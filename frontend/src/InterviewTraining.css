@@ -1,0 +1,114 @@
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.interview-page {
+  min-height: 100vh;
+  background: #f4f6ff;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-icon {
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.logo {
+  font-size: 28px;
+  background: #6c63ff;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+/* Card */
+.card {
+  max-width: 700px;
+  margin: auto;
+  background: #e8ebff;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #cfd4ff;
+}
+
+.card h2 {
+  margin-bottom: 5px;
+}
+
+.description {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+label {
+  font-weight: 600;
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+}
+
+/* Interview Types */
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.type {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #aaa;
+  background: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.type.active {
+  background: #e1ddff;
+  border-color: #6c63ff;
+}
+
+/* Button */
+.start-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 14px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background: #5952d4;
+}
