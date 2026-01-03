@@ -1,8 +1,18 @@
+import "./DashBoard.css";
+
 function DashBoard() {
   return (
-    <div>
-      <h1>Hello React 👋</h1>
-      <p>This is my first React app.</p>
+    <div className="dashboard">
+      <h1>AI Interviewer</h1>
+      <br />
+      <h2 className="dashboard">Dashboard</h2>
+      {/* <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2>
+      <h2 className="dashboard">Dashboard</h2> */}
     </div>
   );
 }
