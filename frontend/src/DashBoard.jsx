@@ -7,4 +7,4 @@ function DashBoard() {
   );
 }
 
-export default App;
+export default DashBoard;
