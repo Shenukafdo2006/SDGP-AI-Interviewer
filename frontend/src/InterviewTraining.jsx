@@ -1,11 +1,11 @@
 import "./InterviewTraining.css";
 
-function InterviewTraining() {
+function InterviewTraining({ onBack }) {
   return (
     <div className="interview-page">
       {/* Header */}
       <header className="header">
-        <div className="menu-icon">☰</div>
+        <div className="menu-icon" onClick={onBack} style={{cursor: onBack ? 'pointer' : 'default'}}>←</div>
         <div className="logo">🤖</div>
       </header>
 
@@ -50,7 +50,7 @@ function InterviewTraining() {
         </select>
 
         {/* Button */}
-        <button className="start-btn">Start Interview</button>
+        <button className="start-btn" onClick={() => { if (onBack) { /* start interview then return */ } }}>Start Interview</button>
       </div>
     </div>
   );

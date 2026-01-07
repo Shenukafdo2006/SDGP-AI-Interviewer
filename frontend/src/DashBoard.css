@@ -1,13 +1,55 @@
+/* Dashboard styles updated to match the provided design */
 
-.dashboard h1 {
-    padding-left: 20px;
-    padding-bottom: 800px;
-    color: white;
+:root{
+    --purple: #a24bd8;
+    --purple-dark: #8e44ad;
+    --card-bg: #eaf3fb;
+    --muted: #6b6b6b;
 }
 
-.dashboard h2 {
-    color: white;
-    padding-left: 20px;
-    padding-bottom: 1800px;
+*{box-sizing:border-box}
+body{margin:0;font-family: Georgia, 'Times New Roman', serif;}
+
+.topbar{
+    background:var(--purple);
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    border-bottom-left-radius:12px;
+    border-bottom-right-radius:12px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
 }
- 
+.topbar .menu{font-size:30px;color:#111}
+.brand{display:flex;align-items:center;justify-content:center;flex:1}
+.logo-circle{background:#fff;padding:8px 18px;border-radius:6px;color:var(--purple-dark);font-weight:800}
+.menu-placeholder{width:30px}
+
+.container{max-width:1100px;margin:22px auto;padding:0 20px;display:flex;flex-direction:column;gap:20px}
+
+.card{background:var(--card-bg);border-radius:12px;padding:22px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 6px 12px rgba(0,0,0,0.04)}
+
+.hero{display:flex;align-items:center;justify-content:space-between;padding:30px;background:#dfeeff}
+.hero-text h1{margin:0;font-size:28px}
+.hero-text .next{margin-top:6px;color:var(--muted);font-weight:600}
+.cta{background:var(--purple-dark);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-weight:700}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.info{display:flex;align-items:center;gap:18px;padding:18px;background:#eef6fb;border-radius:12px}
+.icon{font-size:28px;width:56px;height:56px;display:flex;align-items:center;justify-content:center}
+.meta h3{margin:0;font-size:16px}
+.meta .sub{margin-top:6px;color:var(--muted);font-size:13px}
+
+.quick-actions h3{margin:0 0 10px 0}
+.actions{display:flex;flex-direction:column;gap:10px}
+.action{display:block;padding:10px 12px;border-radius:6px;color:#111;text-decoration:none}
+.bar.blue{background:#bcd6ff}
+.bar.pink{background:#ffd1ea}
+.bar.green{background:#c9f1d8}
+
+@media (max-width:900px){
+    .grid{grid-template-columns:1fr}
+    .hero{flex-direction:column;align-items:flex-start;gap:16px}
+    .logo-circle{padding:6px 12px}
+}
