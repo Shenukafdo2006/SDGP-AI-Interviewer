@@ -1,19 +1,20 @@
 /* InterviewTraining: aligned with DashBoard visual language */
 
 :root{
-  --purple: #8f4fc1;
-  --purple-dark: #7b3fb2;
-  --page-bg: #f2f5f8;
-  --surface: #eef3f7;
-  --muted: #58606b;
-  --text: #0f1724;
+  --purple: #7c3fb0;
+  --purple-dark: #632f93;
+  --blue-accent: #4aa0ff;
+  --page-bg: #e6eef8;
+  --surface: #dfe8f6;
+  --muted: #495063;
+  --text: #071028;
 }
 
 *{box-sizing:border-box}
 
 .interview-page{
   min-height:100vh;
-  padding:0;
+  padding:12px 8px 40px 8px;
   background:var(--page-bg);
   font-family: Georgia, 'Times New Roman', serif;
   color:var(--text);
@@ -30,12 +31,12 @@
   box-shadow:0 6px 18px rgba(15,23,36,0.06);
 }
 .menu-icon{font-size:28px;color:#111}
-.logo{background:#f7f9fc;padding:8px 12px;border-radius:8px;color:var(--purple-dark);font-weight:800;border:1px solid rgba(0,0,0,0.04)}
+.logo{background:rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;color:var(--purple-dark);font-weight:800;border:1px solid rgba(0,0,0,0.04)}
 
 .title{max-width:1100px;margin:22px auto 6px auto;padding:0 20px;font-size:28px}
 .subtitle{max-width:1100px;margin:0 auto 18px auto;padding:0 20px;color:var(--muted);font-weight:600}
 
-.card{max-width:1100px;margin:18px auto;padding:22px;border-radius:12px;background:var(--surface);border:1px solid rgba(0,0,0,0.04)}
+.card{max-width:1100px;margin:18px auto;padding:22px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(0,0,0,0.04);box-shadow:0 10px 24px rgba(7,16,40,0.04)}
 .card h2{margin:0 0 8px 0}
 .description{color:var(--muted);margin-bottom:14px}
 
