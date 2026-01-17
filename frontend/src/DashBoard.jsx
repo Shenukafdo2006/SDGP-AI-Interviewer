@@ -1,6 +1,9 @@
 import "./DashBoard.css";
 import { useState } from "react";
+
 import InterviewTraining from "./InterviewTraining";
+// Placeholder imports for new pages
+// import Quiz from './Quiz';
 
 function NavItem({ children, onClick }) {
   return (
@@ -10,13 +13,9 @@ function NavItem({ children, onClick }) {
   );
 }
 
-function DashBoard() {
-  const [view, setView] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (view === "training") {
-    return <InterviewTraining onBack={() => setView("dashboard")} />;
-  }
+function DashBoard({ setView }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="dashboard-page">
@@ -43,8 +42,16 @@ function DashBoard() {
           <nav className="nav">
             <NavItem onClick={() => setView('dashboard')}>Dashboard</NavItem>
             <NavItem onClick={() => setView('training')}>Interview Training</NavItem>
-            <NavItem onClick={() => alert('Quizzes - placeholder')}>Quizzes</NavItem>
-            <NavItem onClick={() => alert('CV Upload - placeholder')}>CV</NavItem>
+            <NavItem onClick={() => setView('quiz')}>Quiz</NavItem>
+            <NavItem onClick={() => setView('learning-resources')}>Learning Resources</NavItem>
+            <NavItem onClick={() => setView('cv-maker')}>CV Maker</NavItem>
+            <NavItem onClick={() => setView('cv-filtering')}>CV Filtering</NavItem>
+            <NavItem onClick={() => setView('achievements')}>Achievements</NavItem>
+            <NavItem onClick={() => setView('activity-calendar')}>Activity Calendar</NavItem>
+            <NavItem onClick={() => setView('linkedin-integration')}>LinkedIn Integration</NavItem>
+            <NavItem onClick={() => setView('career-suggestions')}>Career Suggestions</NavItem>
+            <NavItem onClick={() => setView('skill-improvement')}>Skill Improvement</NavItem>
+            <NavItem onClick={() => setView('daily-motivation')}>Daily Motivation</NavItem>
           </nav>
         </aside>
 
