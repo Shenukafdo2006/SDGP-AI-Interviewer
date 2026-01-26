@@ -2,14 +2,15 @@ import React from "react";
 import "./Achievements.css";
 
 const stats = [
-  { icon: "🏆",label: "Achievements", value: 4 },
-  { icon: "🔥",label: "Day Streak", value: 15 },
-  { icon: "⚡",label: "Level", value: 10 },
+  { icon: "🏆", label: "Achievements", value: 4 },
+  { icon: "🔥", label: "Day Streak", value: 15 },
+  { icon: "⚡", label: "Level", value: 10 },
 ];
 
 const xp = {
+  icon: "🏆",
   level: 10,
-  current: 100,
+  current: 900,
   total: 1000,
   title: "Career Achiever",
 };
@@ -51,16 +52,16 @@ const achievements = [
     name: "Knowledge Seeker",
     desc: "Read 20 learning resources",
     unlocked: false,
-    progress: "12/20",
-    color: "#bbb",
+    progress: { current: 12, total: 20 },
+    color: "#3b82f6",
     icon: "⚡",
   },
   {
     name: "Perfect Score",
     desc: "Get 90%+ on 10 interviews",
     unlocked: false,
-    progress: "3/10",
-    color: "#bbb",
+    progress: { current: 3, total: 10 },
+    color: "#22c55e",
     icon: "⭕",
   },
 ];
@@ -81,6 +82,7 @@ const Achievements = () => {
 
       {/* XP */}
       <div className="xp-card">
+        <div className="xp-icon">{xp.icon}</div>
         <div className="xp-level">Level {xp.level}</div>
         <div className="xp-title">{xp.title}</div>
 
@@ -97,35 +99,52 @@ const Achievements = () => {
 
       {/* Achievements */}
       <div className="achievements-grid">
-        {achievements.map((ach, idx) => (
-          <div
-            key={idx}
-            className={`achievement-card ${
-              ach.unlocked ? "unlocked" : "locked"
-            }`}
-            style={{
-              borderColor: ach.unlocked ? ach.color : "#eee",
-            }}
-          >
+        {achievements.map((ach, idx) => {
+          const progressPercent =
+            ach.progress &&
+            (ach.progress.current / ach.progress.total) * 100;
+
+          return (
             <div
-              className="achievement-icon"
-              style={{ background: ach.color }}
+              key={idx}
+              className={`achievement-card ${
+                ach.unlocked ? "unlocked" : "locked"
+              }`}
+              style={{
+                borderColor: ach.unlocked ? ach.color : "#e5e7eb",
+              }}
             >
-              {ach.icon}
-            </div>
-
-            <div className="achievement-name">{ach.name}</div>
-            <div className="achievement-desc">{ach.desc}</div>
-
-            {ach.unlocked ? (
-              <div className="badge unlocked-badge">
-                Unlocked {ach.date}
+              <div
+                className="achievement-icon"
+                style={{ background: ach.color }}
+              >
+                {ach.icon}
               </div>
-            ) : (
-              <div className="badge locked-badge">{ach.progress}</div>
-            )}
-          </div>
-        ))}
+
+              <div className="achievement-name">{ach.name}</div>
+              <div className="achievement-desc">{ach.desc}</div>
+
+              {ach.unlocked ? (
+                <div className="badge unlocked-badge">
+                  Unlocked {ach.date}
+                </div>
+              ) : (
+                <>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+
+                  <div className="badge locked-badge">
+                    {ach.progress.current}/{ach.progress.total}
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

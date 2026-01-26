@@ -3,168 +3,222 @@
   margin: 0 auto;
   position: relative;
   top: 40px;
+  padding: 0 20px;
+  font-family: 'Inter', system-ui, sans-serif;
 }
+
+/* ================= STATS ROW ================= */
 
 .stats-row {
   display: flex;
-  gap: 100px;
-  margin-bottom: 30px;
-}
-
-.stat-icon {
-  font-size: 30px;
+  gap: 60px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
 }
 
 .stat-card {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-variant-numeric: tabular-nums;
- background: linear-gradient(
-  135deg,
-  #185E73,   
-  #4FA9BF
-);
-
-   color: black;
-  border-radius: 25px;
-  padding: 8px 32px;
-  font-weight: bold;
-  font-size: 18px;
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 40px;
+  padding: 12px 30px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #EAF2FF;
+  background: linear-gradient(135deg, #1E3A8A, #2563EB);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+}
+
+.stat-icon {
+  font-size: 28px;
 }
 
 .stat-value {
-  color: #ffffff;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  width: 58px;
-  height: 58px;
+  background: linear-gradient(135deg, #3B82F6, #60A5FA);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4),
+              0 4px 12px rgba(59, 130, 246, 0.5);
 }
 
-/* XP Section */
+
+
 .xp-card {
-background: linear-gradient(
-  135deg,
-  #0D1B2A,
-  #1B3B6F,
-  #3A7CA5
-);
-position: relative;
-top: 50px;
-box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
-  border-radius: 26px;
-  padding: 40px;
-  margin-bottom: 24px;
-  
+  background: linear-gradient(135deg, #1E3A8A, #2563EB, #3B82F6);
+  border-radius: 25px;
+  padding: 20px 30px;
+  margin-bottom: 30px;
+  position: relative;
+  box-shadow:
+    inset 0 0 30px rgba(255, 255, 255, 0.08),
+    0 10px 30px rgba(37, 99, 235, 0.4);
 }
 
-.xp-level {
-    
-font-family: 'Inter', system-ui, sans-serif;
- font-variant-numeric: tabular-nums;
-  font-weight: bold;
-  font-size: 50px;
-  color: white;
+.xp-icon {
+ 
+  top: -20px;
+  left: -20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(96, 165, 250, 0.6);
 }
 
 .xp-title {
-    font-family: 'Inter', system-ui, sans-serif;
-  font-size: 30px;
-  color: whitesmoke;
-  margin-bottom: 8px;
+  font-size: 20px;
+  color: #CFE3FF;
+  margin-bottom: 12px;
+}
+
+.xp-level {
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .xp-bar {
-  background: #fff;
-  border-radius: 8px;
-  top: 10px;
-  height: 15px;
+  width: 100%;
+  height: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
   position: relative;
+  border: 1px solid rgba(147, 197, 253, 0.6);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4);
 }
 
 .xp-fill {
-  background: linear-gradient(
-  135deg,
-  #7B5CFF,
-  #5F3DFF,
-  #9B7CFF
-);
-
   height: 100%;
-  border-radius: 7px;
+  border-radius: 22px;
+  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+  transition: width 0.4s ease-in-out;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
 }
 
 .xp-text {
   position: absolute;
-  right: 8px;
-  bottom: 70px;
-  font-size: 30px;
-  color: silver;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  color: #0F172A;
+  font-weight: 700;
 }
 
-/* Achievements Grid */
+/* ================= ACHIEVEMENTS GRID ================= */
+
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 50px;
+  gap: 40px;
 }
 
 .achievement-card {
-  position: relative;
-  top: 60px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px #eee;
-  padding: 18px;
+  background: linear-gradient(135deg, #0F172A, #1E40AF, #3B82F6);
+  border-radius: 18px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid #eee;
+  box-shadow:
+    inset 0 0 20px rgba(255, 255, 255, 0.06),
+    0 10px 28px rgba(37, 99, 235, 0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-bottom: 20px;
+}
+
+.achievement-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.1),
+    0 18px 40px rgba(37, 99, 235, 0.6);
 }
 
 .achievement-icon {
-  color: #fff;
-  border-radius: 12px;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  margin-bottom: 8px;
+  color: #ffffff;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  box-shadow: 0 6px 16px rgba(96, 165, 250, 0.6);
 }
 
 .achievement-name {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 16px;
   text-align: center;
+  color: #EAF2FF;
+  margin-bottom: 6px;
 }
 
 .achievement-desc {
   font-size: 14px;
-  color: #444;
-  margin-bottom: 8px;
+  color: #B6D4FF;
   text-align: center;
+  margin-bottom: 10px;
 }
 
-/* Badges */
 .badge {
-  border-radius: 8px;
-  padding: 2px 10px;
-  font-size: 13px;
+  font-size: 15px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-weight: 600;
 }
 
 .unlocked-badge {
-  background: #eaf0ff;
-  color: #4b0082;
+  background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+  color: #1E3A8A;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
 }
 
 .locked-badge {
-  background: #eee;
-  color: #888;
+  background: rgba(255, 255, 255, 0.2);
+  color: #C7DCFF;
 }
+
+/* ================= ACHIEVEMENT PROGRESS BAR ================= */
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+  margin: 10px 0 6px;
+  border: 1px solid rgba(147, 197, 253, 0.5);
+  box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.4);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #3B82F6,
+    #60A5FA,
+    #93C5FD
+  );
+  box-shadow:
+    inset 0 0 6px rgba(255, 255, 255, 0.7),
+    0 0 10px rgba(59, 130, 246, 0.7);
+  transition: width 0.4s ease;
+}
+
