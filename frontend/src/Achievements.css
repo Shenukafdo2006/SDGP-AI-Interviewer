@@ -5,6 +5,8 @@
   top: 40px;
   padding: 0 20px;
   font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  min-height: 100vh;
 }
 
 /* ================= STATS ROW ================= */
@@ -24,69 +26,71 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 18px;
-  color: #EAF2FF;
-  background: linear-gradient(135deg, #1E3A8A, #2563EB);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+  color: #1E3A8A;
+  background: linear-gradient(135deg, #93C5FD 0%, #60A5FA 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .stat-icon {
   font-size: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .stat-value {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  background: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
   font-weight: 700;
-  color: #ffffff;
-  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.4),
-              0 4px 12px rgba(59, 130, 246, 0.5);
+  color: #1E40AF;
+  box-shadow: 0 3px 8px rgba(30, 64, 175, 0.2);
 }
 
 
 
 .xp-card {
-  background: linear-gradient(135deg, #1E3A8A, #2563EB, #3B82F6);
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%);
   border-radius: 25px;
   padding: 20px 30px;
   margin-bottom: 30px;
   position: relative;
-  box-shadow:
-    inset 0 0 30px rgba(255, 255, 255, 0.08),
-    0 10px 30px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .xp-icon {
- 
   top: -20px;
   left: -20px;
   width: 60px;
   height: 60px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
+  background: linear-gradient(135deg, #60A5FA, #93C5FD);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 32px;
-  color: #ffffff;
-  box-shadow: 0 6px 16px rgba(96, 165, 250, 0.6);
+  color: #1E40AF;
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .xp-title {
   font-size: 20px;
-  color: #CFE3FF;
+  color: #BFDBFE;
   margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .xp-level {
   font-size: 40px;
   font-weight: 700;
-  color: #ffffff;
+  color: #FFFFFF;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .xp-bar {
@@ -96,16 +100,15 @@
   background: rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(147, 197, 253, 0.6);
-  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .xp-fill {
   height: 100%;
   border-radius: 22px;
-  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+  background: linear-gradient(90deg, #DBEAFE 0%, #FFFFFF 100%);
   transition: width 0.4s ease-in-out;
-  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .xp-text {
@@ -114,7 +117,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 15px;
-  color: #0F172A;
+  color: #1E3A8A;
   font-weight: 700;
 }
 
@@ -127,24 +130,22 @@
 }
 
 .achievement-card {
-  background: linear-gradient(135deg, #0F172A, #1E40AF, #3B82F6);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 100%);
   border-radius: 18px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow:
-    inset 0 0 20px rgba(255, 255, 255, 0.06),
-    0 10px 28px rgba(37, 99, 235, 0.35);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  border: 2px solid #DBEAFE;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   margin-bottom: 20px;
 }
 
 .achievement-card:hover {
   transform: translateY(-6px);
-  box-shadow:
-    inset 0 0 24px rgba(255, 255, 255, 0.1),
-    0 18px 40px rgba(37, 99, 235, 0.6);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+  border-color: #93C5FD;
 }
 
 .achievement-icon {
@@ -157,21 +158,22 @@
   font-size: 28px;
   color: #ffffff;
   margin-bottom: 12px;
-  background: linear-gradient(135deg, #3B82F6, #60A5FA);
-  box-shadow: 0 6px 16px rgba(96, 165, 250, 0.6);
+  background: linear-gradient(135deg, #60A5FA, #3B82F6);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .achievement-name {
   font-weight: 600;
   font-size: 16px;
   text-align: center;
-  color: #EAF2FF;
+  color: #1E3A8A;
   margin-bottom: 6px;
 }
 
 .achievement-desc {
   font-size: 14px;
-  color: #B6D4FF;
+  color: #475569;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -184,14 +186,16 @@
 }
 
 .unlocked-badge {
-  background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
-  color: #1E3A8A;
-  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.6);
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .locked-badge {
-  background: rgba(255, 255, 255, 0.2);
-  color: #C7DCFF;
+  background: #F1F5F9;
+  color: #94A3B8;
+  border: 1px solid #E2E8F0;
 }
 
 /* ================= ACHIEVEMENT PROGRESS BAR ================= */
@@ -200,11 +204,10 @@
   width: 100%;
   height: 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.18);
+  background: #DBEAFE;
   overflow: hidden;
   margin: 10px 0 6px;
-  border: 1px solid rgba(147, 197, 253, 0.5);
-  box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.4);
+  border: 2px solid #BFDBFE;
 }
 
 .progress-fill {
@@ -212,13 +215,10 @@
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    #3B82F6,
-    #60A5FA,
-    #93C5FD
+    #60A5FA 0%,
+    #3B82F6 50%,
+    #2563EB 100%
   );
-  box-shadow:
-    inset 0 0 6px rgba(255, 255, 255, 0.7),
-    0 0 10px rgba(59, 130, 246, 0.7);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
   transition: width 0.4s ease;
 }
-
