@@ -11,7 +11,10 @@ const tips = [
     icon: '🎯',
     title: 'Start Small',
     desc: 'Break down your goals into smaller, manageable tasks. Every small win counts!',
-    color: '#ff0066',
+    color:"Black"
+
+
+
   },
   {
     icon: '📅',
