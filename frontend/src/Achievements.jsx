@@ -10,7 +10,6 @@ const stats = [
 ];
 
 const xp = {
-  icon: "🏆",
   level: 10,
   current: 800,
   total: 1000,
