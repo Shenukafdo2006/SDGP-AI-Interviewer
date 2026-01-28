@@ -2,10 +2,10 @@
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
-  top: 40px;
+ 
   padding: 0 20px;
   font-family: 'Inter', system-ui, sans-serif;
-  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+  /* background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); */
   min-height: 100vh;
 }
 
@@ -30,6 +30,7 @@
   background: linear-gradient(135deg, #93C5FD 0%, #60A5FA 100%);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
   border: 2px solid rgba(255, 255, 255, 0.4);
+  margin-top: 30px;
 }
 
 .stat-icon {
@@ -50,16 +51,12 @@
   color: #1E40AF;
   box-shadow: 0 3px 8px rgba(30, 64, 175, 0.2);
 }
-
-
-
 .xp-card {
   background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%);
   border-radius: 25px;
   padding: 20px 30px;
   margin-bottom: 30px;
   position: relative;
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
