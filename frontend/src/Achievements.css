@@ -2,11 +2,21 @@
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
- 
   padding: 0 20px;
   font-family: 'Inter', system-ui, sans-serif;
-  /* background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); */
   min-height: 100vh;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ================= STATS ROW ================= */
@@ -31,11 +41,51 @@
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
   border: 2px solid rgba(255, 255, 255, 0.4);
   margin-top: 30px;
+  animation: slideInLeft 0.6s ease-out backwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .stat-icon {
   font-size: 28px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .stat-value {
@@ -50,7 +100,18 @@
   font-weight: 700;
   color: #1E40AF;
   box-shadow: 0 3px 8px rgba(30, 64, 175, 0.2);
+  animation: pulse 2s ease-in-out infinite;
 }
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 .xp-card {
   background: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%);
   border-radius: 25px;
@@ -58,6 +119,23 @@
   margin-bottom: 30px;
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.2);
+  animation: slideInRight 0.6s ease-out 0.2s backwards;
+  transition: transform 0.3s ease;
+}
+
+.xp-card:hover {
+  transform: translateY(-3px);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .xp-icon {
@@ -74,6 +152,16 @@
   color: #1E40AF;
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.5);
+  animation: rotate 3s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
 }
 
 .xp-title {
@@ -88,6 +176,21 @@
   font-weight: 700;
   color: #FFFFFF;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: levelPop 0.5s ease-out 0.5s backwards;
+}
+
+@keyframes levelPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .xp-bar {
@@ -106,6 +209,35 @@
   background: linear-gradient(90deg, #DBEAFE 0%, #FFFFFF 100%);
   transition: width 0.4s ease-in-out;
   box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  animation: fillBar 1.5s ease-out 0.6s backwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes fillBar {
+  from {
+    width: 0 !important;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
 }
 
 .xp-text {
@@ -137,12 +269,36 @@
   border: 2px solid #DBEAFE;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.achievement-card:nth-child(1) { animation-delay: 0.1s; }
+.achievement-card:nth-child(2) { animation-delay: 0.2s; }
+.achievement-card:nth-child(3) { animation-delay: 0.3s; }
+.achievement-card:nth-child(4) { animation-delay: 0.4s; }
+.achievement-card:nth-child(5) { animation-delay: 0.5s; }
+.achievement-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .achievement-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
   border-color: #93C5FD;
+}
+
+.achievement-card:hover .achievement-icon {
+  transform: rotateY(360deg);
+  animation: none;
 }
 
 .achievement-icon {
@@ -158,6 +314,17 @@
   background: linear-gradient(135deg, #60A5FA, #3B82F6);
   box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: transform 0.6s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .achievement-name {
@@ -180,6 +347,11 @@
   padding: 5px 14px;
   border-radius: 999px;
   font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
 }
 
 .unlocked-badge {
@@ -187,6 +359,19 @@
   color: #FFFFFF;
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: badgePop 0.5s ease-out;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .locked-badge {
@@ -217,5 +402,34 @@
     #2563EB 100%
   );
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-  transition: width 0.4s ease;
+  transition: width 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+  animation: progressGrow 1s ease-out backwards;
+}
+
+.progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progressShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes progressGrow {
+  from {
+    width: 0 !important;
+  }
+}
+
+@keyframes progressShimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
 }
