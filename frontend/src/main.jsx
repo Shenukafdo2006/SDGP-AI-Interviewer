@@ -26,7 +26,7 @@ function App() {
   if (view === 'learning-resources') return <LearningResources />
   if (view === 'cv-maker') return <CVMaker />
   if (view === 'cv-filtering') return <CVFiltering />
-  if (view === 'achievements') return <Achievements />
+  if (view === 'achievements') return <Achievements/>
   if (view === 'activity-calendar') return <ActivityCalendar />
   if (view === 'linkedin-integration') return <LinkedInIntegration />
   if (view === 'career-suggestions') return <CareerSuggestions />

@@ -1,6 +1,8 @@
 import React from "react";
 import "./Achievements.css";
 
+
+
 const stats = [
   { icon: "🏆", label: "Achievements", value: 4 },
   { icon: "🔥", label: "Day Streak", value: 15 },
@@ -8,9 +10,8 @@ const stats = [
 ];
 
 const xp = {
-  icon: "🏆",
   level: 10,
-  current: 900,
+  current: 800,
   total: 1000,
   title: "Career Achiever",
 };
