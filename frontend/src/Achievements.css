@@ -102,7 +102,7 @@
   box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
-  animation: fillBar 1.5s ease-out;
+  animation: fillBar 1.5s ease-out forwards;
 }
 
 /* Shimmer effect on XP bar */
@@ -129,7 +129,12 @@
 
 @keyframes fillBar {
   from {
-    width: 0 !important;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 }
 
@@ -159,6 +164,7 @@
   font-size: 15px;
   color: #1E3A8A;
   font-weight: 700;
+  z-index: 1;
 }
 
 /* ================= ACHIEVEMENTS GRID ================= */
@@ -180,6 +186,29 @@
   border: 2px solid #DBEAFE;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.achievement-card:nth-child(1) { animation-delay: 0.1s; }
+.achievement-card:nth-child(2) { animation-delay: 0.2s; }
+.achievement-card:nth-child(3) { animation-delay: 0.3s; }
+.achievement-card:nth-child(4) { animation-delay: 0.4s; }
+.achievement-card:nth-child(5) { animation-delay: 0.5s; }
+.achievement-card:nth-child(6) { animation-delay: 0.6s; }
+.achievement-card:nth-child(7) { animation-delay: 0.7s; }
+.achievement-card:nth-child(8) { animation-delay: 0.8s; }
+.achievement-card:nth-child(9) { animation-delay: 0.9s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .achievement-card:hover {
@@ -266,4 +295,39 @@
   );
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
   transition: width 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+  animation: progressFillBar 1.2s ease-out forwards;
+}
+
+/* Shimmer effect on progress bars */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: progressShimmer 2s ease-in-out infinite;
+}
+
+@keyframes progressFillBar {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@keyframes progressShimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 200%;
+  }
 }
