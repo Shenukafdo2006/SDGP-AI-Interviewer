@@ -1,4 +1,3 @@
-
 /* BASE LAYOUT */
 .career-suggestions-page {
   max-width: 900px;
@@ -177,32 +176,89 @@
   box-shadow: 0 25px 50px rgba(0,0,0,0.2);
 }
 
-/* 🎨 INTERACTIVE IMAGES - MAIN FEATURE */
-.career-logo {
+/* 🎨 ENHANCED: 3D Flip Container for Career Logo */
+
+.career-logo-wrapper {
+  perspective: 1000px;
   width: 70px;
   height: 70px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.career-logo-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+
+.career-logo-wrapper.flipped .career-logo-inner {
+  transform: rotateY(180deg);
+}
+
+
+.career-logo {
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
   object-fit: contain;
   background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
   padding: 0.75rem;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  margin-bottom: 1.5rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 3px solid transparent;
-  position: relative;
+  position: absolute;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
+
+
+.career-logo.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+
+.career-logo.back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 2rem;
+  padding: 0;
+}
+
 
 .career-logo:hover {
   transform: scale(1.25) rotate(8deg);
   box-shadow: 0 20px 60px rgba(102, 126, 234, 0.5);
   border-color: #667eea;
   z-index: 20;
+  filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+}
+
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.career-logo-wrapper:hover .career-logo.front {
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .career-logo:active {
   transform: scale(1.1) rotate(4deg);
 }
+
+/* 🎨 ENHANCED: Improved tooltip with arrow */
 
 .career-logo::after {
   content: attr(data-company);
@@ -222,14 +278,70 @@
   margin-bottom: 1rem;
   box-shadow: 0 8px 25px rgba(0,0,0,0.3);
   transition: all 0.3s ease;
+   border-bottom: 8px solid transparent;
 }
 
-.career-logo:hover::after {
+
+.career-logo::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #1e293b;
+  opacity: 0;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.career-logo:hover::after,
+.career-logo:hover::before {
   opacity: 1;
   transform: translateX(-50%) translateY(-8px);
 }
 
-/* CARD CONTENT */
+
+.career-logo-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s, opacity 0.6s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.career-logo-wrapper.clicked::after {
+  width: 150px;
+  height: 150px;
+  opacity: 0;
+}
+
+
+@keyframes floatLogo {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.career-logo-wrapper {
+  animation: floatLogo 3s ease-in-out infinite;
+}
+
+
+.career-card:nth-child(1) .career-logo-wrapper { animation-delay: 0s; }
+.career-card:nth-child(2) .career-logo-wrapper { animation-delay: 0.2s; }
+.career-card:nth-child(3) .career-logo-wrapper { animation-delay: 0.4s; }
+.career-card:nth-child(4) .career-logo-wrapper { animation-delay: 0.6s; }
+.career-card:nth-child(5) .career-logo-wrapper { animation-delay: 0.8s; }
+.career-card:nth-child(6) .career-logo-wrapper { animation-delay: 1s; }
+
+
 .career-title {
   font-size: 1.4rem;
   font-weight: 800;
@@ -319,6 +431,7 @@
   transform: translateX(-4px);
 }
 
+
 .detail-logo {
   width: 90px;
   height: 90px;
@@ -327,13 +440,22 @@
   background: white;
   padding: 1rem;
   box-shadow: 0 10px 35px rgba(0,0,0,0.15);
-  transition: all 0.4s ease;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
+  /* ADD THIS - 3D effect */
+  transform-style: preserve-3d;
 }
 
 .detail-logo:hover {
-  transform: scale(1.15) rotate(360deg);
+  transform: scale(1.15) rotateY(360deg) rotateX(10deg);
   box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+  border: 3px solid #667eea;
+  filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.7));
+}
+
+/* Detail logo click animation */
+.detail-logo:active {
+  transform: scale(0.95) rotateY(180deg);
 }
 
 .explanation {
@@ -378,6 +500,38 @@
   margin-left: 1rem;
 }
 
+/* Shake animation for errors or attention */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.career-logo-wrapper.shake {
+  animation: shake 0.5s ease;
+}
+
+/* Sparkle effect on logo hover */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+.career-logo-wrapper::before {
+  content: '✨';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 1.2rem;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.career-logo-wrapper:hover::before {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .careers-grid {
@@ -393,8 +547,14 @@
     min-width: 100%;
   }
   
+  /*  mobile hover effects */
   .career-logo:hover {
-    transform: scale(1.1) rotate(2deg);
+    transform: scale(1.15) rotate(4deg);
+  }
+  
+  /* Reduce animation intensity on mobile */
+  .career-logo-wrapper {
+    animation: none;
   }
 }
 
@@ -405,5 +565,11 @@
   
   .hero-section {
     padding: 2rem 1.5rem;
+  }
+  
+  /* Adjust logo size on small screens */
+  .career-logo-wrapper {
+    width: 60px;
+    height: 60px;
   }
 }
