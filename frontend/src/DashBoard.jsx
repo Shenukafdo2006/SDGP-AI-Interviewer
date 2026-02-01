@@ -114,8 +114,8 @@ function DashBoard({ setView }) {
             <h3>Quick Actions</h3>
             <div className="actions">
               <button className="action bar blue" onClick={() => setView('training')}>Start Mock Interview</button>
-              <button className="action bar pink" onClick={() => alert('Skills Quiz - placeholder')}>Take Skills Quiz</button>
-              <button className="action bar green" onClick={() => alert('Upload CV - placeholder')}>Upload/Update CV</button>
+              <button className="action bar pink" onClick={() => setView('quiz')}>Take Skills Quiz</button>
+              <button className="action bar green" onClick={() => setView('cv-maker')}>Upload/Update CV</button>
             </div>
           </section>
 
