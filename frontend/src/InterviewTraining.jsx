@@ -1,6 +1,8 @@
 import "./InterviewTraining.css";
+import { useState } from "react";
 
 function InterviewTraining({ onBack }) {
+  const [interviewType, setInterviewType] = useState("Technical");
   return (
     <div className="interview-page">
       
@@ -44,10 +46,33 @@ function InterviewTraining({ onBack }) {
           {/* Interview Type */}
           <label>Interview Type</label>
           <div className="type-grid">
-            <button className="type active">⚙️ Technical</button>
-            <button className="type">🧠 Behavioural</button>
-            <button className="type">💬 Soft Skills</button>
-            <button className="type">🔀 Mixed</button>
+            <button
+              className={`type ${interviewType === "Technical" ? "active" : ""}`}
+              onClick={() => setInterviewType("Technical")}
+            >
+              ⚙️ Technical
+            </button>
+
+            <button
+              className={`type ${interviewType === "Behavioural" ? "active" : ""}`}
+              onClick={() => setInterviewType("Behavioural")}
+            >
+              🧠 Behavioural
+            </button>
+
+            <button
+              className={`type ${interviewType === "Soft Skills" ? "active" : ""}`}
+              onClick={() => setInterviewType("Soft Skills")}
+            >
+              💬 Soft Skills
+            </button>
+
+            <button
+              className={`type ${interviewType === "Mixed" ? "active" : ""}`}
+              onClick={() => setInterviewType("Mixed")}
+            >
+              🔀 Mixed
+            </button>
           </div>
 
           {/* Experience Level */}

@@ -63,7 +63,7 @@ function DashBoard({ setView }) {
               <div className="progress-wrap">
                 <div className="progress-label">Overall Progress</div>
                 <div className="progress-bar" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
-                  <div className="progress-fill" style={{width:'78%'}}></div>
+                  <div className="progress-fill" style={{ width: '78%' }}></div>
                 </div>
               </div>
             </div>
@@ -114,8 +114,8 @@ function DashBoard({ setView }) {
             <h3>Quick Actions</h3>
             <div className="actions">
               <button className="action bar blue" onClick={() => setView('training')}>Start Mock Interview</button>
-              <button className="action bar pink" onClick={() => alert('Skills Quiz - placeholder')}>Take Skills Quiz</button>
-              <button className="action bar green" onClick={() => alert('Upload CV - placeholder')}>Upload/Update CV</button>
+              <button className="action bar pink" onClick={() => setView('quiz')}>Take Skills Quiz</button>
+              <button className="action bar green" onClick={() => setView('cv-maker')}>Upload/Update CV</button>
             </div>
           </section>
 
