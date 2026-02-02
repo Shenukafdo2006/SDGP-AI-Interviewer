@@ -1,12 +1,14 @@
 .achievements-page {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
-  padding: 0 20px;
-  font-family: 'Inter', system-ui, sans-serif;
+  padding: 60px 40px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(147, 197, 253, 0.03) 0%, transparent 50%);
 }
 
 :root {
@@ -16,6 +18,8 @@
   --gradient-xp: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%);
   --gradient-progress: linear-gradient(90deg, #60A5FA 0%, #3B82F6 50%, #2563EB 100%);
   --gradient-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  --gradient-glow: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+  --gradient-rainbow: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 25%, #EC4899 50%, #F59E0B 75%, #3B82F6 100%);
   --color-primary: #3B82F6;
   --color-primary-dark: #1E40AF;
   --color-primary-darker: #1E3A8A;
@@ -27,15 +31,19 @@
   --color-gray-400: #94A3B8;
   --color-gray-500: #64748B;
   --color-gray-600: #475569;
+  --color-gold: #FBBF24;
+  --color-gold-dark: #D97706;
   --shadow-sm: 0 2px 6px rgba(37, 99, 235, 0.3);
   --shadow-md: 0 4px 12px rgba(59, 130, 246, 0.25);
   --shadow-lg: 0 12px 24px rgba(59, 130, 246, 0.3);
+  --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.5);
   --border-radius-sm: 14px;
   --border-radius-md: 18px;
   --border-radius-lg: 20px;
   --border-radius-xl: 25px;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.6s ease;
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -48,18 +56,64 @@
   }
 }
 
+/* Advanced floating background elements */
+.achievements-page::before,
+.achievements-page::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: -1;
+  animation: floatBackground 20s ease-in-out infinite;
+}
+
+.achievements-page::before {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+  top: -200px;
+  right: -200px;
+  animation-delay: 0s;
+}
+
+.achievements-page::after {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.15) 0%, transparent 70%);
+  bottom: -150px;
+  left: -150px;
+  animation-delay: 10s;
+}
+
+@keyframes floatBackground {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(50px, -50px) scale(1.1);
+  }
+  50% {
+    transform: translate(0, -100px) scale(0.9);
+  }
+  75% {
+    transform: translate(-50px, -50px) scale(1.05);
+  }
+}
+
 .stats-row {
   display: flex;
-  gap: 60px;
-  margin-bottom: 40px;
+  gap: 80px;
+  margin-bottom: 60px;
   flex-wrap: wrap;
+  perspective: 1000px;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  gap: 40px;
-  padding: 12px 30px;
+  gap: 50px;
+  padding: 18px 40px;
   border-radius: var(--border-radius-lg);
   font-weight: 600;
   font-size: 18px;
@@ -67,13 +121,40 @@
   background: var(--gradient-stat);
   box-shadow: var(--shadow-md);
   border: 2px solid rgba(255, 255, 255, 0.4);
-  margin-top: 30px;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transform-style: preserve-3d;
+}
+
+/* Advanced shine effect */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 45%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.1) 55%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+}
+
+.stat-card:hover::before {
+  transform: translateX(100%);
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px) rotateX(2deg);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(59, 130, 246, 0.3);
 }
 
 .stat-card:focus-visible {
@@ -84,66 +165,156 @@
 .stat-icon {
   font-size: 28px;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  animation: iconFloat 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(5deg);
+  }
 }
 
 .stat-value {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--color-primary-dark);
   box-shadow: 0 3px 8px rgba(30, 64, 175, 0.2);
+  position: relative;
+  transition: transform var(--transition-bounce);
+}
+
+.stat-card:hover .stat-value {
+  transform: scale(1.15) rotate(360deg);
+}
+
+/* Pulse animation for stat value */
+.stat-value::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary-light);
+  opacity: 0;
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
 .xp-card {
   background: var(--gradient-xp);
   border-radius: var(--border-radius-xl);
-  padding: 20px 30px;
-  margin-bottom: 30px;
+  padding: 32px 40px;
+  margin-bottom: 50px;
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
   transition: transform var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Animated gradient background */
+.xp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+.xp-card:hover::before {
+  opacity: 1;
 }
 
 .xp-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              0 0 40px rgba(59, 130, 246, 0.2);
 }
 
 .xp-title {
-  font-size: 20px;
+  font-size: 22px;
   color: var(--color-primary-lighter);
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: titleGlow 2s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 10px rgba(219, 234, 254, 0.5);
+  }
 }
 
 .xp-level {
-  font-size: 40px;
+  font-size: 48px;
   font-weight: 700;
   color: var(--color-white);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.3);
+  display: inline-block;
+  transition: transform var(--transition-bounce);
+  margin-bottom: 20px;
+}
+
+.xp-card:hover .xp-level {
+  transform: scale(1.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 30px rgba(255, 255, 255, 0.6);
 }
 
 .xp-bar {
   width: 100%;
-  height: 20px;
-  border-radius: 22px;
+  height: 24px;
+  border-radius: 24px;
   background: rgba(255, 255, 255, 0.2);
   overflow: hidden;
   position: relative;
   border: 2px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: transform var(--transition-base), border-color var(--transition-base);
+  transition: transform var(--transition-base), 
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .xp-bar:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
   border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 
+              0 0 15px rgba(255, 255, 255, 0.4);
 }
 
 .xp-bar:focus-visible {
@@ -153,33 +324,55 @@
 
 .xp-fill {
   height: 100%;
-  border-radius: 22px;
-  background: linear-gradient(90deg, var(--color-primary-lighter) 0%, var(--color-white) 100%);
-  transition: width 0.8s ease-in-out, background var(--transition-base), box-shadow var(--transition-base);
+  border-radius: 24px;
+  background: linear-gradient(90deg, 
+    var(--color-primary-lighter) 0%, 
+    var(--color-white) 50%,
+    var(--color-primary-lighter) 100%
+  );
+  background-size: 200% 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+              background-position 0.5s ease;
   box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
   animation: fillAnimation 1.5s ease-out forwards;
 }
 
-.xp-fill::after {
+/* Multiple layered shimmer effects */
+.xp-fill::after,
+.xp-fill::before {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--gradient-shimmer);
   animation: shimmerAnimation 2s ease-in-out infinite;
 }
 
-.xp-bar:hover .xp-fill::after {
-  animation: shimmerAnimation 0.8s ease-in-out infinite;
+.xp-fill::after {
+  background: var(--gradient-shimmer);
+}
+
+.xp-fill::before {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent
+  );
+  animation-delay: 1s;
 }
 
 .xp-bar:hover .xp-fill {
-  background: linear-gradient(90deg, var(--color-primary-lighter) 0%, var(--color-white) 50%, var(--color-primary-lighter) 100%);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 255, 255, 0.8);
+  background-position: 100% 0;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 
+              0 0 20px rgba(255, 255, 255, 0.9),
+              inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.xp-bar:hover .xp-fill::after {
+  animation: shimmerAnimation 0.6s ease-in-out infinite;
 }
 
 @keyframes fillAnimation {
@@ -212,30 +405,83 @@
   font-weight: 700;
   z-index: 1;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: transform var(--transition-base);
+}
+
+.xp-bar:hover .xp-text {
+  transform: translateY(-50%) scale(1.1);
 }
 
 .achievements-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 50px;
+  perspective: 2000px;
 }
 
 .achievement-card {
   background: var(--gradient-card);
   border-radius: var(--border-radius-md);
-  padding: 20px;
+  padding: 28px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
   border: 2px solid var(--color-primary-lighter);
-  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
-  margin-bottom: 20px;
-  margin-top: 50px;
+  position: relative;
+  margin-bottom: 30px;
+  margin-top: 60px;
   opacity: 0;
-  animation: fadeInUp 0.6s ease-out forwards;
-  animation-delay: calc(var(--card-index, 0) * 0.1s);
+  overflow: hidden;
+  transition: transform var(--transition-base), 
+              box-shadow var(--transition-base), 
+              border-color var(--transition-base);
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: calc(var(--card-index, 0) * 0.08s);
   contain: layout style paint;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+/* Reflection effect */
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  transition: left 0.7s ease;
+  pointer-events: none;
+}
+
+.achievement-card:hover::before {
+  left: 100%;
+}
+
+/* Glow effect */
+.achievement-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: var(--gradient-glow);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.achievement-card:hover::after {
+  opacity: 0.3;
 }
 
 .achievement-card:nth-child(1) { --card-index: 1; }
@@ -254,18 +500,21 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) rotateX(-10deg);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) rotateX(0deg);
   }
 }
 
 .achievement-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-12px) rotateY(2deg) rotateX(2deg) scale(1.03);
+  box-shadow: var(--shadow-lg), 
+              0 0 30px rgba(59, 130, 246, 0.3),
+              0 20px 40px rgba(59, 130, 246, 0.15);
   border-color: var(--color-primary-light);
+  z-index: 10;
 }
 
 .achievement-card:focus-visible {
@@ -274,70 +523,164 @@
 }
 
 .achievement-card:active {
-  transform: translateY(-4px) scale(1.01);
-}
-
-.achievement-card:hover .achievement-icon {
-  transform: rotateY(360deg) scale(1.1);
+  transform: translateY(-8px) scale(1.02);
 }
 
 .achievement-card.locked {
-  opacity: 0.6;
-  filter: grayscale(0.5);
+  opacity: 0.5;
+  filter: grayscale(0.6);
+  position: relative;
+}
+
+.achievement-card.locked::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(100, 116, 139, 0.1) 50%,
+    transparent 100%
+  );
 }
 
 .achievement-card.locked:hover {
-  opacity: 0.8;
-  filter: grayscale(0.3);
+  opacity: 0.75;
+  filter: grayscale(0.4);
+  transform: translateY(-6px) scale(1.01);
 }
 
+/* Nearly complete achievement special effects */
 .achievement-card.nearly-complete {
-  border-color: #FBBF24;
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+  border-color: var(--color-gold);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3),
+              0 0 20px rgba(251, 191, 36, 0.2);
+  animation: nearlyCompleteGlow 2s ease-in-out infinite;
+}
+
+@keyframes nearlyCompleteGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3),
+                0 0 20px rgba(251, 191, 36, 0.2);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(251, 191, 36, 0.5),
+                0 0 30px rgba(251, 191, 36, 0.4);
+  }
+}
+
+.achievement-card.nearly-complete::after {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
 }
 
 .achievement-icon {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   border-radius: var(--border-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 32px;
   color: var(--color-white);
-  margin-bottom: 12px;
+  margin-bottom: 18px;
   background: var(--gradient-primary);
   box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.3);
+  position: relative;
   transition: transform var(--transition-slow);
+  transform-style: preserve-3d;
+}
+
+/* Icon inner glow */
+.achievement-icon::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: calc(var(--border-radius-sm) - 4px);
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.achievement-card:hover .achievement-icon::before {
+  opacity: 1;
+}
+
+.achievement-card:hover .achievement-icon {
+  transform: rotateY(360deg) scale(1.15) translateZ(20px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5),
+              0 0 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Special rainbow effect for rare achievements */
+.achievement-card.rare .achievement-icon {
+  background: var(--gradient-rainbow);
+  background-size: 300% 300%;
+  animation: rainbowShift 3s ease infinite;
+}
+
+@keyframes rainbowShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .achievement-name {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 17px;
   text-align: center;
   color: var(--color-primary-darker);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  transition: transform var(--transition-base);
+}
+
+.achievement-card:hover .achievement-name {
+  transform: scale(1.05);
 }
 
 .achievement-desc {
   font-size: 14px;
   color: var(--color-gray-600);
   text-align: center;
-  margin-bottom: 10px;
-  line-height: 1.4;
+  margin-bottom: 14px;
+  line-height: 1.5;
+  transition: color var(--transition-base);
+}
+
+.achievement-card:hover .achievement-desc {
+  color: var(--color-gray-500);
 }
 
 .badge {
   font-size: 15px;
-  padding: 5px 14px;
+  padding: 7px 18px;
   border-radius: 999px;
   font-weight: 600;
-  transition: transform var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-bounce);
+}
+
+.badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.badge:hover::before {
+  left: 100%;
 }
 
 .badge:hover {
-  transform: scale(1.05);
+  transform: scale(1.1) rotate(-2deg);
 }
 
 .unlocked-badge {
@@ -345,6 +688,10 @@
   color: var(--color-white);
   box-shadow: var(--shadow-sm);
   border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.unlocked-badge:hover {
+  box-shadow: var(--shadow-md), 0 0 15px rgba(59, 130, 246, 0.4);
 }
 
 .locked-badge {
@@ -355,35 +702,58 @@
 
 .progress-bar {
   width: 100%;
-  height: 12px;
+  height: 14px;
   border-radius: 999px;
   background: var(--color-primary-lighter);
   overflow: hidden;
-  margin: 10px 0 6px;
+  margin: 14px 0 8px;
   border: 2px solid var(--color-primary-light);
   position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform var(--transition-base);
+}
+
+.achievement-card:hover .progress-bar {
+  transform: scaleX(1.02);
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 999px;
   background: var(--gradient-progress);
+  background-size: 200% 100%;
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-  transition: width 0.8s ease-out;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              background-position 0.5s ease;
   position: relative;
   overflow: hidden;
   animation: fillAnimation 1.2s ease-out forwards;
 }
 
-.progress-fill::after {
+.progress-fill::after,
+.progress-fill::before {
   content: '';
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--gradient-shimmer);
   animation: shimmerAnimation 2s ease-in-out infinite;
+}
+
+.progress-fill::after {
+  background: var(--gradient-shimmer);
+}
+
+.progress-fill::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation-delay: 1s;
+}
+
+.achievement-card:hover .progress-fill {
+  background-position: 100% 0;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6),
+              inset 0 0 5px rgba(255, 255, 255, 0.3);
 }
 
 .progress-text {
@@ -395,68 +765,126 @@
   font-weight: 700;
   color: var(--color-primary-darker);
   z-index: 1;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+  transition: transform var(--transition-base);
 }
 
+.achievement-card:hover .progress-text {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Particle effects (optional - can be added via JavaScript) */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(50px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Special milestone achievements */
+.achievement-card.milestone {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+  border-color: var(--color-gold);
+}
+
+.achievement-card.milestone .achievement-icon {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow: 0 4px 10px rgba(251, 191, 36, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.7),
+                0 0 30px rgba(251, 191, 36, 0.5);
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .achievements-page {
-    padding: 0 15px;
+    padding: 40px 20px;
   }
 
   .stats-row {
-    gap: 20px;
+    gap: 30px;
     flex-direction: column;
   }
 
   .stat-card {
     flex-direction: column;
-    gap: 15px;
-    padding: 20px;
-    margin-top: 20px;
+    gap: 20px;
+    padding: 24px;
+    margin-top: 25px;
   }
 
   .achievements-grid {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 35px;
   }
 
   .xp-card {
-    padding: 18px 20px;
+    padding: 24px 28px;
   }
 
   .xp-level {
-    font-size: 32px;
+    font-size: 40px;
   }
 }
 
 @media (max-width: 480px) {
+  .achievements-page {
+    padding: 30px 15px;
+  }
+
   .stat-card {
-    gap: 10px;
-    padding: 15px;
+    gap: 15px;
+    padding: 20px;
   }
 
   .stat-value {
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
   }
 
   .achievement-card {
-    padding: 16px;
+    padding: 22px 20px;
   }
 
   .achievement-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+
+  .xp-card {
+    padding: 20px 24px;
+  }
+
+  .xp-level {
+    font-size: 36px;
   }
 }
 
+/* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   :root {
     --gradient-card: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
     --color-gray-100: #334155;
     --color-gray-400: #94A3B8;
     --color-gray-600: #CBD5E1;
+  }
+
+  .achievements-page {
+    background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(147, 197, 253, 0.05) 0%, transparent 50%);
   }
 
   .achievement-name {
@@ -472,9 +900,50 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
+  .achievement-card:hover {
+    box-shadow: var(--shadow-lg), 
+                0 0 30px rgba(59, 130, 246, 0.2),
+                0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+
   .locked-badge {
     background: #1E293B;
     color: #64748B;
     border-color: #334155;
+  }
+
+  .achievement-card.milestone {
+    background: linear-gradient(135deg, #422006 0%, #713F12 100%);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .achievement-card {
+    border-width: 3px;
+  }
+  
+  .stat-card {
+    border-width: 3px;
+  }
+  
+  .xp-bar {
+    border-width: 3px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .achievement-card,
+  .stat-card,
+  .xp-card {
+    break-inside: avoid;
+  }
+  
+  .achievement-card::before,
+  .achievement-card::after,
+  .stat-card::before,
+  .xp-card::before {
+    display: none;
   }
 }
