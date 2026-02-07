@@ -4,6 +4,7 @@ import './index.css'
 
 import DashBoard from './DashBoard'
 import InterviewTraining from './InterviewTraining'
+import LiveInterview from './LiveInterview'
 import Quiz from './Quiz'
 import LearningResources from './LearningResources'
 import CVMaker from './CVMaker'
@@ -19,9 +20,11 @@ function App() {
   const [view, setView] = useState('dashboard')
 
   if (view === 'training') {
-    return <InterviewTraining onBack={() => setView('dashboard')} />
+    return <InterviewTraining onBack={() => setView('dashboard')} onStartInterview={() => setView('live-interview')} />
   }
-
+  if (view === 'live-interview') {
+    return <LiveInterview onBack={() => setView('training')} />;
+  }
   if (view === 'quiz') return <Quiz />
   if (view === 'learning-resources') return <LearningResources />
   if (view === 'cv-maker') return <CVMaker />
