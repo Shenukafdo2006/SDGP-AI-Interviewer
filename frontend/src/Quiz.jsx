@@ -23,7 +23,7 @@ const quizzes = [
   // ...add more quizzes as needed
 ];
 
-const Quiz = () => {
+const Quiz = ({ onBack }) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -52,6 +52,16 @@ const Quiz = () => {
   if (!selectedQuiz) {
     return (
       <div className="quiz-page">
+        <header className="header">
+          <div
+            className="menu-icon"
+            onClick={onBack}
+            style={{ cursor: onBack ? "pointer" : "default" }}
+          >
+            ←
+          </div>
+          <div className="logo">📝</div>
+        </header>
         <h2>Quizzes</h2>
         <div className="quiz-list">
           {quizzes.map((quiz) => (
@@ -70,6 +80,16 @@ const Quiz = () => {
   if (showResult) {
     return (
       <div className="quiz-page">
+        <header className="header">
+          <div
+            className="menu-icon"
+            onClick={onBack}
+            style={{ cursor: onBack ? "pointer" : "default" }}
+          >
+            ←
+          </div>
+          <div className="logo">📝</div>
+        </header>
         <h2>{selectedQuiz.title} - Results</h2>
         <p>Your Score: {getScore()} / {selectedQuiz.questions.length}</p>
         <button onClick={() => setSelectedQuiz(null)}>Back to Quizzes</button>
@@ -80,6 +100,16 @@ const Quiz = () => {
   const q = selectedQuiz.questions[currentQ];
   return (
     <div className="quiz-page">
+      <header className="header">
+        <div
+          className="menu-icon"
+          onClick={onBack}
+          style={{ cursor: onBack ? "pointer" : "default" }}
+        >
+          ←
+        </div>
+        <div className="logo">📝</div>
+      </header>
       <h2>{selectedQuiz.title}</h2>
       <p>{q.q}</p>
       <div className="answers">

@@ -25,7 +25,7 @@ function App() {
   if (view === 'live-interview') {
     return <LiveInterview onBack={() => setView('training')} />;
   }
-  if (view === 'quiz') return <Quiz />
+  if (view === 'quiz') return <Quiz onBack={() => setView('dashboard')} />
   if (view === 'learning-resources') return <LearningResources />
   if (view === 'cv-maker') return <CVMaker />
   if (view === 'cv-filtering') return <CVFiltering />
