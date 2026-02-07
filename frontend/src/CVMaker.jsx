@@ -16,7 +16,7 @@ const initialCV = {
   ],
 };
 
-const CVMaker = () => {
+const CVMaker = ({ onBack }) => {
   const [cv, setCV] = useState(initialCV);
   const [skillInput, setSkillInput] = useState('');
   const [expInput, setExpInput] = useState('');
@@ -58,6 +58,15 @@ const CVMaker = () => {
 
   return (
     <div className="cv-maker-page" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <header className="header">
+        <div
+          className="menu-icon"
+          onClick={onBack}
+          style={{ cursor: onBack ? "pointer" : "default" }}
+        >
+          ←
+        </div>
+      </header>
       <div style={{ flex: 2, minWidth: 350 }}>
         <h2>Personal Information</h2>
         <div style={{ marginBottom: 10 }}>
