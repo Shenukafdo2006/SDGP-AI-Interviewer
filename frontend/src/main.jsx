@@ -26,15 +26,15 @@ function App() {
     return <LiveInterview onBack={() => setView('training')} />;
   }
   if (view === 'quiz') return <Quiz onBack={() => setView('dashboard')} />
-  if (view === 'learning-resources') return <LearningResources />
-  if (view === 'cv-maker') return <CVMaker />
-  if (view === 'cv-filtering') return <CVFiltering />
-  if (view === 'achievements') return <Achievements/>
-  if (view === 'activity-calendar') return <ActivityCalendar />
-  if (view === 'linkedin-integration') return <LinkedInIntegration />
-  if (view === 'career-suggestions') return <CareerSuggestions />
-  if (view === 'skill-improvement') return <SkillImprovement />
-  if (view === 'daily-motivation') return <DailyMotivation />
+  if (view === 'learning-resources') return <LearningResources onBack={() => setView('dashboard')} />
+  if (view === 'cv-maker') return <CVMaker onBack={() => setView('dashboard')} />
+  if (view === 'cv-filtering') return <CVFiltering onBack={() => setView('dashboard')} />
+  if (view === 'achievements') return <Achievements onBack={() => setView('dashboard')} />
+  if (view === 'activity-calendar') return <ActivityCalendar onBack={() => setView('dashboard')} />
+  if (view === 'linkedin-integration') return <LinkedInIntegration onBack={() => setView('dashboard')} />
+  if (view === 'career-suggestions') return <CareerSuggestions onBack={() => setView('dashboard')} />
+  if (view === 'skill-improvement') return <SkillImprovement onBack={() => setView('dashboard')} />
+  if (view === 'daily-motivation') return <DailyMotivation onBack={() => setView('dashboard')} />
 
   return <DashBoard setView={setView} />
 }
