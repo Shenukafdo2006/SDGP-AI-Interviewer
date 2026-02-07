@@ -36,8 +36,14 @@ const tips = [
   },
 ];
 
-const DailyMotivation = () => (
+const DailyMotivation = ({ onBack }) => (
   <div className="daily-motivation-page" style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ position: 'absolute', top: 16, left: 16 }}>
+      <button className="menu-icon" onClick={onBack} style={{ cursor: onBack ? 'pointer' : 'default', background: 'none', border: 'none', fontSize: 28, padding: 0 }}>
+        ←
+      </button>
+    </div>
+    <div style={{ height: 40 }} />
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 30 }}>
       <div style={{ background: 'linear-gradient(90deg,#ff0066,#ff4e9b)', color: '#fff', borderRadius: 20, boxShadow: '0 2px 8px #ccc', padding: '24px 32px', fontSize: 22, fontStyle: 'italic', marginBottom: 10, width: '100%', maxWidth: 800 }}>
         <span style={{ fontSize: 32, marginRight: 12 }}>❝</span>
