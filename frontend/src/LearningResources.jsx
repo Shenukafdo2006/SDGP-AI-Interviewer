@@ -34,12 +34,22 @@ const resources = [
   },
 ];
 
-const LearningResources = () => {
+const LearningResources = ({ onBack }) => {
   const [selected, setSelected] = useState(null);
 
   if (selected) {
     return (
       <div className="learning-resources-page" style={{ maxWidth: 700, margin: '0 auto' }}>
+        <header className="header">
+          <div
+            className="menu-icon"
+            onClick={onBack}
+            style={{ cursor: onBack ? "pointer" : "default" }}
+          >
+            ←
+          </div>
+          <div className="logo">📚</div>
+        </header>
         <button style={{ marginBottom: 20 }} onClick={() => setSelected(null)}>Back to Resources</button>
         <h2>{selected.title}</h2>
         <div style={{ marginBottom: 10 }}>Provider: <b>{selected.provider}</b></div>
@@ -55,6 +65,16 @@ const LearningResources = () => {
 
   return (
     <div className="learning-resources-page" style={{ maxWidth: 700, margin: '0 auto' }}>
+      <header className="header">
+        <div
+          className="menu-icon"
+          onClick={onBack}
+          style={{ cursor: onBack ? "pointer" : "default" }}
+        >
+          ←
+        </div>
+        <div className="logo">📚</div>
+      </header>
       <h2>Learning Resources</h2>
       {resources.map(resource => (
         <div key={resource.id} style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #eee', marginBottom: 24, padding: 18, position: 'relative' }}>
