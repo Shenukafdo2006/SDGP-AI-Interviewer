@@ -79,9 +79,203 @@ const CVMaker = ({ onBack }) => {
     switch (activeFeature) {
       case "dashboard":
         return (
-          <div className="feature-panel">
-            <h3>📊 CV Health Dashboard</h3>
-            <p>Overview of your CV's performance</p>
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>🎯 CV Health Dashboard</h3>
+              <p>Complete overview of your CV's performance and areas for improvement</p>
+            </div>
+
+            <div className="cvmaker-health-overview">
+              <div className="cvmaker-health-score-large">
+                <div className="cvmaker-score-circle-large">
+                  <svg viewBox="0 0 200 200" className="cvmaker-progress-ring">
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="90"
+                      fill="none"
+                      stroke="#e0e0e0"
+                      strokeWidth="20"
+                    />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="90"
+                      fill="none"
+                      stroke="#667eea"
+                      strokeWidth="20"
+                      strokeDasharray="565.48"
+                      strokeDashoffset={565.48 - (565.48 * 78) / 100}
+                      transform="rotate(-90 100 100)"
+                    />
+                  </svg>
+                  <div className="cvmaker-score-overlay">
+                    <div className="cvmaker-score-number-large">78</div>
+                    <div className="cvmaker-score-label-large">Overall Health</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="cvmaker-health-metrics">
+                <div className="cvmaker-metric-card">
+                  <div className="cvmaker-metric-icon">📊</div>
+                  <div className="cvmaker-metric-info">
+                    <h4>ATS Score</h4>
+                    <p className="cvmaker-metric-value">90/100</p>
+                    <span className="cvmaker-metric-status cvmaker-excellent">Excellent</span>
+                  </div>
+                </div>
+
+                <div className="cvmaker-metric-card">
+                  <div className="cvmaker-metric-icon">📖</div>
+                  <div className="cvmaker-metric-info">
+                    <h4>Readability</h4>
+                    <p className="cvmaker-metric-value">88/100</p>
+                    <span className="cvmaker-metric-status cvmaker-good">Good</span>
+                  </div>
+                </div>
+
+                <div className="cvmaker-metric-card">
+                  <div className="cvmaker-metric-icon">✅</div>
+                  <div className="cvmaker-metric-info">
+                    <h4>Completeness</h4>
+                    <p className="cvmaker-metric-value">85/100</p>
+                    <span className="cvmaker-metric-status cvmaker-good">Good</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="cvmaker-section-scores">
+              <h4>📋 Section-by-Section Analysis</h4>
+              <div className="cvmaker-sections-grid">
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Professional Summary</span>
+                    <span className="cvmaker-section-score cvmaker-score-high">92/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '92%', background: '#4caf50'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">✅ Excellent - Well written and impactful</p>
+                </div>
+
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Work Experience</span>
+                    <span className="cvmaker-section-score cvmaker-score-medium">65/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '65%', background: '#ff9800'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">⚠️ Add quantifiable achievements</p>
+                </div>
+
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Education</span>
+                    <span className="cvmaker-section-score cvmaker-score-high">88/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '88%', background: '#4caf50'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">✅ Complete and well-formatted</p>
+                </div>
+
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Skills</span>
+                    <span className="cvmaker-section-score cvmaker-score-medium">70/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '70%', background: '#ff9800'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">⚠️ Add 3 more technical skills</p>
+                </div>
+
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Projects</span>
+                    <span className="cvmaker-section-score cvmaker-score-medium">75/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '75%', background: '#2196f3'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">ℹ️ Add GitHub links to projects</p>
+                </div>
+
+                <div className="cvmaker-section-score-card">
+                  <div className="cvmaker-section-header">
+                    <span className="cvmaker-section-name">Formatting</span>
+                    <span className="cvmaker-section-score cvmaker-score-medium">72/100</span>
+                  </div>
+                  <div className="cvmaker-progress-bar-small">
+                    <div className="cvmaker-progress-fill-small" style={{width: '72%', background: '#2196f3'}}></div>
+                  </div>
+                  <p className="cvmaker-section-feedback">ℹ️ Consider using bullet points</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="cvmaker-improvement-roadmap">
+              <h4>🚀 Improvement Roadmap</h4>
+              <div className="cvmaker-roadmap-items">
+                <div className="cvmaker-roadmap-item cvmaker-priority-high">
+                  <div className="cvmaker-roadmap-icon">🔴</div>
+                  <div className="cvmaker-roadmap-content">
+                    <h5>Experience Section <span className="cvmaker-impact">+15 points</span></h5>
+                    <p>Add quantifiable achievements with metrics and numbers</p>
+                    <span className="cvmaker-priority-badge cvmaker-high">High Priority</span>
+                  </div>
+                </div>
+
+                <div className="cvmaker-roadmap-item cvmaker-priority-medium">
+                  <div className="cvmaker-roadmap-icon">🟡</div>
+                  <div className="cvmaker-roadmap-content">
+                    <h5>Skills Section <span className="cvmaker-impact">+10 points</span></h5>
+                    <p>Add trending skills: Docker, Kubernetes, AWS</p>
+                    <span className="cvmaker-priority-badge cvmaker-medium">Medium Priority</span>
+                  </div>
+                </div>
+
+                <div className="cvmaker-roadmap-item cvmaker-priority-low">
+                  <div className="cvmaker-roadmap-icon">🟢</div>
+                  <div className="cvmaker-roadmap-content">
+                    <h5>Projects Section <span className="cvmaker-impact">+5 points</span></h5>
+                    <p>Link to GitHub repositories for code samples</p>
+                    <span className="cvmaker-priority-badge cvmaker-low">Low Priority</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="cvmaker-comparison">
+              <h4>📊 Industry Comparison</h4>
+              <div className="cvmaker-comparison-chart">
+                <div className="cvmaker-comparison-item">
+                  <span className="cvmaker-comparison-label">Your CV</span>
+                  <div className="cvmaker-comparison-bar">
+                    <div className="cvmaker-comparison-fill cvmaker-your-score" style={{width: '78%'}}>78%</div>
+                  </div>
+                </div>
+                <div className="cvmaker-comparison-item">
+                  <span className="cvmaker-comparison-label">Industry Average</span>
+                  <div className="cvmaker-comparison-bar">
+                    <div className="cvmaker-comparison-fill cvmaker-industry-avg" style={{width: '65%'}}>65%</div>
+                  </div>
+                </div>
+                <div className="cvmaker-comparison-item">
+                  <span className="cvmaker-comparison-label">Top 10% CVs</span>
+                  <div className="cvmaker-comparison-bar">
+                    <div className="cvmaker-comparison-fill cvmaker-top-ten" style={{width: '92%'}}>92%</div>
+                  </div>
+                </div>
+              </div>
+              <p className="cvmaker-comparison-note">
+                💡 You're performing <strong>20% above industry average</strong>! 
+                Focus on high-priority improvements to reach top 10%.
+              </p>
+            </div>
           </div>
         );
 
