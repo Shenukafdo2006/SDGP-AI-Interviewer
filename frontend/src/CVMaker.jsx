@@ -40,6 +40,8 @@ const CVMaker = ({ onBack }) => {
   // =====================
   // Functions
   // =====================
+  
+  // Feature 1: Smart CV Scoring
   const analyzeCV = () => {
     const score = {
       overall: 78,
@@ -48,10 +50,14 @@ const CVMaker = ({ onBack }) => {
       atsScore: 90,
       readability: 88,
       skillsScore: 70,
+      experienceScore: 65,
       feedback: [
-        { type: "success", message: "✅ Professional summary is excellent" },
-        { type: "warning", message: "⚠️ Add more quantifiable achievements" },
-        { type: "info", message: "ℹ️ Consider adding GitHub portfolio link" },
+        { type: "success", message: "✅ Professional summary is excellent and well-structured" },
+        { type: "warning", message: "⚠️ Add more quantifiable achievements (e.g., 'Increased sales by 40%')" },
+        { type: "info", message: "ℹ️ Consider adding GitHub portfolio link to showcase projects" },
+        { type: "success", message: "✅ Skills section matches SE internship requirements perfectly" },
+        { type: "warning", message: "⚠️ Experience section needs action verbs (use 'Led' instead of 'Was responsible for')" },
+        { type: "info", message: "ℹ️ Add 3 more technical skills to match industry standards" },
       ],
       sectionScores: {
         summary: 92,
@@ -60,6 +66,11 @@ const CVMaker = ({ onBack }) => {
         skills: 70,
         projects: 75,
       },
+      improvements: [
+        { section: "Experience", priority: "High", impact: "+15 points" },
+        { section: "Skills", priority: "Medium", impact: "+10 points" },
+        { section: "Projects", priority: "Low", impact: "+5 points" },
+      ]
     };
     setCvHealth(score);
   };
@@ -93,26 +104,98 @@ const CVMaker = ({ onBack }) => {
 
       case "scoring":
         return (
-          <div className="feature-panel">
-            <h3>⭐ Smart CV Scoring</h3>
-            <textarea
-              placeholder="Paste your CV here..."
-              value={cvContent}
-              onChange={(e) => setCvContent(e.target.value)}
-              rows={6}
-              className="cv-input"
-            />
-            <button onClick={analyzeCV} className="analyze-btn">Analyze CV</button>
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>📊 Smart CV Scoring & Feedback</h3>
+              <p>Get detailed AI-powered analysis of your CV's strength and improvement areas</p>
+            </div>
+
+            <div className="cvmaker-scoring-input">
+              <textarea
+                className="cvmaker-cv-input"
+                placeholder="Paste your CV content here for instant analysis..."
+                value={cvContent}
+                onChange={(e) => setCvContent(e.target.value)}
+                rows="6"
+              />
+            </div>
+
+            <button onClick={analyzeCV} className="cvmaker-analyze-btn">
+              🔍 Analyze My CV
+            </button>
+
             {cvHealth && (
-              <div className="cv-score-results">
-                <h4>Overall Score: {cvHealth.overall}%</h4>
-                <p>Completeness: {cvHealth.completeness}%</p>
-                <p>Formatting: {cvHealth.formatting}%</p>
-                <p>ATS Score: {cvHealth.atsScore}%</p>
-                <div className="feedback-list">
-                  {cvHealth.feedback.map((f, i) => (
-                    <p key={i} className={`feedback-${f.type}`}>{f.message}</p>
-                  ))}
+              <div className="cvmaker-scoring-results">
+                <div className="cvmaker-score-cards">
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#4caf50" }}>
+                      {cvHealth.overall}%
+                    </div>
+                    <div className="cvmaker-score-label">Overall Score</div>
+                  </div>
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#2196f3" }}>
+                      {cvHealth.completeness}%
+                    </div>
+                    <div className="cvmaker-score-label">Completeness</div>
+                  </div>
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#ff9800" }}>
+                      {cvHealth.formatting}%
+                    </div>
+                    <div className="cvmaker-score-label">Formatting</div>
+                  </div>
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#9c27b0" }}>
+                      {cvHealth.atsScore}%
+                    </div>
+                    <div className="cvmaker-score-label">ATS Friendly</div>
+                  </div>
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#00bcd4" }}>
+                      {cvHealth.readability}%
+                    </div>
+                    <div className="cvmaker-score-label">Readability</div>
+                  </div>
+                  <div className="cvmaker-score-card">
+                    <div className="cvmaker-score-value" style={{ color: "#e91e63" }}>
+                      {cvHealth.skillsScore}%
+                    </div>
+                    <div className="cvmaker-score-label">Skills Match</div>
+                  </div>
+                </div>
+
+                <div className="cvmaker-feedback-section">
+                  <h4>💡 Detailed Feedback & Recommendations</h4>
+                  <div className="cvmaker-feedback-list">
+                    {cvHealth.feedback.map((item, index) => (
+                      <div key={index} className={`cvmaker-feedback-item cvmaker-${item.type}`}>
+                        {item.message}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-section-breakdown">
+                  <h4>📑 Section Breakdown</h4>
+                  <div className="cvmaker-sections-list">
+                    {Object.entries(cvHealth.sectionScores).map(([section, score]) => (
+                      <div key={section} className="cvmaker-section-item">
+                        <div className="cvmaker-section-name-score">
+                          <span>{section.charAt(0).toUpperCase() + section.slice(1)}</span>
+                          <span className={`cvmaker-section-score ${score >= 80 ? 'cvmaker-score-high' : score >= 60 ? 'cvmaker-score-medium' : 'cvmaker-score-low'}`}>
+                            {score}/100
+                          </span>
+                        </div>
+                        <div className="cvmaker-section-progress">
+                          <div className="cvmaker-section-progress-fill" style={{
+                            width: `${score}%`,
+                            background: score >= 80 ? '#4caf50' : score >= 60 ? '#ff9800' : '#f44336'
+                          }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
