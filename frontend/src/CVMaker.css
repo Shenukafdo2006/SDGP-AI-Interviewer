@@ -802,3 +802,174 @@
   border-radius: 4px;
   transition: width 0.5s ease;
 }
+
+/* ============================================
+   Job Matcher Styles
+   ============================================ */
+
+.cvmaker-matcher-description {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  border-left: 4px solid #667eea;
+}
+
+.cvmaker-matcher-description p {
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+.cvmaker-form-group {
+  margin-bottom: 25px;
+}
+
+.cvmaker-input-label {
+  display: block;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.cvmaker-job-description-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 150px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.cvmaker-job-description-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+}
+
+/* ============================================
+   Match Results
+   ============================================ */
+
+.cvmaker-match-results {
+  margin-top: 30px;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  border: 2px solid #e0e0e0;
+}
+
+.cvmaker-match-score-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.cvmaker-score-badge {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+.cvmaker-score-text h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cvmaker-score-text p {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+.cvmaker-match-status {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cvmaker-match-status.cvmaker-excellent {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cvmaker-match-status.cvmaker-good {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.cvmaker-match-status.cvmaker-needs-work {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.cvmaker-keywords-section {
+  display: grid;
+  gap: 30px;
+}
+
+.cvmaker-keyword-group {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cvmaker-keyword-group h5 {
+  margin: 0 0 15px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.cvmaker-keyword-group.cvmaker-matched h5 {
+  color: #4caf50;
+}
+
+.cvmaker-keyword-group.cvmaker-missing h5 {
+  color: #f44336;
+}
+
+.cvmaker-keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cvmaker-keyword-tag {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.cvmaker-keyword-tag.cvmaker-green {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #4caf50;
+}
+
+.cvmaker-keyword-tag.cvmaker-red {
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #f44336;
+}
