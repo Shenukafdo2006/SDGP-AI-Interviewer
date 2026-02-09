@@ -9,7 +9,8 @@ const CVMaker = ({ onBack }) => {
   const [jobDescription, setJobDescription] = useState("");
   const [cvContent, setCvContent] = useState("");
   const [cvHealth, setCvHealth] = useState(null);
-  const [selectedTemplate, setSelectedTemplate] = useState("modern"); // Add this state
+  const [selectedTemplate, setSelectedTemplate] = useState("modern");
+  const [matchScore, setMatchScore] = useState(null); // Add this state
 
   // =====================
   // Templates & Features
@@ -74,6 +75,58 @@ const CVMaker = ({ onBack }) => {
       ]
     };
     setCvHealth(score);
+  };
+
+  // Feature 2: Job Description Matching
+  const matchJobDescription = () => {
+    if (!jobDescription.trim()) {
+      alert("⚠️ Please enter a job description to analyze");
+      return;
+    }
+
+    const jdKeywords = jobDescription
+      .toLowerCase()
+      .replace(/[^\w\s]/g, " ")
+      .split(/\s+/)
+      .filter((word) => word.length > 3);
+
+    const uniqueJdKeywords = [...new Set(jdKeywords)];
+    
+    const sampleCVData = {
+      skills: ["JavaScript", "React", "Node.js", "Python", "SQL", "Git", "Docker"],
+      summary: "Software engineering student with experience in web development and cloud technologies",
+      experience: ["Web Developer Intern", "Freelance Developer", "Open Source Contributor"],
+      education: ["BSc Computer Science"],
+      projects: ["E-commerce Website", "Task Management App", "Machine Learning Model"]
+    };
+    
+    const cvText = JSON.stringify(sampleCVData).toLowerCase();
+
+    const matched = [];
+    const missing = [];
+
+    uniqueJdKeywords.forEach((keyword) => {
+      if (cvText.includes(keyword)) {
+        matched.push(keyword);
+      } else {
+        missing.push(keyword);
+      }
+    });
+
+    const scorePercentage = Math.round((matched.length / uniqueJdKeywords.length) * 100);
+
+    setMatchScore({
+      percentage: scorePercentage,
+      matchedKeywords: matched.length,
+      totalKeywords: uniqueJdKeywords.length,
+      matchedList: matched.slice(0, 15),
+      missingList: missing.slice(0, 15),
+      recommendations: missing.slice(0, 5).map(skill => ({
+        skill,
+        action: `Add ${skill} to your skills section or complete a project using it`,
+        priority: missing.indexOf(skill) < 3 ? "High" : "Medium"
+      }))
+    });
   };
 
   const renderActiveFeature = () => {
@@ -441,6 +494,111 @@ const CVMaker = ({ onBack }) => {
                     ))}
                   </div>
                 </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case "jobmatch":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>🎯 Job Description Matching</h3>
+              <p>Analyze how well your CV matches specific job requirements</p>
+            </div>
+
+            <div className="cvmaker-matcher-description">
+              <p>📋 Paste a job description below to see your match score and missing keywords</p>
+            </div>
+
+            <div className="cvmaker-form-group">
+              <label className="cvmaker-input-label">Job Description</label>
+              <textarea
+                placeholder="Paste the complete job description here..."
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                rows="10"
+                className="cvmaker-job-description-textarea"
+              />
+            </div>
+
+            <button onClick={matchJobDescription} className="cvmaker-analyze-btn">
+              🔍 Analyze Match Score
+            </button>
+
+            {matchScore && (
+              <div className="cvmaker-match-results">
+                <div className="cvmaker-match-score-header">
+                  <div
+                    className="cvmaker-score-badge"
+                    style={{
+                      background:
+                        matchScore.percentage >= 70
+                          ? "#4caf50"
+                          : matchScore.percentage >= 40
+                          ? "#ff9800"
+                          : "#f44336",
+                    }}
+                  >
+                    {matchScore.percentage}%
+                  </div>
+                  <div className="cvmaker-score-text">
+                    <h4>Match Score</h4>
+                    <p>
+                      Matched {matchScore.matchedKeywords} out of {matchScore.totalKeywords} keywords
+                    </p>
+                    <span className={`cvmaker-match-status ${
+                      matchScore.percentage >= 70 ? 'cvmaker-excellent' : 
+                      matchScore.percentage >= 50 ? 'cvmaker-good' : 'cvmaker-needs-work'
+                    }`}>
+                      {matchScore.percentage >= 70 ? '🎉 Excellent Match!' : 
+                       matchScore.percentage >= 50 ? '👍 Good Match' : '⚠️ Needs Improvement'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="cvmaker-keywords-section">
+                  <div className="cvmaker-keyword-group cvmaker-matched">
+                    <h5>✅ Matched Keywords ({matchScore.matchedList.length})</h5>
+                    <div className="cvmaker-keyword-tags">
+                      {matchScore.matchedList.map((keyword, index) => (
+                        <span key={index} className="cvmaker-keyword-tag cvmaker-green">
+                          {keyword}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="cvmaker-keyword-group cvmaker-missing">
+                    <h5>❌ Missing Keywords ({matchScore.missingList.length})</h5>
+                    <div className="cvmaker-keyword-tags">
+                      {matchScore.missingList.map((keyword, index) => (
+                        <span key={index} className="cvmaker-keyword-tag cvmaker-red">
+                          {keyword}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {matchScore.recommendations && (
+                  <div className="cvmaker-recommendations-section">
+                    <h4>💡 Recommendations to Improve Match</h4>
+                    <div className="cvmaker-recommendations-list">
+                      {matchScore.recommendations.map((rec, index) => (
+                        <div key={index} className="cvmaker-recommendation-item">
+                          <div className="cvmaker-rec-header">
+                            <span className="cvmaker-rec-skill">{rec.skill}</span>
+                            <span className={`cvmaker-priority-badge cvmaker-${rec.priority.toLowerCase()}`}>
+                              {rec.priority} Priority
+                            </span>
+                          </div>
+                          <p className="cvmaker-rec-action">{rec.action}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
