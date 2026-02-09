@@ -1306,3 +1306,241 @@
 .cvmaker-cover-letter-tips li:last-child {
   border-bottom: none;
 }
+
+/* ============================================
+   ATS Test Styles
+   ============================================ */
+
+.cvmaker-ats-info {
+  margin-bottom: 25px;
+}
+
+.cvmaker-info-box {
+  background: #e3f2fd;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #2196f3;
+}
+
+.cvmaker-info-box h5 {
+  color: #1565c0;
+  margin: 0 0 10px 0;
+}
+
+.cvmaker-info-box p {
+  color: #555;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cvmaker-ats-results {
+  margin-top: 30px;
+}
+
+.cvmaker-ats-score-display {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.cvmaker-ats-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cvmaker-score-circle-ats {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.cvmaker-score-number-ats {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #2c3e50;
+}
+
+.cvmaker-score-label-ats {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.cvmaker-ats-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cvmaker-ats-summary h4 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+}
+
+.cvmaker-ats-summary p {
+  color: #555;
+  margin: 0 0 15px 0;
+  font-size: 1.05rem;
+}
+
+.cvmaker-ats-verdict {
+  margin-top: 10px;
+}
+
+.cvmaker-verdict {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.cvmaker-verdict.cvmaker-pass {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cvmaker-verdict.cvmaker-warning {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.cvmaker-verdict.cvmaker-fail {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.cvmaker-ats-issues {
+  margin-bottom: 30px;
+}
+
+.cvmaker-ats-issues h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-issues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cvmaker-issue-item {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  border-left: 4px solid;
+}
+
+.cvmaker-issue-item.cvmaker-success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #4caf50;
+}
+
+.cvmaker-issue-item.cvmaker-warning {
+  background: #fff3e0;
+  color: #e65100;
+  border-color: #ff9800;
+}
+
+.cvmaker-issue-item.cvmaker-info {
+  background: #e3f2fd;
+  color: #1565c0;
+  border-color: #2196f3;
+}
+
+.cvmaker-ats-tips {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.cvmaker-ats-tips h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.cvmaker-tip-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: start;
+}
+
+.cvmaker-tip-number {
+  background: #667eea;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.cvmaker-tip-card p {
+  margin: 0;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.cvmaker-ats-checklist {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-ats-checklist h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cvmaker-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cvmaker-checklist-item:hover {
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.cvmaker-checklist-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.cvmaker-checklist-item span {
+  color: #555;
+  font-size: 0.95rem;
+}
