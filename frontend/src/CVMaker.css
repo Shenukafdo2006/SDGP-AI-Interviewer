@@ -276,4 +276,194 @@
 .cvmaker-sidebar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
 }
+/* ============================================
+   Dashboard Health Overview
+   ============================================ */
 
+.cvmaker-health-overview {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  padding: 40px;
+  border-radius: 15px;
+}
+
+.cvmaker-health-score-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cvmaker-score-circle-large {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.cvmaker-progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.cvmaker-score-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.cvmaker-score-number-large {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #667eea;
+  line-height: 1;
+}
+
+.cvmaker-score-label-large {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.cvmaker-health-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.cvmaker-metric-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  display: flex;
+  gap: 15px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.cvmaker-metric-card:hover {
+  transform: translateY(-5px);
+}
+
+.cvmaker-metric-icon {
+  font-size: 2rem;
+}
+
+.cvmaker-metric-info h4 {
+  color: #718096;
+  font-size: 0.85rem;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.cvmaker-metric-value {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.cvmaker-metric-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cvmaker-metric-status.cvmaker-excellent {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cvmaker-metric-status.cvmaker-good {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+/* ============================================
+   Section Scores
+   ============================================ */
+
+.cvmaker-section-scores {
+  margin-bottom: 40px;
+}
+
+.cvmaker-section-scores h4 {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+}
+
+.cvmaker-sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.cvmaker-section-score-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+}
+
+.cvmaker-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cvmaker-section-name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.cvmaker-section-score {
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.cvmaker-section-score.cvmaker-score-high {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cvmaker-section-score.cvmaker-score-medium {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.cvmaker-section-score.cvmaker-score-low {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.cvmaker-progress-bar-small {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.cvmaker-progress-fill-small {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.cvmaker-section-feedback {
+  color: #555;
+  font-size: 0.9rem;
+  margin: 0;
+}
