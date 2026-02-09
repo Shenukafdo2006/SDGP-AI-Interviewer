@@ -1,208 +1,423 @@
-import React, { useState } from "react";
-import "./CVMaker.css";
+import React, { useState } from 'react';
+import './CVMaker.css';
 
 const CVMaker = () => {
-  const [activeFeature, setActiveFeature] = useState("welcome");
-  const [selectedTemplate, setSelectedTemplate] = useState("modern");
+  const [cvData, setCvData] = useState({
+    personalInfo: {
+      fullName: '',
+      email: '',
+      phone: '',
+      location: ''
+    },
+    summary: '',
+    experience: [],
+    education: [],
+    skills: []
+  });
 
-  // Templates data
-  const templates = [
-    { id: "modern", name: "Modern", icon: "✨", color: "#667eea" },
-    { id: "professional", name: "Professional", icon: "👔", color: "#2c3e50" },
-    { id: "creative", name: "Creative", icon: "🎨", color: "#764ba2" },
-    { id: "minimal", name: "Minimal", icon: "📄", color: "#4caf50" },
-    { id: "academic", name: "Academic", icon: "🎓", color: "#2196f3" },
-    { id: "tech", name: "Tech", icon: "💻", color: "#ff9800" },
-  ];
+  const [jobDescription, setJobDescription] = useState('');
+  const [matchScore, setMatchScore] = useState(null);
+  const [cvHealth, setCvHealth] = useState(null);
+  const [showScoring, setShowScoring] = useState(false);
+  const [showMatching, setShowMatching] = useState(false);
 
-  // Feature list for sidebar
-  const features = [
-    { id: "templates", icon: "📋", label: "Templates" },
-    { id: "scoring", icon: "📊", label: "CV Scoring", badge: "New" },
-    { id: "jobmatch", icon: "🎯", label: "Job Match", badge: "Hot" },
-    { id: "ai", icon: "🤖", label: "AI Suggestions" },
-    { id: "coverletter", icon: "✉️", label: "Cover Letter" },
-    { id: "ats", icon: "✅", label: "ATS Test" },
-    { id: "portfolio", icon: "🎨", label: "Portfolio" },
-    { id: "export", icon: "📤", label: "Export" },
-  ];
+  // ==========================================
+  // FEATURE 1: Smart CV Scoring & Feedback System
+  // ==========================================
+  const analyzeCV = () => {
+    const score = {
+      overall: 0,
+      completeness: 0,
+      formatting: 0,
+      feedback: []
+    };
 
-  const renderActiveFeature = () => {
-    switch (activeFeature) {
-      case "templates":
-        return (
-          <div className="feature-panel">
-            <div className="panel-header">
-              <h3>📋 CV Templates</h3>
-              <p>Choose from professionally designed templates for your internship applications</p>
-            </div>
+    // Check completeness - Required fields
+    const requiredFields = ['fullName', 'email', 'phone'];
+    const filledFields = requiredFields.filter(field => cvData.personalInfo[field]);
+    score.completeness = Math.round((filledFields.length / requiredFields.length) * 100);
 
-            <div className="templates-grid">
-              {templates.map((template) => (
-                <div
-                  key={template.id}
-                  className={`template-card ${selectedTemplate === template.id ? "selected" : ""}`}
-                  onClick={() => setSelectedTemplate(template.id)}
-                  style={{ borderColor: template.color }}
-                >
-                  <div className="template-icon" style={{ color: template.color }}>
-                    {template.icon}
-                  </div>
-                  <h4>{template.name}</h4>
-                  <p>
-                    Perfect for{" "}
-                    {template.id === "tech"
-                      ? "SE students"
-                      : template.id === "academic"
-                      ? "QS students"
-                      : template.id === "professional"
-                      ? "PM students"
-                      : "all roles"}
-                  </p>
-                  <button className="preview-btn" style={{ background: template.color }}>
-                    Preview
-                  </button>
-                </div>
-              ))}
-            </div>
+    // Check sections
+    if (cvData.experience.length > 0) score.completeness += 10;
+    if (cvData.education.length > 0) score.completeness += 10;
+    if (cvData.skills.length > 0) score.completeness += 10;
 
-            {selectedTemplate && (
-              <div className="selected-template-info">
-                <h4>✅ Selected Template: {templates.find(t => t.id === selectedTemplate)?.name}</h4>
-                <p>You can customize this template with your information</p>
-                <button className="use-template-btn">
-                  Use This Template →
-                </button>
-              </div>
-            )}
-          </div>
-        );
+    // Cap at 100
+    score.completeness = Math.min(score.completeness, 100);
 
-      default:
-        return (
-          <div className="feature-panel">
-            <div className="panel-header">
-              <h3>🎯 Welcome to CV Maker</h3>
-              <p>Select a feature from the sidebar to get started with building your professional resume</p>
-            </div>
-            <div className="welcome-content">
-              <div className="welcome-grid">
-                <div className="welcome-card">
-                  <div className="welcome-icon">📊</div>
-                  <h4>Smart CV Analysis</h4>
-                  <p>Get AI-powered feedback on your resume</p>
-                </div>
-                <div className="welcome-card">
-                  <div className="welcome-icon">🎯</div>
-                  <h4>Job Matching</h4>
-                  <p>Match your CV with job requirements</p>
-                </div>
-                <div className="welcome-card">
-                  <div className="welcome-icon">📋</div>
-                  <h4>Professional Templates</h4>
-                  <p>Choose from beautiful resume designs</p>
-                </div>
-                <div className="welcome-card">
-                  <div className="welcome-icon">✨</div>
-                  <h4>AI Suggestions</h4>
-                  <p>Improve your CV with smart recommendations</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+    // Formatting check
+    score.formatting = cvData.summary.length > 50 ? 100 : Math.round((cvData.summary.length / 50) * 100);
+
+    // Calculate overall
+    score.overall = Math.round((score.completeness + score.formatting) / 2);
+
+    // Generate feedback
+    if (cvData.personalInfo.fullName === '') {
+      score.feedback.push({ type: 'error', message: '❌ Add your full name' });
     }
+    if (cvData.personalInfo.email === '') {
+      score.feedback.push({ type: 'error', message: '❌ Add your email address' });
+    }
+    if (cvData.personalInfo.phone === '') {
+      score.feedback.push({ type: 'warning', message: '⚠️ Add your phone number' });
+    }
+    if (cvData.experience.length === 0) {
+      score.feedback.push({ type: 'warning', message: '⚠️ Add at least one work experience' });
+    }
+    if (cvData.skills.length < 5) {
+      score.feedback.push({ type: 'info', message: 'ℹ️ Add more skills (at least 5 recommended)' });
+    }
+    if (cvData.summary.length < 50) {
+      score.feedback.push({ type: 'info', message: 'ℹ️ Write a longer professional summary (50+ characters)' });
+    }
+
+    setCvHealth(score);
+    setShowScoring(true);
+  };
+
+  // ==========================================
+  // FEATURE 2: Job Description Matching
+  // ==========================================
+  const matchJobDescription = () => {
+    if (!jobDescription.trim()) {
+      alert('⚠️ Please enter a job description to analyze');
+      return;
+    }
+
+    // Extract keywords from job description (words longer than 3 characters)
+    const jdKeywords = jobDescription
+      .toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 3);
+
+    // Remove duplicates
+    const uniqueJdKeywords = [...new Set(jdKeywords)];
+
+    // Get all CV text
+    const cvText = JSON.stringify(cvData).toLowerCase();
+    
+    // Count matched keywords
+    const matched = [];
+    const missing = [];
+
+    uniqueJdKeywords.forEach(keyword => {
+      if (cvText.includes(keyword)) {
+        matched.push(keyword);
+      } else {
+        missing.push(keyword);
+      }
+    });
+
+    const scorePercentage = Math.round((matched.length / uniqueJdKeywords.length) * 100);
+    
+    setMatchScore({
+      percentage: scorePercentage,
+      matchedKeywords: matched.length,
+      totalKeywords: uniqueJdKeywords.length,
+      matchedList: matched.slice(0, 15),
+      missingList: missing.slice(0, 15)
+    });
+    setShowMatching(true);
   };
 
   return (
-    <div className="cv-maker-dashboard">
-      {/* Sidebar Navigation */}
-      <div className="cv-maker-sidebar">
-        <div className="sidebar-header">
-          <h2>🎯 CV Maker</h2>
-          <p className="subtitle">AI-Powered Resume Builder</p>
-          <div className="user-progress">
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "12%" }}></div>
-            </div>
-            <span>12% Complete</span>
+    <div className="cv-maker-container">
+      {/* Header */}
+      <div className="cv-maker-header">
+        <h1>🎯 AI-Powered CV Maker</h1>
+        <p>Create, Analyze & Optimize Your Resume</p>
+      </div>
+
+      {/* Feature Buttons */}
+      <div className="feature-buttons">
+        <button onClick={analyzeCV} className="feature-btn primary">
+          📊 Smart CV Scoring & Feedback
+        </button>
+        <button onClick={() => setShowMatching(!showMatching)} className="feature-btn secondary">
+          🎯 Job Description Matching
+        </button>
+      </div>
+
+      {/* Basic CV Form */}
+      <div className="cv-form-section">
+        <h2>📝 Your CV Information</h2>
+        
+        <div className="form-group">
+          <label>Full Name *</label>
+          <input
+            type="text"
+            placeholder="e.g., John Doe"
+            value={cvData.personalInfo.fullName}
+            onChange={(e) => setCvData({
+              ...cvData,
+              personalInfo: { ...cvData.personalInfo, fullName: e.target.value }
+            })}
+          />
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Email Address *</label>
+            <input
+              type="email"
+              placeholder="john.doe@example.com"
+              value={cvData.personalInfo.email}
+              onChange={(e) => setCvData({
+                ...cvData,
+                personalInfo: { ...cvData.personalInfo, email: e.target.value }
+              })}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Phone Number *</label>
+            <input
+              type="tel"
+              placeholder="+1 (234) 567-8900"
+              value={cvData.personalInfo.phone}
+              onChange={(e) => setCvData({
+                ...cvData,
+                personalInfo: { ...cvData.personalInfo, phone: e.target.value }
+              })}
+            />
           </div>
         </div>
 
-        <div className="sidebar-features">
-          {features.map((feature) => (
-            <button
-              key={feature.id}
-              className={`sidebar-feature ${activeFeature === feature.id ? "active" : ""}`}
-              onClick={() => setActiveFeature(feature.id)}
-            >
-              <span className="feature-icon">{feature.icon}</span>
-              <span className="feature-label">{feature.label}</span>
-              {feature.badge && (
-                <span className="badge">{feature.badge}</span>
-              )}
-            </button>
-          ))}
+        <div className="form-group">
+          <label>Location</label>
+          <input
+            type="text"
+            placeholder="City, Country"
+            value={cvData.personalInfo.location}
+            onChange={(e) => setCvData({
+              ...cvData,
+              personalInfo: { ...cvData.personalInfo, location: e.target.value }
+            })}
+          />
         </div>
 
-        <div className="sidebar-footer">
-          <div className="target-audience">
-            <h4>🎯 For Internship Students</h4>
-            <div className="audience-tags">
-              <span className="tag">Software Engineering</span>
-              <span className="tag">Quality Assurance</span>
-              <span className="tag">Project Management</span>
-            </div>
-          </div>
+        <div className="form-group">
+          <label>Professional Summary</label>
+          <textarea
+            placeholder="Write a brief summary about your professional background and career goals... (50+ characters recommended)"
+            value={cvData.summary}
+            onChange={(e) => setCvData({ ...cvData, summary: e.target.value })}
+            rows="5"
+          />
+          <small className="char-count">
+            {cvData.summary.length} characters 
+            {cvData.summary.length < 50 && ` (${50 - cvData.summary.length} more needed)`}
+          </small>
+        </div>
+
+        <div className="form-group">
+          <label>Skills (comma separated)</label>
+          <input
+            type="text"
+            placeholder="e.g., React, JavaScript, Python, Node.js, SQL, AWS"
+            value={cvData.skills.join(', ')}
+            onChange={(e) => setCvData({ 
+              ...cvData, 
+              skills: e.target.value.split(',').map(s => s.trim()).filter(s => s)
+            })}
+          />
+          <small className="skill-count">
+            {cvData.skills.length} skill{cvData.skills.length !== 1 ? 's' : ''} added
+            {cvData.skills.length < 5 && ` (${5 - cvData.skills.length} more recommended)`}
+          </small>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="cv-maker-content">
-        <div className="content-header">
-          <h1>
-            {features.find((f) => f.id === activeFeature)?.icon || "🎯"}
-            {" "}
-            {features.find((f) => f.id === activeFeature)?.label || "Welcome"}
-          </h1>
-          <p className="feature-description">
-            {activeFeature === "templates" && "Choose from professionally designed templates"}
-            {activeFeature === "welcome" && "Welcome to CV Maker - Your AI-powered resume building assistant"}
-          </p>
+      {/* Feature 1: CV Health Score Display */}
+      {showScoring && cvHealth && (
+        <div className="cv-health-dashboard">
+          <div className="dashboard-header">
+            <h3>📊 Your CV Health Score</h3>
+            <button onClick={() => setShowScoring(false)} className="close-btn">✕</button>
+          </div>
+          
+          <div className="score-circle">
+            <div className="circle" style={{
+              background: `conic-gradient(
+                ${cvHealth.overall >= 70 ? '#4caf50' : cvHealth.overall >= 40 ? '#ff9800' : '#f44336'} 0% ${cvHealth.overall}%,
+                #e0e0e0 ${cvHealth.overall}% 100%
+              )`
+            }}>
+              <div className="inner-circle">
+                <div className="score-content">
+                  <span className="score-number">{cvHealth.overall}%</span>
+                  <span className="score-label">
+                    {cvHealth.overall >= 70 ? 'Excellent' : cvHealth.overall >= 40 ? 'Good' : 'Needs Work'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="health-bars">
+            <div className="health-bar">
+              <div className="health-bar-header">
+                <span>Completeness</span>
+                <span className="percentage">{cvHealth.completeness}%</span>
+              </div>
+              <div className="bar">
+                <div className="fill" style={{ width: `${cvHealth.completeness}%` }}></div>
+              </div>
+            </div>
+
+            <div className="health-bar">
+              <div className="health-bar-header">
+                <span>Formatting Quality</span>
+                <span className="percentage">{cvHealth.formatting}%</span>
+              </div>
+              <div className="bar">
+                <div className="fill" style={{ width: `${cvHealth.formatting}%` }}></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="feedback-section">
+            <h4>💡 Recommendations to Improve Your CV</h4>
+            <div className="feedback-list">
+              {cvHealth.feedback.length > 0 ? (
+                cvHealth.feedback.map((item, index) => (
+                  <div key={index} className={`feedback-item ${item.type}`}>
+                    {item.message}
+                  </div>
+                ))
+              ) : (
+                <div className="feedback-item success">
+                  ✅ Excellent! Your CV is complete and well-formatted!
+                </div>
+              )}
+            </div>
+          </div>
         </div>
+      )}
 
-        {/* Active Feature Component */}
-        <div className="feature-container">{renderActiveFeature()}</div>
+      {/* Feature 2: Job Description Matcher */}
+      {showMatching && (
+        <div className="job-matcher-section">
+          <div className="dashboard-header">
+            <h3>🎯 Job Description Matcher</h3>
+            <button onClick={() => setShowMatching(false)} className="close-btn">✕</button>
+          </div>
 
-        {/* Quick Stats Bar */}
-        <div className="quick-stats">
-          <div className="stat-card">
-            <div className="stat-icon">📄</div>
-            <div className="stat-info">
-              <h4>CV Score</h4>
-              <p className="stat-value">--/100</p>
-            </div>
+          <div className="matcher-description">
+            <p>📋 Paste a job description below to see how well your CV matches the requirements.</p>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">🎯</div>
-            <div className="stat-info">
-              <h4>Match Rate</h4>
-              <p className="stat-value">--%</p>
-            </div>
+
+          <div className="form-group">
+            <label>Job Description</label>
+            <textarea
+              placeholder="Paste the complete job description here...
+
+Example:
+We are seeking a Senior Full Stack Developer with 5+ years of experience.
+
+Requirements:
+- Strong knowledge of React and Node.js
+- Experience with AWS cloud services
+- Proficiency in JavaScript/TypeScript
+- Database experience (MongoDB, PostgreSQL)
+..."
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              rows="10"
+              className="job-description-textarea"
+            />
+            <small>{jobDescription.length} characters</small>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">🚀</div>
-            <div className="stat-info">
-              <h4>Internship Ready</h4>
-              <p className="stat-value">--%</p>
+
+          <button onClick={matchJobDescription} className="analyze-btn">
+            🔍 Analyze Match Score
+          </button>
+
+          {/* Match Results */}
+          {matchScore && (
+            <div className="match-results">
+              <div className="match-score-header">
+                <div className="score-badge" style={{
+                  background: matchScore.percentage >= 70 ? '#4caf50' : 
+                              matchScore.percentage >= 40 ? '#ff9800' : '#f44336'
+                }}>
+                  {matchScore.percentage}%
+                </div>
+                <div className="score-text">
+                  <h4>Match Score</h4>
+                  <p>Matched {matchScore.matchedKeywords} out of {matchScore.totalKeywords} keywords</p>
+                  <div className="match-rating">
+                    {matchScore.percentage >= 70 && '🌟 Excellent Match!'}
+                    {matchScore.percentage >= 40 && matchScore.percentage < 70 && '👍 Good Match'}
+                    {matchScore.percentage < 40 && '⚠️ Needs Improvement'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="keywords-section">
+                <div className="keyword-group matched">
+                  <h5>✅ Matched Keywords ({matchScore.matchedList.length})</h5>
+                  <p className="keyword-description">These keywords from the job description are already in your CV</p>
+                  <div className="keyword-tags">
+                    {matchScore.matchedList.map((keyword, index) => (
+                      <span key={index} className="keyword-tag green">{keyword}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="keyword-group missing">
+                  <h5>❌ Missing Keywords ({matchScore.missingList.length})</h5>
+                  <p className="keyword-description">Consider adding these keywords to improve your match</p>
+                  <div className="keyword-tags">
+                    {matchScore.missingList.map((keyword, index) => (
+                      <span key={index} className="keyword-tag red">{keyword}</span>
+                    ))}
+                  </div>
+                  {matchScore.missingList.length > 0 && (
+                    <p className="hint">
+                      💡 <strong>Tip:</strong> Add relevant missing keywords to your professional summary, skills, or experience sections to improve your match score.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="action-buttons">
+                <button onClick={() => {
+                  setJobDescription('');
+                  setMatchScore(null);
+                }} className="reset-btn">
+                  🔄 Try Another Job Description
+                </button>
+              </div>
             </div>
+          )}
+        </div>
+      )}
+
+      {/* Quick Tips Section */}
+      <div className="quick-tips">
+        <h3>💡 Quick Tips</h3>
+        <div className="tips-grid">
+          <div className="tip-card">
+            <div className="tip-icon">📝</div>
+            <h4>Be Specific</h4>
+            <p>Use concrete examples and quantifiable achievements in your summary</p>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">⏱️</div>
-            <div className="stat-info">
-              <h4>Time Saved</h4>
-              <p className="stat-value">0h</p>
-            </div>
+          <div className="tip-card">
+            <div className="tip-icon">🎯</div>
+            <h4>Match Keywords</h4>
+            <p>Tailor your CV to include keywords from the job description</p>
+          </div>
+          <div className="tip-card">
+            <div className="tip-icon">✨</div>
+            <h4>Keep It Clean</h4>
+            <p>Use clear formatting and avoid unnecessary graphics or colors</p>
+          </div>
+          <div className="tip-card">
+            <div className="tip-icon">🚀</div>
+            <h4>Show Impact</h4>
+            <p>Focus on achievements and results rather than just responsibilities</p>
           </div>
         </div>
       </div>
