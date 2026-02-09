@@ -467,3 +467,159 @@
   font-size: 0.9rem;
   margin: 0;
 }
+
+/* ============================================
+   Templates Grid
+   ============================================ */
+
+.cvmaker-template-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.cvmaker-filter-btn {
+  padding: 10px 20px;
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  color: #2c3e50;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-filter-btn:hover {
+  background: #e0e0e0;
+}
+
+.cvmaker-filter-btn.cvmaker-active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.cvmaker-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.cvmaker-template-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cvmaker-template-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.cvmaker-template-card.cvmaker-selected {
+  border-width: 3px;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.cvmaker-template-preview {
+  height: 150px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cvmaker-template-icon {
+  font-size: 4rem;
+}
+
+.cvmaker-template-details {
+  padding: 20px;
+}
+
+.cvmaker-template-details h4 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  font-size: 1.3rem;
+}
+
+.cvmaker-template-description {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  min-height: 40px;
+}
+
+.cvmaker-template-meta {
+  margin-bottom: 15px;
+}
+
+.cvmaker-best-for {
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.cvmaker-template-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cvmaker-preview-btn {
+  flex: 1;
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-preview-btn:hover {
+  background: #5a6fd8;
+  transform: translateY(-2px);
+}
+
+.cvmaker-use-template-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: default;
+}
+
+.cvmaker-template-tips {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.cvmaker-template-tips h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.cvmaker-template-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cvmaker-template-tips li {
+  padding: 10px 0;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cvmaker-template-tips li:last-child {
+  border-bottom: none;
+}
