@@ -9,6 +9,7 @@ const CVMaker = ({ onBack }) => {
   const [jobDescription, setJobDescription] = useState("");
   const [cvContent, setCvContent] = useState("");
   const [cvHealth, setCvHealth] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState("modern"); // Add this state
 
   // =====================
   // Templates & Features
@@ -281,17 +282,66 @@ const CVMaker = ({ onBack }) => {
 
       case "templates":
         return (
-          <div className="feature-panel">
-            <h3>📋 Choose a Template</h3>
-            <div className="template-list">
-              {templates.map((tpl) => (
-                <div key={tpl.id} className={`template-card ${tpl.id === activeFeature ? "active" : ""}`} style={{ borderColor: tpl.color }}>
-                  <span className="icon">{tpl.icon}</span>
-                  <h4>{tpl.name}</h4>
-                  <p>{tpl.description}</p>
-                  <small>Best for: {tpl.bestFor}</small>
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>📋 CV Templates</h3>
+              <p>Choose from professionally designed templates optimized for different industries</p>
+            </div>
+            <div className="cvmaker-template-filter">
+              <button className="cvmaker-filter-btn cvmaker-active">All Templates</button>
+              <button className="cvmaker-filter-btn">ATS-Friendly</button>
+              <button className="cvmaker-filter-btn">Creative</button>
+              <button className="cvmaker-filter-btn">Technical</button>
+            </div>
+            <div className="cvmaker-templates-grid">
+              {templates.map((template) => (
+                <div
+                  key={template.id}
+                  className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`}
+                  onClick={() => setSelectedTemplate(template.id)}
+                >
+                  <div className="cvmaker-template-preview">
+                    <div className="cvmaker-template-icon" style={{ color: template.color }}>
+                      {template.icon}
+                    </div>
+                  </div>
+                  <div className="cvmaker-template-details">
+                    <h4>{template.name}</h4>
+                    <p className="cvmaker-template-description">{template.description}</p>
+                    <div className="cvmaker-template-meta">
+                      <span className="cvmaker-best-for">
+                        <strong>Best for:</strong> {template.bestFor}
+                      </span>
+                    </div>
+                    <div className="cvmaker-template-actions">
+                      <button 
+                        className="cvmaker-preview-btn" 
+                        style={{ background: template.color }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          alert(`Previewing ${template.name} template...`);
+                        }}
+                      >
+                        Preview
+                      </button>
+                      {selectedTemplate === template.id && (
+                        <button className="cvmaker-use-template-btn">
+                          ✓ Using
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               ))}
+            </div>
+            <div className="cvmaker-template-tips">
+              <h4>💡 Template Selection Tips</h4>
+              <ul>
+                <li><strong>For Tech Jobs:</strong> Use Modern or Tech templates with project sections</li>
+                <li><strong>For Corporate:</strong> Professional template works best for finance/consulting</li>
+                <li><strong>For ATS Systems:</strong> Minimal template has highest compatibility (95%+)</li>
+                <li><strong>For Creative Roles:</strong> Creative template showcases your design sense</li>
+              </ul>
             </div>
           </div>
         );
