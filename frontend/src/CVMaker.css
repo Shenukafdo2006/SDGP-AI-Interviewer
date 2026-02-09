@@ -1,5 +1,5 @@
 /* ============================================
-   CV Maker Dashboard - Complete Styles
+   CV Maker Dashboard - Commit 2: Base + Templates
    ============================================ */
 
 * {
@@ -230,7 +230,97 @@ body {
 }
 
 /* ============================================
-   Templates Grid
+   Welcome Screen
+   ============================================ */
+
+.welcome-content {
+  margin-top: 40px;
+}
+
+.welcome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.welcome-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+  border-color: #667eea;
+}
+
+.welcome-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.welcome-card h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.welcome-card p {
+  color: #718096;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ============================================
+   Quick Stats Bar
+   ============================================ */
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+}
+
+.stat-info h4 {
+  color: #718096;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* ============================================
+   Templates Feature Styles
    ============================================ */
 
 .templates-grid {
@@ -295,265 +385,39 @@ body {
   transform: translateY(-2px);
 }
 
-/* ============================================
-   Analyze Button
-   ============================================ */
+.selected-template-info {
+  margin-top: 40px;
+  padding: 25px;
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-radius: 12px;
+  border: 2px solid #667eea;
+  text-align: center;
+}
 
-.analyze-btn {
+.selected-template-info h4 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.selected-template-info p {
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+.use-template-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 15px 40px;
-  border-radius: 10px;
-  font-size: 1.1rem;
+  padding: 12px 35px;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 30px;
 }
 
-.analyze-btn:hover {
+.use-template-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-/* ============================================
-   Scoring Results
-   ============================================ */
-
-.scoring-results {
-  margin-top: 30px;
-}
-
-.score-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
-}
-
-.score-card {
-  background: #f8f9fa;
-  padding: 25px;
-  border-radius: 12px;
-  text-align: center;
-  border: 2px solid #e9ecef;
-}
-
-.score-value {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.score-label {
-  color: #718096;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-/* ============================================
-   Feedback Section
-   ============================================ */
-
-.feedback-section {
-  background: #f8f9fa;
-  padding: 25px;
-  border-radius: 12px;
-  margin-top: 30px;
-}
-
-.feedback-section h4 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-}
-
-.feedback-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.feedback-item {
-  padding: 15px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  border-left: 5px solid;
-}
-
-.feedback-item.success {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #4caf50;
-}
-
-.feedback-item.warning {
-  background: #fff3e0;
-  color: #e65100;
-  border-color: #ff9800;
-}
-
-.feedback-item.info {
-  background: #e3f2fd;
-  color: #1565c0;
-  border-color: #2196f3;
-}
-
-/* ============================================
-   Job Matcher Styles
-   ============================================ */
-
-.matcher-description {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 25px;
-  border-left: 4px solid #667eea;
-}
-
-.matcher-description p {
-  margin: 0;
-  color: #555;
-  font-size: 1rem;
-}
-
-.form-group {
-  margin-bottom: 25px;
-}
-
-.job-description-textarea {
-  width: 100%;
-  padding: 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-family: inherit;
-  resize: vertical;
-  min-height: 150px;
-  background: #fafafa;
-}
-
-.job-description-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  background: white;
-}
-
-/* ============================================
-   Match Results
-   ============================================ */
-
-.match-results {
-  margin-top: 30px;
-  padding: 30px;
-  background: #f8f9fa;
-  border-radius: 15px;
-  border: 2px solid #e0e0e0;
-}
-
-.match-score-header {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.score-badge {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: white;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-}
-
-.score-text h4 {
-  margin: 0 0 8px 0;
-  color: #333;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.score-text p {
-  margin: 0;
-  color: #666;
-  font-size: 1rem;
-}
-
-.keywords-section {
-  display: grid;
-  gap: 30px;
-}
-
-.keyword-group {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-}
-
-.keyword-group h5 {
-  margin: 0 0 15px 0;
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.keyword-group.matched h5 {
-  color: #4caf50;
-}
-
-.keyword-group.missing h5 {
-  color: #f44336;
-}
-
-.keyword-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.keyword-tag {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: inline-block;
-}
-
-.keyword-tag.green {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #4caf50;
-}
-
-.keyword-tag.red {
-  background: #ffebee;
-  color: #c62828;
-  border: 1px solid #f44336;
-}
-
-/* ============================================
-   Suggestions Grid
-   ============================================ */
-
-.suggestions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 25px;
-  margin-top: 30px;
-}
-
-.suggestion-card {
-  background: #f8f9fa;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  border: 2px solid #e9ecef;
 }
