@@ -10,7 +10,8 @@ const CVMaker = ({ onBack }) => {
   const [cvContent, setCvContent] = useState("");
   const [cvHealth, setCvHealth] = useState(null);
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
-  const [matchScore, setMatchScore] = useState(null); // Add this state
+  const [matchScore, setMatchScore] = useState(null);
+  const [aiSuggestions, setAiSuggestions] = useState([]); // Add this state
 
   // =====================
   // Templates & Features
@@ -127,6 +128,40 @@ const CVMaker = ({ onBack }) => {
         priority: missing.indexOf(skill) < 3 ? "High" : "Medium"
       }))
     });
+  };
+
+  // Feature 5: AI Content Suggestions
+  const generateAISuggestions = () => {
+    setAiSuggestions([
+      {
+        section: "Summary",
+        original: "I am a software developer with experience in coding",
+        suggested: "Results-driven Software Developer with 3+ years of experience building scalable web applications using modern technologies",
+        improvement: "+25 points",
+        reason: "More specific, quantified, and uses strong action words"
+      },
+      {
+        section: "Experience",
+        original: "Made website faster",
+        suggested: "Optimized website loading speed from 5.2s to 1.5s (71% improvement), enhancing user experience for 50,000+ monthly visitors",
+        improvement: "+20 points",
+        reason: "Quantifiable results with specific metrics"
+      },
+      {
+        section: "Skills",
+        original: "Good at Python",
+        suggested: "Python (Advanced): Django, Flask, NumPy, Pandas - 3+ years production experience",
+        improvement: "+15 points",
+        reason: "Specific frameworks and proficiency level"
+      },
+      {
+        section: "Projects",
+        original: "Built a web app",
+        suggested: "Developed full-stack e-commerce platform using React and Node.js, implementing secure payment gateway (Stripe) and serving 1,000+ active users",
+        improvement: "+18 points",
+        reason: "Specific technologies and measurable impact"
+      }
+    ]);
   };
 
   const renderActiveFeature = () => {
@@ -601,6 +636,89 @@ const CVMaker = ({ onBack }) => {
                 )}
               </div>
             )}
+          </div>
+        );
+
+      case "ai":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>🤖 AI-Powered Content Suggestions</h3>
+              <p>Get intelligent recommendations to enhance every section of your CV</p>
+            </div>
+
+            <button onClick={generateAISuggestions} className="cvmaker-analyze-btn">
+              ✨ Generate AI Suggestions
+            </button>
+
+            {aiSuggestions.length > 0 && (
+              <div className="cvmaker-ai-suggestions">
+                {aiSuggestions.map((suggestion, index) => (
+                  <div key={index} className="cvmaker-suggestion-comparison">
+                    <div className="cvmaker-suggestion-header">
+                      <h5>{suggestion.section}</h5>
+                      <span className="cvmaker-improvement-badge">{suggestion.improvement}</span>
+                    </div>
+                    
+                    <div className="cvmaker-comparison-boxes">
+                      <div className="cvmaker-original-box">
+                        <div className="cvmaker-box-label">❌ Original (Weak)</div>
+                        <p>{suggestion.original}</p>
+                      </div>
+                      
+                      <div className="cvmaker-arrow">→</div>
+                      
+                      <div className="cvmaker-suggested-box">
+                        <div className="cvmaker-box-label">✅ AI Suggestion (Strong)</div>
+                        <p>{suggestion.suggested}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="cvmaker-suggestion-reason">
+                      <strong>Why this is better:</strong> {suggestion.reason}
+                    </div>
+                    
+                    <div className="cvmaker-suggestion-actions">
+                      <button className="cvmaker-apply-btn">Apply Suggestion</button>
+                      <button className="cvmaker-edit-btn">Edit & Apply</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="cvmaker-ai-quick-tools">
+              <h4>🛠️ Quick AI Tools</h4>
+              <div className="cvmaker-quick-tools-grid">
+                <div className="cvmaker-quick-tool">
+                  <div className="cvmaker-tool-icon">💡</div>
+                  <h5>Enhance Summary</h5>
+                  <p>Make your professional summary more compelling</p>
+                  <button className="cvmaker-tool-btn">Enhance</button>
+                </div>
+                
+                <div className="cvmaker-quick-tool">
+                  <div className="cvmaker-tool-icon">📊</div>
+                  <h5>Add Metrics</h5>
+                  <p>Suggest quantifiable achievements</p>
+                  <button className="cvmaker-tool-btn">Add Metrics</button>
+                </div>
+                
+                <div className="cvmaker-quick-tool">
+                  <div className="cvmaker-tool-icon">🎯</div>
+                  <h5>Action Verbs</h5>
+                  <p>Replace weak verbs with powerful ones</p>
+                  <button className="cvmaker-tool-btn">Optimize</button>
+                </div>
+                
+                <div className="cvmaker-quick-tool">
+                  <div className="cvmaker-tool-icon">🔍</div>
+                  <h5>Keyword Optimizer</h5>
+                  <p>Add industry-specific keywords</p>
+                  <button className="cvmaker-tool-btn">Optimize</button>
+                </div>
+              </div>
+            </div>
           </div>
         );
 
