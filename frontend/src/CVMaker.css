@@ -1178,3 +1178,131 @@
 .cvmaker-tool-btn:hover {
   background: #5a6fd8;
 }
+
+/* ============================================
+   Cover Letter Styles
+   ============================================ */
+
+.cvmaker-cover-letter-form {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.cvmaker-input,
+.cvmaker-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: white;
+  box-sizing: border-box;
+}
+
+.cvmaker-input:focus,
+.cvmaker-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.cvmaker-textarea-small {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.cvmaker-cover-letter-section {
+  margin-top: 30px;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-cover-letter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cvmaker-cover-letter-header h4 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.cvmaker-cover-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cvmaker-copy-btn,
+.cvmaker-download-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-copy-btn:hover,
+.cvmaker-download-btn:hover {
+  background: #5a6fd8;
+  transform: translateY(-2px);
+}
+
+.cvmaker-cover-letter-content {
+  margin-top: 15px;
+}
+
+.cvmaker-cover-letter-textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: 'Georgia', serif;
+  line-height: 1.8;
+  resize: vertical;
+  background: white;
+  box-sizing: border-box;
+}
+
+.cvmaker-cover-letter-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.cvmaker-cover-letter-tips {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.cvmaker-cover-letter-tips h5 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+}
+
+.cvmaker-cover-letter-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cvmaker-cover-letter-tips li {
+  padding: 8px 0;
+  color: #555;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cvmaker-cover-letter-tips li:last-child {
+  border-bottom: none;
+}
