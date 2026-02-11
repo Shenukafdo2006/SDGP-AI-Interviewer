@@ -15,8 +15,14 @@ const CVMaker = ({ onBack }) => {
   const [coverLetter, setCoverLetter] = useState("");
   const [atsScore, setAtsScore] = useState(null);
   const [analytics, setAnalytics] = useState(null);
-  const [collaborators, setCollaborators] = useState([]); // Add collaborators state
-  const [cvVersions, setCvVersions] = useState([]); // Add versions state
+  const [collaborators, setCollaborators] = useState([]);
+  const [cvVersions, setCvVersions] = useState([]);
+  const [shareSettings, setShareSettings] = useState({ // Add share settings state
+    privacy: 'private',
+    password: '',
+    expiryDate: '',
+    allowDownload: true
+  });
 
   // =====================
   // Templates & Features
@@ -294,6 +300,17 @@ Tailored for: ${jobTitle} at ${company}`;
       ]);
       alert(`✅ Version "${versionName}" saved successfully!`);
     }
+  };
+
+  // Feature 10: Privacy Functions
+  const generateShareLink = () => {
+    const link = "https://cvmaker.example.com/share/abc123";
+    navigator.clipboard.writeText(link);
+    alert(`✅ Shareable link copied to clipboard:\n${link}`);
+  };
+
+  const generateQRCode = () => {
+    alert("📱 QR Code Generated!\n\nScan this code to view your CV on mobile devices.\n\n(Note: In a real app, this would generate a downloadable QR code image)");
   };
 
   // Export CV function (placeholder)
@@ -1356,6 +1373,132 @@ Tailored for: ${jobTitle} at ${company}`;
                   <li><strong>Industry Professionals:</strong> Comment access for industry-specific advice</li>
                   <li><strong>Friends:</strong> View-only for proofreading</li>
                 </ul>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "privacy":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>🔒 Privacy & Sharing Controls</h3>
+              <p>Control who can access and download your CV</p>
+            </div>
+
+            <div className="cvmaker-privacy-settings">
+              <div className="cvmaker-setting-group">
+                <h4>👁️ Visibility Settings</h4>
+                <div className="cvmaker-radio-group">
+                  <label className="cvmaker-radio-label">
+                    <input 
+                      type="radio" 
+                      name="privacy" 
+                      value="private"
+                      checked={shareSettings.privacy === 'private'}
+                      onChange={(e) => setShareSettings({...shareSettings, privacy: e.target.value})}
+                    />
+                    <div className="cvmaker-radio-content">
+                      <strong>🔒 Private</strong>
+                      <p>Only you can view and edit</p>
+                    </div>
+                  </label>
+                  
+                  <label className="cvmaker-radio-label">
+                    <input 
+                      type="radio" 
+                      name="privacy" 
+                      value="password"
+                      checked={shareSettings.privacy === 'password'}
+                      onChange={(e) => setShareSettings({...shareSettings, privacy: e.target.value})}
+                    />
+                    <div className="cvmaker-radio-content">
+                      <strong>🔐 Password Protected</strong>
+                      <p>Anyone with password can view</p>
+                    </div>
+                  </label>
+                  
+                  <label className="cvmaker-radio-label">
+                    <input 
+                      type="radio" 
+                      name="privacy" 
+                      value="public"
+                      checked={shareSettings.privacy === 'public'}
+                      onChange={(e) => setShareSettings({...shareSettings, privacy: e.target.value})}
+                    />
+                    <div className="cvmaker-radio-content">
+                      <strong>🌐 Public</strong>
+                      <p>Anyone with link can view</p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {shareSettings.privacy === 'password' && (
+                <div className="cvmaker-setting-group">
+                  <label className="cvmaker-input-label">Set Password</label>
+                  <input 
+                    type="password" 
+                    className="cvmaker-input" 
+                    placeholder="Enter password..."
+                    value={shareSettings.password}
+                    onChange={(e) => setShareSettings({...shareSettings, password: e.target.value})}
+                  />
+                </div>
+              )}
+
+              <div className="cvmaker-setting-group">
+                <h4>⏰ Link Expiration</h4>
+                <input 
+                  type="date" 
+                  className="cvmaker-input" 
+                  value={shareSettings.expiryDate}
+                  onChange={(e) => setShareSettings({...shareSettings, expiryDate: e.target.value})}
+                />
+                <p className="cvmaker-setting-note">
+                  Link will stop working after this date (leave empty for permanent link)
+                </p>
+              </div>
+
+              <div className="cvmaker-setting-group">
+                <h4>📥 Download Permissions</h4>
+                <label className="cvmaker-checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={shareSettings.allowDownload}
+                    onChange={(e) => setShareSettings({...shareSettings, allowDownload: e.target.checked})}
+                  />
+                  <span>Allow viewers to download CV</span>
+                </label>
+                <p className="cvmaker-setting-note">
+                  If disabled, viewers can only preview online
+                </p>
+              </div>
+
+              <div className="cvmaker-sharing-options">
+                <h4>🔗 Share Your CV</h4>
+                <div className="cvmaker-share-buttons">
+                  <button onClick={generateShareLink} className="cvmaker-share-btn">
+                    🔗 Generate Shareable Link
+                  </button>
+                  <button onClick={generateQRCode} className="cvmaker-share-btn">
+                    📱 Generate QR Code
+                  </button>
+                  <button className="cvmaker-share-btn">
+                    ✉️ Share via Email
+                  </button>
+                </div>
+              </div>
+
+              <div className="cvmaker-watermark-setting">
+                <h4>🏷️ Watermark Protection</h4>
+                <label className="cvmaker-checkbox-label">
+                  <input type="checkbox" />
+                  <span>Add watermark to prevent unauthorized sharing</span>
+                </label>
+                <p className="cvmaker-setting-note">
+                  Adds "Confidential - [Your Name]" footer to discourage theft
+                </p>
               </div>
             </div>
           </div>
