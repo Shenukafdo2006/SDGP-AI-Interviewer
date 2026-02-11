@@ -1705,3 +1705,201 @@
   margin: 0;
   line-height: 1.6;
 }
+
+/* ============================================
+   Analytics Dashboard
+   ============================================ */
+
+.cvmaker-analytics-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.cvmaker-analytics-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.cvmaker-analytics-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.cvmaker-analytics-icon {
+  font-size: 2.5rem;
+}
+
+.cvmaker-analytics-data h4 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.cvmaker-analytics-data p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.cvmaker-section-analytics {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cvmaker-section-analytics h4 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+.cvmaker-section-views {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cvmaker-section-view-item {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 10px;
+}
+
+.cvmaker-section-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cvmaker-section-views {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.cvmaker-section-view-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.cvmaker-section-view-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.cvmaker-company-analytics {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cvmaker-company-analytics h4 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+}
+
+.cvmaker-company-chart {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  height: 250px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.cvmaker-company-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cvmaker-company-bar {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 10px;
+  min-height: 40px;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-company-bar:hover {
+  opacity: 0.8;
+}
+
+.cvmaker-company-value {
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.cvmaker-company-label {
+  font-size: 0.85rem;
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cvmaker-insights-section {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-insights-section h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cvmaker-insight-item {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: #555;
+  font-size: 0.95rem;
+  border-left: 4px solid #667eea;
+}
+
+.cvmaker-export-analytics {
+  text-align: center;
+}
+
+.cvmaker-export-analytics-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-export-analytics-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
