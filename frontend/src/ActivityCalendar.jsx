@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import './ActivityCalendar.css';
 
-const MyComponent = () => {
-  const navigate = useNavigate();
 
-  const goBack = () => {
-    navigate(-1); // This goes back one step in history
-  };
 
 const stats = [
   { label: 'Active Days', value: 7 },

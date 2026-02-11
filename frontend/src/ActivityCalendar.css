@@ -104,6 +104,34 @@
   gap: var(--spacing-lg);
 }
 
+/* ===== GO BACK BUTTON ===== */
+.go-back-button {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.go-back-button:hover {
+  background-color: var(--primary-light);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.go-back-button:active {
+  transform: scale(0.96);
+}
+
 /* ===== STATS SECTION ===== */
 .stats-row {
   display: grid;
@@ -299,15 +327,6 @@
 }
 
 /* ===== EVENT DOTS ===== */
-.event-dots-container {
-  display: flex;
-  gap: 3px;
-  margin-top: auto;
-  padding-top: var(--spacing-xs);
-  position: relative;
-  z-index: 1;
-}
-
 .event-dot {
   height: 6px;
   width: 6px;
