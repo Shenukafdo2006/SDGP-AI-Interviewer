@@ -1544,3 +1544,164 @@
   color: #555;
   font-size: 0.95rem;
 }
+
+/* ============================================
+   Integration Styles
+   ============================================ */
+
+.cvmaker-integration-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.cvmaker-integration-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  border: 2px solid #e0e0e0;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-integration-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.cvmaker-integration-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.cvmaker-integration-icon.cvmaker-linkedin {
+  background: #0077b5;
+  color: white;
+}
+
+.cvmaker-integration-icon.cvmaker-github {
+  background: #333;
+  color: white;
+}
+
+.cvmaker-integration-card h4 {
+  color: #2c3e50;
+  margin: 0 0 15px 0;
+  font-size: 1.4rem;
+}
+
+.cvmaker-integration-card p {
+  color: #718096;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.cvmaker-integration-btn {
+  width: 100%;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.cvmaker-linkedin-btn {
+  background: #0077b5;
+  color: white;
+}
+
+.cvmaker-linkedin-btn:hover {
+  background: #006399;
+  transform: translateY(-2px);
+}
+
+.cvmaker-github-btn {
+  background: #333;
+  color: white;
+}
+
+.cvmaker-github-btn:hover {
+  background: #24292e;
+  transform: translateY(-2px);
+}
+
+.cvmaker-integration-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  text-align: left;
+}
+
+.cvmaker-feature-check {
+  color: #4caf50;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cvmaker-integration-benefits {
+  margin-bottom: 30px;
+}
+
+.cvmaker-integration-benefits h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
+
+.cvmaker-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.cvmaker-benefit-card {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.cvmaker-benefit-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.cvmaker-benefit-card h5 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.cvmaker-benefit-card p {
+  color: #718096;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.cvmaker-privacy-notice {
+  background: #fff3e0;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #ff9800;
+}
+
+.cvmaker-privacy-notice h5 {
+  color: #e65100;
+  margin: 0 0 10px 0;
+}
+
+.cvmaker-privacy-notice p {
+  color: #555;
+  margin: 0;
+  line-height: 1.6;
+}
