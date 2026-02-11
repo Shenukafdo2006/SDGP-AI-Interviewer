@@ -1903,3 +1903,263 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
+/* ============================================
+   Collaboration Styles
+   ============================================ */
+
+.cvmaker-collaborate-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-add-collaborator h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-collaborator-form {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+}
+
+.cvmaker-add-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-add-btn:hover {
+  background: #5a6fd8;
+}
+
+.cvmaker-collaborators-list {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cvmaker-collaborators-list h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-collaborator-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.cvmaker-collaborator-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.cvmaker-collaborator-info {
+  flex: 1;
+}
+
+.cvmaker-collaborator-email {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.cvmaker-collaborator-meta {
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+.cvmaker-collaborator-status {
+  margin-right: 10px;
+}
+
+.cvmaker-status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cvmaker-status-badge.cvmaker-pending {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.cvmaker-status-badge.cvmaker-accepted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.cvmaker-remove-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-remove-btn:hover {
+  background: #d32f2f;
+}
+
+.cvmaker-version-control {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cvmaker-version-control h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-save-version-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.cvmaker-save-version-btn:hover {
+  background: #5a6fd8;
+  transform: translateY(-2px);
+}
+
+.cvmaker-versions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cvmaker-version-item {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.cvmaker-version-icon {
+  font-size: 2rem;
+}
+
+.cvmaker-version-info {
+  flex: 1;
+}
+
+.cvmaker-version-info h5 {
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.cvmaker-version-info p {
+  color: #718096;
+  font-size: 0.85rem;
+  margin: 0 0 8px 0;
+}
+
+.cvmaker-version-changes {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cvmaker-version-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.cvmaker-restore-btn,
+.cvmaker-view-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-restore-btn {
+  background: #667eea;
+  color: white;
+}
+
+.cvmaker-restore-btn:hover {
+  background: #5a6fd8;
+}
+
+.cvmaker-view-btn {
+  background: #f8f9fa;
+  color: #2c3e50;
+  border: 2px solid #e0e0e0;
+}
+
+.cvmaker-view-btn:hover {
+  background: #e0e0e0;
+}
+
+.cvmaker-collaboration-tips {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-collaboration-tips h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.cvmaker-collaboration-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cvmaker-collaboration-tips li {
+  padding: 10px 0;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cvmaker-collaboration-tips li:last-child {
+  border-bottom: none;
+}
