@@ -14,6 +14,7 @@ const CVMaker = ({ onBack }) => {
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [coverLetter, setCoverLetter] = useState("");
   const [atsScore, setAtsScore] = useState(null);
+  const [analytics, setAnalytics] = useState(null); // Add analytics state
 
   // =====================
   // Templates & Features
@@ -229,6 +230,35 @@ Tailored for: ${jobTitle} at ${company}`;
     setTimeout(() => {
       alert("✅ Successfully imported:\n• 12 Public Repositories\n• Top Languages: JavaScript, Python, Java\n• 450+ Contributions this year\n• 5 Featured Projects");
     }, 1500);
+  };
+
+  // Feature 7: Analytics
+  const loadAnalytics = () => {
+    setAnalytics({
+      views: 127,
+      downloads: 34,
+      avgTimeSpent: "2m 45s",
+      topSections: [
+        { name: "Skills", views: 95, percentage: 75 },
+        { name: "Experience", views: 89, percentage: 70 },
+        { name: "Projects", views: 76, percentage: 60 },
+        { name: "Education", views: 68, percentage: 54 },
+      ],
+      viewsByCompany: [
+        { company: "Google", views: 15 },
+        { company: "Microsoft", views: 12 },
+        { company: "Amazon", views: 10 },
+        { company: "Meta", views: 8 },
+        { company: "Others", views: 82 },
+      ],
+      insights: [
+        "📈 Your CV views increased by 45% this week",
+        "🎯 CVs with quantifiable results get 3x more downloads",
+        "⏰ Best time to apply: Tuesday mornings (9-11 AM)",
+        "💡 Your skills section gets 50% more attention than education",
+        "🚀 Adding GitHub link increased profile views by 30%"
+      ]
+    });
   };
 
   // Export CV function (placeholder)
@@ -1093,6 +1123,114 @@ Tailored for: ${jobTitle} at ${company}`;
                 Your credentials are never stored, and you can revoke access anytime.
               </p>
             </div>
+          </div>
+        );
+
+      case "analytics":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>📊 Analytics & Insights</h3>
+              <p>Track how your CV performs and get data-driven improvement suggestions</p>
+            </div>
+
+            <button onClick={loadAnalytics} className="cvmaker-analyze-btn">
+              📈 Load Analytics Dashboard
+            </button>
+
+            {analytics && (
+              <div className="cvmaker-analytics-dashboard">
+                <div className="cvmaker-analytics-overview">
+                  <div className="cvmaker-analytics-card">
+                    <div className="cvmaker-analytics-icon">👁️</div>
+                    <div className="cvmaker-analytics-data">
+                      <h4>{analytics.views}</h4>
+                      <p>Total Views</p>
+                    </div>
+                  </div>
+                  
+                  <div className="cvmaker-analytics-card">
+                    <div className="cvmaker-analytics-icon">📥</div>
+                    <div className="cvmaker-analytics-data">
+                      <h4>{analytics.downloads}</h4>
+                      <p>Downloads</p>
+                    </div>
+                  </div>
+                  
+                  <div className="cvmaker-analytics-card">
+                    <div className="cvmaker-analytics-icon">⏱️</div>
+                    <div className="cvmaker-analytics-data">
+                      <h4>{analytics.avgTimeSpent}</h4>
+                      <p>Avg. Time Spent</p>
+                    </div>
+                  </div>
+                  
+                  <div className="cvmaker-analytics-card">
+                    <div className="cvmaker-analytics-icon">📈</div>
+                    <div className="cvmaker-analytics-data">
+                      <h4>+45%</h4>
+                      <p>Growth This Week</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="cvmaker-section-analytics">
+                  <h4>🔍 Most Viewed Sections</h4>
+                  <div className="cvmaker-section-views">
+                    {analytics.topSections.map((section, index) => (
+                      <div key={index} className="cvmaker-section-view-item">
+                        <div className="cvmaker-section-view-header">
+                          <span className="cvmaker-section-name">{section.name}</span>
+                          <span className="cvmaker-section-views">{section.views} views</span>
+                        </div>
+                        <div className="cvmaker-section-view-bar">
+                          <div 
+                            className="cvmaker-section-view-fill" 
+                            style={{width: `${section.percentage}%`}}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-company-analytics">
+                  <h4>🏢 Views by Company</h4>
+                  <div className="cvmaker-company-chart">
+                    {analytics.viewsByCompany.map((company, index) => (
+                      <div key={index} className="cvmaker-company-item">
+                        <div className="cvmaker-company-bar" 
+                          style={{
+                            height: `${(company.views / Math.max(...analytics.viewsByCompany.map(c => c.views))) * 100}%`,
+                            background: `hsl(${index * 60}, 70%, 60%)`
+                          }}
+                        >
+                          <div className="cvmaker-company-value">{company.views}</div>
+                        </div>
+                        <div className="cvmaker-company-label">{company.company}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-insights-section">
+                  <h4>💡 Key Insights</h4>
+                  <div className="cvmaker-insights-list">
+                    {analytics.insights.map((insight, index) => (
+                      <div key={index} className="cvmaker-insight-item">
+                        {insight}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-export-analytics">
+                  <button className="cvmaker-export-analytics-btn">
+                    📊 Export Full Report (PDF)
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         );
 
