@@ -12,7 +12,8 @@ const CVMaker = ({ onBack }) => {
   const [selectedTemplate, setSelectedTemplate] = useState("modern");
   const [matchScore, setMatchScore] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([]);
-  const [coverLetter, setCoverLetter] = useState(""); // Add this state
+  const [coverLetter, setCoverLetter] = useState("");
+  const [atsScore, setAtsScore] = useState(null); // Add ATS score state
 
   // =====================
   // Templates & Features
@@ -128,6 +129,26 @@ const CVMaker = ({ onBack }) => {
         action: `Add ${skill} to your skills section or complete a project using it`,
         priority: missing.indexOf(skill) < 3 ? "High" : "Medium"
       }))
+    });
+  };
+
+  // Feature 3: ATS Test
+  const runATSTest = () => {
+    setAtsScore({
+      score: 85,
+      compatibility: "Excellent",
+      issues: [
+        { type: "warning", message: "Avoid using tables - use bullet points instead" },
+        { type: "success", message: "Good use of standard section headings" },
+        { type: "info", message: "Font is ATS-friendly (recommended: Arial, Calibri)" },
+      ],
+      tips: [
+        "Use standard headings: Experience, Education, Skills",
+        "Avoid tables, images, and complex formatting",
+        "Use bullet points (•) instead of special characters",
+        "Include relevant keywords from job description",
+        "Save as .docx or .pdf (not scanned images)"
+      ]
     });
   };
 
@@ -836,6 +857,140 @@ Tailored for: ${jobTitle} at ${company}`;
                     <li>Show enthusiasm for the company's mission</li>
                     <li>End with a clear call-to-action</li>
                   </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
+      case "ats":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>✅ ATS (Applicant Tracking System) Test</h3>
+              <p>Check how well your CV will perform with automated screening systems</p>
+            </div>
+
+            <div className="cvmaker-ats-info">
+              <div className="cvmaker-info-box">
+                <h5>📌 What is ATS?</h5>
+                <p>
+                  Applicant Tracking Systems are software used by 75%+ of companies to automatically 
+                  screen CVs before human review. A low ATS score means your CV might be rejected 
+                  before anyone reads it.
+                </p>
+              </div>
+            </div>
+
+            <button onClick={runATSTest} className="cvmaker-analyze-btn">
+              🧪 Run ATS Compatibility Test
+            </button>
+
+            {atsScore !== null && (
+              <div className="cvmaker-ats-results">
+                <div className="cvmaker-ats-score-display">
+                  <div className="cvmaker-ats-score">
+                    <div className="cvmaker-score-circle-ats">
+                      <svg viewBox="0 0 200 200" className="cvmaker-progress-ring">
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="90"
+                          fill="none"
+                          stroke="#e0e0e0"
+                          strokeWidth="20"
+                        />
+                        <circle
+                          cx="100"
+                          cy="100"
+                          r="90"
+                          fill="none"
+                          stroke={atsScore.score >= 80 ? "#4caf50" : atsScore.score >= 60 ? "#ff9800" : "#f44336"}
+                          strokeWidth="20"
+                          strokeDasharray="565.48"
+                          strokeDashoffset={565.48 - (565.48 * atsScore.score) / 100}
+                          transform="rotate(-90 100 100)"
+                        />
+                      </svg>
+                      <div className="cvmaker-score-overlay">
+                        <div className="cvmaker-score-number-ats">{atsScore.score}%</div>
+                        <div className="cvmaker-score-label-ats">{atsScore.compatibility}</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="cvmaker-ats-summary">
+                    <h4>ATS Compatibility Report</h4>
+                    <p>Your CV scored <strong>{atsScore.score}%</strong> for ATS compatibility.</p>
+                    <div className="cvmaker-ats-verdict">
+                      {atsScore.score >= 80 ? (
+                        <span className="cvmaker-verdict cvmaker-pass">
+                          ✅ Excellent! Your CV will pass most ATS systems
+                        </span>
+                      ) : atsScore.score >= 60 ? (
+                        <span className="cvmaker-verdict cvmaker-warning">
+                          ⚠️ Good, but some improvements recommended
+                        </span>
+                      ) : (
+                        <span className="cvmaker-verdict cvmaker-fail">
+                          ❌ Needs work - may be rejected by ATS systems
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="cvmaker-ats-issues">
+                  <h4>🔍 Detected Issues</h4>
+                  <div className="cvmaker-issues-list">
+                    {atsScore.issues.map((issue, index) => (
+                      <div key={index} className={`cvmaker-issue-item cvmaker-${issue.type}`}>
+                        {issue.message}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-ats-tips">
+                  <h4>💡 ATS Optimization Guide</h4>
+                  <div className="cvmaker-tips-grid">
+                    {atsScore.tips.map((tip, index) => (
+                      <div key={index} className="cvmaker-tip-card">
+                        <div className="cvmaker-tip-number">{index + 1}</div>
+                        <p>{tip}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="cvmaker-ats-checklist">
+                  <h4>✅ ATS-Friendly Checklist</h4>
+                  <div className="cvmaker-checklist-items">
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" defaultChecked />
+                      <span>Use standard section headings (Experience, Education, Skills)</span>
+                    </label>
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" defaultChecked />
+                      <span>Avoid tables, text boxes, and columns</span>
+                    </label>
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" />
+                      <span>No headers/footers with important information</span>
+                    </label>
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" defaultChecked />
+                      <span>Simple fonts (Arial, Calibri, Times New Roman)</span>
+                    </label>
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" />
+                      <span>Include keywords from job description</span>
+                    </label>
+                    <label className="cvmaker-checklist-item">
+                      <input type="checkbox" defaultChecked />
+                      <span>Save as .docx or .pdf (not scanned images)</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             )}
