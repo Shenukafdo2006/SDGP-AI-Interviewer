@@ -14,7 +14,9 @@ const CVMaker = ({ onBack }) => {
   const [aiSuggestions, setAiSuggestions] = useState([]);
   const [coverLetter, setCoverLetter] = useState("");
   const [atsScore, setAtsScore] = useState(null);
-  const [analytics, setAnalytics] = useState(null); // Add analytics state
+  const [analytics, setAnalytics] = useState(null);
+  const [collaborators, setCollaborators] = useState([]); // Add collaborators state
+  const [cvVersions, setCvVersions] = useState([]); // Add versions state
 
   // =====================
   // Templates & Features
@@ -261,6 +263,39 @@ Tailored for: ${jobTitle} at ${company}`;
     });
   };
 
+  // Feature 8: Collaboration
+  const addCollaborator = () => {
+    const email = prompt("Enter collaborator email:");
+    if (email) {
+      setCollaborators([
+        ...collaborators,
+        {
+          email,
+          permission: "comment",
+          addedDate: new Date().toLocaleDateString(),
+          status: "pending"
+        }
+      ]);
+    }
+  };
+
+  // Feature 9: Version Control
+  const saveVersion = () => {
+    const versionName = prompt("Enter version name (e.g., 'For Google Application'):");
+    if (versionName) {
+      setCvVersions([
+        ...cvVersions,
+        {
+          name: versionName,
+          date: new Date().toLocaleString(),
+          template: selectedTemplate,
+          changes: "Updated experience section, added new skills"
+        }
+      ]);
+      alert(`✅ Version "${versionName}" saved successfully!`);
+    }
+  };
+
   // Export CV function (placeholder)
   const exportCV = (format) => {
     alert(`Exporting as ${format.toUpperCase()}...`);
@@ -368,7 +403,7 @@ Tailored for: ${jobTitle} at ${company}`;
                     <span className="cvmaker-section-score cvmaker-score-high">88/100</span>
                   </div>
                   <div className="cvmaker-progress-bar-small">
-                    <div className="cvmaker-progress-fill-small" style={{width: '88%', background: '#4caf50'}}></div>
+                    <div className="cvmaker-progress_fill-small" style={{width: '88%', background: '#4caf50'}}></div>
                   </div>
                   <p className="cvmaker-section-feedback">✅ Complete and well-formatted</p>
                 </div>
@@ -1231,6 +1266,98 @@ Tailored for: ${jobTitle} at ${company}`;
                 </div>
               </div>
             )}
+          </div>
+        );
+
+      case "collaborate":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>🤝 Collaboration & Feedback</h3>
+              <p>Share your CV with mentors, professors, and professionals for feedback</p>
+            </div>
+
+            <div className="cvmaker-collaborate-section">
+              <div className="cvmaker-add-collaborator">
+                <h4>👥 Add Collaborators</h4>
+                <div className="cvmaker-collaborator-form">
+                  <input 
+                    type="email" 
+                    placeholder="Enter email address..." 
+                    className="cvmaker-input"
+                  />
+                  <select className="cvmaker-select">
+                    <option>Can Comment</option>
+                    <option>Can Edit</option>
+                    <option>View Only</option>
+                  </select>
+                  <button onClick={addCollaborator} className="cvmaker-add-btn">
+                    + Add
+                  </button>
+                </div>
+              </div>
+
+              {collaborators.length > 0 && (
+                <div className="cvmaker-collaborators-list">
+                  <h4>Current Collaborators</h4>
+                  {collaborators.map((collab, index) => (
+                    <div key={index} className="cvmaker-collaborator-item">
+                      <div className="cvmaker-collaborator-avatar">
+                        {collab.email[0].toUpperCase()}
+                      </div>
+                      <div className="cvmaker-collaborator-info">
+                        <div className="cvmaker-collaborator-email">{collab.email}</div>
+                        <div className="cvmaker-collaborator-meta">
+                          {collab.permission} • Added {collab.addedDate}
+                        </div>
+                      </div>
+                      <div className="cvmaker-collaborator-status">
+                        <span className={`cvmaker-status-badge cvmaker-${collab.status}`}>
+                          {collab.status}
+                        </span>
+                      </div>
+                      <button className="cvmaker-remove-btn">Remove</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="cvmaker-version-control">
+                <h4>📚 Version History</h4>
+                <button onClick={saveVersion} className="cvmaker-save-version-btn">
+                  💾 Save Current Version
+                </button>
+                
+                {cvVersions.length > 0 && (
+                  <div className="cvmaker-versions-list">
+                    {cvVersions.map((version, index) => (
+                      <div key={index} className="cvmaker-version-item">
+                        <div className="cvmaker-version-icon">📄</div>
+                        <div className="cvmaker-version-info">
+                          <h5>{version.name}</h5>
+                          <p>{version.date} • {version.template} template</p>
+                          <span className="cvmaker-version-changes">{version.changes}</span>
+                        </div>
+                        <div className="cvmaker-version-actions">
+                          <button className="cvmaker-restore-btn">Restore</button>
+                          <button className="cvmaker-view-btn">View</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="cvmaker-collaboration-tips">
+                <h4>💡 Collaboration Tips</h4>
+                <ul>
+                  <li><strong>Career Counselors:</strong> Give edit access for comprehensive feedback</li>
+                  <li><strong>Professors:</strong> Comment access for academic sections</li>
+                  <li><strong>Industry Professionals:</strong> Comment access for industry-specific advice</li>
+                  <li><strong>Friends:</strong> View-only for proofreading</li>
+                </ul>
+              </div>
+            </div>
           </div>
         );
 
