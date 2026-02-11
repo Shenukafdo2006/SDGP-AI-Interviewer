@@ -17,7 +17,7 @@ const CVMaker = ({ onBack }) => {
   const [analytics, setAnalytics] = useState(null);
   const [collaborators, setCollaborators] = useState([]);
   const [cvVersions, setCvVersions] = useState([]);
-  const [shareSettings, setShareSettings] = useState({ // Add share settings state
+  const [shareSettings, setShareSettings] = useState({
     privacy: 'private',
     password: '',
     expiryDate: '',
@@ -302,20 +302,19 @@ Tailored for: ${jobTitle} at ${company}`;
     }
   };
 
-  // Feature 10: Privacy Functions
+  // Feature 10: Export Functions
+  const exportCV = (format) => {
+    alert(`📤 Exporting CV as ${format.toUpperCase()}...\n\nIn a real application, this would:\n• Generate ${format} file\n• Download to your device\n• Optimize for ${format === 'pdf' ? 'printing' : 'editing'}`);
+  };
+
   const generateShareLink = () => {
-    const link = "https://cvmaker.example.com/share/abc123";
+    const link = `https://cvmaker.app/view/${Math.random().toString(36).substring(7)}`;
     navigator.clipboard.writeText(link);
-    alert(`✅ Shareable link copied to clipboard:\n${link}`);
+    alert(`🔗 Shareable link created and copied to clipboard:\n\n${link}\n\nSettings:\n• Privacy: ${shareSettings.privacy}\n• Download: ${shareSettings.allowDownload ? 'Allowed' : 'View only'}\n• Expires: ${shareSettings.expiryDate || 'Never'}`);
   };
 
   const generateQRCode = () => {
-    alert("📱 QR Code Generated!\n\nScan this code to view your CV on mobile devices.\n\n(Note: In a real app, this would generate a downloadable QR code image)");
-  };
-
-  // Export CV function (placeholder)
-  const exportCV = (format) => {
-    alert(`Exporting as ${format.toUpperCase()}...`);
+    alert("📱 QR Code generated!\n\nIn a real application, this would:\n• Generate QR code image\n• Link to your CV\n• Allow printing on business cards");
   };
 
   const renderActiveFeature = () => {
@@ -1499,6 +1498,120 @@ Tailored for: ${jobTitle} at ${company}`;
                 <p className="cvmaker-setting-note">
                   Adds "Confidential - [Your Name]" footer to discourage theft
                 </p>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "export":
+        return (
+          <div className="cvmaker-feature-panel">
+            <div className="cvmaker-panel-header">
+              <h3>📤 Export & Download</h3>
+              <p>Download your CV in multiple formats for different use cases</p>
+            </div>
+
+            <div className="cvmaker-export-options">
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">📄</div>
+                <h4>PDF Format</h4>
+                <p>Best for email applications and printing. Preserves formatting perfectly.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ Universal compatibility</span>
+                  <span>✓ Print-ready</span>
+                  <span>✓ Professional look</span>
+                </div>
+                <button onClick={() => exportCV('pdf')} className="cvmaker-export-btn">
+                  Download PDF
+                </button>
+              </div>
+              
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">📝</div>
+                <h4>Word Document (.docx)</h4>
+                <p>Editable format for recruiters who request Word files. Easy to customize.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ Fully editable</span>
+                  <span>✓ ATS-friendly</span>
+                  <span>✓ Widely accepted</span>
+                </div>
+                <button onClick={() => exportCV('docx')} className="cvmaker-export-btn">
+                  Download DOCX
+                </button>
+              </div>
+              
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">📱</div>
+                <h4>Plain Text (.txt)</h4>
+                <p>For online application forms and ATS systems. Maximum compatibility.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ ATS optimized</span>
+                  <span>✓ Copy-paste ready</span>
+                  <span>✓ No formatting issues</span>
+                </div>
+                <button onClick={() => exportCV('txt')} className="cvmaker-export-btn">
+                  Download TXT
+                </button>
+              </div>
+
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">🌐</div>
+                <h4>HTML Web Page</h4>
+                <p>Host on your personal website or portfolio. Interactive and modern.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ Interactive</span>
+                  <span>✓ Web-optimized</span>
+                  <span>✓ Modern design</span>
+                </div>
+                <button onClick={() => exportCV('html')} className="cvmaker-export-btn">
+                  Download HTML
+                </button>
+              </div>
+
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">🔗</div>
+                <h4>Shareable Link</h4>
+                <p>Create a unique URL to share your CV online. No download needed.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ Instant access</span>
+                  <span>✓ Track views</span>
+                  <span>✓ Always updated</span>
+                </div>
+                <button onClick={generateShareLink} className="cvmaker-export-btn">
+                  Generate Link
+                </button>
+              </div>
+
+              <div className="cvmaker-export-card">
+                <div className="cvmaker-export-icon">📲</div>
+                <h4>QR Code</h4>
+                <p>Print on business cards for easy sharing at networking events.</p>
+                <div className="cvmaker-export-features">
+                  <span>✓ Print-ready</span>
+                  <span>✓ Easy scan</span>
+                  <span>✓ Professional</span>
+                </div>
+                <button onClick={generateQRCode} className="cvmaker-export-btn">
+                  Generate QR
+                </button>
+              </div>
+            </div>
+
+            <div className="cvmaker-export-tips">
+              <h4>💡 Export Tips</h4>
+              <div className="cvmaker-tips-grid">
+                <div className="cvmaker-tip-item">
+                  <strong>For Online Applications:</strong> Use PDF or Plain Text
+                </div>
+                <div className="cvmaker-tip-item">
+                  <strong>For Email:</strong> PDF is most professional
+                </div>
+                <div className="cvmaker-tip-item">
+                  <strong>For Editing:</strong> Use DOCX format
+                </div>
+                <div className="cvmaker-tip-item">
+                  <strong>For Portfolio:</strong> HTML or Shareable Link
+                </div>
               </div>
             </div>
           </div>
