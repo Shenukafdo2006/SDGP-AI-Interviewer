@@ -218,64 +218,30 @@
 }
 
 /* ============================================
-   Responsive Design
+   Feature Panel Styles
    ============================================ */
 
-@media (max-width: 1024px) {
-  .cvmaker-sidebar {
-    width: 250px;
-  }
-
-  .cvmaker-content {
-    margin-left: 250px;
-  }
+.cvmaker-feature-panel {
+  padding: 20px 0;
 }
 
-@media (max-width: 768px) {
-  .cvmaker-sidebar {
-    position: fixed;
-    left: -280px;
-    transition: left 0.3s ease;
-    z-index: 1000;
-  }
-
-  .cvmaker-sidebar.cvmaker-open {
-    left: 0;
-  }
-
-  .cvmaker-content {
-    margin-left: 0;
-    padding: 20px;
-  }
+.cvmaker-panel-header {
+  margin-bottom: 30px;
 }
 
-@media (max-width: 480px) {
-  .cvmaker-content-header h1 {
-    font-size: 1.6rem;
-  }
+.cvmaker-panel-header h3 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
 }
 
-/* ============================================
-   Scrollbar Styling
-   ============================================ */
-
-.cvmaker-sidebar::-webkit-scrollbar,
-.cvmaker-content::-webkit-scrollbar {
-  width: 8px;
+.cvmaker-panel-header p {
+  color: #718096;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
-.cvmaker-sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.cvmaker-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-}
-
-.cvmaker-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
-}
 /* ============================================
    Dashboard Health Overview
    ============================================ */
@@ -465,6 +431,179 @@
 .cvmaker-section-feedback {
   color: #555;
   font-size: 0.9rem;
+  margin: 0;
+}
+
+/* ============================================
+   Improvement Roadmap
+   ============================================ */
+
+.cvmaker-improvement-roadmap {
+  margin-bottom: 40px;
+}
+
+.cvmaker-improvement-roadmap h4 {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+}
+
+.cvmaker-roadmap-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cvmaker-roadmap-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.cvmaker-roadmap-item.cvmaker-priority-high {
+  border-color: #f44336;
+  background: #ffebee;
+}
+
+.cvmaker-roadmap-item.cvmaker-priority-medium {
+  border-color: #ff9800;
+  background: #fff3e0;
+}
+
+.cvmaker-roadmap-item.cvmaker-priority-low {
+  border-color: #4caf50;
+  background: #e8f5e9;
+}
+
+.cvmaker-roadmap-icon {
+  font-size: 2rem;
+}
+
+.cvmaker-roadmap-content {
+  flex: 1;
+}
+
+.cvmaker-roadmap-content h5 {
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cvmaker-impact {
+  background: #667eea;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cvmaker-roadmap-content p {
+  color: #555;
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+}
+
+.cvmaker-priority-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cvmaker-priority-badge.cvmaker-high {
+  background: #f44336;
+  color: white;
+}
+
+.cvmaker-priority-badge.cvmaker-medium {
+  background: #ff9800;
+  color: white;
+}
+
+.cvmaker-priority-badge.cvmaker-low {
+  background: #4caf50;
+  color: white;
+}
+
+/* ============================================
+   Industry Comparison
+   ============================================ */
+
+.cvmaker-comparison {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-comparison h4 {
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+}
+
+.cvmaker-comparison-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.cvmaker-comparison-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cvmaker-comparison-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.cvmaker-comparison-bar {
+  height: 40px;
+  background: #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cvmaker-comparison-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 15px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: width 0.5s ease;
+}
+
+.cvmaker-comparison-fill.cvmaker-your-score {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+}
+
+.cvmaker-comparison-fill.cvmaker-industry-avg {
+  background: #90caf9;
+}
+
+.cvmaker-comparison-fill.cvmaker-top-ten {
+  background: #4caf50;
+}
+
+.cvmaker-comparison-note {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -972,6 +1111,54 @@
   background: #ffebee;
   color: #c62828;
   border: 1px solid #f44336;
+}
+
+/* ============================================
+   Recommendations Section
+   ============================================ */
+
+.cvmaker-recommendations-section {
+  margin-top: 30px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.cvmaker-recommendations-section h4 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.cvmaker-recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cvmaker-recommendation-item {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.cvmaker-rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cvmaker-rec-skill {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1.05rem;
+}
+
+.cvmaker-rec-action {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* ============================================
@@ -1903,6 +2090,7 @@
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
+
 /* ============================================
    Collaboration Styles
    ============================================ */
@@ -1913,6 +2101,7 @@
   gap: 30px;
 }
 
+.cvmaker-add-collaborator {
   background: #f8f9fa;
   padding: 25px;
   border-radius: 12px;
@@ -2162,8 +2351,12 @@
 
 .cvmaker-collaboration-tips li:last-child {
   border-bottom: none;
+}
+
+/* ============================================
    Privacy & Sharing Controls
    ============================================ */
+
 .cvmaker-privacy-settings {
   display: flex;
   flex-direction: column;
@@ -2302,6 +2495,7 @@
   color: #e65100;
   margin-bottom: 15px;
 }
+
 /* ============================================
    Export Options
    ============================================ */
@@ -2399,177 +2593,6 @@
 
 .cvmaker-tip-item:last-child {
   margin-bottom: 0;
-/* ============================================
-   Improvement Roadmap
-   ============================================ */
-
-.cvmaker-improvement-roadmap {
-  margin-bottom: 40px;
-}
-
-.cvmaker-improvement-roadmap h4 {
-  color: #2c3e50;
-  font-size: 1.4rem;
-  margin-bottom: 25px;
-}
-
-.cvmaker-roadmap-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.cvmaker-roadmap-item {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  border-left: 4px solid;
-}
-
-.cvmaker-roadmap-item.cvmaker-priority-high {
-  border-color: #f44336;
-  background: #ffebee;
-}
-
-.cvmaker-roadmap-item.cvmaker-priority-medium {
-  border-color: #ff9800;
-  background: #fff3e0;
-}
-
-.cvmaker-roadmap-item.cvmaker-priority-low {
-  border-color: #4caf50;
-  background: #e8f5e9;
-}
-
-.cvmaker-roadmap-icon {
-  font-size: 2rem;
-}
-
-.cvmaker-roadmap-content {
-  flex: 1;
-}
-
-.cvmaker-roadmap-content h5 {
-  color: #2c3e50;
-  margin: 0 0 8px 0;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.cvmaker-impact {
-  background: #667eea;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.cvmaker-roadmap-content p {
-  color: #555;
-  margin: 0 0 10px 0;
-  font-size: 0.95rem;
-}
-
-.cvmaker-priority-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.cvmaker-priority-badge.cvmaker-high {
-  background: #f44336;
-  color: white;
-}
-
-.cvmaker-priority-badge.cvmaker-medium {
-  background: #ff9800;
-  color: white;
-}
-
-.cvmaker-priority-badge.cvmaker-low {
-  background: #4caf50;
-  color: white;
-}
-
-/* ============================================
-   Industry Comparison
-   ============================================ */
-
-.cvmaker-comparison {
-  background: #f8f9fa;
-  padding: 25px;
-  border-radius: 12px;
-}
-
-.cvmaker-comparison h4 {
-  color: #2c3e50;
-  font-size: 1.4rem;
-  margin-bottom: 25px;
-}
-
-.cvmaker-comparison-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.cvmaker-comparison-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.cvmaker-comparison-label {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 0.95rem;
-}
-
-.cvmaker-comparison-bar {
-  height: 40px;
-  background: #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-}
-
-.cvmaker-comparison-fill {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 15px;
-  color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
-  transition: width 0.5s ease;
-}
-
-.cvmaker-comparison-fill.cvmaker-your-score {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-.cvmaker-comparison-fill.cvmaker-industry-avg {
-  background: #90caf9;
-}
-
-.cvmaker-comparison-fill.cvmaker-top-ten {
-  background: #4caf50;
-}
-
-.cvmaker-comparison-note {
-  color: #555;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0;
 }
 
 /* ============================================
@@ -2618,26 +2641,121 @@
 }
 
 /* ============================================
-   Feature Panel Base
+   Responsive Design
    ============================================ */
 
-.cvmaker-feature-panel {
-  padding: 20px 0;
+@media (max-width: 1200px) {
+  .cvmaker-comparison-boxes {
+    grid-template-columns: 1fr;
+  }
+  
+  .cvmaker-arrow {
+    transform: rotate(90deg);
+    justify-content: center;
+  }
 }
 
-.cvmaker-panel-header {
-  margin-bottom: 30px;
+@media (max-width: 1024px) {
+  .cvmaker-sidebar {
+    width: 250px;
+  }
+
+  .cvmaker-content {
+    margin-left: 250px;
+  }
+  
+  .cvmaker-health-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .cvmaker-ats-score-display {
+    grid-template-columns: 1fr;
+  }
 }
 
-.cvmaker-panel-header h3 {
-  color: #2c3e50;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+@media (max-width: 768px) {
+  .cvmaker-sidebar {
+    position: fixed;
+    left: -280px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .cvmaker-sidebar.cvmaker-open {
+    left: 0;
+  }
+
+  .cvmaker-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .cvmaker-templates-grid,
+  .cvmaker-quick-tools-grid,
+  .cvmaker-export-options,
+  .cvmaker-integration-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .cvmaker-score-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cvmaker-quick-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cvmaker-collaborator-form {
+    grid-template-columns: 1fr;
+  }
+  
+  .cvmaker-match-score-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-.cvmaker-panel-header p {
-  color: #718096;
-  line-height: 1.6;
-  font-size: 1.1rem;
-  margin: 0;
+@media (max-width: 480px) {
+  .cvmaker-content-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .cvmaker-panel-header h3 {
+    font-size: 1.4rem;
+  }
+
+  .cvmaker-score-cards,
+  .cvmaker-quick-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .cvmaker-sections-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cvmaker-cover-actions {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
+.cvmaker-sidebar::-webkit-scrollbar,
+.cvmaker-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cvmaker-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cvmaker-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.cvmaker-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
