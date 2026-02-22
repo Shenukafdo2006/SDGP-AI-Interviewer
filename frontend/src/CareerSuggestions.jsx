@@ -1,98 +1,200 @@
 import React, { useState, useMemo } from 'react';
 import './CareerSuggestions.css';
-
+;
 // ============================================
 // CAREER DATA - Extended with skills, growth, and reasons
 // ============================================
 const careersData = [
   {
     id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6a/IFS_logo.png',
-    title: 'Front End Developer - IFS',
-    company: 'IFS',
-    salary: '$30k - $65k',
-    skills: ['React', 'TypeScript', 'CSS', 'JavaScript', 'HTML'],
+    logo: '/logos/99x.png',
+    title: 'Software Engineer',
+    company: '99X Technology',
+    salary: 'LKR 150,000 - 350,000',
+    skills: ['JavaScript', 'React', 'Node.js', 'Agile', 'Git'],
     growth: 'High Demand',
-    details: 'Work on modern web applications, collaborate with UI/UX teams, and use technologies like React, TypeScript, and CSS. You will be responsible for creating responsive user interfaces and ensuring cross-browser compatibility.',
+    details:
+      'Work on high-quality software products for global clients using modern tech stacks and agile practices.',
     reasons: [
-      'Matches your JavaScript and React skills',
-      'Growing demand in Sri Lankan tech industry',
-      'Great entry point for web development career'
+      '99X is known for excellent software engineering culture',
+      'Many opportunities to work on cloud and product development',
+      'Strong training and career progression paths'
     ]
   },
   {
     id: 2,
-    logo: 'https://wso2.com/files/images/logo.svg',
-    title: 'Backend Developer - WSO2',
-    company: 'WSO2',
-    salary: '$35k - $70k',
-    skills: ['Node.js', 'Java', 'Python', 'MongoDB', 'REST APIs'],
-    growth: 'Very High',
-    details: 'Build scalable backend systems, APIs, and microservices using Node.js, Java, and cloud platforms. Work with databases and ensure system reliability and performance.',
+    logo: '/logos/codegen.png',
+    title: 'Backend Developer',
+    company: 'CodeGen International',
+    salary: 'LKR 160,000 - 380,000',
+    skills: ['Java', 'Spring Boot', 'REST APIs', 'SQL', 'Microservices'],
+    growth: 'High Demand',
+    details:
+      'Develop backend services and APIs for travel and reservation systems used globally.',
     reasons: [
-      'Strong backend development opportunities',
-      'Exposure to enterprise-level systems',
-      'Work with cutting-edge cloud technologies'
+      'CodeGen is a leader in travel tech solutions',
+      'Backend skills are highly valued and in demand',
+      'Work with international products and large datasets'
     ]
   },
   {
     id: 3,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Virtusa_logo.png',
-    title: 'Quality Assurance Engineer - Virtusa',
-    company: 'Virtusa',
-    salary: '$28k - $55k',
-    skills: ['Selenium', 'Testing', 'Automation', 'JIRA', 'Agile'],
-    growth: 'Stable',
-    details: 'Ensure software quality through automated and manual testing, work with QA tools like Selenium, and collaborate with development teams to deliver bug-free products.',
+    logo: '/logos/creativesoftware.png',
+    title: 'Full Stack Developer',
+    company: 'Creative Software',
+    salary: 'LKR 140,000 - 320,000',
+    skills: ['Angular', 'React', 'Node.js', 'SQL', 'REST'],
+    growth: 'Growing',
+    details:
+      'Build full stack applications for cloud and enterprise solutions with a focus on scalability and performance.',
     reasons: [
-      'Critical role in software development lifecycle',
-      'Good work-life balance opportunities',
-      'Pathway to QA leadership roles'
+      'Creative Software works with global clients',
+      'Great environment for learning diverse technologies',
+      'Strong mentoring and project variety'
     ]
   },
   {
     id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-    title: 'Project Manager - Google',
-    company: 'Google',
-    salary: '$45k - $90k',
-    skills: ['Project Management', 'Agile', 'Scrum', 'Leadership', 'Communication'],
-    growth: 'High Demand',
-    details: 'Lead cross-functional teams, manage project timelines, and deliver innovative solutions in a fast-paced environment. Coordinate between stakeholders and ensure project success.',
+    logo:'/logos/dialog.png',
+    title: 'Mobile App Developer',
+    company: 'Dialog Axiata',
+    salary: 'LKR 130,000 - 300,000',
+    skills: ['Flutter', 'React Native', 'Dart', 'Android', 'iOS'],
+    growth: 'Strong',
+    details:
+      'Develop mobile applications and digital services for one of Sri Lanka’s largest telco providers.',
     reasons: [
-      'Leadership and strategic planning focus',
-      'High earning potential with experience',
-      'Work with global teams and technologies'
+      'Dialog leads in digital transformation in Sri Lanka',
+      'Mobile skills are highly marketable',
+      'Work on consumer-facing products'
     ]
   },
   {
     id: 5,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
-    title: 'Data Scientist - Amazon',
-    company: 'Amazon',
-    salary: '$50k - $95k',
-    skills: ['Python', 'Machine Learning', 'SQL', 'TensorFlow', 'Statistics'],
-    growth: 'Very High',
-    details: 'Analyze large datasets, build machine learning models, and derive insights that drive business decisions. Work with cutting-edge AI/ML technologies.',
+    logo: '/logos/hsenid.jpg',
+    title: 'Software Developer',
+    company: 'hSenid Software International',
+    salary: 'LKR 120,000 - 280,000',
+    skills: ['C#', '.NET', 'SQL', 'REST APIs', 'Teamwork'],
+    growth: 'Stable',
+    details:
+      'Work on HR and business management software used across industries in Sri Lanka and abroad.',
     reasons: [
-      'High demand for AI/ML professionals',
-      'Competitive salary packages',
-      'Work on impactful data-driven projects'
+      'hSenid is a respected local software provider',
+      'Good for understanding enterprise systems',
+      'Balanced work responsibilities'
     ]
   },
   {
     id: 6,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg',
-    title: 'Cloud Solutions Architect - Microsoft',
-    company: 'Microsoft',
-    salary: '$55k - $100k',
-    skills: ['Azure', 'AWS', 'Cloud Architecture', 'DevOps', 'Networking'],
-    growth: 'Very High',
-    details: 'Design and implement cloud solutions, migrate applications to the cloud, and ensure scalability and security of cloud infrastructure.',
+    logo: '/logos/ifs.jpg',
+    title: 'Frontend Developer',
+    company: 'IFS Sri Lanka',
+    salary: 'LKR 130,000 - 310,000',
+    skills: ['React', 'JavaScript', 'CSS', 'HTML', 'UI/UX'],
+    growth: 'High',
+    details:
+      'Develop responsive and user-friendly interfaces for enterprise applications.',
     reasons: [
-      'Cloud computing is the future',
-      'Excellent career growth trajectory',
-      'Work with enterprise clients globally'
+      'Strong demand for frontend skills in the local market',
+      'International exposure while working at IFS',
+      'Good entry point to enterprise web dev'
+    ]
+  },
+  {
+    id: 7,
+    logo: '/logos/johnkeels.jpg',
+    title: 'Software Solutions Engineer',
+    company: 'John Keells IT',
+    salary: 'LKR 140,000 - 330,000',
+    skills: ['Java', 'Microservices', 'Cloud', 'SQL', 'Teamwork'],
+    growth: 'Growing',
+    details:
+      'Design and build software solutions for sectors including leisure, aviation, and exports.',
+    reasons: [
+      'Works on diverse tech projects',
+      'Exposure to enterprise-level systems',
+      'Great cross-team collaboration'
+    ]
+  },
+  {
+    id: 8,
+    logo: '/logos/millenium.png',
+    title: 'DevOps Engineer',
+    company: 'MillenniumIT ESP',
+    salary: 'LKR 150,000 - 360,000',
+    skills: ['Docker', 'Kubernetes', 'AWS', 'CI/CD', 'Linux'],
+    growth: 'Very High',
+    details:
+      'Support automated infrastructure workflows and cloud deployments using modern DevOps practices.',
+    reasons: [
+      'DevOps is one of the most in-demand roles in Sri Lanka',
+      'Work on scalable systems',
+      'Great salary growth potential'
+    ]
+  },
+  {
+    id: 9,
+    logo: '/logos/syscolabs.png',
+    title: 'AI / ML Engineer',
+    company: 'Sysco LABS',
+    salary: 'LKR 180,000 - 400,000',
+    skills: ['Python', 'TensorFlow', 'Machine Learning', 'Data Modeling', 'SQL'],
+    growth: 'Very High',
+    details:
+      'Work on machine learning projects and data-driven products for global clients.',
+    reasons: [
+      'Sysco LABS works on cutting-edge tech stacks',
+      'AI & ML skills are trending globally',
+      'Cross-domain experience'
+    ]
+  },
+  {
+    id: 10,
+    logo: '/logos/virtusa.jpg',
+    title: 'Quality Assurance Engineer',
+    company: 'Virtusa Sri Lanka',
+    salary: 'LKR 130,000 - 300,000',
+    skills: ['Selenium', 'Test Automation', 'Agile', 'JIRA', 'Reporting'],
+    growth: 'Stable',
+    details:
+      'Ensure the quality of software through test automation and manual testing practices.',
+    reasons: [
+      'QA roles are abundant in Sri Lankan IT firms',
+      'Good starting point for new grads',
+      'Opportunity to grow into leadership'
+    ]
+  },
+  {
+    id: 11,
+    logo: '/logos/wso2.png',
+    title: 'Integration Developer',
+    company: 'WSO2 Sri Lanka',
+    salary: 'LKR 160,000 - 370,000',
+    skills: ['Java', 'APIs', 'Middleware', 'Microservices', 'Cloud'],
+    growth: 'Very High',
+    details:
+      'Develop integration platforms and API ecosystems for distributed enterprise systems.',
+    reasons: [
+      'WSO2 is a leader in integration software',
+      'Great for backend & middleware experience',
+      'Exposure to enterprise architecture'
+    ]
+  },
+  {
+    id: 12,
+    logo: '/logos/microimage.png',
+    title: 'Business Systems Developer',
+    company: 'Microimage',
+    salary: 'LKR 120,000 - 290,000',
+    skills: ['Power BI', 'SQL', 'C#', 'Data Analytics', 'Reporting'],
+    growth: 'Growing',
+    details:
+      'Develop business intelligence and workforce optimization software solutions.',
+    reasons: [
+      'Strong local reputation in analytics space',
+      'Good mix of dev + data skills',
+      'Work on products used by enterprises'
     ]
   }
 ];

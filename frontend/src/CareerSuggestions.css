@@ -6,7 +6,7 @@
 
 .career-suggestions-page {
   max-width: 1100px;
-  margin: 0 auto;
+ margin: 0 auto;
   padding: 24px;
   min-height: 100vh;
 }
@@ -306,23 +306,25 @@
 .career-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  border-color: var(--purple, #8b5cf6);
 }
 
 .career-card-logo {
-  width: 70px;
-  height: 70px;
-  border-radius: 14px;
+  width: 180px;
+  height: 180px;
+  border-radius: 16px;
   object-fit: contain;
   background: #fff;
-  padding: 10px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
 .career-card-title {
   font-weight: 700;
-  font-size: 17px;
-  color: var(--text, #e6e9f0);
+  font-size: 22px;
+  letter-spacing: -0.02em; /* Tighter headers look more modern */
+  color: #ffffff;
   margin-bottom: 6px;
 }
 
@@ -333,14 +335,17 @@
 }
 
 .career-card-match {
-  background: linear-gradient(90deg, rgba(34, 197, 94, 0.2), rgba(96, 165, 250, 0.15));
-  color: #86efac;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34, 197, 94, 0.1); /* Subtle green tint */
+  color: #4ade80;
+  padding: 4px 12px;
+  border-radius: 6px; /* Squircle looks more "SaaS" than a pill */
+  font-family: 'JetBrains Mono', monospace; /* If you have a mono font */
+  font-size: 12px;
+  text-transform: uppercase;
+  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
 .career-card-skills {
@@ -376,6 +381,21 @@
 .career-card-btn:hover {
   background: var(--purple-dark, #6d28d9);
   transform: translateY(-2px);
+}
+.career-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.career-card:hover::before {
+  opacity: 1;
 }
 
 /* ============================================
@@ -603,6 +623,7 @@
 @media (max-width: 768px) {
   .career-suggestions-page {
     padding: 16px;
+    background-color: #0f1117;
   }
 
   .career-header-banner {
