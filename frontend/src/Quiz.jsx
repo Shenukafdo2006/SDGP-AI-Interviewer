@@ -1,5 +1,5 @@
 import "./Quiz.css";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 const quizzes = [
   {
@@ -56,16 +56,28 @@ const Quiz = ({ onBack }) => {
   };
 
   const answerQuestion = (idx) => {
-    setAnswers([...answers, idx]);
+    setAnswers((prev) => [...prev, idx]);
+
     if (currentQ + 1 < selectedQuiz.questions.length) {
-      setCurrentQ(currentQ + 1);
+      setCurrentQ((prev) => prev + 1);
     } else {
       setShowResult(true);
     }
   };
 
-  const getScore = () =>
-    answers.filter((a, i) => a === selectedQuiz.questions[i].correct).length;
+  const score = useMemo(() => {
+    if (!selectedQuiz) return 0;
+    return answers.filter(
+      (a, i) => a === selectedQuiz.questions[i]?.correct
+    ).length;
+  }, [answers, selectedQuiz]);
+
+  const totalQuestions = selectedQuiz?.questions.length || 0;
+
+  const progress =
+    selectedQuiz && totalQuestions > 0
+      ? Math.round(((currentQ + 1) / totalQuestions) * 100)
+      : 0;
 
   const resetQuiz = () => {
     setSelectedQuiz(null);
@@ -79,11 +91,6 @@ const Quiz = ({ onBack }) => {
     setAnswers([]);
     setShowResult(false);
   };
-
-  const totalQuestions = selectedQuiz?.questions.length || 0;
-  const progress = selectedQuiz
-    ? Math.round((currentQ / totalQuestions) * 100)
-    : 0;
 
   return (
     <div className="quiz-page">
@@ -119,14 +126,10 @@ const Quiz = ({ onBack }) => {
           <div className="result-box">
             <h2>{selectedQuiz.title}</h2>
             <p>
-              Your Score: {getScore()} / {selectedQuiz.questions.length}
+              Your Score: {score} / {totalQuestions}
             </p>
             <p>
-              Accuracy:{" "}
-              {Math.round(
-                (getScore() / selectedQuiz.questions.length) * 100
-              )}
-              %
+              Accuracy: {Math.round((score / totalQuestions) * 100)}%
             </p>
 
             <div className="result-actions">

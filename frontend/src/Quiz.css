@@ -41,10 +41,6 @@
   transform: translateY(-5px);
 }
 
-.quiz-card h3 {
-  margin-bottom: 10px;
-}
-
 .quiz-count {
   font-size: 14px;
   opacity: 0.8;
