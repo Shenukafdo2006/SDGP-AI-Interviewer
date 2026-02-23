@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
 
-// 🔹 Skill Data
+
 const skills = [
   { name: "React", level: "Intermediate", progress: 75, target: 90, next: "Master React Hooks" },
   { name: "TypeScript", level: "Beginner", progress: 60, target: 85, next: "Advanced Type Patterns" },
@@ -23,15 +23,15 @@ const recommendations = [
 ];
 
 const SkillImprovement = () => {
-  // 🔹 Animated Skills State
+  
   const [animatedSkills, setAnimatedSkills] = useState(
     skills.map(skill => ({ ...skill, animatedProgress: 0 }))
   );
 
-  // 🔹 Weekly Goals State
+  
   const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
 
-  // 🔹 Animate progress bars on mount
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimatedSkills(skills.map(skill => ({ ...skill, animatedProgress: skill.progress })));
@@ -39,7 +39,7 @@ const SkillImprovement = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // 🔹 Mark goal as done
+  
   const handleGoalClick = (idx) => {
     setWeeklyGoals(
       weeklyGoals.map((goal, i) =>
@@ -50,7 +50,7 @@ const SkillImprovement = () => {
     );
   };
 
-  // 🔹 Priority class for recommendations
+
   const getPriorityClass = (level) => {
     if (level === "High") return "priority-high";
     if (level === "Medium") return "priority-medium";
