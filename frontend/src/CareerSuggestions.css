@@ -16,6 +16,7 @@
    ============================================ */
 
 .career-header-banner {
+  position: relative;
   background: linear-gradient(
     135deg,
     rgba(139, 92, 246, 0.25),

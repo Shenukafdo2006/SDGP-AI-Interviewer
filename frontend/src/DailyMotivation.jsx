@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./DailyMotivation.css";
 
-const DailyMotivation = () => {
+const DailyMotivation = ({ onBack }) => {
 
   // ================= QUOTES =================
   const quotes = [
@@ -30,6 +30,7 @@ const DailyMotivation = () => {
     setCurrentQuote(quotes[randomIndex]);
   };
 
+  
   // ================= INTENTIONS =================
   const [intentions, setIntentions] = useState([
     "Practice gratitude for 5 minutes",
@@ -81,6 +82,7 @@ const DailyMotivation = () => {
 
       {/* HEADER */}
       <div className="header">
+        <button className="go-back-button" onClick={onBack}>← Back</button>
         <div className="rise-text">RISE AND SHINE ✨</div>
         <h1>Your Daily Motivation</h1>
         <p>Monday, February 23, 2026</p>

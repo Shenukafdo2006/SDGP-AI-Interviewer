@@ -386,7 +386,7 @@ const CareerDetailView = ({ career, onBack }) => {
 // ============================================
 // MAIN CAREER SUGGESTIONS COMPONENT
 // ============================================
-const CareerSuggestions = () => {
+const CareerSuggestions = ({ onBack }) => {
   // User profile state
   const [userSkills, setUserSkills] = useState([]);
   const [userInterests, setUserInterests] = useState([]);
@@ -491,6 +491,7 @@ const CareerSuggestions = () => {
     <div className="career-suggestions-page">
       {/* Header Banner */}
       <div className="career-header-banner">
+        <button className="go-back-button" onClick={onBack}>← Back</button>
         <h2 className="career-header-title">
           🚀 Why Explore These Careers?
         </h2>
