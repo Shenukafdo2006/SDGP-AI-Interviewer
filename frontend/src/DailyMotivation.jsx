@@ -2,7 +2,35 @@ import React, { useState } from "react";
 import "./DailyMotivation.css";
 
 const DailyMotivation = () => {
-  // ---------------- INTENTIONS ----------------
+
+  // ================= QUOTES =================
+  const quotes = [
+    {
+      text: "The only way to do great work is to love what you do.",
+      author: "Steve Jobs"
+    },
+    {
+      text: "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      author: "Winston Churchill"
+    },
+    {
+      text: "Believe you can and you're halfway there.",
+      author: "Theodore Roosevelt"
+    },
+    {
+      text: "Dream big and dare to fail.",
+      author: "Norman Vaughan"
+    }
+  ];
+
+  const [currentQuote, setCurrentQuote] = useState(quotes[0]);
+
+  const generateNewQuote = () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setCurrentQuote(quotes[randomIndex]);
+  };
+
+  // ================= INTENTIONS =================
   const [intentions, setIntentions] = useState([
     "Practice gratitude for 5 minutes",
     "Move my body for 30 minutes",
@@ -17,7 +45,7 @@ const DailyMotivation = () => {
     }
   };
 
-  // ---------------- HABITS ----------------
+  // ================= HABITS =================
   const [habits, setHabits] = useState([
     { name: "Meditation", streak: 12, completed: false },
     { name: "Reading", streak: 8, completed: true },
@@ -35,23 +63,49 @@ const DailyMotivation = () => {
   const toggleHabit = (index) => {
     const updated = [...habits];
     updated[index].completed = !updated[index].completed;
-    if (!updated[index].completed) updated[index].streak--;
-    else updated[index].streak++;
+
+    if (!updated[index].completed && updated[index].streak > 0) {
+      updated[index].streak--;
+    } else if (updated[index].completed) {
+      updated[index].streak++;
+    }
+
     setHabits(updated);
   };
 
-  // ---------------- VISION ----------------
+  // ================= VISION =================
   const [vision, setVision] = useState("");
 
   return (
     <div className="motivation-container">
+
+      {/* HEADER */}
       <div className="header">
         <div className="rise-text">RISE AND SHINE ✨</div>
         <h1>Your Daily Motivation</h1>
         <p>Monday, February 23, 2026</p>
       </div>
 
-      {/* DAILY INTENTIONS */}
+      {/* ================= GLOWING QUOTE CARD ================= */}
+      <div className="top-quote-card">
+        <div className="quote-left">
+          <div className="quote-symbol">❝</div>
+          <div>
+            <div className="top-quote-text">
+              {currentQuote.text}
+            </div>
+            <div className="top-quote-author">
+              — {currentQuote.author}
+            </div>
+          </div>
+        </div>
+
+        <button className="new-quote-btn" onClick={generateNewQuote}>
+          🔄 New Quote
+        </button>
+      </div>
+
+      {/* ================= DAILY INTENTIONS ================= */}
       <div className="card intentions-card">
         <h3>🎯 Daily Intentions</h3>
 
@@ -73,7 +127,7 @@ const DailyMotivation = () => {
         </div>
       </div>
 
-      {/* BUILD HABITS */}
+      {/* ================= BUILD HABITS ================= */}
       <div className="card habits-card">
         <h3>🔥 Build Daily Habits</h3>
 
@@ -109,7 +163,7 @@ const DailyMotivation = () => {
         </div>
       </div>
 
-      {/* VISION BOARD */}
+      {/* ================= VISION BOARD ================= */}
       <div className="card vision-card">
         <h3>💭 Your Vision</h3>
         <p>What’s one thing you want to accomplish this month?</p>
@@ -123,7 +177,7 @@ const DailyMotivation = () => {
         <button className="save-btn">Save Vision</button>
       </div>
 
-      {/* STATS */}
+      {/* ================= STATS ================= */}
       <div className="stats-row">
         <div className="stat-card gold">
           <h2>7</h2>
