@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container */
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Glass Card */
+.login-form {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  padding: 45px 35px;
+  width: 380px;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  color: white;
+  transition: transform 0.25s ease;
+}
+
+.login-form:hover {
+  transform: translateY(-4px);
+}
+
+/* Title */
+.login-form h2 {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 13px;
+  margin-bottom: 26px;
+  opacity: 0.85;
+}
+
+/* Inputs */
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.22);
+  color: white;
+  transition: all 0.25s ease;
+}
+
+.login-form input::placeholder {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.login-form input:focus {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Options Row */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin: 12px 0 22px 0;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.options input {
+  accent-color: #ffffff;
+}
+
+.options a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+/* Button */
+.login-form button {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #243b55;
+  transition: all 0.25s ease;
+}
+
+.login-form button:hover {
+  background: #e6e6e6;
+  transform: scale(1.03);
+}
+
+/* Bottom Text */
+.bottom-text {
+  margin-top: 22px;
+  font-size: 13px;
+}
+
+.link-text {
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.link-text:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

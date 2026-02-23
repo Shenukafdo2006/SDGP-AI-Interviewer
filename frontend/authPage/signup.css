@@ -1,0 +1,108 @@
+/* Google Font (optional but recommended) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container */
+.signup-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Glass Card Effect */
+.signup-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  padding: 45px 35px;
+  width: 380px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.signup-form:hover {
+  transform: translateY(-5px);
+}
+
+/* Title */
+.signup-form h2 {
+  margin-bottom: 25px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+.signup-form input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.signup-form input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.signup-form input:focus {
+  background: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* Button */
+.signup-form button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #1e3c72;
+  transition: all 0.3s ease;
+}
+
+.signup-form button:hover {
+  background: #e6e6e6;
+  transform: scale(1.03);
+}
+
+/* Bottom text */
+.signup-form p {
+  margin-top: 20px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.signup-form a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-form a:hover {
+  text-decoration: underline;
+}
