@@ -1,122 +1,117 @@
 .skill-page {
   padding: 30px;
-  background: linear-gradient(135deg, #e0eafc, #cfdef3); /* subtle gradient */
   min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  font-family: Arial, sans-serif;
+
+  /* 🔵 Dark Blue Gradient Background */
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #ffffff;
 }
+
 .section-title {
   margin: 25px 0 15px;
-  font-size: 1.5rem;
-  color: #222;
-  border-bottom: 2px solid #4a90e2;
-  padding-bottom: 6px;
+  color: #ffffff;
 }
+
 .skill-container,
 .goal-container,
 .recommendation-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
+/* 🔥 Glass Card Effect */
 .skill-card,
 .goal-card,
 .recommend-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  flex: 1;
+  min-width: 250px;
+  color: #ffffff;
 }
 
-.skill-card:hover,
-.goal-card:hover,
-.recommend-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-.skill-header {
+.skill-header,
+.goal-footer,
+.recommend-header,
+.skill-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .skill-level {
   font-size: 12px;
-  font-weight: bold;
-  background: #4a90e2;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.3);
+  padding: 4px 8px;
+  border-radius: 20px;
+  color: #c7d2fe;
 }
+
 .progress-bar {
   width: 100%;
-  height: 12px;
-  background: #eee;
-  border-radius: 12px;
-  margin: 10px 0;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  margin: 8px 0;
   overflow: hidden;
+}
+
+.progress-bar.small {
+  height: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4a90e2, #50e3c2);
-  border-radius: 12px;
-  transition: width 0.5s ease;
-}
-
-.progress-bar.small {
-  height: 10px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  transition: width 0.4s ease;
 }
 
 .progress-fill.dark {
-  background: linear-gradient(90deg, #333, #555);
-}
-
-.skill-footer {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #666;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
 }
 
 .next-step {
-  font-style: italic;
-  color: #888;
+  font-size: 13px;
+  color: #cbd5e1;
 }
 
 .goal-card button,
 .recommend-card button {
-  margin-top: 12px;
-  padding: 8px 16px;
+  margin-top: 8px;
+  padding: 6px 12px;
   border: none;
   border-radius: 8px;
-  background: #4a90e2;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
   color: white;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 12px;
+  transition: 0.3s;
 }
 
-.goal-card button:hover:not(:disabled),
+.goal-card button:hover,
 .recommend-card button:hover {
-  background: #357ab8;
-  transform: translateY(-2px);
+  opacity: 0.85;
 }
 
 .goal-card button:disabled {
-  background: #ccc;
+  background: gray;
   cursor: not-allowed;
 }
+
+/* Priority Colors */
 .priority-high {
-  border-left: 6px solid #e74c3c;
+  border-left: 5px solid #ef4444;
 }
+
 .priority-medium {
-  border-left: 6px solid #f39c12;
+  border-left: 5px solid #f59e0b;
 }
+
 .priority-low {
-  border-left: 6px solid #2ecc71;
+  border-left: 5px solid #10b981;
 }
