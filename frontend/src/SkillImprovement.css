@@ -1,102 +1,122 @@
 .skill-page {
   padding: 30px;
-  background: #f5f7fa;
+  background: linear-gradient(135deg, #e0eafc, #cfdef3); /* subtle gradient */
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
-
 .section-title {
   margin: 25px 0 15px;
+  font-size: 1.5rem;
+  color: #222;
+  border-bottom: 2px solid #4a90e2;
+  padding-bottom: 6px;
 }
-
 .skill-container,
 .goal-container,
 .recommendation-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
 
 .skill-card,
 .goal-card,
 .recommend-card {
-  background: white;
-  padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  flex: 1;
-  min-width: 250px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.skill-header,
-.goal-footer,
-.recommend-header,
-.skill-footer {
+.skill-card:hover,
+.goal-card:hover,
+.recommend-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+.skill-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .skill-level {
   font-size: 12px;
-  background: #e0e7ff;
-  padding: 4px 8px;
-  border-radius: 20px;
+  font-weight: bold;
+  background: #4a90e2;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 12px;
 }
-
 .progress-bar {
   width: 100%;
-  height: 10px;
+  height: 12px;
   background: #eee;
-  border-radius: 6px;
-  margin: 8px 0;
+  border-radius: 12px;
+  margin: 10px 0;
   overflow: hidden;
-}
-
-.progress-bar.small {
-  height: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background: #4a90e2;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #4a90e2, #50e3c2);
+  border-radius: 12px;
+  transition: width 0.5s ease;
+}
+
+.progress-bar.small {
+  height: 10px;
 }
 
 .progress-fill.dark {
-  background: #333;
+  background: linear-gradient(90deg, #333, #555);
 }
 
-.next-step {
+.skill-footer {
+  display: flex;
+  justify-content: space-between;
   font-size: 13px;
   color: #666;
 }
 
+.next-step {
+  font-style: italic;
+  color: #888;
+}
+
 .goal-card button,
 .recommend-card button {
-  margin-top: 8px;
-  padding: 6px 12px;
+  margin-top: 12px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: #4a90e2;
   color: white;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.goal-card button:hover:not(:disabled),
+.recommend-card button:hover {
+  background: #357ab8;
+  transform: translateY(-2px);
 }
 
 .goal-card button:disabled {
-  background: gray;
+  background: #ccc;
   cursor: not-allowed;
 }
-
 .priority-high {
-  border-left: 5px solid red;
+  border-left: 6px solid #e74c3c;
 }
-
 .priority-medium {
-  border-left: 5px solid orange;
+  border-left: 6px solid #f39c12;
 }
-
 .priority-low {
-  border-left: 5px solid green;
+  border-left: 6px solid #2ecc71;
 }

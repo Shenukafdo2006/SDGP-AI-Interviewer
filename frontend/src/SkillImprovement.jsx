@@ -30,47 +30,78 @@ const SkillImprovement = () => {
   };
 
   return (
-    <div className="skill-improvement-page" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-      <div style={{ flex: 2, minWidth: 350 }}>
-        <h2>Skill Progress</h2>
-        {skills.map((skill, idx) => (
-          <div key={idx} style={{ marginBottom: 20 }}>
-            <div style={{ fontWeight: 'bold' }}>{skill.name} <span style={{ fontWeight: 'normal', fontSize: 14 }}>({skill.level})</span></div>
-            <div style={{ background: '#eee', borderRadius: 8, height: 12, margin: '6px 0', position: 'relative' }}>
-              <div style={{ width: `${skill.progress}%`, background: '#4b0082', height: '100%', borderRadius: 8 }}></div>
-              <span style={{ position: 'absolute', right: 8, top: -18, fontSize: 12 }}>{skill.progress}%</span>
-            </div>
-            <div style={{ fontSize: 12, color: '#555' }}>Next: {skill.next} <span style={{ float: 'right' }}>Target: {skill.target}%</span></div>
-          </div>
-        ))}
+    <div className="skill-page">
+      <h2 className="section-title">Skill Progress</h2>
+
+<div className="skill-container">
+  {skills.map((skill, idx) => (
+    <div key={idx} className="skill-card">
+
+      <div className="skill-header">
+        <strong>{skill.name}</strong>
+        <span className="skill-level">{skill.level}</span>
       </div>
-      <div style={{ flex: 1, minWidth: 250 }}>
-        <h2>Weekly Goals</h2>
-        {goalProgress.map((goal, idx) => (
-          <div key={idx} style={{ marginBottom: 16 }}>
-            <div style={{ fontWeight: 'bold' }}>{goal.category}</div>
-            <div style={{ fontSize: 13 }}>{goal.goal}</div>
-            <div style={{ background: '#eee', borderRadius: 8, height: 8, margin: '6px 0', position: 'relative' }}>
-              <div style={{ width: `${(goal.current / goal.total) * 100}%`, background: '#000', height: '100%', borderRadius: 8 }}></div>
-            </div>
-            <div style={{ fontSize: 12 }}>{goal.current}/{goal.total}
-              <button style={{ marginLeft: 10, fontSize: 11, padding: '2px 8px' }} onClick={() => handleGoalClick(idx)} disabled={goal.current >= goal.total}>Mark as done</button>
-            </div>
-          </div>
-        ))}
+
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{ width: `${skill.progress}%` }}
+        ></div>
       </div>
-      <div style={{ flexBasis: '100%', marginTop: 30 }}>
-        <h2>Personalized Recommendations</h2>
-        <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-          {recommendations.map((rec, idx) => (
-            <div key={idx} style={{ background: '#f8f0ff', borderRadius: 10, padding: 16, minWidth: 220, boxShadow: '0 2px 8px #eee' }}>
-              <div style={{ fontWeight: 'bold', fontSize: 15 }}>{rec.title} <span style={{ fontSize: 11, color: '#888', marginLeft: 8 }}>{rec.level}</span></div>
-              <div style={{ fontSize: 13, margin: '6px 0' }}>{rec.desc}</div>
-              <button style={{ background: '#4b0082', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 12px', fontSize: 13 }}>{rec.action}</button>
-            </div>
-          ))}
-        </div>
+
+      <div className="skill-footer">
+        <span className="next-step">Next: {skill.next}</span>
+        <span>Target: {skill.target}%</span>
       </div>
+
+    </div>
+  ))}
+</div>
+      <h2 className="section-title">Weekly Goals</h2>
+
+<div className="goal-container">
+  {goalProgress.map((goal, idx) => (
+    <div key={idx} className="goal-card">
+
+      <strong>{goal.category}</strong>
+      <p>{goal.goal}</p>
+
+      <div className="progress-bar small">
+        <div
+          className="progress-fill dark"
+          style={{ width: `${(goal.current / goal.total) * 100}%` }}
+        ></div>
+      </div>
+
+      <div className="goal-footer">
+        <span>{goal.current}/{goal.total}</span>
+
+        <button
+          onClick={() => handleGoalClick(idx)}
+          disabled={goal.current >= goal.total}
+        >
+          Mark as done
+        </button>
+      </div>
+
+    </div>
+  ))}
+</div>
+     <h2 className="section-title">Personalized Recommendations</h2>
+<div className="recommendation-container">
+  {recommendations.map((rec, idx) => (
+    <div key={idx} className={`recommend-card priority-${rec.level.toLowerCase()}`}>
+      <div className="recommend-header">
+        <strong>{rec.title}</strong>
+        <span>{rec.level}</span>
+      </div>
+
+      <p>{rec.desc}</p>
+
+      <button>{rec.action}</button>
+    </div>
+  ))}
+</div> 
     </div>
   );
 };
