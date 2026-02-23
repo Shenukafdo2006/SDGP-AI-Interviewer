@@ -8,7 +8,7 @@ function Login({ onLoginSuccess, onBackToSignup }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Login Successful!");
-    onLoginSuccess(); // Navigate to dashboard
+    onLoginSuccess(); 
   };
 
   return (

@@ -24,8 +24,9 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
       return;
     }
 
+    
     alert("Signup Successful!");
-    onSignupSuccess(); // Navigate to dashboard
+    onSignupSuccess();
   };
 
   return (
@@ -72,11 +73,8 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
         <button type="submit">Sign Up</button>
 
         <p>
-          Already have an account? 
-          <span
-            className="link-text"
-            onClick={onGoToLogin}
-          >
+          Already have an account?
+          <span className="link-text" onClick={onGoToLogin}>
             Login
           </span>
         </p>
