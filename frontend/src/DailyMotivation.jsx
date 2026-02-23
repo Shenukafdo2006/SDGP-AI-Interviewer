@@ -1,71 +1,149 @@
+import React, { useState } from "react";
+import "./DailyMotivation.css";
 
-import React from 'react';
+const DailyMotivation = () => {
+  // ---------------- INTENTIONS ----------------
+  const [intentions, setIntentions] = useState([
+    "Practice gratitude for 5 minutes",
+    "Move my body for 30 minutes",
+    "Connect with someone I care about",
+  ]);
+  const [newIntention, setNewIntention] = useState("");
 
-const quote = {
-  text: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
-  author: 'Winston Churchill',
-};
+  const addIntention = () => {
+    if (newIntention.trim() !== "") {
+      setIntentions([...intentions, newIntention]);
+      setNewIntention("");
+    }
+  };
 
-const tips = [
-  {
-    icon: '🎯',
-    title: 'Start Small',
-    desc: 'Break down your goals into smaller, manageable tasks. Every small win counts!',
-    color:"Black"
+  // ---------------- HABITS ----------------
+  const [habits, setHabits] = useState([
+    { name: "Meditation", streak: 12, completed: false },
+    { name: "Reading", streak: 8, completed: true },
+    { name: "Exercise", streak: 5, completed: false },
+  ]);
+  const [newHabit, setNewHabit] = useState("");
 
+  const addHabit = () => {
+    if (newHabit.trim() !== "") {
+      setHabits([...habits, { name: newHabit, streak: 0, completed: false }]);
+      setNewHabit("");
+    }
+  };
 
+  const toggleHabit = (index) => {
+    const updated = [...habits];
+    updated[index].completed = !updated[index].completed;
+    if (!updated[index].completed) updated[index].streak--;
+    else updated[index].streak++;
+    setHabits(updated);
+  };
 
-  },
-  {
-    icon: '📅',
-    title: 'Stay Consistent',
-    desc: 'Consistency beats intensity. Dedicate time every day, even if it’s just 30 minutes.',
-    color: '#ff0066',
-  },
-  {
-    icon: '⭐',
-    title: 'Celebrate Progress',
-    desc: 'Acknowledge your achievements, no matter how small. You’re improving every day!',
-    color: '#ff0066',
-  },
-  {
-    icon: '⚡',
-    title: 'Learn from Failures',
-    desc: 'Every mistake is a learning opportunity. Embrace challenges as growth moments.',
-    color: '#ff0066',
-  },
-];
+  // ---------------- VISION ----------------
+  const [vision, setVision] = useState("");
 
-const DailyMotivation = ({ onBack }) => (
-  <div className="daily-motivation-page" style={{ maxWidth: 900, margin: '0 auto' }}>
-    <div style={{ position: 'absolute', top: 16, left: 16 }}>
-      <button className="menu-icon" onClick={onBack} style={{ cursor: onBack ? 'pointer' : 'default', background: 'none', border: 'none', fontSize: 28, padding: 0 }}>
-        ←
-      </button>
-    </div>
-    <div style={{ height: 40 }} />
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 30 }}>
-      <div style={{ background: 'linear-gradient(90deg,#ff0066,#ff4e9b)', color: '#fff', borderRadius: 20, boxShadow: '0 2px 8px #ccc', padding: '24px 32px', fontSize: 22, fontStyle: 'italic', marginBottom: 10, width: '100%', maxWidth: 800 }}>
-        <span style={{ fontSize: 32, marginRight: 12 }}>❝</span>
-        {`"${quote.text}"`}
-        <div style={{ fontSize: 16, fontStyle: 'normal', marginTop: 10 }}>— {quote.author}</div>
+  return (
+    <div className="motivation-container">
+      <div className="header">
+        <div className="rise-text">RISE AND SHINE ✨</div>
+        <h1>Your Daily Motivation</h1>
+        <p>Monday, February 23, 2026</p>
       </div>
-    </div>
-    <div style={{ border: '1px solid #222', borderRadius: 18, padding: 24, background: '#fff', boxShadow: '0 2px 8px #eee' }}>
-      <div style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 18 }}>Motivation Tips</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-        {tips.map((tip, idx) => (
-          <div key={idx} style={{ background: '#fff', borderRadius: 14, boxShadow: '0 2px 8px #eee', padding: 18, minWidth: 260, flex: 1, display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{ background: tip.color, color: '#fff', borderRadius: 12, width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{tip.icon}</div>
-            <div>
-              <div style={{ fontWeight: 'bold', fontSize: 16 }}>{tip.title}</div>
-              <div style={{ fontSize: 14, color: '#444', marginTop: 4 }}>{tip.desc}</div>
-            </div>
+
+      {/* DAILY INTENTIONS */}
+      <div className="card intentions-card">
+        <h3>🎯 Daily Intentions</h3>
+
+        {intentions.map((item, index) => (
+          <div className="intention-item" key={index}>
+            <span>○ {item}</span>
+            <span className="delete">×</span>
           </div>
         ))}
+
+        <div className="add-row">
+          <input
+            type="text"
+            placeholder="Add a new intention..."
+            value={newIntention}
+            onChange={(e) => setNewIntention(e.target.value)}
+          />
+          <button onClick={addIntention}>Add</button>
+        </div>
       </div>
+
+      {/* BUILD HABITS */}
+      <div className="card habits-card">
+        <h3>🔥 Build Daily Habits</h3>
+
+        <div className="habit-grid">
+          {habits.map((habit, index) => (
+            <div key={index} className="habit-item">
+              <div className="habit-top">
+                <span>{habit.name}</span>
+                <span className="streak">🔥 {habit.streak}</span>
+              </div>
+
+              <div className="progress-bar">
+                <div
+                  className={`progress ${habit.completed ? "active" : ""}`}
+                ></div>
+              </div>
+
+              <button onClick={() => toggleHabit(index)}>
+                {habit.completed ? "✓ Completed Today" : "Mark Done"}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="add-row">
+          <input
+            type="text"
+            placeholder="Add a new habit..."
+            value={newHabit}
+            onChange={(e) => setNewHabit(e.target.value)}
+          />
+          <button onClick={addHabit}>Add</button>
+        </div>
+      </div>
+
+      {/* VISION BOARD */}
+      <div className="card vision-card">
+        <h3>💭 Your Vision</h3>
+        <p>What’s one thing you want to accomplish this month?</p>
+
+        <textarea
+          placeholder="Write your vision here..."
+          value={vision}
+          onChange={(e) => setVision(e.target.value)}
+        />
+
+        <button className="save-btn">Save Vision</button>
+      </div>
+
+      {/* STATS */}
+      <div className="stats-row">
+        <div className="stat-card gold">
+          <h2>7</h2>
+          <p>Day Streak 🔥</p>
+        </div>
+
+        <div className="stat-card purple">
+          <h2>0</h2>
+          <p>Goals Done ✅</p>
+        </div>
+
+        <div className="stat-card blue">
+          <h2>1</h2>
+          <p>Quotes Read 📖</p>
+        </div>
+      </div>
+
+      <div className="footer-text">✨ Make today amazing ✨</div>
     </div>
-  </div>
-);
+  );
+};
 
 export default DailyMotivation;
