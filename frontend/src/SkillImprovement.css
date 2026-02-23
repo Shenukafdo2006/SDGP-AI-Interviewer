@@ -19,12 +19,9 @@
   gap: 20px;
 }
 
-.skill-card:hover,
-.goal-card:hover,
-.recommend-card:hover {
-  transform: translateY(-1.5s);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.25);
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
+.skill-card,
+.goal-card,
+.recommend-card {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   padding: 18px;
@@ -52,7 +49,7 @@
   color: #c7d2fe;
 }
 
-/* 🔹 Progress Bars with Animation */
+
 .progress-bar {
   width: 100%;
   height: 10px;
