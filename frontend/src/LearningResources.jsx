@@ -1,4 +1,4 @@
-
+import "./LearningResources.css";
 import React, { useState } from 'react';
 
 const resources = [
