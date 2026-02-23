@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
 
+// 🔹 Skill Data
 const skills = [
   { name: "React", level: "Intermediate", progress: 75, target: 90, next: "Master React Hooks" },
   { name: "TypeScript", level: "Beginner", progress: 60, target: 85, next: "Advanced Type Patterns" },
@@ -22,8 +23,23 @@ const recommendations = [
 ];
 
 const SkillImprovement = () => {
+  // 🔹 Animated Skills State
+  const [animatedSkills, setAnimatedSkills] = useState(
+    skills.map(skill => ({ ...skill, animatedProgress: 0 }))
+  );
+
+  // 🔹 Weekly Goals State
   const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
 
+  // 🔹 Animate progress bars on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedSkills(skills.map(skill => ({ ...skill, animatedProgress: skill.progress })));
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 🔹 Mark goal as done
   const handleGoalClick = (idx) => {
     setWeeklyGoals(
       weeklyGoals.map((goal, i) =>
@@ -34,6 +50,7 @@ const SkillImprovement = () => {
     );
   };
 
+  // 🔹 Priority class for recommendations
   const getPriorityClass = (level) => {
     if (level === "High") return "priority-high";
     if (level === "Medium") return "priority-medium";
@@ -43,9 +60,8 @@ const SkillImprovement = () => {
   return (
     <div className="skill-page">
       <h2 className="section-title">Skill Progress</h2>
-
       <div className="skill-container">
-        {skills.map((skill, idx) => (
+        {animatedSkills.map((skill, idx) => (
           <div key={idx} className="skill-card">
             <div className="skill-header">
               <h4>{skill.name}</h4>
@@ -55,12 +71,12 @@ const SkillImprovement = () => {
             <div className="progress-bar">
               <div
                 className="progress-fill"
-                style={{ width: `${skill.progress}%` }}
+                style={{ width: `${skill.animatedProgress}%` }}
               ></div>
             </div>
 
             <div className="skill-footer">
-              <span>{skill.progress}%</span>
+              <span>{skill.animatedProgress}%</span>
               <span>Target: {skill.target}%</span>
             </div>
 
@@ -70,7 +86,6 @@ const SkillImprovement = () => {
       </div>
 
       <h2 className="section-title">Weekly Goals</h2>
-
       <div className="goal-container">
         {weeklyGoals.map((goal, idx) => {
           const percent = (goal.current / goal.total) * 100;
@@ -101,7 +116,6 @@ const SkillImprovement = () => {
       </div>
 
       <h2 className="section-title">Personalized Recommendations</h2>
-
       <div className="recommendation-container">
         {recommendations.map((rec, idx) => (
           <div key={idx} className={`recommend-card ${getPriorityClass(rec.level)}`}>
