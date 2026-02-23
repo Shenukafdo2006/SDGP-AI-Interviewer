@@ -1,22 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Achievements.css";
 
-
-
-const stats = [
+// Initial stats and XP
+const initialStats = [
   { icon: "🏆", label: "Achievements", value: 4 },
   { icon: "🔥", label: "Day Streak", value: 15 },
   { icon: "⚡", label: "Level", value: 10 },
 ];
 
-const xp = {
+const initialXp = {
   level: 10,
   current: 800,
   total: 1000,
   title: "Career Achiever",
+  icon: "⚡",
 };
 
-const achievements = [
+// Default achievements
+const defaultAchievements = [
   {
     name: "First Interview",
     desc: "Completed your first mock interview",
@@ -68,6 +69,48 @@ const achievements = [
 ];
 
 const Achievements = () => {
+  const [stats, setStats] = useState(initialStats);
+  const [xp, setXp] = useState(initialXp);
+  const [achievements, setAchievements] = useState(defaultAchievements);
+  const userId = "user123"; // Firestore user document ID
+
+  // Fetch user data from backend
+  const fetchUserData = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/user/${userId}`);
+      if (!res.ok) throw new Error("Failed to fetch user data");
+      const data = await res.json();
+
+      setStats(data.stats || initialStats);
+      setXp(data.xp || initialXp);
+      setAchievements(data.achievements || defaultAchievements);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  // Update achievement progress or unlock
+  const updateAchievement = async (achName, unlocked, progress) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/user/${userId}/achievement/${achName}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ unlocked, progress }),
+        }
+      );
+      if (!res.ok) throw new Error("Failed to update achievement");
+      fetchUserData(); // Refresh data after update
+    } catch (error) {
+      console.error("Error updating achievement:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <div className="achievements-page">
       {/* Stats */}
