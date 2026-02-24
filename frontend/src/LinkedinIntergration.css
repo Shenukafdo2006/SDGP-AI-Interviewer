@@ -44,9 +44,25 @@
   font-size: 13px;
 }
 
+/* ===== Header (matches other pages) ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 14px 16px;
+  margin-bottom: 16px;
+
+  background: linear-gradient(180deg, rgba(108,99,255,0.12), rgba(255,255,255,0.02));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
 /* ===== Layout grid ===== */
 .li-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: 1.8fr 1fr;
   gap: 16px;
 }

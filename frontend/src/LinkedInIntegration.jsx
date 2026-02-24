@@ -61,7 +61,6 @@ const [selected, setSelected] = useState(null);
           >
             ←
           </div>
-          <div className="logo">📚</div>
         </header>
         <button style={{ marginBottom: 20 }} onClick={() => setSelected(null)}>Back to Resources</button>
         <h2>{selected.title}</h2>
@@ -78,7 +77,7 @@ const [selected, setSelected] = useState(null);
 
   return (
     <div className="linkedin-integration-page" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-      <header className="header">
+      <header className="header" style={ { width: '100%', display: 'flex', alignItems: 'center', padding: '0 18px', boxSizing: 'border-box' } }>
         <div
           className="menu-icon"
           onClick={onBack}
@@ -88,6 +87,7 @@ const [selected, setSelected] = useState(null);
         </div>
         <div className="logo">📚</div>
       </header>
+      
       <div style={{ flex: 2, minWidth: 350 }}>
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #eee', padding: 18, marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
