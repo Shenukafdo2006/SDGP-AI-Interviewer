@@ -31,7 +31,12 @@
   min-width: 250px;
   color: #ffffff;
 }
-
+.skill-card:hover,
+.goal-card:hover,
+.recommend-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(59,130,246,0.4);
+}
 .skill-header,
 .goal-footer,
 .recommend-header,
