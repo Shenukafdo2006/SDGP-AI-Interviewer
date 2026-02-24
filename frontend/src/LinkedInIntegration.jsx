@@ -31,7 +31,7 @@ const peopleSuggestions = [
   { initials: 'JA', name: 'James Wilson', title: 'Full Stack Developer at Meta', mutual: 12 },
 ];
 
-const LinkedInIntegration = () => {
+const LinkedInIntegration = ({ onBack }) => {
   const [update, setUpdate] = useState('');
   const [shared, setShared] = useState(false);
   const [connected, setConnected] = useState(Array(peopleSuggestions.length).fill(false));
@@ -48,8 +48,46 @@ const LinkedInIntegration = () => {
     setConnected(connected.map((c, i) => i === idx ? true : c));
   };
 
+const [selected, setSelected] = useState(null);
+
+  if (selected) {      
+    return (
+      <div className="linkedin-integration-page" style={{ maxWidth: 700, margin: '0 auto' }}>
+        <header className="header">
+          <div
+            className="menu-icon"
+            onClick={onBack}
+            style={{ cursor: onBack ? "pointer" : "default" }}
+          >
+            ←
+          </div>
+          <div className="logo">📚</div>
+        </header>
+        <button style={{ marginBottom: 20 }} onClick={() => setSelected(null)}>Back to Resources</button>
+        <h2>{selected.title}</h2>
+        <div style={{ marginBottom: 10 }}>Provider: <b>{selected.provider}</b></div>
+        <div style={{ marginBottom: 10 }}>Tags: {selected.tags.map(tag => <span key={tag} style={{ background: '#eee', borderRadius: 6, padding: '2px 8px', marginRight: 5 }}>{tag}</span>)}</div>
+        <div style={{ marginBottom: 10 }}>Level: {selected.level} | Duration: {selected.duration}</div>
+        <div style={{ marginBottom: 10 }}>Rating: <span style={{ color: '#f5b400', fontWeight: 'bold' }}>{selected.rating} ★</span></div>
+        <a href={selected.link} target="_blank" rel="noopener noreferrer">
+          <button style={{ background: 'linear-gradient(90deg,#a020f0,#8a2be2)', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 24px', fontSize: 16 }}>View Course</button>
+        </a>
+      </div>
+    );
+  }
+
   return (
     <div className="linkedin-integration-page" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+      <header className="header">
+        <div
+          className="menu-icon"
+          onClick={onBack}
+          style={{ cursor: onBack ? "pointer" : "default" }}
+        >
+          ←
+        </div>
+        <div className="logo">📚</div>
+      </header>
       <div style={{ flex: 2, minWidth: 350 }}>
         <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #eee', padding: 18, marginBottom: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
