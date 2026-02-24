@@ -202,3 +202,12 @@
 .result-actions {
   margin-top: 20px;
 }
+
+/* Timer Display */
+.timer {
+  font-weight: 600;
+  margin: 15px 0;
+  font-size: 16px;
+  color: #ffd600;
+  text-align: right;
+}

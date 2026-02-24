@@ -1,5 +1,5 @@
 import "./Quiz.css";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 const quizzes = [
   {
@@ -49,12 +49,16 @@ const Quiz = ({ onBack }) => {
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [timer, setTimer] = useState(15);
 
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
     setAnswers([]);
     setShowResult(false);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+    setTimer(15);
   };
 
   const answerQuestion = (idx) => {
@@ -63,17 +67,35 @@ const Quiz = ({ onBack }) => {
     setSelectedAnswer(idx);
     setIsAnswered(true);
     setAnswers((prev) => [...prev, idx]);
-
-    setTimeout(() => {
-      if (currentQ + 1 < selectedQuiz.questions.length) {
-        setCurrentQ((prev) => prev + 1);
-        setSelectedAnswer(null);
-        setIsAnswered(false);
-      } else {
-        setShowResult(true);
-      }
-    }, 1000);
   };
+
+  const nextQuestion = () => {
+    if (currentQ + 1 < selectedQuiz.questions.length) {
+      setCurrentQ((prev) => prev + 1);
+      setSelectedAnswer(null);
+      setIsAnswered(false);
+      setTimer(15);
+    } else {
+      setShowResult(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedQuiz || showResult) return;
+
+    if (timer === 0) {
+      setAnswers((prev) => [...prev, null]); // unanswered
+      setIsAnswered(true);
+      setTimeout(nextQuestion, 800);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer, selectedQuiz, showResult, currentQ]);
 
   const score = useMemo(() => {
     if (!selectedQuiz) return 0;
@@ -96,6 +118,7 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
+    setTimer(15);
   };
 
   const restartQuiz = () => {
@@ -104,6 +127,7 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
+    setTimer(15);
   };
 
   return (
@@ -163,6 +187,10 @@ const Quiz = ({ onBack }) => {
             <p>
               Question {currentQ + 1} of {totalQuestions}
             </p>
+
+            <div className="timer">
+              ⏱ Time Left: {timer}s
+            </div>
 
             <div className="progress-bar">
               <div
