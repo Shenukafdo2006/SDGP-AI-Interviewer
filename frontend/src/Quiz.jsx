@@ -47,6 +47,8 @@ const Quiz = ({ onBack }) => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
 
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
@@ -56,13 +58,21 @@ const Quiz = ({ onBack }) => {
   };
 
   const answerQuestion = (idx) => {
+    if (isAnswered) return;
+
+    setSelectedAnswer(idx);
+    setIsAnswered(true);
     setAnswers((prev) => [...prev, idx]);
 
-    if (currentQ + 1 < selectedQuiz.questions.length) {
-      setCurrentQ((prev) => prev + 1);
-    } else {
-      setShowResult(true);
-    }
+    setTimeout(() => {
+      if (currentQ + 1 < selectedQuiz.questions.length) {
+        setCurrentQ((prev) => prev + 1);
+        setSelectedAnswer(null);
+        setIsAnswered(false);
+      } else {
+        setShowResult(true);
+      }
+    }, 1000);
   };
 
   const score = useMemo(() => {
@@ -84,12 +94,16 @@ const Quiz = ({ onBack }) => {
     setCurrentQ(0);
     setAnswers([]);
     setShowResult(false);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
   };
 
   const restartQuiz = () => {
     setCurrentQ(0);
     setAnswers([]);
     setShowResult(false);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
   };
 
   return (
@@ -160,15 +174,31 @@ const Quiz = ({ onBack }) => {
             <div className="question-card">
               <h3>{selectedQuiz.questions[currentQ].q}</h3>
               <div className="answers">
-                {selectedQuiz.questions[currentQ].a.map((ans, idx) => (
-                  <button
-                    key={idx}
-                    className="answer-btn"
-                    onClick={() => answerQuestion(idx)}
-                  >
-                    {ans}
-                  </button>
-                ))}
+                {selectedQuiz.questions[currentQ].a.map((ans, idx) => {
+                  const correctIndex =
+                    selectedQuiz.questions[currentQ].correct;
+
+                  let className = "answer-btn";
+
+                  if (isAnswered) {
+                    if (idx === correctIndex) {
+                      className += " correct";
+                    } else if (idx === selectedAnswer) {
+                      className += " wrong";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={idx}
+                      className={className}
+                      onClick={() => answerQuestion(idx)}
+                      disabled={isAnswered}
+                    >
+                      {ans}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
