@@ -1,0 +1,260 @@
+[33mcommit 57b6d972519663f4cb1740b91e8a748c887522f5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Mon Feb 23 22:35:21 2026 +0530
+
+     redesign quiz UI with modern glass style and clean layout
+
+[33mcommit ff7d30369a26fea01f5f1c46fe14ec70ee22dccc[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Mon Feb 23 22:24:02 2026 +0530
+
+    git add . git commit -m "UI: Updated SkillImprovement page with dark gradient theme and glass card design"
+
+[33mcommit 731a619ecc643e8fc31bd16ec8585a2d897d3650[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Mon Feb 23 21:50:28 2026 +0530
+
+    Refactor SkillImprovement component to use CSS classes instead of inline styles
+
+[33mcommit 6574fb81ac308a5760be7aef5d644a5a04d7bd8c[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Mon Feb 23 20:55:46 2026 +0530
+
+    Add Skill page styles with progress and goal cards
+
+[33mcommit 7c79111198f4ebe4934f3de218c6ecd26a071638[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Mon Feb 23 16:45:28 2026 +0530
+
+    login and sign up
+
+[33mcommit cf250f08c21e9091ce1ec17394fbec429de51aac[m
+Merge: 07c2d5e 8410ae5
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 15:38:11 2026 +0530
+
+    Merge branch 'main' of https://github.com/Shenukafdo2006/SDGP-AI-Interviewer
+
+[33mcommit 8410ae5c7c06b988f276862e3c39ca58a26a01a3[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Mon Feb 23 15:38:03 2026 +0530
+
+    signup backend
+
+[33mcommit 07c2d5e35d54772e4ceaf40535c2d22fb36f7dc4[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 15:37:54 2026 +0530
+
+    backend fix
+
+[33mcommit 47b6c69c615233f0fbbcbfe8f06e8e5f7e025ae3[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Mon Feb 23 15:31:27 2026 +0530
+
+    login and sign up
+
+[33mcommit 6c86b45717c3f2c760cccb6f3eb6ed87d3876406[m
+Merge: bcb69ff 145f528
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Mon Feb 23 14:47:28 2026 +0530
+
+    backend update
+
+[33mcommit bcb69ffc2fb8a3ab3348c73bf573e94f59d370fb[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Mon Feb 23 14:43:00 2026 +0530
+
+    backend
+
+[33mcommit 145f528e64f3380b74b68bc78228909746705748[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 14:42:22 2026 +0530
+
+    folders for login / signup
+
+[33mcommit aa4145a688353c89b6028df2dac6b7f62e704407[m
+Author: ChampikaKasun <champikagtx@gmail.com>
+Date:   Mon Feb 23 13:24:40 2026 +0530
+
+    linkedin update
+
+[33mcommit 6ed637393db169d5c986b1ac2feece953b6326cb[m
+Author: ChampikaKasun <champikagtx@gmail.com>
+Date:   Mon Feb 23 13:21:32 2026 +0530
+
+    update linkedin jsx
+
+[33mcommit cb054a79156510052c3d95a2ea2fc1f87b37cbc7[m
+Author: ChampikaKasun <champikagtx@gmail.com>
+Date:   Mon Feb 23 13:17:48 2026 +0530
+
+    create linkedin intergration
+
+[33mcommit 03e377d355896c6d1a98fd6a377e5f19e2bce5e8[m
+Author: ChampikaKasun <champikagtx@gmail.com>
+Date:   Mon Feb 23 13:12:01 2026 +0530
+
+    update learningresourses.css
+
+[33mcommit dcca70ed37a4a756fa7d92405dc399678a5c6102[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 12:36:14 2026 +0530
+
+    quiz improvements
+
+[33mcommit 14b5d4af68420f026b4ae766a172b9231febd7c4[m
+Merge: feef1b1 ce498c9
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Mon Feb 23 09:54:49 2026 +0530
+
+    Merge branch 'main' of https://github.com/Shenukafdo2006/SDGP-AI-Interviewer
+
+[33mcommit feef1b1045b125e0c6993cc7afc9c8c9a56f3de6[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Mon Feb 23 09:54:43 2026 +0530
+
+    adding the back button
+
+[33mcommit ce498c990a0bf05d8e6a07d6716213b55be88602[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:45:19 2026 +0530
+
+    created ai services (in correct location)
+
+[33mcommit f3bc9e4ea1dcb9b040f874fc7a3d4b1f8e1a5985[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:44:18 2026 +0530
+
+    delete ai service (created folder in wrong location)
+
+[33mcommit 537ef51972fc22f133e4874f3a2d13e27392d3f4[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:35:21 2026 +0530
+
+    create ai.service
+
+[33mcommit 961649b02cda536f08c7af5a29ac5948de07b3ea[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:25:54 2026 +0530
+
+    connecting fast api to backend
+
+[33mcommit 319c214330a6bf8bdc992cc53ab63f3f98583773[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:18:22 2026 +0530
+
+    update app.py
+
+[33mcommit 1bc9d0bbe73736978c4c893f1784e93f14238eb8[m
+Merge: 30b94e4 376f431
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Mon Feb 23 09:17:39 2026 +0530
+
+    Merge branch 'main' of https://github.com/Shenukafdo2006/SDGP-AI-Interviewer
+
+[33mcommit 30b94e4796682680b800ddb6c88c54365ef968e9[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Mon Feb 23 09:17:32 2026 +0530
+
+    Adding of the quote card
+
+[33mcommit 376f431881ae199296c601b8202ff81b3e8529ee[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:16:33 2026 +0530
+
+    create app.py
+
+[33mcommit 6900e033d9e128fef807379505e3749b3b82d338[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:13:46 2026 +0530
+
+    additions to ai part
+
+[33mcommit e27cff03b179e8d46b40a8f29159348e581e5f2b[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Mon Feb 23 09:09:25 2026 +0530
+
+    ai part (fast api)
+
+[33mcommit ab389b2a529b98bb8e17163c9cbbef55ed4fdc88[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Mon Feb 23 05:39:47 2026 +0530
+
+    creation of an interactive daily motivation page
+
+[33mcommit ac38c54033385b30b2822c4496ef79dce2d3e321[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Sun Feb 22 16:46:12 2026 +0530
+
+    width changes
+
+[33mcommit 667c44da9be71f673c6a7e9b8f5d647552e1db18[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Sun Feb 22 09:51:52 2026 +0530
+
+    applying some effects
+
+[33mcommit bd19a230ac7f396c3e38e759b17c39f2e3065fd7[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Sun Feb 22 09:36:29 2026 +0530
+
+    Changing of the appearance and adding some features to the career suggestions page
+
+[33mcommit 922013a76a4c05413abed38b85fd6a66f2ba842b[m
+Author: Kaveesha Fernandopulle <kaveesha2004f@gmail.com>
+Date:   Sun Feb 22 09:35:36 2026 +0530
+
+    Creation of a folder to store the logos of suggested careers
+
+[33mcommit 5d65793abfe39cc5c3ba015dbf39a63b8f5b5551[m
+Author: mihiri719 <mihirinambi@gmail.com>
+Date:   Tue Feb 17 19:48:09 2026 +0530
+
+    Add new features to sidebar of the CVMaker.jsx and CVMaker.css
+
+[33mcommit 394ebad96fa134524718eeee71dc231ca2ee2125[m
+Author: charukasomawansa <csomawansa855@gmail.com>
+Date:   Sun Feb 15 20:14:38 2026 +0530
+
+    files removed
+
+[33mcommit 7be8a08e44f1c7456db8423cabaa3168e0487d42[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Thu Feb 12 21:45:48 2026 +0530
+
+    Creat SkillImprovement.css
+
+[33mcommit 25d4dc91810b61048fdf694bc24a06efac6c2c7e[m
+Author: Ashen49 <munasinghanethsara@gmail.com>
+Date:   Thu Feb 12 21:42:52 2026 +0530
+
+    created Quiz.css
+
+[33mcommit c083fb6652d8eb6cf890f49dde269f96c664d671[m
+Author: ChampikaKasun <champikagtx@gmail.com>
+Date:   Thu Feb 12 21:24:08 2026 +0530
+
+    Create stylesheet
+
+[33mcommit 2e3d444cbb9c1383603e985deb5f694117440847[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Thu Feb 12 16:26:23 2026 +0530
+
+    update to vite.config
+    
+    was running in to an error before , changes the localhost route
+
+[33mcommit b74b4539c2c4ebfcb1f7564c45c0cda60bb15f60[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Thu Feb 12 16:07:42 2026 +0530
+
+    wiring of backend and frontend
+
+[33mcommit eaeb84627126fb0c021ab4203c912f041e6ac1b9[m
+Author: Shenukafdo2006 <shenukafdo2006@gmail.com>
+Date:   Thu Feb 12 16:03:00 2026 +0530
+
+    update vite.config file
+
+[33mcommit a04d838ebf40e44b6cd97bb4f16d023dd3f171b2[m
+Author: Shenukafdo2006 <
