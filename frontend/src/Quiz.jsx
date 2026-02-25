@@ -165,16 +165,6 @@ const Quiz = () => {
 
       <div className="quiz-container">
         {!selectedQuiz && (
-          <div className="quiz-grid">
-            {quizzes.map((quiz) => (
-              <div key={quiz.id} className="quiz-card">
-                <h3>{quiz.title}</h3>
-                <p>{quiz.description}</p>
-                <span className="quiz-count">{quiz.questions.length} Questions</span>
-                <button className="primary-btn" onClick={() => startQuiz(quiz)}>Start Quiz</button>
-              </div>
-            ))}
-          </div>
         )}
 
         {selectedQuiz && showResult && (
