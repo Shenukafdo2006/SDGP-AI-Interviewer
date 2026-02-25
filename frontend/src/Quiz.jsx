@@ -177,9 +177,38 @@ const quizzes = [
       { q: "Conditional rendering uses?", a: ["if / ternary", "for loop", "switch only", "CSS"], correct: 0 },
     ],
   },
-  
+
   {
     id: 10,
+    title: "JavaScript Fundamentals",
+    description: "Intermediate JavaScript Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Which keyword creates block scope?", a: ["let", "var", "constvar", "function"], correct: 0 },
+      { q: "Difference between == and === ?", a: ["Type + value", "Value only", "Type only", "None"], correct: 0 },
+      { q: "What is closure?", a: ["Function with preserved scope", "Loop", "Variable", "Object"], correct: 0 },
+      { q: "Arrow functions use?", a: ["=>", "->", "==>", "::"], correct: 0 },
+      { q: "Which method adds item to array end?", a: ["push()", "pop()", "shift()", "slice()"], correct: 0 },
+      { q: "Which method removes last item?", a: ["pop()", "push()", "shift()", "map()"], correct: 0 },
+      { q: "map() returns?", a: ["New array", "Boolean", "Number", "Object"], correct: 0 },
+      { q: "filter() returns?", a: ["Filtered array", "Number", "String", "Boolean"], correct: 0 },
+      { q: "What is JSON?", a: ["Data format", "Function", "Loop", "Variable"], correct: 0 },
+      { q: "Convert object to JSON?", a: ["JSON.stringify()", "JSON.parse()", "toJSON()", "string()"], correct: 0 },
+      { q: "Convert JSON to object?", a: ["JSON.parse()", "JSON.stringify()", "parseJSON()", "toObject()"], correct: 0 },
+      { q: "Promise represents?", a: ["Future value", "Loop", "Variable", "Array"], correct: 0 },
+      { q: "Async function keyword?", a: ["async", "await", "promise", "defer"], correct: 0 },
+      { q: "Await works with?", a: ["Promises", "Arrays", "Objects", "Loops"], correct: 0 },
+      { q: "Spread operator?", a: ["...", ":::", "***", "&&&"], correct: 0 },
+      { q: "Rest parameter uses?", a: ["...", "###", "$$$", "%%"], correct: 0 },
+      { q: "Template strings use?", a: ["` `", "' '", "\" \"", "< >"], correct: 0 },
+      { q: "Which method finds first match?", a: ["find()", "map()", "reduce()", "every()"], correct: 0 },
+      { q: "reduce() returns?", a: ["Single value", "Array", "Boolean", "Object"], correct: 0 },
+      { q: "typeof null returns?", a: ["object", "null", "undefined", "string"], correct: 0 }
+    ],
+  },
+  
+  {
+    id: 11,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
