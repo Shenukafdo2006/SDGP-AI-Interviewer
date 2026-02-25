@@ -85,7 +85,6 @@ const Quiz = () => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [timer, setTimer] = useState(60);
 
-  // Start quiz
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
