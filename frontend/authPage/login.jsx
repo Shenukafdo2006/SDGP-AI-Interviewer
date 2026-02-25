@@ -1,13 +1,28 @@
 import React, { useState } from "react";
+import { Mail, Lock, Eye, EyeOff, Github, UserPlus } from "lucide-react";
 import "./login.css";
 
 function Login({ onLoginSuccess, onBackToSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Login Successful!");
+    
+    // Simple Validation
+    if (!email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setError("");
+    console.log("Logging in...", { email, password });
     onLoginSuccess(); 
   };
 
