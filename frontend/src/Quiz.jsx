@@ -6,6 +6,7 @@ const quizzes = [
     id: 1,
     title: "JavaScript Fundamentals",
     description: "Core JavaScript Concepts",
+    difficulty: "Beginner",
     questions: [
       { q: "What is a closure?", a: ["Function with preserved scope", "CSS property", "Loop", "Object"], correct: 0 },
       { q: "Which declares a variable?", a: ["var", "let", "const", "All"], correct: 3 },
@@ -19,27 +20,29 @@ const quizzes = [
       { q: "Async handling keyword?", a: ["async/await", "delay", "wait()", "promiseOnly"], correct: 0 },
     ],
   },
-  {
+    {
     id: 2,
-    title: "React Fundamentals",
-    description: "React Core Concepts",
+    title: "Java",
+    description: "Core Java Concepts",
+    difficulty: "Beginner",
     questions: [
-      { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
-      { q: "Hook for state?", a: ["useEffect", "useState", "useMemo", "useRef"], correct: 1 },
-      { q: "JSX stands for?", a: ["JavaScript XML", "Java Syntax X", "JSON XML", "None"], correct: 0 },
-      { q: "Props are?", a: ["Data passed to components", "State", "Hooks", "CSS"], correct: 0 },
-      { q: "Virtual DOM is?", a: ["Copy of real DOM", "Database", "Hook", "Server"], correct: 0 },
-      { q: "Side effects hook?", a: ["useState", "useEffect", "useMemo", "useHook"], correct: 1 },
-      { q: "Component must return?", a: ["HTML", "JSX", "CSS", "JSON"], correct: 1 },
-      { q: "Key prop is for?", a: ["Performance", "List rendering", "Styling", "API"], correct: 1 },
-      { q: "React created by?", a: ["Google", "Facebook", "Microsoft", "Amazon"], correct: 1 },
-      { q: "Fragment syntax?", a: ["<> </>", "<div>", "<frag>", "<React>"], correct: 0 },
+      { q: "Which keyword is used to create a class?", a: ["class", "struct", "function", "object"], correct: 0 },
+      { q: "Java is ___ language?", a: ["Compiled", "Interpreted", "Both", "None"], correct: 2 },
+      { q: "Which method starts execution?", a: ["start()", "main()", "run()", "execute()"], correct: 1 },
+      { q: "Primitive type for decimal?", a: ["int", "double", "String", "float"], correct: 1 },
+      { q: "Inheritance keyword?", a: ["extend", "extends", "implements", "inherit"], correct: 1 },
+      { q: "Java supports multiple inheritance via?", a: ["Class", "Interface", "Abstract", "Package"], correct: 1 },
+      { q: "Access modifier for everything?", a: ["private", "public", "protected", "default"], correct: 1 },
+      { q: "Default value of boolean?", a: ["true", "false", "0", "null"], correct: 1 },
+      { q: "Loop until condition false?", a: ["for", "while", "do...while", "loop"], correct: 1 },
+      { q: "Keyword for exception handling?", a: ["try", "catch", "throw", "All"], correct: 3 },
     ],
   },
   {
     id: 3,
     title: "HTML Basics",
     description: "Core HTML Concepts",
+    difficulty: "Beginner",
     questions: [
       { q: "HTML stands for?", a: ["HyperText Markup Language", "HighText ML", "Home Tool ML", "Hyperlinks ML"], correct: 0 },
       { q: "Hyperlink tag?", a: ["<a>", "<link>", "<href>", "<h1>"], correct: 0 },
@@ -55,8 +58,120 @@ const quizzes = [
   },
   {
     id: 4,
+    title: "Python",
+    description: "Core Python Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Python is ___ typed language?", a: ["Strongly", "Weakly", "Both", "None"], correct: 0 },
+      { q: "Function keyword?", a: ["def", "func", "function", "define"], correct: 0 },
+      { q: "Print to console?", a: ["print()", "console.log()", "echo()", "write()"], correct: 0 },
+      { q: "List indexing starts at?", a: ["0", "1", "-1", "None"], correct: 0 },
+      { q: "Python file extension?", a: [".java", ".py", ".js", ".txt"], correct: 1 },
+      { q: "Loop over sequence?", a: ["for", "while", "loop", "foreach"], correct: 0 },
+      { q: "Python comment?", a: ["//", "#", "/* */", "<!-- -->"], correct: 1 },
+      { q: "Dictionary key-value syntax?", a: ["{}", "[]", "()", "<>"], correct: 0 },
+      { q: "Boolean True value?", a: ["True", "true", "1", "Yes"], correct: 0 },
+      { q: "Exit from loop?", a: ["break", "stop", "exit", "end"], correct: 0 },
+    ],
+  }, 
+   {
+    id: 5,
+    title: "OOP",
+    description: "Object Oriented Programming Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "OOP stands for?", a: ["Object Oriented Programming", "Open Oriented Program", "Object Ordered Program", "None"], correct: 0 },
+      { q: "Encapsulation means?", a: ["Hiding data", "Inheritance", "Polymorphism", "Abstraction"], correct: 0 },
+      { q: "Inheritance allows?", a: ["Code reuse", "Data hiding", "Object creation", "Compilation"], correct: 0 },
+      { q: "Polymorphism is?", a: ["Many forms", "Single form", "Variable type", "None"], correct: 0 },
+      { q: "Class vs Object?", a: ["Template vs Instance", "Instance vs Template", "Function vs Variable", "None"], correct: 0 },
+      { q: "Abstraction is?", a: ["Hiding implementation", "Encapsulation", "Inheritance", "Polymorphism"], correct: 0 },
+      { q: "Method overriding?", a: ["Child changes parent method", "Child adds new method", "Parent method deletion", "None"], correct: 0 },
+      { q: "Constructor purpose?", a: ["Initialize object", "Destroy object", "Return object", "None"], correct: 0 },
+      { q: "Access specifier?", a: ["public/private/protected", "int/float/string", "if/else/for", "None"], correct: 0 },
+      { q: "OOP main concept?", a: ["Encapsulation, Inheritance, Polymorphism, Abstraction", "Only Inheritance", "Only Encapsulation", "None"], correct: 0 },
+    ],
+  },
+  
+  {
+    id: 6,
+    title: "Algorithm",
+    description: "Basic Algorithm Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Algorithm means?", a: ["Step by step procedure", "Random process", "Data storage", "Function call"], correct: 0 },
+      { q: "Best case complexity?", a: ["Minimum time", "Maximum time", "Average time", "None"], correct: 0 },
+      { q: "Sorting type?", a: ["Bubble, Merge, Quick", "Add, Delete, Pop", "Push, Pop, Shift", "None"], correct: 0 },
+      { q: "Searching type?", a: ["Linear, Binary", "Loop, Conditional", "Add, Remove", "None"], correct: 0 },
+      { q: "Complexity of linear search?", a: ["O(n)", "O(log n)", "O(n^2)", "O(1)"], correct: 0 },
+      { q: "Complexity of binary search?", a: ["O(log n)", "O(n)", "O(n^2)", "O(1)"], correct: 0 },
+      { q: "Algorithm efficiency depends on?", a: ["Time & Space", "Memory only", "CPU only", "None"], correct: 0 },
+      { q: "Recursion is?", a: ["Function calling itself", "Loop", "Iteration", "Array"], correct: 0 },
+      { q: "Divide and Conquer?", a: ["Divide problem into subproblems", "Combine arrays", "Sort data", "Loop"], correct: 0 },
+      { q: "Greedy approach?", a: ["Pick best at each step", "Pick first element", "Pick last element", "Loop"], correct: 0 },
+    ],
+  },
+   
+   {
+    id: 7,
+    title: "CSS",
+    description: "Core CSS Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
+      { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
+      { q: "Inside spacing?", a: ["margin", "padding", "border", "space"], correct: 1 },
+      { q: "Outside spacing?", a: ["margin", "padding", "gap", "border"], correct: 0 },
+      { q: "Flexbox property?", a: ["display:flex", "flexbox:true", "align:flex", "box:flex"], correct: 0 },
+      { q: "Center text?", a: ["align:center", "text-align:center", "center:true", "justify:center"], correct: 1 },
+      { q: "Background color?", a: ["bgcolor", "background-color", "color-bg", "fill"], correct: 1 },
+      { q: "Border radius?", a: ["corner", "border-radius", "round", "radius"], correct: 1 },
+      { q: "Grid layout?", a: ["display:grid", "layout:grid", "grid:true", "use:grid"], correct: 0 },
+      { q: "Hover effect?", a: [":hover", "::hover", ".hover", "#hover"], correct: 0 },
+    ],
+  },
+  {
+  id: 8,
+  title: "React Fundamentals",
+  description: "Core React Concepts for Beginners",
+  difficulty: "Beginner",
+  questions: [
+    { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
+    { q: "Which hook is used to store state?", a: ["useState", "useEffect", "useRef", "useMemo"], correct: 0 },
+    { q: "JSX stands for?", a: ["JavaScript XML", "Java Syntax X", "JSON XML", "Just Simple X"], correct: 0 },
+    { q: "How do you pass data to a component?", a: ["Props", "State", "Hooks", "Variables"], correct: 0 },
+    { q: "Which hook runs side effects?", a: ["useEffect", "useState", "useRef", "useMemo"], correct: 0 },
+    { q: "A component must return?", a: ["JSX", "HTML", "CSS", "Text"], correct: 0 },
+    { q: "Keys in lists help with?", a: ["Performance", "Styling", "API calls", "Routing"], correct: 0 },
+    { q: "React was developed by?", a: ["Facebook", "Google", "Microsoft", "Apple"], correct: 0 },
+    { q: "Fragment syntax in React is?", a: ["<>...</>", "<div>...</div>", "<frag>...</frag>", "<React>...</React>"], correct: 0 },
+    { q: "React uses a virtual?", a: ["DOM", "Database", "Hook", "Component Tree"], correct: 0 },
+  ],
+}
+  {
+    id: 9,
+    title: "React Fundamentals",
+    description: "React Core Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
+      { q: "Hook for state?", a: ["useEffect", "useState", "useMemo", "useRef"], correct: 1 },
+      { q: "JSX stands for?", a: ["JavaScript XML", "Java Syntax X", "JSON XML", "None"], correct: 0 },
+      { q: "Props are?", a: ["Data passed to components", "State", "Hooks", "CSS"], correct: 0 },
+      { q: "Virtual DOM is?", a: ["Copy of real DOM", "Database", "Hook", "Server"], correct: 0 },
+      { q: "Side effects hook?", a: ["useState", "useEffect", "useMemo", "useHook"], correct: 1 },
+      { q: "Component must return?", a: ["HTML", "JSX", "CSS", "JSON"], correct: 1 },
+      { q: "Key prop is for?", a: ["Performance", "List rendering", "Styling", "API"], correct: 1 },
+      { q: "React created by?", a: ["Google", "Facebook", "Microsoft", "Amazon"], correct: 1 },
+      { q: "Fragment syntax?", a: ["<> </>", "<div>", "<frag>", "<React>"], correct: 0 },
+    ],
+  },
+  
+  {
+    id: 10,
     title: "CSS Fundamentals",
     description: "Styling the Web",
+    difficulty: "Advanced",
     questions: [
       { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
       { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
@@ -80,8 +195,8 @@ const Quiz = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [timer, setTimer] = useState(60);
+  const [activeTab, setActiveTab] = useState("Beginner");
 
-  // Start quiz
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
@@ -92,7 +207,6 @@ const Quiz = () => {
     setTimer(60);
   };
 
-  // Timer effect
   useEffect(() => {
     if (!selectedQuiz || showResult) return;
     if (timer <= 0) {
@@ -151,6 +265,8 @@ const Quiz = () => {
     setTimer(60);
   };
 
+  const filteredQuizzes = quizzes.filter(q => q.difficulty === activeTab);
+
   return (
     <div className="quiz-page">
       <header className="header">
@@ -160,16 +276,30 @@ const Quiz = () => {
 
       <div className="quiz-container">
         {!selectedQuiz && (
-          <div className="quiz-grid">
-            {quizzes.map((quiz) => (
-              <div key={quiz.id} className="quiz-card">
-                <h3>{quiz.title}</h3>
-                <p>{quiz.description}</p>
-                <span className="quiz-count">{quiz.questions.length} Questions</span>
-                <button className="primary-btn" onClick={() => startQuiz(quiz)}>Start Quiz</button>
-              </div>
-            ))}
-          </div>
+          <>
+            <div className="dashboard-tabs">
+              {["Beginner", "Intermediate", "Advanced"].map(tab => (
+                <button
+                  key={tab}
+                  className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            <div className="quiz-grid">
+              {filteredQuizzes.map((quiz) => (
+                <div key={quiz.id} className="quiz-card">
+                  <h3>{quiz.title}</h3>
+                  <p>{quiz.description}</p>
+                  <span className="quiz-count">{quiz.questions.length} Questions</span>
+                  <button className="primary-btn" onClick={() => startQuiz(quiz)}>Start Quiz</button>
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {selectedQuiz && showResult && (
