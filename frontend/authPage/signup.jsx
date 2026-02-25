@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { User, Mail, Lock, Eye, EyeOff, Github } from "lucide-react";
 import "./Signup.css";
 
 function Signup({ onSignupSuccess, onGoToLogin }) {
@@ -6,27 +7,39 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    agree: false,
   });
 
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: type === "checkbox" ? checked : value,
     });
+    // Clear error when user interacts
+    if (errors[name]) setErrors({ ...errors, [name]: "" });
+  };
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Full name is required";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email address";
+    if (formData.password.length < 8) newErrors.password = "Must be at least 8 characters";
+    if (!formData.agree) newErrors.agree = "You must agree to the terms";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    if (validate()) {
+      console.log("Form Submitted", formData);
+      onSignupSuccess();
     }
-
-    
-    alert("Signup Successful!");
-    onSignupSuccess();
   };
 
   return (
