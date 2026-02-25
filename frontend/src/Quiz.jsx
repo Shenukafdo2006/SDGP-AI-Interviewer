@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 const quizzes = [
   {
     id: 1,
-    title: "JavaScript Fundamentals",
+    title: "JavaScript ",
     description: "Core JavaScript Concepts",
     difficulty: "Beginner",
     questions: [
@@ -40,7 +40,7 @@ const quizzes = [
   },
   {
     id: 3,
-    title: "HTML Basics",
+    title: "HTML ",
     description: "Core HTML Concepts",
     difficulty: "Beginner",
     questions: [
@@ -152,7 +152,7 @@ const quizzes = [
   {
     id: 9,
     title: "React Fundamentals",
-    description: "React Core Concepts",
+    description: "Intermediate React Core Concepts",
     difficulty: "Intermediate",
     questions: [
       { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
@@ -180,7 +180,7 @@ const quizzes = [
 
   {
     id: 10,
-    title: "JavaScript Fundamentals",
+    title: "JavaScript ",
     description: "Intermediate JavaScript Concepts",
     difficulty: "Intermediate",
     questions: [
@@ -209,6 +209,35 @@ const quizzes = [
   
   {
     id: 11,
+    title: "Java ",
+    description: "Intermediate Java Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Java is a?", a: ["Object Oriented Language", "Database", "Operating System", "Browser"], correct: 0 },
+      { q: "Which keyword creates an object?", a: ["new", "create", "object", "make"], correct: 0 },
+      { q: "Parent class is called?", a: ["Superclass", "Childclass", "Subclass", "Object"], correct: 0 },
+      { q: "Child class is called?", a: ["Subclass", "Superclass", "Parent", "Root"], correct: 0 },
+      { q: "Method overloading means?", a: ["Same method different parameters", "Same class", "Different classes", "Same variables"], correct: 0 },
+      { q: "Method overriding requires?", a: ["Inheritance", "Loop", "Array", "Interface"], correct: 0 },
+      { q: "Which access modifier is most restricted?", a: ["private", "public", "protected", "default"], correct: 0 },
+      { q: "Array index starts at?", a: ["0", "1", "-1", "Depends"], correct: 0 },
+      { q: "Exception handled by?", a: ["try-catch", "if-else", "loop", "switch"], correct: 0 },
+      { q: "Which keyword inherits class?", a: ["extends", "implements", "inherits", "super"], correct: 0 },
+      { q: "Interface uses keyword?", a: ["implements", "extends", "inherit", "interfaceuse"], correct: 0 },
+      { q: "Abstract class keyword?", a: ["abstract", "virtual", "interface", "class"], correct: 0 },
+      { q: "Main method signature?", a: ["public static void main(String[] args)", "main()", "void main()", "start()"], correct: 0 },
+      { q: "Static keyword means?", a: ["Belongs to class", "Belongs to object", "Variable", "Constant"], correct: 0 },
+      { q: "Final keyword means?", a: ["Cannot change", "Loop", "Method", "Object"], correct: 0 },
+      { q: "Constructor name must be?", a: ["Same as class", "Any name", "start", "init"], correct: 0 },
+      { q: "Polymorphism means?", a: ["Many forms", "One class", "One object", "Loop"], correct: 0 },
+      { q: "Encapsulation means?", a: ["Data hiding", "Inheritance", "Looping", "Printing"], correct: 0 },
+      { q: "Which stores multiple values?", a: ["Array", "int", "double", "char"], correct: 0 },
+      { q: "Scanner class used for?", a: ["User input", "Output", "Math", "Files"], correct: 0 }
+    ],
+  },
+
+  {
+    id: 12,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
