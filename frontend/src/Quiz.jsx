@@ -147,7 +147,8 @@ const quizzes = [
     { q: "Fragment syntax in React is?", a: ["<>...</>", "<div>...</div>", "<frag>...</frag>", "<React>...</React>"], correct: 0 },
     { q: "React uses a virtual?", a: ["DOM", "Database", "Hook", "Component Tree"], correct: 0 },
   ],
-}
+  },
+  
   {
     id: 9,
     title: "React Fundamentals",
