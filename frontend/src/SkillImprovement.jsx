@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
 
-
 const skills = [
   { name: "React", level: "Intermediate", progress: 75, target: 90, next: "Master React Hooks" },
   { name: "TypeScript", level: "Beginner", progress: 60, target: 85, next: "Advanced Type Patterns" },
@@ -23,23 +22,22 @@ const recommendations = [
 ];
 
 const SkillImprovement = () => {
-  
+
   const [animatedSkills, setAnimatedSkills] = useState(
     skills.map(skill => ({ ...skill, animatedProgress: 0 }))
   );
 
-  
   const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
 
-  
   useEffect(() => {
     const timer = setTimeout(() => {
-      setAnimatedSkills(skills.map(skill => ({ ...skill, animatedProgress: skill.progress })));
+      setAnimatedSkills(
+        skills.map(skill => ({ ...skill, animatedProgress: skill.progress }))
+      );
     }, 100);
     return () => clearTimeout(timer);
   }, []);
 
-  
   const handleGoalClick = (idx) => {
     setWeeklyGoals(
       weeklyGoals.map((goal, i) =>
@@ -50,16 +48,28 @@ const SkillImprovement = () => {
     );
   };
 
-
   const getPriorityClass = (level) => {
     if (level === "High") return "priority-high";
     if (level === "Medium") return "priority-medium";
     return "priority-low";
   };
 
+  const goBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="skill-page">
+
+      <button 
+        className="back-btn" 
+        onClick={()=> window.location.href = "/dashboard"}
+      >
+        ← Back
+      </button>
+
       <h2 className="section-title">Skill Progress</h2>
+
       <div className="skill-container">
         {animatedSkills.map((skill, idx) => (
           <div key={idx} className="skill-card">
@@ -86,6 +96,7 @@ const SkillImprovement = () => {
       </div>
 
       <h2 className="section-title">Weekly Goals</h2>
+
       <div className="goal-container">
         {weeklyGoals.map((goal, idx) => {
           const percent = (goal.current / goal.total) * 100;
@@ -116,6 +127,7 @@ const SkillImprovement = () => {
       </div>
 
       <h2 className="section-title">Personalized Recommendations</h2>
+
       <div className="recommendation-container">
         {recommendations.map((rec, idx) => (
           <div key={idx} className={`recommend-card ${getPriorityClass(rec.level)}`}>
@@ -128,6 +140,7 @@ const SkillImprovement = () => {
           </div>
         ))}
       </div>
+
     </div>
   );
 };
