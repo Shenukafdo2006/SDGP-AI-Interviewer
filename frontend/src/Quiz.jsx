@@ -20,8 +20,26 @@ const quizzes = [
       { q: "Async handling keyword?", a: ["async/await", "delay", "wait()", "promiseOnly"], correct: 0 },
     ],
   },
-  {
+   {
     id: 2,
+    title: "Java",
+    description: "Core Java Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Which keyword is used to create a class?", a: ["class", "struct", "function", "object"], correct: 0 },
+      { q: "Java is ___ language?", a: ["Compiled", "Interpreted", "Both", "None"], correct: 2 },
+      { q: "Which method starts execution?", a: ["start()", "main()", "run()", "execute()"], correct: 1 },
+      { q: "Primitive type for decimal?", a: ["int", "double", "String", "float"], correct: 1 },
+      { q: "Inheritance keyword?", a: ["extend", "extends", "implements", "inherit"], correct: 1 },
+      { q: "Java supports multiple inheritance via?", a: ["Class", "Interface", "Abstract", "Package"], correct: 1 },
+      { q: "Access modifier for everything?", a: ["private", "public", "protected", "default"], correct: 1 },
+      { q: "Default value of boolean?", a: ["true", "false", "0", "null"], correct: 1 },
+      { q: "Loop until condition false?", a: ["for", "while", "do...while", "loop"], correct: 1 },
+      { q: "Keyword for exception handling?", a: ["try", "catch", "throw", "All"], correct: 3 },
+    ],
+  },
+  {
+    id: 3,
     title: "React Fundamentals",
     description: "React Core Concepts",
     difficulty: "Intermediate",
@@ -39,7 +57,7 @@ const quizzes = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     title: "HTML Basics",
     description: "Core HTML Concepts",
     difficulty: "Beginner",
@@ -57,7 +75,7 @@ const quizzes = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
