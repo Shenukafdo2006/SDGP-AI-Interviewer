@@ -92,9 +92,28 @@ const quizzes = [
       { q: "OOP main concept?", a: ["Encapsulation, Inheritance, Polymorphism, Abstraction", "Only Inheritance", "Only Encapsulation", "None"], correct: 0 },
     ],
   },
-
+  
   {
     id: 6,
+    title: "Algorithm",
+    description: "Basic Algorithm Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Algorithm means?", a: ["Step by step procedure", "Random process", "Data storage", "Function call"], correct: 0 },
+      { q: "Best case complexity?", a: ["Minimum time", "Maximum time", "Average time", "None"], correct: 0 },
+      { q: "Sorting type?", a: ["Bubble, Merge, Quick", "Add, Delete, Pop", "Push, Pop, Shift", "None"], correct: 0 },
+      { q: "Searching type?", a: ["Linear, Binary", "Loop, Conditional", "Add, Remove", "None"], correct: 0 },
+      { q: "Complexity of linear search?", a: ["O(n)", "O(log n)", "O(n^2)", "O(1)"], correct: 0 },
+      { q: "Complexity of binary search?", a: ["O(log n)", "O(n)", "O(n^2)", "O(1)"], correct: 0 },
+      { q: "Algorithm efficiency depends on?", a: ["Time & Space", "Memory only", "CPU only", "None"], correct: 0 },
+      { q: "Recursion is?", a: ["Function calling itself", "Loop", "Iteration", "Array"], correct: 0 },
+      { q: "Divide and Conquer?", a: ["Divide problem into subproblems", "Combine arrays", "Sort data", "Loop"], correct: 0 },
+      { q: "Greedy approach?", a: ["Pick best at each step", "Pick first element", "Pick last element", "Loop"], correct: 0 },
+    ],
+  },
+
+  {
+    id: 7,
     title: "React Fundamentals",
     description: "React Core Concepts",
     difficulty: "Intermediate",
@@ -113,7 +132,7 @@ const quizzes = [
   },
   
   {
-    id: 7,
+    id: 8,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
