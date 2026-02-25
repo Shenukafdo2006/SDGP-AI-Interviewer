@@ -96,7 +96,6 @@ const Quiz = () => {
     setTimer(60);
   };
 
-  // Timer effect
   useEffect(() => {
     if (!selectedQuiz || showResult) return;
     if (timer <= 0) {
