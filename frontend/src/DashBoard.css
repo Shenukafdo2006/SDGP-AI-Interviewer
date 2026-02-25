@@ -24,6 +24,37 @@ body {
   background: var(--page-bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Custom Scrollbar */
+.container::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track,
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb:hover,
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
+}
+
+.dashboard-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* TOP BAR  */
@@ -90,6 +121,9 @@ body {
   margin: 0;
   padding: 20px 28px;
   gap: 24px;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 72px);
 }
 
 .container {
@@ -98,6 +132,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
 }
 
 /*  SIDEBAR  */
@@ -109,6 +146,10 @@ body {
   border-radius: 14px;
   padding: 18px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: fit-content;
+  max-height: 100%;
 }
 
 .sidebar-top {
@@ -250,11 +291,26 @@ body {
 
 /*  QUICK ACTIONS */
 
+.quick-actions {
+  margin-bottom: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
 .action {
   padding: 12px 14px;
   border-radius: 10px;
   border: none;
   color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  flex: 1;
+  min-width: 200px;
 }
 
 .bar.blue {
@@ -276,6 +332,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 14px;
+  margin-bottom: 20px;
 }
 
 .footer .small {
