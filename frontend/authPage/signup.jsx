@@ -43,55 +43,111 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
   };
 
   return (
-    <div className="signup-container">
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <h2>Create Account</h2>
+    <div className="signup-wrapper">
+      <div className="signup-card">
+        {/* Top Icon */}
+        <div className="header-icon">
+          <div className="icon-box">
+            <User size={28} color="#fff" strokeWidth={2.5} />
+            <div className="plus-badge">+</div>
+          </div>
+        </div>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+        <h2>Create your account</h2>
+        <p className="subtitle">Join thousands of users building amazing things</p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          {/* Full Name */}
+          <div className="input-field">
+            <label>Full Name</label>
+            <div className={`input-wrapper ${errors.name ? "error-border" : ""}`}>
+              <User className="icon" size={18} />
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter your full name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+            {errors.name && <span className="error-msg">{errors.name}</span>}
+          </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+          {/* Email */}
+          <div className="input-field">
+            <label>Email Address</label>
+            <div className={`input-wrapper ${errors.email ? "error-border" : ""}`}>
+              <Mail className="icon" size={18} />
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+          {/* Password */}
+          <div className="input-field">
+            <label>Password</label>
+            <div className={`input-wrapper ${errors.password ? "error-border" : ""}`}>
+              <Lock className="icon" size={18} />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Create a strong password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <button 
+                type="button" 
+                className="toggle-pass" 
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+            <p className="hint">Must be at least 8 characters</p>
+          </div>
 
-        <button type="submit">Sign Up</button>
+          {/* Agreement */}
+          <div className="checkbox-field">
+            <input
+              type="checkbox"
+              name="agree"
+              id="agree"
+              checked={formData.agree}
+              onChange={handleChange}
+            />
+            <label htmlFor="agree">
+              I agree to the <span>Terms of Service</span> and <span>Privacy Policy</span>
+            </label>
+          </div>
+          {errors.agree && <p className="error-msg text-center">{errors.agree}</p>}
 
-        <p>
-          Already have an account?
-          <span className="link-text" onClick={onGoToLogin}>
-            Login
-          </span>
+          <button type="submit" className="btn-primary">Create Account</button>
+        </form>
+
+        <div className="divider">
+          <span>or continue with</span>
+        </div>
+
+        <div className="social-group">
+          <button className="btn-social">
+            <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width="18" />
+            Google
+          </button>
+          <button className="btn-social">
+            <Github size={18} />
+            GitHub
+          </button>
+        </div>
+
+        <p className="footer-text">
+          Already have an account? <span onClick={onGoToLogin}>Sign in</span>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
