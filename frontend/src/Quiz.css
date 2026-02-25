@@ -37,6 +37,35 @@
   padding-top: 10px;
 }
 
+/* Dashboard Tabs */
+.dashboard-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-btn.active {
+  background: #00c6ff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.35);
+}
+
 .quiz-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
