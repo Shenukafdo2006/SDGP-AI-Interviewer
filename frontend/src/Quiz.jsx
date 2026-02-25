@@ -165,6 +165,30 @@ const Quiz = () => {
 
       <div className="quiz-container">
         {!selectedQuiz && (
+          <>
+            <div className="dashboard-tabs">
+              {["Beginner", "Intermediate", "Advanced"].map(tab => (
+                <button
+                  key={tab}
+                  className={`tab-btn ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+
+            <div className="quiz-grid">
+              {filteredQuizzes.map((quiz) => (
+                <div key={quiz.id} className="quiz-card">
+                  <h3>{quiz.title}</h3>
+                  <p>{quiz.description}</p>
+                  <span className="quiz-count">{quiz.questions.length} Questions</span>
+                  <button className="primary-btn" onClick={() => startQuiz(quiz)}>Start Quiz</button>
+                </div>
+              ))}
+            </div>
+          </>
         )}
 
         {selectedQuiz && showResult && (
