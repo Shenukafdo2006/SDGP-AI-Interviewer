@@ -45,7 +45,6 @@ body {
   box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
 }
 
-/* Glass Card Effect */
 .signup-form {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
