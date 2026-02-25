@@ -130,9 +130,26 @@ const quizzes = [
       { q: "Hover effect?", a: [":hover", "::hover", ".hover", "#hover"], correct: 0 },
     ],
   },
-  
   {
-    id: 8,
+  id: 8,
+  title: "React Fundamentals",
+  description: "Core React Concepts for Beginners",
+  difficulty: "Beginner",
+  questions: [
+    { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
+    { q: "Which hook is used to store state?", a: ["useState", "useEffect", "useRef", "useMemo"], correct: 0 },
+    { q: "JSX stands for?", a: ["JavaScript XML", "Java Syntax X", "JSON XML", "Just Simple X"], correct: 0 },
+    { q: "How do you pass data to a component?", a: ["Props", "State", "Hooks", "Variables"], correct: 0 },
+    { q: "Which hook runs side effects?", a: ["useEffect", "useState", "useRef", "useMemo"], correct: 0 },
+    { q: "A component must return?", a: ["JSX", "HTML", "CSS", "Text"], correct: 0 },
+    { q: "Keys in lists help with?", a: ["Performance", "Styling", "API calls", "Routing"], correct: 0 },
+    { q: "React was developed by?", a: ["Facebook", "Google", "Microsoft", "Apple"], correct: 0 },
+    { q: "Fragment syntax in React is?", a: ["<>...</>", "<div>...</div>", "<frag>...</frag>", "<React>...</React>"], correct: 0 },
+    { q: "React uses a virtual?", a: ["DOM", "Database", "Hook", "Component Tree"], correct: 0 },
+  ],
+}
+  {
+    id: 9,
     title: "React Fundamentals",
     description: "React Core Concepts",
     difficulty: "Intermediate",
@@ -151,7 +168,7 @@ const quizzes = [
   },
   
   {
-    id: 9,
+    id: 10,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
