@@ -20,7 +20,7 @@ const quizzes = [
       { q: "Async handling keyword?", a: ["async/await", "delay", "wait()", "promiseOnly"], correct: 0 },
     ],
   },
-   {
+    {
     id: 2,
     title: "Java",
     description: "Core Java Concepts",
@@ -56,7 +56,7 @@ const quizzes = [
       { q: "Form tag?", a: ["<form>", "<input>", "<label>", "<submit>"], correct: 0 },
     ],
   },
-   {
+  {
     id: 4,
     title: "Python",
     description: "Core Python Concepts",
@@ -73,9 +73,28 @@ const quizzes = [
       { q: "Boolean True value?", a: ["True", "true", "1", "Yes"], correct: 0 },
       { q: "Exit from loop?", a: ["break", "stop", "exit", "end"], correct: 0 },
     ],
+  }, 
+   {
+    id: 5,
+    title: "OOP",
+    description: "Object Oriented Programming Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "OOP stands for?", a: ["Object Oriented Programming", "Open Oriented Program", "Object Ordered Program", "None"], correct: 0 },
+      { q: "Encapsulation means?", a: ["Hiding data", "Inheritance", "Polymorphism", "Abstraction"], correct: 0 },
+      { q: "Inheritance allows?", a: ["Code reuse", "Data hiding", "Object creation", "Compilation"], correct: 0 },
+      { q: "Polymorphism is?", a: ["Many forms", "Single form", "Variable type", "None"], correct: 0 },
+      { q: "Class vs Object?", a: ["Template vs Instance", "Instance vs Template", "Function vs Variable", "None"], correct: 0 },
+      { q: "Abstraction is?", a: ["Hiding implementation", "Encapsulation", "Inheritance", "Polymorphism"], correct: 0 },
+      { q: "Method overriding?", a: ["Child changes parent method", "Child adds new method", "Parent method deletion", "None"], correct: 0 },
+      { q: "Constructor purpose?", a: ["Initialize object", "Destroy object", "Return object", "None"], correct: 0 },
+      { q: "Access specifier?", a: ["public/private/protected", "int/float/string", "if/else/for", "None"], correct: 0 },
+      { q: "OOP main concept?", a: ["Encapsulation, Inheritance, Polymorphism, Abstraction", "Only Inheritance", "Only Encapsulation", "None"], correct: 0 },
+    ],
   },
+
   {
-    id: 4,
+    id: 6,
     title: "React Fundamentals",
     description: "React Core Concepts",
     difficulty: "Intermediate",
@@ -94,7 +113,7 @@ const quizzes = [
   },
   
   {
-    id: 5,
+    id: 7,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
