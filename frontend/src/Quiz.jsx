@@ -154,6 +154,8 @@ const Quiz = () => {
     setTimer(60);
   };
 
+  const filteredQuizzes = quizzes.filter(q => q.difficulty === activeTab);
+
   return (
     <div className="quiz-page">
       <header className="header">
