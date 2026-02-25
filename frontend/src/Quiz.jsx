@@ -5,73 +5,69 @@ const quizzes = [
   {
     id: 1,
     title: "JavaScript Fundamentals",
-    description: "Introduction to JavaScript",
+    description: "Core JavaScript Concepts",
     questions: [
-      {
-        q: "What is a closure?",
-        a: [
-          "A function with preserved scope",
-          "A CSS property",
-          "A type of loop",
-          "An object",
-        ],
-        correct: 0,
-      },
-      {
-        q: "Which keyword declares a variable?",
-        a: ["var", "let", "const", "all of the above"],
-        correct: 3,
-      },
-      {
-        q: "What does === mean?",
-        a: [
-          "Equal value",
-          "Equal value and type",
-          "Assignment operator",
-          "Comparison only",
-        ],
-        correct: 1,
-      },
-      {
-        q: "Which method converts JSON to object?",
-        a: [
-          "JSON.parse()",
-          "JSON.stringify()",
-          "JSON.convert()",
-          "JSON.toObject()",
-        ],
-        correct: 0,
-      },
-      {
-        q: "Which array method adds element to end?",
-        a: ["push()", "pop()", "shift()", "unshift()"],
-        correct: 0,
-      },
-      {
-        q: "Which keyword is used for asynchronous handling?",
-        a: ["async/await", "delay", "promiseOnly", "wait()"],
-        correct: 0,
-      },
-      {
-        q: "What is typeof null?",
-        a: ["null", "object", "undefined", "string"],
-        correct: 1,
-      },
-      {
-        q: "Which loop runs at least once?",
-        a: ["for", "while", "do...while", "foreach"],
-        correct: 2,
-      },
-      {
-        q: "Which symbol is used for single-line comments?",
-        a: ["//", "/* */", "#", "<!-- -->"],
-        correct: 0,
-      },
-      {
-        q: "Which method removes last array element?",
-        a: ["pop()", "push()", "shift()", "remove()"],
-        correct: 0,
-      },
+      { q: "What is a closure?", a: ["Function with preserved scope", "CSS property", "Loop", "Object"], correct: 0 },
+      { q: "Which declares a variable?", a: ["var", "let", "const", "All"], correct: 3 },
+      { q: "=== means?", a: ["Equal value", "Equal value & type", "Assign", "Compare"], correct: 1 },
+      { q: "Convert JSON to object?", a: ["JSON.parse()", "JSON.stringify()", "JSON.toObj()", "JSON.convert()"], correct: 0 },
+      { q: "Add element to end?", a: ["push()", "pop()", "shift()", "unshift()"], correct: 0 },
+      { q: "Remove last element?", a: ["pop()", "push()", "shift()", "delete()"], correct: 0 },
+      { q: "typeof null?", a: ["null", "object", "undefined", "string"], correct: 1 },
+      { q: "Loop runs at least once?", a: ["for", "while", "do...while", "foreach"], correct: 2 },
+      { q: "Single line comment?", a: ["//", "/* */", "#", "<!-- -->"], correct: 0 },
+      { q: "Async handling keyword?", a: ["async/await", "delay", "wait()", "promiseOnly"], correct: 0 },
+    ],
+  },
+  {
+    id: 2,
+    title: "React Fundamentals",
+    description: "React Core Concepts",
+    questions: [
+      { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
+      { q: "Hook for state?", a: ["useEffect", "useState", "useMemo", "useRef"], correct: 1 },
+      { q: "JSX stands for?", a: ["JavaScript XML", "Java Syntax X", "JSON XML", "None"], correct: 0 },
+      { q: "Props are?", a: ["Data passed to components", "State", "Hooks", "CSS"], correct: 0 },
+      { q: "Virtual DOM is?", a: ["Copy of real DOM", "Database", "Hook", "Server"], correct: 0 },
+      { q: "Side effects hook?", a: ["useState", "useEffect", "useMemo", "useHook"], correct: 1 },
+      { q: "Component must return?", a: ["HTML", "JSX", "CSS", "JSON"], correct: 1 },
+      { q: "Key prop is for?", a: ["Performance", "List rendering", "Styling", "API"], correct: 1 },
+      { q: "React created by?", a: ["Google", "Facebook", "Microsoft", "Amazon"], correct: 1 },
+      { q: "Fragment syntax?", a: ["<> </>", "<div>", "<frag>", "<React>"], correct: 0 },
+    ],
+  },
+  {
+    id: 3,
+    title: "HTML Basics",
+    description: "Core HTML Concepts",
+    questions: [
+      { q: "HTML stands for?", a: ["HyperText Markup Language", "HighText ML", "Home Tool ML", "Hyperlinks ML"], correct: 0 },
+      { q: "Hyperlink tag?", a: ["<a>", "<link>", "<href>", "<h1>"], correct: 0 },
+      { q: "Image tag?", a: ["<img>", "<image>", "<src>", "<pic>"], correct: 0 },
+      { q: "Largest heading?", a: ["<h6>", "<h1>", "<head>", "<title>"], correct: 1 },
+      { q: "Paragraph tag?", a: ["<para>", "<p>", "<text>", "<pg>"], correct: 1 },
+      { q: "Line break tag?", a: ["<br>", "<lb>", "<break>", "<hr>"], correct: 0 },
+      { q: "Table row?", a: ["<td>", "<tr>", "<th>", "<table>"], correct: 1 },
+      { q: "List tag?", a: ["<ul>", "<li>", "<ol>", "All"], correct: 3 },
+      { q: "Meta tag inside?", a: ["body", "footer", "head", "title"], correct: 2 },
+      { q: "Form tag?", a: ["<form>", "<input>", "<label>", "<submit>"], correct: 0 },
+    ],
+  },
+  {
+    id: 4,
+    title: "CSS Fundamentals",
+    description: "Styling the Web",
+    questions: [
+      { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
+      { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
+      { q: "Inside spacing?", a: ["margin", "padding", "border", "space"], correct: 1 },
+      { q: "Outside spacing?", a: ["margin", "padding", "gap", "border"], correct: 0 },
+      { q: "Flexbox property?", a: ["display:flex", "flexbox:true", "align:flex", "box:flex"], correct: 0 },
+      { q: "Center text?", a: ["align:center", "text-align:center", "center:true", "justify:center"], correct: 1 },
+      { q: "Background color?", a: ["bgcolor", "background-color", "color-bg", "fill"], correct: 1 },
+      { q: "Border radius?", a: ["corner", "border-radius", "round", "radius"], correct: 1 },
+      { q: "Grid layout?", a: ["display:grid", "layout:grid", "grid:true", "use:grid"], correct: 0 },
+      { q: "Hover effect?", a: [":hover", "::hover", ".hover", "#hover"], correct: 0 },
     ],
   },
 ];
@@ -93,7 +89,6 @@ const Quiz = ({ onBack }) => {
 
   const answerQuestion = (idx) => {
     if (isAnswered) return;
-
     setSelectedAnswer(idx);
     setIsAnswered(true);
     setAnswers((prev) => [...prev, idx]);
@@ -106,7 +101,7 @@ const Quiz = ({ onBack }) => {
       } else {
         setShowResult(true);
       }
-    }, 1000);
+    }, 800);
   };
 
   const score = useMemo(() => {
@@ -117,7 +112,6 @@ const Quiz = ({ onBack }) => {
   }, [answers, selectedQuiz]);
 
   const totalQuestions = selectedQuiz?.questions.length || 0;
-
   const progress =
     selectedQuiz && totalQuestions > 0
       ? Math.round(((currentQ + 1) / totalQuestions) * 100)
@@ -143,9 +137,7 @@ const Quiz = ({ onBack }) => {
   return (
     <div className="quiz-page">
       <header className="header">
-        <div className="menu-icon" onClick={onBack}>
-          ←
-        </div>
+        <div className="menu-icon" onClick={onBack}>←</div>
         <div className="logo">📝 Skills Quiz</div>
       </header>
 
@@ -173,13 +165,8 @@ const Quiz = ({ onBack }) => {
         {selectedQuiz && showResult && (
           <div className="result-box">
             <h2>{selectedQuiz.title}</h2>
-            <p>
-              Your Score: {score} / {totalQuestions}
-            </p>
-            <p>
-              Accuracy: {Math.round((score / totalQuestions) * 100)}%
-            </p>
-
+            <p>Your Score: {score} / {totalQuestions}</p>
+            <p>Accuracy: {Math.round((score / totalQuestions) * 100)}%</p>
             <div className="result-actions">
               <button className="primary-btn" onClick={restartQuiz}>
                 Try Again
@@ -194,9 +181,7 @@ const Quiz = ({ onBack }) => {
         {selectedQuiz && !showResult && (
           <div className="quiz-player">
             <h2>{selectedQuiz.title}</h2>
-            <p>
-              Question {currentQ + 1} of {totalQuestions}
-            </p>
+            <p>Question {currentQ + 1} of {totalQuestions}</p>
 
             <div className="progress-bar">
               <div
@@ -215,11 +200,8 @@ const Quiz = ({ onBack }) => {
                   let className = "answer-btn";
 
                   if (isAnswered) {
-                    if (idx === correctIndex) {
-                      className += " correct";
-                    } else if (idx === selectedAnswer) {
-                      className += " wrong";
-                    }
+                    if (idx === correctIndex) className += " correct";
+                    else if (idx === selectedAnswer) className += " wrong";
                   }
 
                   return (
