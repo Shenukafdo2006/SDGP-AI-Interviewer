@@ -111,9 +111,28 @@ const quizzes = [
       { q: "Greedy approach?", a: ["Pick best at each step", "Pick first element", "Pick last element", "Loop"], correct: 0 },
     ],
   },
-
-  {
+   
+   {
     id: 7,
+    title: "CSS",
+    description: "Core CSS Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
+      { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
+      { q: "Inside spacing?", a: ["margin", "padding", "border", "space"], correct: 1 },
+      { q: "Outside spacing?", a: ["margin", "padding", "gap", "border"], correct: 0 },
+      { q: "Flexbox property?", a: ["display:flex", "flexbox:true", "align:flex", "box:flex"], correct: 0 },
+      { q: "Center text?", a: ["align:center", "text-align:center", "center:true", "justify:center"], correct: 1 },
+      { q: "Background color?", a: ["bgcolor", "background-color", "color-bg", "fill"], correct: 1 },
+      { q: "Border radius?", a: ["corner", "border-radius", "round", "radius"], correct: 1 },
+      { q: "Grid layout?", a: ["display:grid", "layout:grid", "grid:true", "use:grid"], correct: 0 },
+      { q: "Hover effect?", a: [":hover", "::hover", ".hover", "#hover"], correct: 0 },
+    ],
+  },
+  
+  {
+    id: 8,
     title: "React Fundamentals",
     description: "React Core Concepts",
     difficulty: "Intermediate",
@@ -132,7 +151,7 @@ const quizzes = [
   },
   
   {
-    id: 8,
+    id: 9,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
