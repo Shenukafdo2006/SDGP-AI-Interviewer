@@ -145,7 +145,7 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
         </div>
 
         <p className="footer-text">
-          Already have an account? <span onClick={onGoToLogin}>Sign in</span>
+          Already have an account? <span onClick={onGoToLogin}>Log in</span>
         </p>
       </div>
     </div>
