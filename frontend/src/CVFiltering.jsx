@@ -1,156 +1,1257 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import './CVFiltering.css';
 
-const allCandidates = [
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const STATUS_COLORS = {
+  New: '#3b82f6',
+  Viewed: '#8b5cf6',
+  Shortlisted: '#10b981',
+  'Interview Scheduled': '#f59e0b',
+  'Interview Done': '#6366f1',
+  Selected: '#059669',
+  Rejected: '#ef4444',
+  'On Hold': '#6b7280',
+};
+
+const SAMPLE_CVS = [
   {
-    name: 'Emily Chen',
-    initials: 'EC',
-    degree: 'BS Computer Science - Stanford University',
-    email: 'emily.chen@email.com',
-    location: 'San Francisco, CA',
-    gpa: 3.8,
-    available: 'Immediate',
-    phone: '+1 234-567-8901',
-    experience: '1 year experience',
-    skills: ['React', 'JavaScript', 'TypeScript', 'Node.js', 'CSS'],
+    id: 1, name: 'Alex Chen', position: 'Senior Software Engineer',
+    experience: '5 years', education: 'M.Tech CS', location: 'Bangalore',
+    skills: ['React', 'Python', 'Java', 'AWS', 'Docker'], noticePeriod: '30 days',
+    salary: '18L', graduationYear: '2018', gender: 'Male', status: 'Shortlisted',
+    tags: ['Team Lead', 'Full Stack'], rating: 4.8, uploadDate: '2024-01-15',
+    matchPercentage: 92, email: 'alex.chen@email.com', phone: '+91 98765 43210',
+    avatar: 'AC', university: 'IIT Bombay', interviews: 3, offers: 1,
   },
   {
-    name: 'Michael Rodriguez',
-    initials: 'MR',
-    degree: 'BS Software Engineering - MIT',
-    email: 'michael.r@email.com',
-    location: 'Remote',
-    gpa: 3.9,
-    available: 'June 2025',
-    phone: '+1 234-567-8902',
-    experience: '6 months experience',
-    skills: ['React', 'JavaScript', 'HTML', 'CSS', 'Git'],
+    id: 2, name: 'Priya Sharma', position: 'Product Manager',
+    experience: '7 years', education: 'MBA', location: 'Mumbai',
+    skills: ['Product Strategy', 'Agile', 'User Research', 'Analytics'], noticePeriod: '60 days',
+    salary: '25L', graduationYear: '2016', gender: 'Female', status: 'Interview Scheduled',
+    tags: ['IIM Alumnus', 'Certified Scrum Master'], rating: 4.9, uploadDate: '2024-01-14',
+    matchPercentage: 88, email: 'priya.s@email.com', phone: '+91 98765 43211',
+    avatar: 'PS', university: 'IIM Ahmedabad', interviews: 5, offers: 2,
   },
   {
-    name: 'Sarah Johnson',
-    initials: 'SJ',
-    degree: 'BS Data Science - Columbia University',
-    email: 'sarah.j@email.com',
-    location: 'New York, NY',
-    gpa: 3.7,
-    available: 'Immediate',
-    phone: '+1 234-567-8903',
-    experience: '1.5 years experience',
-    skills: ['Python', 'Machine Learning', 'SQL', 'Statistics', 'TensorFlow'],
+    id: 3, name: 'Rahul Verma', position: 'UX Designer',
+    experience: '3 years', education: 'B.Des', location: 'Delhi',
+    skills: ['Figma', 'Adobe XD', 'UI Design', 'Wireframing'], noticePeriod: '15 days',
+    salary: '12L', graduationYear: '2020', gender: 'Male', status: 'New',
+    tags: ['Creative', 'Portfolio Available'], rating: 4.2, uploadDate: '2024-01-13',
+    matchPercentage: 75, email: 'rahul.v@email.com', phone: '+91 98765 43212',
+    avatar: 'RV', university: 'NID Ahmedabad', interviews: 2, offers: 0,
+  },
+  {
+    id: 4, name: 'Neha Gupta', position: 'Data Scientist',
+    experience: '4 years', education: 'PhD', location: 'Pune',
+    skills: ['Python', 'Machine Learning', 'TensorFlow', 'SQL'], noticePeriod: '45 days',
+    salary: '22L', graduationYear: '2019', gender: 'Female', status: 'Viewed',
+    tags: ['Research Published', 'Kaggle Expert'], rating: 4.7, uploadDate: '2024-01-12',
+    matchPercentage: 95, email: 'neha.g@email.com', phone: '+91 98765 43213',
+    avatar: 'NG', university: 'IIT Delhi', interviews: 4, offers: 1,
+  },
+  {
+    id: 5, name: 'Vikram Singh', position: 'DevOps Engineer',
+    experience: '6 years', education: 'B.Tech', location: 'Hyderabad',
+    skills: ['Kubernetes', 'Jenkins', 'Terraform', 'AWS'], noticePeriod: '30 days',
+    salary: '20L', graduationYear: '2017', gender: 'Male', status: 'Shortlisted',
+    tags: ['Certified Kubernetes Admin'], rating: 4.5, uploadDate: '2024-01-11',
+    matchPercentage: 82, email: 'vikram.s@email.com', phone: '+91 98765 43214',
+    avatar: 'VS', university: 'NIT Trichy', interviews: 3, offers: 1,
+  },
+  {
+    id: 6, name: 'Aisha Patel', position: 'Frontend Developer',
+    experience: '2 years', education: 'B.Tech', location: 'Bangalore',
+    skills: ['React', 'TypeScript', 'CSS', 'Next.js'], noticePeriod: 'Immediate',
+    salary: '10L', graduationYear: '2022', gender: 'Female', status: 'New',
+    tags: ['Open Source Contributor'], rating: 4.3, uploadDate: '2024-01-10',
+    matchPercentage: 79, email: 'aisha.p@email.com', phone: '+91 98765 43215',
+    avatar: 'AP', university: 'BITS Pilani', interviews: 1, offers: 0,
   },
 ];
 
-const allSkills = ['React', 'JavaScript', 'TypeScript', 'Node.js', 'CSS', 'HTML', 'Git', 'Python', 'Machine Learning', 'SQL', 'Statistics', 'TensorFlow', 'AWS', 'Android', 'Bootstrap', 'Firebase'];
+// ─── Utility Helpers ──────────────────────────────────────────────────────────
 
-const CVFiltering = () => {
-  const [search, setSearch] = useState('');
-  const [location, setLocation] = useState('');
-  const [expLevel, setExpLevel] = useState('');
-  const [availability, setAvailability] = useState('');
-  const [skills, setSkills] = useState([]);
-  const [shortlisted, setShortlisted] = useState([]);
+const getStatusColor = (status) => STATUS_COLORS[status] || '#6b7280';
 
-  const handleSkillChange = (skill) => {
-    setSkills(skills.includes(skill) ? skills.filter(s => s !== skill) : [...skills, skill]);
-  };
+const getRatingStars = (rating) => {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half ? 1 : 0));
+};
 
-  const clearFilters = () => {
-    setSearch('');
-    setLocation('');
-    setExpLevel('');
-    setAvailability('');
-    setSkills([]);
-  };
+const formatFileSize = (bytes) => (bytes / 1024 / 1024).toFixed(2) + ' MB';
 
-  const filteredCandidates = allCandidates.filter(c => {
-    if (search && !(`${c.name} ${c.email}`.toLowerCase().includes(search.toLowerCase()))) return false;
-    if (location && c.location !== location) return false;
-    if (expLevel && c.experience.indexOf(expLevel) === -1) return false;
-    if (availability && c.available !== availability) return false;
-    if (skills.length && !skills.every(s => c.skills.includes(s))) return false;
-    return true;
-  });
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
-  const handleShortlist = (idx) => {
-    setShortlisted([...shortlisted, idx]);
-  };
+const Notification = ({ notifications }) => (
+  <div className="cvf-notification-stack">
+    {notifications.map(n => (
+      <div key={n.id} className={`cvf-notification cvf-notification--${n.type}`}>
+        <span className="cvf-notification__icon">
+          {n.type === 'success' ? '✓' : n.type === 'error' ? '✕' : '!'}
+        </span>
+        <span>{n.message}</span>
+      </div>
+    ))}
+  </div>
+);
 
-  const handleDownload = (candidate) => {
-    const content = `Name: ${candidate.name}\nEmail: ${candidate.email}\nPhone: ${candidate.phone}\nLocation: ${candidate.location}\nDegree: ${candidate.degree}\nGPA: ${candidate.gpa}\nAvailable: ${candidate.available}\nExperience: ${candidate.experience}\nSkills: ${candidate.skills.join(', ')}`;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${candidate.name.replace(/\s+/g, '_')}_CV.txt`;
-    link.click();
-  };
+const StatusBadge = ({ status }) => (
+  <span
+    className="cvf-status-badge"
+    style={{ background: getStatusColor(status) + '18', color: getStatusColor(status) }}
+  >
+    {status}
+  </span>
+);
+
+const SkillTag = ({ skill, size = '' }) => (
+  <span className={`cvf-skill-tag ${size ? 'cvf-skill-tag--' + size : ''}`}>{skill}</span>
+);
+
+const MatchBar = ({ pct }) => (
+  <div className="cvf-match-bar">
+    <div className="cvf-match-bar__track">
+      <div className="cvf-match-bar__fill" style={{ width: `${pct}%` }} />
+    </div>
+    <span className="cvf-match-bar__label">{pct}% match</span>
+  </div>
+);
+
+const AvatarCircle = ({ initials, status, size = 'md' }) => (
+  <div
+    className={`cvf-avatar cvf-avatar--${size}`}
+    style={{ background: getStatusColor(status) + '22', color: getStatusColor(status) }}
+  >
+    {initials}
+  </div>
+);
+
+// ─── Upload Tab ───────────────────────────────────────────────────────────────
+
+const UploadTab = ({ cvData, uploadedFiles, uploadProgress, onUpload, onDrop }) => {
+  const handleDragOver = (e) => { e.preventDefault(); e.stopPropagation(); };
 
   return (
-    <div className="cv-filtering-page" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-      <div style={{ flex: 1, minWidth: 220, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #eee', padding: 18, marginBottom: 24 }}>
-        <h3>Filters</h3>
-        <div style={{ marginBottom: 10 }}>
-          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Name or email..." style={{ width: '100%', padding: 6, borderRadius: 6, border: '1px solid #ccc' }} />
+    <div className="cvf-tab-content cvf-upload">
+      <div className="cvf-section-title">
+        <h2>Upload Resumes</h2>
+        <p>Drag & drop or browse to upload multiple CVs at once</p>
+      </div>
+
+      <div
+        className="cvf-dropzone"
+        onDragOver={handleDragOver}
+        onDrop={onDrop}
+        onClick={() => document.getElementById('cvf-file-input').click()}
+      >
+        <input
+          id="cvf-file-input"
+          type="file"
+          multiple
+          accept=".pdf,.docx,.doc,.txt"
+          onChange={onUpload}
+          style={{ display: 'none' }}
+        />
+        <div className="cvf-dropzone__icon">
+          <span>📁</span>
+          <div className="cvf-dropzone__ring" />
         </div>
-        <div style={{ marginBottom: 10 }}>
-          <label>Location<br/>
-            <select value={location} onChange={e => setLocation(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 6 }}>
-              <option value="">All Locations</option>
-              {[...new Set(allCandidates.map(c => c.location))].map(loc => <option key={loc} value={loc}>{loc}</option>)}
+        <h3>Drag & Drop CVs Here</h3>
+        <p>or <span className="cvf-link">browse files</span></p>
+        <p className="cvf-dropzone__hint">Supports: PDF, DOCX, DOC, TXT · Max 8MB per file</p>
+      </div>
+
+      {uploadedFiles.length > 0 && (
+        <div className="cvf-upload-progress">
+          <div className="cvf-row-between cvf-mb-16">
+            <h3>Upload Progress</h3>
+            <span className="cvf-chip">{uploadedFiles.length} files</span>
+          </div>
+          {uploadedFiles.map(file => (
+            <div key={file.id} className="cvf-progress-item">
+              <div className="cvf-progress-item__header">
+                <span className="cvf-file-icon">{file.type.includes('pdf') ? '📄' : '📝'}</span>
+                <div className="cvf-progress-item__info">
+                  <span className="cvf-progress-item__name">{file.name}</span>
+                  <span className="cvf-progress-item__size">{formatFileSize(file.size)}</span>
+                </div>
+                <span className={`cvf-progress-item__status cvf-progress-item__status--${file.status}`}>
+                  {file.status === 'completed' ? '✓' : '⟳'}
+                </span>
+              </div>
+              <div className="cvf-progress-track">
+                <div className="cvf-progress-fill" style={{ width: `${uploadProgress[file.id] || 0}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="cvf-recent-uploads">
+        <div className="cvf-row-between cvf-mb-16">
+          <h3>Recent Uploads</h3>
+          <button className="cvf-btn-ghost">View All</button>
+        </div>
+        <div className="cvf-recent-grid">
+          {cvData.slice(0, 3).map(cv => (
+            <div key={cv.id} className="cvf-recent-card">
+              <div className="cvf-recent-card__header">
+                <AvatarCircle initials={cv.avatar} status={cv.status} />
+                <div className="cvf-recent-card__info">
+                  <strong>{cv.name}</strong>
+                  <span>{cv.position}</span>
+                </div>
+                <span className="cvf-text-muted cvf-text-sm">2h ago</span>
+              </div>
+              <div className="cvf-recent-card__footer">
+                <StatusBadge status={cv.status} />
+                <button className="cvf-icon-btn" title="Preview">👁️</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── CV Card (Grid) ───────────────────────────────────────────────────────────
+
+const CVCardGrid = ({ cv, selected, onSelect, onCompare, onClick }) => (
+  <div
+    className={`cvf-cv-card cvf-cv-card--grid ${selected ? 'cvf-cv-card--selected' : ''}`}
+    onClick={() => onClick(cv)}
+  >
+    <div className="cvf-cv-card__top">
+      <AvatarCircle initials={cv.avatar} status={cv.status} size="lg" />
+      <input
+        type="checkbox"
+        checked={selected}
+        onClick={e => e.stopPropagation()}
+        onChange={e => { e.stopPropagation(); onSelect(cv.id); }}
+        className="cvf-checkbox"
+      />
+    </div>
+
+    <h3 className="cvf-cv-card__name">{cv.name}</h3>
+    <p className="cvf-cv-card__role">{cv.position}</p>
+
+    <MatchBar pct={cv.matchPercentage} />
+
+    <div className="cvf-cv-card__meta">
+      <span>💼 {cv.experience}</span>
+      <span>🎓 {cv.education}</span>
+      <span>📍 {cv.location}</span>
+    </div>
+
+    <div className="cvf-skills-row">
+      {cv.skills.slice(0, 3).map((s, i) => <SkillTag key={i} skill={s} />)}
+      {cv.skills.length > 3 && <span className="cvf-skill-tag cvf-skill-tag--more">+{cv.skills.length - 3}</span>}
+    </div>
+
+    <div className="cvf-cv-card__rating">
+      <span className="cvf-stars">{getRatingStars(cv.rating)}</span>
+      <span className="cvf-text-muted">{cv.rating}</span>
+    </div>
+
+    <div className="cvf-cv-card__footer">
+      <StatusBadge status={cv.status} />
+      <div className="cvf-action-row">
+        <button className="cvf-icon-btn" title="Compare" onClick={e => { e.stopPropagation(); onCompare(cv); }}>👥</button>
+        <button className="cvf-icon-btn" title="Star" onClick={e => e.stopPropagation()}>⭐</button>
+        <button className="cvf-icon-btn" title="More" onClick={e => e.stopPropagation()}>⋯</button>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── CV Card (List) ───────────────────────────────────────────────────────────
+
+const CVCardList = ({ cv, selected, onSelect, onClick }) => (
+  <div
+    className={`cvf-cv-card cvf-cv-card--list ${selected ? 'cvf-cv-card--selected' : ''}`}
+    onClick={() => onClick(cv)}
+  >
+    <div className="cvf-cv-list__left">
+      <input
+        type="checkbox"
+        checked={selected}
+        onClick={e => e.stopPropagation()}
+        onChange={e => { e.stopPropagation(); onSelect(cv.id); }}
+        className="cvf-checkbox"
+      />
+      <AvatarCircle initials={cv.avatar} status={cv.status} />
+      <div className="cvf-cv-list__info">
+        <strong>{cv.name}</strong>
+        <span className="cvf-text-muted">{cv.position} · {cv.experience} · {cv.location}</span>
+        <div className="cvf-skills-row cvf-skills-row--sm">
+          {cv.skills.slice(0, 4).map((s, i) => <SkillTag key={i} skill={s} size="sm" />)}
+        </div>
+      </div>
+    </div>
+    <div className="cvf-cv-list__right">
+      <div
+        className="cvf-match-ring"
+        style={{
+          background: `conic-gradient(#10b981 0% ${cv.matchPercentage}%, #e5e7eb ${cv.matchPercentage}% 100%)`
+        }}
+      >
+        <span>{cv.matchPercentage}%</span>
+      </div>
+      <div className="cvf-cv-list__status">
+        <span className="cvf-status-dot" style={{ background: getStatusColor(cv.status) }} />
+        <span className="cvf-text-muted cvf-text-sm">{cv.status}</span>
+      </div>
+      <button className="cvf-icon-btn">👁️</button>
+    </div>
+  </div>
+);
+
+// ─── Filter Tab ───────────────────────────────────────────────────────────────
+
+const FilterTab = ({
+  cvData, filters, onFilterChange, onApply, onClearFilters,
+  viewMode, setViewMode, sortBy, setSortBy,
+  selectedCVs, onToggleSelect, onSelectAll, onClearSelection,
+  compareList, onToggleCompare,
+  onOpenCV,
+  onBulkAction,
+  filterResults,
+}) => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const displayCVs = (() => {
+    let list = filterResults.length > 0 ? filterResults : cvData;
+    switch (sortBy) {
+      case 'match':     list.sort((a, b) => b.matchPercentage - a.matchPercentage); break;
+      case 'exp-high':  list.sort((a, b) => parseInt(b.experience) - parseInt(a.experience)); break;
+      case 'exp-low':   list.sort((a, b) => parseInt(a.experience) - parseInt(b.experience)); break;
+      case 'rating':    list.sort((a, b) => b.rating - a.rating); break;
+      case 'name':      list.sort((a, b) => a.name.localeCompare(b.name)); break;
+      default:          list.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+    }
+    return [...list];
+  })();
+
+  const FilterInput = ({ label, name, type = 'select', options = [], placeholder = '' }) => (
+    <div className="cvf-filter-group">
+      <label>{label}</label>
+      {type === 'select' ? (
+        <select name={name} value={filters[name] || ''} onChange={onFilterChange}>
+          {options.map(o => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      ) : (
+        <input type="text" name={name} placeholder={placeholder} value={filters[name] || ''} onChange={onFilterChange} />
+      )}
+    </div>
+  );
+
+  return (
+    <div className="cvf-tab-content cvf-filter-layout">
+      {/* Sidebar */}
+      <aside className={`cvf-sidebar ${sidebarOpen ? '' : 'cvf-sidebar--collapsed'}`}>
+        <button className="cvf-sidebar__toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? '◀' : '▶'}
+        </button>
+
+        {sidebarOpen && (
+          <>
+            <div className="cvf-row-between cvf-mb-16">
+              <h3>Filters</h3>
+              <button className="cvf-btn-ghost" onClick={onClearFilters}>Clear all</button>
+            </div>
+
+            <FilterInput label="Position" name="position" options={[
+              { value: '', label: 'All Positions' },
+              { value: 'Software Engineer', label: 'Software Engineer' },
+              { value: 'Product Manager', label: 'Product Manager' },
+              { value: 'UX Designer', label: 'UX Designer' },
+              { value: 'Data Scientist', label: 'Data Scientist' },
+              { value: 'DevOps Engineer', label: 'DevOps Engineer' },
+              { value: 'Frontend Developer', label: 'Frontend Developer' },
+            ]} />
+
+            <FilterInput label="Experience" name="experience" options={[
+              { value: '', label: 'All Experience' },
+              { value: '2 years', label: '0-2 years' },
+              { value: '3 years', label: '3-5 years' },
+              { value: '6 years', label: '6-8 years' },
+            ]} />
+
+            <FilterInput label="Education" name="education" options={[
+              { value: '', label: 'All Education' },
+              { value: 'B.Tech', label: 'B.Tech' },
+              { value: 'M.Tech', label: 'M.Tech' },
+              { value: 'MBA', label: 'MBA' },
+              { value: 'PhD', label: 'PhD' },
+              { value: 'B.Des', label: 'B.Des' },
+            ]} />
+
+            <FilterInput label="Location" name="location" type="text" placeholder="e.g. Bangalore" />
+
+            <FilterInput label="Skills" name="skills" type="text" placeholder="e.g. React, Python" />
+
+            <FilterInput label="Notice Period" name="noticePeriod" options={[
+              { value: '', label: 'Any' },
+              { value: 'Immediate', label: 'Immediate' },
+              { value: '15 days', label: '15 days' },
+              { value: '30 days', label: '30 days' },
+              { value: '60 days', label: '60 days' },
+            ]} />
+
+            <FilterInput label="Gender" name="gender" options={[
+              { value: '', label: 'Any' },
+              { value: 'Male', label: 'Male' },
+              { value: 'Female', label: 'Female' },
+            ]} />
+
+            <FilterInput label="Status" name="currentStatus" options={[
+              { value: '', label: 'Any Status' },
+              { value: 'New', label: 'New' },
+              { value: 'Shortlisted', label: 'Shortlisted' },
+              { value: 'Interview Scheduled', label: 'Interview Scheduled' },
+              { value: 'Selected', label: 'Selected' },
+              { value: 'Rejected', label: 'Rejected' },
+            ]} />
+
+            <button className="cvf-btn-primary cvf-btn-full" onClick={onApply}>
+              Apply Filters
+            </button>
+          </>
+        )}
+      </aside>
+
+      {/* Results */}
+      <div className="cvf-results">
+        <div className="cvf-results__header">
+          <div className="cvf-row-gap">
+            <h2>Candidates</h2>
+            <span className="cvf-chip">{displayCVs.length} results</span>
+          </div>
+          <div className="cvf-results__controls">
+            <div className="cvf-view-toggle">
+              {['grid', 'list'].map(m => (
+                <button
+                  key={m}
+                  className={`cvf-view-btn ${viewMode === m ? 'cvf-view-btn--active' : ''}`}
+                  onClick={() => setViewMode(m)}
+                  title={m + ' view'}
+                >
+                  {m === 'grid' ? '⊞' : '☰'}
+                </button>
+              ))}
+            </div>
+            <select className="cvf-select" value={sortBy} onChange={e => setSortBy(e.target.value)}>
+              <option value="latest">Latest</option>
+              <option value="match">Best Match</option>
+              <option value="rating">Top Rated</option>
+              <option value="exp-high">Experience ↑</option>
+              <option value="exp-low">Experience ↓</option>
+              <option value="name">Name A–Z</option>
             </select>
-          </label>
+          </div>
         </div>
-        <div style={{ marginBottom: 10 }}>
-          <label>Experience Level<br/>
-            <select value={expLevel} onChange={e => setExpLevel(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 6 }}>
-              <option value="">All Levels</option>
-              {['1 year', '6 months', '1.5 years'].map(lvl => <option key={lvl} value={lvl}>{lvl}</option>)}
-            </select>
-          </label>
+
+        <div className={`cvf-cv-grid ${viewMode === 'list' ? 'cvf-cv-grid--list' : 'cvf-cv-grid--grid'}`}>
+          {displayCVs.map(cv =>
+            viewMode === 'grid' ? (
+              <CVCardGrid
+                key={cv.id} cv={cv}
+                selected={selectedCVs.includes(cv.id)}
+                onSelect={onToggleSelect}
+                onCompare={onToggleCompare}
+                onClick={onOpenCV}
+              />
+            ) : (
+              <CVCardList
+                key={cv.id} cv={cv}
+                selected={selectedCVs.includes(cv.id)}
+                onSelect={onToggleSelect}
+                onClick={onOpenCV}
+              />
+            )
+          )}
         </div>
-        <div style={{ marginBottom: 10 }}>
-          <label>Availability<br/>
-            <select value={availability} onChange={e => setAvailability(e.target.value)} style={{ width: '100%', padding: 6, borderRadius: 6 }}>
-              <option value="">All</option>
-              {[...new Set(allCandidates.map(c => c.available))].map(av => <option key={av} value={av}>{av}</option>)}
-            </select>
-          </label>
+      </div>
+
+      {/* Bulk Action Bar */}
+      {selectedCVs.length > 0 && (
+        <div className="cvf-bulk-bar">
+          <div className="cvf-bulk-bar__info">
+            <span className="cvf-bulk-bar__count">{selectedCVs.length}</span>
+            <span>selected</span>
+          </div>
+          <div className="cvf-bulk-bar__actions">
+            {[
+              { label: 'Shortlist', icon: '✅', action: 'shortlist' },
+              { label: 'Download', icon: '📥', action: 'download' },
+              { label: 'Email', icon: '📧', action: 'email' },
+              { label: 'Export', icon: '📊', action: 'export' },
+            ].map(b => (
+              <button key={b.action} className="cvf-bulk-btn" onClick={() => onBulkAction(b.action)}>
+                <span>{b.icon}</span> {b.label}
+              </button>
+            ))}
+            <button className="cvf-bulk-btn cvf-bulk-btn--danger" onClick={() => onBulkAction('delete')}>
+              <span>🗑️</span> Delete
+            </button>
+          </div>
         </div>
-        <div style={{ marginBottom: 10 }}>
-          <label>Skills<br/>
-            <div style={{ maxHeight: 120, overflowY: 'auto', border: '1px solid #eee', borderRadius: 6, padding: 6 }}>
-              {allSkills.map(skill => (
-                <div key={skill}>
-                  <input type="checkbox" checked={skills.includes(skill)} onChange={() => handleSkillChange(skill)} /> {skill}
+      )}
+    </div>
+  );
+};
+
+// ─── Advanced Search Tab ──────────────────────────────────────────────────────
+
+const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, onSearch, cvData }) => {
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleChange = (e) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    if (val.length > 1) {
+      const s = [...new Set(cvData.flatMap(c => c.skills))]
+        .filter(sk => sk.toLowerCase().includes(val.toLowerCase()))
+        .slice(0, 5);
+      setSuggestions(s);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const SEARCH_TYPES = ['Basic', 'Boolean', 'Fuzzy', 'Phrase'];
+
+  const TIPS = [
+    { icon: '🔤', title: 'Boolean Search', code: 'React AND Python NOT Java' },
+    { icon: '"', title: 'Phrase Search', code: '"machine learning"' },
+    { icon: '*', title: 'Wildcard', code: 'dev* → developer, development' },
+    { icon: '🎯', title: 'Field Search', code: 'skills:React education:IIT' },
+  ];
+
+  return (
+    <div className="cvf-tab-content cvf-advanced">
+      <div className="cvf-section-title cvf-section-title--center">
+        <h2>Advanced Search</h2>
+        <p>Use powerful search operators to find exactly what you need</p>
+      </div>
+
+      <div className="cvf-advanced__card">
+        <div className="cvf-type-row">
+          {SEARCH_TYPES.map(t => (
+            <button
+              key={t}
+              className={`cvf-type-btn ${searchType === t.toLowerCase() ? 'cvf-type-btn--active' : ''}`}
+              onClick={() => setSearchType(t.toLowerCase())}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+
+        <div className="cvf-search-box">
+          <span className="cvf-search-box__icon">🔍</span>
+          <input
+            type="text"
+            className="cvf-search-input"
+            value={searchQuery}
+            onChange={handleChange}
+            placeholder={
+              searchType === 'boolean' ? 'Example: React AND Python NOT Java' :
+              searchType === 'fuzzy'   ? 'Search with misspellings...' :
+              searchType === 'phrase'  ? 'Enter exact phrase in quotes...' :
+              'Search skills, experience, location...'
+            }
+          />
+          {searchQuery && (
+            <button className="cvf-search-box__clear" onClick={() => setSearchQuery('')}>✕</button>
+          )}
+          {suggestions.length > 0 && (
+            <div className="cvf-suggestions">
+              {suggestions.map((s, i) => (
+                <div key={i} className="cvf-suggestion" onClick={() => { setSearchQuery(s); setSuggestions([]); }}>
+                  🔍 {s}
                 </div>
               ))}
             </div>
-          </label>
+          )}
         </div>
-        <button onClick={clearFilters} style={{ marginTop: 10, background: '#eee', border: 'none', borderRadius: 8, padding: '6px 16px', fontSize: 14 }}>Clear Filters</button>
+
+        <button className="cvf-btn-primary cvf-btn-full" onClick={onSearch}>
+          Search Candidates
+        </button>
       </div>
-      <div style={{ flex: 3, minWidth: 350 }}>
-        <h2>{filteredCandidates.length} candidates found</h2>
-        {filteredCandidates.map((c, idx) => (
-          <div key={idx} style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #eee', marginBottom: 24, padding: 18, position: 'relative', display: 'flex', gap: 18 }}>
-            <div style={{ background: '#4b0082', color: '#fff', borderRadius: '50%', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: 20 }}>{c.initials}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 'bold', fontSize: 17 }}>{c.name}</div>
-              <div style={{ color: '#666', fontSize: 14 }}>{c.degree}</div>
-              <div style={{ fontSize: 13, color: '#888' }}>{c.email}</div>
-              <div style={{ fontSize: 13, color: '#888' }}>{c.location}</div>
-              <div style={{ fontSize: 13, color: '#888' }}>GPA: {c.gpa} &nbsp; Available: {c.available}</div>
-              <div style={{ fontSize: 13, color: '#888' }}>{c.phone} &nbsp; {c.experience}</div>
-              <div style={{ margin: '8px 0' }}>{c.skills.map(skill => <span key={skill} style={{ background: '#eee', borderRadius: 6, padding: '2px 8px', marginRight: 5, fontSize: 13 }}>{skill}</span>)}</div>
+
+      <div className="cvf-tips">
+        <h4>Search Tips</h4>
+        <div className="cvf-tips-grid">
+          {TIPS.map(t => (
+            <div key={t.title} className="cvf-tip-card">
+              <div className="cvf-tip-card__icon">{t.icon}</div>
+              <div>
+                <strong>{t.title}</strong>
+                <code>{t.code}</code>
+              </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end', justifyContent: 'center' }}>
-              <button style={{ background: shortlisted.includes(idx) ? '#eee' : '#4b0082', color: shortlisted.includes(idx) ? '#888' : '#fff', border: 'none', borderRadius: 8, padding: '6px 16px', fontSize: 13 }} onClick={() => handleShortlist(idx)} disabled={shortlisted.includes(idx)}>
-                {shortlisted.includes(idx) ? 'Shortlisted' : 'Shortlist'}
-              </button>
-              <button style={{ background: '#eee', border: 'none', borderRadius: 8, padding: '6px 16px', fontSize: 13 }} onClick={() => alert('CV Preview not implemented in mockup.')}>View CV</button>
-              <button style={{ background: '#eee', border: 'none', borderRadius: 8, padding: '6px 16px', fontSize: 13 }} onClick={() => handleDownload(c)}>Download</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Saved Filters Tab ────────────────────────────────────────────────────────
+
+const SavedTab = ({ savedFilters, onSaveFilter, onDeleteFilter }) => {
+  const RECENT_SEARCHES = [
+    { query: 'React developers Bangalore', time: '2 hours ago' },
+    { query: 'Python 5+ years experience', time: '5 hours ago' },
+    { query: 'Product Managers IIM', time: '1 day ago' },
+  ];
+
+  return (
+    <div className="cvf-tab-content cvf-saved">
+      <div className="cvf-row-between cvf-mb-24">
+        <h2>Saved Filters</h2>
+        <button className="cvf-btn-primary" onClick={onSaveFilter}>
+          <span>+</span> New Filter
+        </button>
+      </div>
+
+      {savedFilters.length === 0 ? (
+        <div className="cvf-empty-state">
+          <div className="cvf-empty-state__icon">💾</div>
+          <h3>No saved filters yet</h3>
+          <p>Save your filter combinations for quick access later</p>
+          <button className="cvf-btn-primary" onClick={onSaveFilter}>Save Current Filter</button>
+        </div>
+      ) : (
+        <div className="cvf-saved-grid">
+          {savedFilters.map(f => (
+            <div key={f.id} className="cvf-saved-card">
+              <div className="cvf-row-between cvf-mb-12">
+                <h4>{f.name}</h4>
+                <div className="cvf-action-row">
+                  <button className="cvf-icon-btn" title="Apply">▶</button>
+                  <button className="cvf-icon-btn" title="Share">📤</button>
+                  <button className="cvf-icon-btn" title="Delete" onClick={() => onDeleteFilter(f.id)}>🗑️</button>
+                </div>
+              </div>
+              <div className="cvf-skills-row cvf-mb-12">
+                {Object.entries(f.filters).filter(([, v]) => v).map(([k, v]) => (
+                  <span key={k} className="cvf-chip">{k}: {v}</span>
+                ))}
+              </div>
+              <div className="cvf-saved-card__footer">
+                <span className="cvf-text-muted cvf-text-sm">Last used: 2 days ago</span>
+                <span className="cvf-text-success cvf-text-sm">24 results</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="cvf-recent-searches">
+        <h3 className="cvf-mb-16">Recent Searches</h3>
+        <div className="cvf-recent-list">
+          {RECENT_SEARCHES.map((r, i) => (
+            <div key={i} className="cvf-recent-item">
+              <span>🕐 {r.query}</span>
+              <span className="cvf-text-muted cvf-text-sm">{r.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Analytics Tab ────────────────────────────────────────────────────────────
+
+const AnalyticsTab = () => {
+  const STATS = [
+    { icon: '📄', label: 'Total CVs', value: '156', change: '+12 this week', positive: true },
+    { icon: '✓', label: 'Shortlisted', value: '45', change: '29% of total', positive: false },
+    { icon: '⏳', label: 'In Pipeline', value: '28', change: '18% of total', positive: false },
+    { icon: '⭐', label: 'Avg. Rating', value: '4.2', change: '/ 5.0', positive: false },
+  ];
+
+  const SKILLS = [
+    { name: 'React', size: 'xl' }, { name: 'Python', size: 'lg' }, { name: 'Java', size: 'md' },
+    { name: 'AWS', size: 'sm' }, { name: 'JavaScript', size: 'xl' }, { name: 'Node.js', size: 'lg' },
+    { name: 'TypeScript', size: 'lg' }, { name: 'Docker', size: 'sm' }, { name: 'GraphQL', size: 'md' },
+  ];
+
+  const UNIVERSITIES = [
+    { name: 'IIT Bombay', pct: 85 }, { name: 'IIT Delhi', pct: 72 },
+    { name: 'NIT Trichy', pct: 68 }, { name: 'BITS Pilani', pct: 65 },
+  ];
+
+  const LOCATIONS = [
+    { name: 'Bangalore', pct: 42 }, { name: 'Mumbai', pct: 28 },
+    { name: 'Delhi', pct: 18 }, { name: 'Pune', pct: 12 },
+  ];
+
+  return (
+    <div className="cvf-tab-content cvf-analytics">
+      <h2 className="cvf-mb-24">Analytics Dashboard</h2>
+
+      <div className="cvf-stats-grid">
+        {STATS.map(s => (
+          <div key={s.label} className="cvf-stat-card">
+            <div className="cvf-stat-card__icon">{s.icon}</div>
+            <div>
+              <span className="cvf-text-muted cvf-text-sm">{s.label}</span>
+              <div className="cvf-stat-card__value">{s.value}</div>
+              <span className={`cvf-text-sm ${s.positive ? 'cvf-text-success' : 'cvf-text-muted'}`}>{s.change}</span>
             </div>
           </div>
         ))}
       </div>
+
+      <div className="cvf-charts-grid">
+        <div className="cvf-chart-card">
+          <h3>Skills Distribution</h3>
+          <div className="cvf-skill-cloud">
+            {SKILLS.map(s => (
+              <span key={s.name} className={`cvf-cloud-tag cvf-cloud-tag--${s.size}`}>{s.name}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className="cvf-chart-card">
+          <h3>Experience Breakdown</h3>
+          <div className="cvf-donut-wrapper">
+            <div
+              className="cvf-donut"
+              style={{
+                background: `conic-gradient(
+                  #6366f1 0deg 108deg,
+                  #8b5cf6 108deg 270deg,
+                  #10b981 270deg 360deg
+                )`
+              }}
+            >
+              <div className="cvf-donut__hole" />
+            </div>
+            <div className="cvf-donut-legend">
+              <div className="cvf-legend-item"><span style={{ background: '#6366f1' }} />0-2 yrs (30%)</div>
+              <div className="cvf-legend-item"><span style={{ background: '#8b5cf6' }} />3-5 yrs (45%)</div>
+              <div className="cvf-legend-item"><span style={{ background: '#10b981' }} />6+ yrs (25%)</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="cvf-chart-card">
+          <h3>Top Universities</h3>
+          <div className="cvf-bar-list">
+            {UNIVERSITIES.map(u => (
+              <div key={u.name} className="cvf-bar-item">
+                <span className="cvf-bar-item__label">{u.name}</span>
+                <div className="cvf-bar-item__track">
+                  <div className="cvf-bar-item__fill" style={{ width: `${u.pct}%` }}>
+                    <span>{u.pct}%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="cvf-chart-card">
+          <h3>Location Distribution</h3>
+          <div className="cvf-bar-list">
+            {LOCATIONS.map(l => (
+              <div key={l.name} className="cvf-bar-item">
+                <span className="cvf-bar-item__label">{l.name}</span>
+                <div className="cvf-bar-item__track">
+                  <div className="cvf-bar-item__fill cvf-bar-item__fill--alt" style={{ width: `${l.pct}%` }}>
+                    <span>{l.pct}%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Compare Tab ──────────────────────────────────────────────────────────────
+
+const CompareTab = ({ compareList, onRemove, onClear, onGoFilter }) => {
+  const ROWS = [
+    { label: 'Experience', key: 'experience' },
+    { label: 'Education', key: 'education' },
+    { label: 'University', key: 'university' },
+    { label: 'Notice Period', key: 'noticePeriod' },
+    { label: 'Expected Salary', key: 'salary' },
+    { label: 'Interviews', key: 'interviews' },
+  ];
+
+  if (compareList.length === 0) {
+    return (
+      <div className="cvf-tab-content">
+        <div className="cvf-empty-state">
+          <div className="cvf-empty-state__icon">👥</div>
+          <h3>No candidates to compare</h3>
+          <p>Select candidates from the Filter tab using the 👥 button (up to 3)</p>
+          <button className="cvf-btn-primary" onClick={onGoFilter}>Go to Candidates</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cvf-tab-content cvf-compare">
+      <div className="cvf-row-between cvf-mb-24">
+        <h2>Compare Candidates</h2>
+        <button className="cvf-btn-ghost cvf-btn-danger" onClick={onClear}>Clear All</button>
+      </div>
+
+      <div className="cvf-compare-table-wrapper">
+        <table className="cvf-compare-table">
+          <thead>
+            <tr>
+              <th>Criteria</th>
+              {compareList.map(cv => (
+                <th key={cv.id}>
+                  <div className="cvf-compare-header">
+                    <AvatarCircle initials={cv.avatar} status={cv.status} />
+                    <div>
+                      <div className="cvf-compare-header__name">{cv.name}</div>
+                      <div className="cvf-text-muted cvf-text-sm">{cv.position}</div>
+                    </div>
+                    <button className="cvf-remove-btn" onClick={() => onRemove(cv.id)}>✕</button>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Match Score</td>
+              {compareList.map(cv => (
+                <td key={cv.id}>
+                  <div
+                    className="cvf-score-ring"
+                    style={{
+                      background: `conic-gradient(#10b981 0deg ${cv.matchPercentage * 3.6}deg, #e5e7eb ${cv.matchPercentage * 3.6}deg 360deg)`
+                    }}
+                  >
+                    <span>{cv.matchPercentage}%</span>
+                  </div>
+                </td>
+              ))}
+            </tr>
+            {ROWS.map(row => (
+              <tr key={row.key}>
+                <td>{row.label}</td>
+                {compareList.map(cv => <td key={cv.id}>{cv[row.key]}</td>)}
+              </tr>
+            ))}
+            <tr>
+              <td>Skills</td>
+              {compareList.map(cv => (
+                <td key={cv.id}>
+                  <div className="cvf-skills-row">
+                    {cv.skills.map((s, i) => <SkillTag key={i} skill={s} size="sm" />)}
+                  </div>
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td>Rating</td>
+              {compareList.map(cv => (
+                <td key={cv.id}>
+                  <span className="cvf-stars">{getRatingStars(cv.rating)}</span>
+                  <span className="cvf-text-muted"> {cv.rating}</span>
+                </td>
+              ))}
+            </tr>
+            <tr>
+              <td>Status</td>
+              {compareList.map(cv => (
+                <td key={cv.id}><StatusBadge status={cv.status} /></td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="cvf-compare-actions">
+        <button className="cvf-btn-primary">Shortlist Selected</button>
+        <button className="cvf-btn-outline">Export Comparison</button>
+      </div>
+    </div>
+  );
+};
+
+// ─── CV Preview Modal ─────────────────────────────────────────────────────────
+
+const CVModal = ({ cv, onClose }) => {
+  if (!cv) return null;
+
+  return (
+    <div className="cvf-modal-overlay" onClick={onClose}>
+      <div className="cvf-modal" onClick={e => e.stopPropagation()}>
+        <button className="cvf-modal__close" onClick={onClose}>✕</button>
+
+        <div className="cvf-modal__header">
+          <AvatarCircle initials={cv.avatar} status={cv.status} size="xl" />
+          <div className="cvf-modal__title">
+            <h2>{cv.name}</h2>
+            <p className="cvf-text-muted">{cv.position}</p>
+          </div>
+          <StatusBadge status={cv.status} />
+        </div>
+
+        <div className="cvf-modal__body">
+          <div className="cvf-modal__section">
+            <h4>Contact Information</h4>
+            <div className="cvf-contact-grid">
+              <span>📧 {cv.email}</span>
+              <span>📞 {cv.phone}</span>
+              <span>📍 {cv.location}</span>
+            </div>
+          </div>
+
+          <div className="cvf-modal__section">
+            <h4>Professional Summary</h4>
+            <div className="cvf-summary-grid">
+              {[
+                { label: 'Experience', val: cv.experience },
+                { label: 'Education', val: cv.education },
+                { label: 'University', val: cv.university },
+                { label: 'Graduation Year', val: cv.graduationYear },
+                { label: 'Notice Period', val: cv.noticePeriod },
+                { label: 'Expected Salary', val: cv.salary },
+              ].map(item => (
+                <div key={item.label} className="cvf-summary-item">
+                  <span className="cvf-text-muted cvf-text-sm">{item.label}</span>
+                  <strong>{item.val}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="cvf-modal__section">
+            <h4>Skills</h4>
+            <div className="cvf-skills-row">
+              {cv.skills.map((s, i) => <SkillTag key={i} skill={s} size="lg" />)}
+            </div>
+          </div>
+
+          <div className="cvf-modal__section">
+            <h4>Tags</h4>
+            <div className="cvf-skills-row cvf-mb-12">
+              {cv.tags.map((t, i) => (
+                <span key={i} className="cvf-tag">{t}</span>
+              ))}
+              <button className="cvf-tag cvf-tag--add">+ Add Tag</button>
+            </div>
+            <textarea
+              className="cvf-notes"
+              placeholder="Add notes about this candidate..."
+              rows="3"
+            />
+          </div>
+        </div>
+
+        <div className="cvf-modal__footer">
+          <button className="cvf-btn-primary">Shortlist</button>
+          <button className="cvf-btn-outline">Schedule Interview</button>
+          <button className="cvf-btn-outline">Download CV</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── Main Component ───────────────────────────────────────────────────────────
+
+const CVFiltering = ({ onBack }) => {
+  const [activeTab, setActiveTab] = useState('upload');
+  const [theme, setTheme] = useState('light');
+
+  // CV Data
+  const [cvData] = useState(SAMPLE_CVS);
+  const [filterResults, setFilterResults] = useState([]);
+
+  // Upload state
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState({});
+
+  // Filter state
+  const [filters, setFilters] = useState({
+    position: '', experience: '', education: '', location: '',
+    skills: '', noticePeriod: '', salaryRange: '', gender: '', currentStatus: '',
+  });
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchType, setSearchType] = useState('basic');
+
+  // Saved filters
+  const [savedFilters, setSavedFilters] = useState([]);
+
+  // UI state
+  const [viewMode, setViewMode] = useState('grid');
+  const [sortBy, setSortBy] = useState('latest');
+  const [selectedCVs, setSelectedCVs] = useState([]);
+  const [compareList, setCompareList] = useState([]);
+  const [selectedCV, setSelectedCV] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  // ── Notifications ────────────────────────────────────────────────────────────
+
+  const addNotification = useCallback((type, message) => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, type, message }]);
+    setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== id)), 3000);
+  }, []);
+
+  // ── Upload Logic ─────────────────────────────────────────────────────────────
+
+  const handleUpload = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      if (file.size > 8 * 1024 * 1024) {
+        addNotification('error', `${file.name} exceeds 8MB limit`);
+        return;
+      }
+      const id = Date.now() + file.name;
+      setUploadedFiles(prev => [...prev, { id, name: file.name, size: file.size, type: file.type, status: 'uploading' }]);
+      let progress = 0;
+      const iv = setInterval(() => {
+        progress += 10;
+        setUploadProgress(prev => ({ ...prev, [id]: progress }));
+        if (progress >= 100) {
+          clearInterval(iv);
+          setUploadedFiles(prev => prev.map(f => f.id === id ? { ...f, status: 'completed' } : f));
+          addNotification('success', `${file.name} uploaded successfully`);
+        }
+      }, 300);
+    });
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleUpload({ target: { files: Array.from(e.dataTransfer.files) } });
+  };
+
+  // ── Filter Logic ─────────────────────────────────────────────────────────────
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  const applyFilters = () => {
+    let result = [...cvData];
+    Object.entries(filters).forEach(([key, val]) => {
+      if (val) {
+        result = result.filter(cv => {
+          const field = cv[key];
+          if (Array.isArray(field)) return field.some(f => f.toLowerCase().includes(val.toLowerCase()));
+          return String(field || '').toLowerCase().includes(val.toLowerCase());
+        });
+      }
+    });
+    if (searchQuery) {
+      result = result.filter(cv => JSON.stringify(cv).toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+    setFilterResults(result);
+    addNotification('success', `Found ${result.length} matching CVs`);
+  };
+
+  // ── Selection Logic ──────────────────────────────────────────────────────────
+
+  const toggleSelect = (id) =>
+    setSelectedCVs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+
+  const toggleCompare = (cv) => {
+    setCompareList(prev => {
+      if (prev.find(c => c.id === cv.id)) return prev.filter(c => c.id !== cv.id);
+      if (prev.length >= 3) { addNotification('warning', 'Max 3 candidates for comparison'); return prev; }
+      return [...prev, cv];
+    });
+  };
+
+  // ── Saved Filters ────────────────────────────────────────────────────────────
+
+  const saveFilter = () => {
+    const name = prompt('Enter filter name:');
+    if (name) {
+      setSavedFilters(prev => [...prev, { id: Date.now(), name, filters: { ...filters }, searchQuery, searchType }]);
+      addNotification('success', 'Filter saved!');
+    }
+  };
+
+  const deleteFilter = (id) => setSavedFilters(prev => prev.filter(f => f.id !== id));
+
+  // ── Bulk Actions ─────────────────────────────────────────────────────────────
+
+  const handleBulkAction = (action) => {
+    const msgs = {
+      shortlist: `${selectedCVs.length} candidates shortlisted`,
+      download: `Downloading ${selectedCVs.length} CVs`,
+      email: `Email sent to ${selectedCVs.length} candidates`,
+      export: `Exported ${selectedCVs.length} records`,
+      delete: `${selectedCVs.length} CVs removed`,
+    };
+    addNotification('success', msgs[action] || 'Done');
+    if (action === 'delete') setSelectedCVs([]);
+  };
+
+  // ── Tabs Config ──────────────────────────────────────────────────────────────
+
+  const TABS = [
+    { id: 'upload',    icon: '📤', label: 'Upload' },
+    { id: 'filter',    icon: '🔍', label: 'Filter' },
+    { id: 'advanced',  icon: '🎯', label: 'Advanced' },
+    { id: 'saved',     icon: '💾', label: 'Saved' },
+    { id: 'analytics', icon: '📊', label: 'Analytics' },
+    { id: 'compare',   icon: '👥', label: `Compare${compareList.length ? ` (${compareList.length})` : ''}` },
+  ];
+
+  // ── Render ───────────────────────────────────────────────────────────────────
+
+  return (
+    <div className={`cvf-root cvf-root--${theme}`}>
+      {/* Ambient Background */}
+      <div className="cvf-bg" aria-hidden>
+        <div className="cvf-orb cvf-orb--1" />
+        <div className="cvf-orb cvf-orb--2" />
+        <div className="cvf-orb cvf-orb--3" />
+      </div>
+
+      <Notification notifications={notifications} />
+
+      <div className="cvf-shell">
+        {/* Top Bar */}
+        <header className="cvf-header">
+          <div className="cvf-header__left">
+            {onBack && (
+              <button className="cvf-back-btn" onClick={onBack} title="Back to Dashboard">
+                ← Back
+              </button>
+            )}
+            <div className="cvf-header__brand">
+              <h1>CV Filtering <span className="cvf-badge">v2.0</span></h1>
+            </div>
+            <div className="cvf-header__stats">
+              <div className="cvf-hstat"><strong>{cvData.length}</strong><span>Total CVs</span></div>
+              <div className="cvf-hstat"><strong>92%</strong><span>Parsed</span></div>
+              <div className="cvf-hstat"><strong>24</strong><span>New Today</span></div>
+            </div>
+          </div>
+
+          <div className="cvf-header__right">
+            <button className="cvf-icon-btn" onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}>
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            <button className="cvf-icon-btn cvf-icon-btn--notif">
+              🔔 <span className="cvf-notif-dot">3</span>
+            </button>
+            <div className="cvf-user">
+              <div className="cvf-user__avatar">JD</div>
+              <div className="cvf-user__info">
+                <span>John Doe</span>
+                <span className="cvf-text-muted cvf-text-sm">Recruiter</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Nav Tabs */}
+        <nav className="cvf-nav">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              className={`cvf-nav__tab ${activeTab === tab.id ? 'cvf-nav__tab--active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <span>{tab.icon}</span>
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Content */}
+        <main className="cvf-main">
+          {activeTab === 'upload' && (
+            <UploadTab
+              cvData={cvData}
+              uploadedFiles={uploadedFiles}
+              uploadProgress={uploadProgress}
+              onUpload={handleUpload}
+              onDrop={handleDrop}
+            />
+          )}
+
+          {activeTab === 'filter' && (
+            <FilterTab
+              cvData={cvData}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onApply={applyFilters}
+              onClearFilters={() => setFilters({})}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              selectedCVs={selectedCVs}
+              onToggleSelect={toggleSelect}
+              compareList={compareList}
+              onToggleCompare={toggleCompare}
+              onOpenCV={setSelectedCV}
+              onBulkAction={handleBulkAction}
+              filterResults={filterResults}
+            />
+          )}
+
+          {activeTab === 'advanced' && (
+            <AdvancedTab
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              searchType={searchType}
+              setSearchType={setSearchType}
+              onSearch={applyFilters}
+              cvData={cvData}
+            />
+          )}
+
+          {activeTab === 'saved' && (
+            <SavedTab
+              savedFilters={savedFilters}
+              onSaveFilter={saveFilter}
+              onDeleteFilter={deleteFilter}
+            />
+          )}
+
+          {activeTab === 'analytics' && <AnalyticsTab />}
+
+          {activeTab === 'compare' && (
+            <CompareTab
+              compareList={compareList}
+              onRemove={(id) => setCompareList(prev => prev.filter(c => c.id !== id))}
+              onClear={() => setCompareList([])}
+              onGoFilter={() => setActiveTab('filter')}
+            />
+          )}
+        </main>
+      </div>
+
+      {/* CV Detail Modal */}
+      {selectedCV && <CVModal cv={selectedCV} onClose={() => setSelectedCV(null)} />}
     </div>
   );
 };
