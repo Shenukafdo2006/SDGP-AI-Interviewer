@@ -6,6 +6,7 @@ const quizzes = [
     id: 1,
     title: "JavaScript Fundamentals",
     description: "Core JavaScript Concepts",
+    difficulty: "Beginner",
     questions: [
       { q: "What is a closure?", a: ["Function with preserved scope", "CSS property", "Loop", "Object"], correct: 0 },
       { q: "Which declares a variable?", a: ["var", "let", "const", "All"], correct: 3 },
@@ -23,6 +24,7 @@ const quizzes = [
     id: 2,
     title: "React Fundamentals",
     description: "React Core Concepts",
+    difficulty: "Intermediate",
     questions: [
       { q: "React is a?", a: ["Library", "Framework", "Language", "Database"], correct: 0 },
       { q: "Hook for state?", a: ["useEffect", "useState", "useMemo", "useRef"], correct: 1 },
@@ -40,6 +42,7 @@ const quizzes = [
     id: 3,
     title: "HTML Basics",
     description: "Core HTML Concepts",
+    difficulty: "Beginner",
     questions: [
       { q: "HTML stands for?", a: ["HyperText Markup Language", "HighText ML", "Home Tool ML", "Hyperlinks ML"], correct: 0 },
       { q: "Hyperlink tag?", a: ["<a>", "<link>", "<href>", "<h1>"], correct: 0 },
@@ -57,6 +60,7 @@ const quizzes = [
     id: 4,
     title: "CSS Fundamentals",
     description: "Styling the Web",
+    difficulty: "Advanced",
     questions: [
       { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
       { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
