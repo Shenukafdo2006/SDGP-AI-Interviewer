@@ -1,5 +1,5 @@
 import "./Quiz.css";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 
 const quizzes = [
   {
@@ -9,7 +9,12 @@ const quizzes = [
     questions: [
       {
         q: "What is a closure?",
-        a: ["A function with preserved scope", "A CSS property", "A type of loop"],
+        a: [
+          "A function with preserved scope",
+          "A CSS property",
+          "A type of loop",
+          "An object",
+        ],
         correct: 0,
       },
       {
@@ -17,25 +22,54 @@ const quizzes = [
         a: ["var", "let", "const", "all of the above"],
         correct: 3,
       },
-    ],
-  },
-  {
-    id: 2,
-    title: "React Fundamentals",
-    description: "Introduction to React",
-    questions: [
       {
-        q: "What is a React hook?",
+        q: "What does === mean?",
         a: [
-          "A lifecycle method",
-          "A function for state/side effects",
-          "A CSS selector",
+          "Equal value",
+          "Equal value and type",
+          "Assignment operator",
+          "Comparison only",
         ],
         correct: 1,
       },
       {
-        q: "JSX stands for?",
-        a: ["JavaScript XML", "Java Syntax Extension", "Just Simple X"],
+        q: "Which method converts JSON to object?",
+        a: [
+          "JSON.parse()",
+          "JSON.stringify()",
+          "JSON.convert()",
+          "JSON.toObject()",
+        ],
+        correct: 0,
+      },
+      {
+        q: "Which array method adds element to end?",
+        a: ["push()", "pop()", "shift()", "unshift()"],
+        correct: 0,
+      },
+      {
+        q: "Which keyword is used for asynchronous handling?",
+        a: ["async/await", "delay", "promiseOnly", "wait()"],
+        correct: 0,
+      },
+      {
+        q: "What is typeof null?",
+        a: ["null", "object", "undefined", "string"],
+        correct: 1,
+      },
+      {
+        q: "Which loop runs at least once?",
+        a: ["for", "while", "do...while", "foreach"],
+        correct: 2,
+      },
+      {
+        q: "Which symbol is used for single-line comments?",
+        a: ["//", "/* */", "#", "<!-- -->"],
+        correct: 0,
+      },
+      {
+        q: "Which method removes last array element?",
+        a: ["pop()", "push()", "shift()", "remove()"],
         correct: 0,
       },
     ],
@@ -49,16 +83,12 @@ const Quiz = ({ onBack }) => {
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [timer, setTimer] = useState(15);
 
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
     setAnswers([]);
     setShowResult(false);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setTimer(15);
   };
 
   const answerQuestion = (idx) => {
@@ -67,35 +97,17 @@ const Quiz = ({ onBack }) => {
     setSelectedAnswer(idx);
     setIsAnswered(true);
     setAnswers((prev) => [...prev, idx]);
-  };
 
-  const nextQuestion = () => {
-    if (currentQ + 1 < selectedQuiz.questions.length) {
-      setCurrentQ((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setTimer(15);
-    } else {
-      setShowResult(true);
-    }
-  };
-
-  useEffect(() => {
-    if (!selectedQuiz || showResult) return;
-
-    if (timer === 0) {
-      setAnswers((prev) => [...prev, null]); // unanswered
-      setIsAnswered(true);
-      setTimeout(nextQuestion, 800);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
+    setTimeout(() => {
+      if (currentQ + 1 < selectedQuiz.questions.length) {
+        setCurrentQ((prev) => prev + 1);
+        setSelectedAnswer(null);
+        setIsAnswered(false);
+      } else {
+        setShowResult(true);
+      }
     }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timer, selectedQuiz, showResult, currentQ]);
+  };
 
   const score = useMemo(() => {
     if (!selectedQuiz) return 0;
@@ -118,7 +130,6 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
-    setTimer(15);
   };
 
   const restartQuiz = () => {
@@ -127,7 +138,6 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
-    setTimer(15);
   };
 
   return (
@@ -187,10 +197,6 @@ const Quiz = ({ onBack }) => {
             <p>
               Question {currentQ + 1} of {totalQuestions}
             </p>
-
-            <div className="timer">
-              ⏱ Time Left: {timer}s
-            </div>
 
             <div className="progress-bar">
               <div
