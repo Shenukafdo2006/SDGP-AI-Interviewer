@@ -1,5 +1,5 @@
 import "./Quiz.css";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 
 const quizzes = [
   {
@@ -72,27 +72,42 @@ const quizzes = [
   },
 ];
 
-const Quiz = ({ onBack }) => {
+const Quiz = () => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [timer, setTimer] = useState(60);
 
+  // Start quiz
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
     setAnswers([]);
     setShowResult(false);
+    setSelectedAnswer(null);
+    setIsAnswered(false);
+    setTimer(60);
   };
+
+  // Timer effect
+  useEffect(() => {
+    if (!selectedQuiz || showResult) return;
+    if (timer <= 0) {
+      setShowResult(true);
+      return;
+    }
+    const interval = setInterval(() => setTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [timer, selectedQuiz, showResult]);
 
   const answerQuestion = (idx) => {
     if (isAnswered) return;
     setSelectedAnswer(idx);
     setIsAnswered(true);
     setAnswers((prev) => [...prev, idx]);
-
     setTimeout(() => {
       if (currentQ + 1 < selectedQuiz.questions.length) {
         setCurrentQ((prev) => prev + 1);
@@ -124,6 +139,7 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
+    setTimer(60);
   };
 
   const restartQuiz = () => {
@@ -132,12 +148,13 @@ const Quiz = ({ onBack }) => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
+    setTimer(60);
   };
 
   return (
     <div className="quiz-page">
       <header className="header">
-        <div className="menu-icon" onClick={onBack}>←</div>
+        <div className="menu-icon" onClick={resetQuiz}>←</div>
         <div className="logo">📝 Skills Quiz</div>
       </header>
 
@@ -148,15 +165,8 @@ const Quiz = ({ onBack }) => {
               <div key={quiz.id} className="quiz-card">
                 <h3>{quiz.title}</h3>
                 <p>{quiz.description}</p>
-                <span className="quiz-count">
-                  {quiz.questions.length} Questions
-                </span>
-                <button
-                  className="primary-btn"
-                  onClick={() => startQuiz(quiz)}
-                >
-                  Start Quiz
-                </button>
+                <span className="quiz-count">{quiz.questions.length} Questions</span>
+                <button className="primary-btn" onClick={() => startQuiz(quiz)}>Start Quiz</button>
               </div>
             ))}
           </div>
@@ -168,42 +178,31 @@ const Quiz = ({ onBack }) => {
             <p>Your Score: {score} / {totalQuestions}</p>
             <p>Accuracy: {Math.round((score / totalQuestions) * 100)}%</p>
             <div className="result-actions">
-              <button className="primary-btn" onClick={restartQuiz}>
-                Try Again
-              </button>
-              <button className="ghost-btn" onClick={resetQuiz}>
-                Browse Quizzes
-              </button>
+              <button className="primary-btn" onClick={restartQuiz}>Try Again</button>
+              <button className="ghost-btn" onClick={resetQuiz}>Browse Quizzes</button>
             </div>
           </div>
         )}
 
         {selectedQuiz && !showResult && (
           <div className="quiz-player">
+            <div className="timer">⏱ {timer}s left</div>
             <h2>{selectedQuiz.title}</h2>
             <p>Question {currentQ + 1} of {totalQuestions}</p>
-
             <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
 
             <div className="question-card">
               <h3>{selectedQuiz.questions[currentQ].q}</h3>
               <div className="answers">
                 {selectedQuiz.questions[currentQ].a.map((ans, idx) => {
-                  const correctIndex =
-                    selectedQuiz.questions[currentQ].correct;
-
+                  const correctIndex = selectedQuiz.questions[currentQ].correct;
                   let className = "answer-btn";
-
                   if (isAnswered) {
                     if (idx === correctIndex) className += " correct";
                     else if (idx === selectedAnswer) className += " wrong";
                   }
-
                   return (
                     <button
                       key={idx}
