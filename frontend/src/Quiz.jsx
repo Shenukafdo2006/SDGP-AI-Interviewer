@@ -576,6 +576,45 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 22,
+    title: "OOP",
+    description: "Expert Level Object-Oriented Programming",
+    difficulty: "Advanced",
+    questions: [
+      { q: "OOP stands for?", a: ["Object-Oriented Programming","Object-Oriented Python","Open Online Programming","Open Object Programming"], correct: 0 },
+      { q: "Which is class blueprint?", a: ["Class","Object","Instance","Method"], correct: 0 },
+      { q: "Object is?", a: ["Instance of class","Blueprint","Method","Variable"], correct: 0 },
+      { q: "Encapsulation means?", a: ["Data hiding","Inheritance","Polymorphism","Abstraction"], correct: 0 },
+      { q: "Inheritance allows?", a: ["Code reuse","Data hiding","Data binding","Overloading"], correct: 0 },
+      { q: "Polymorphism means?", a: ["Many forms","Single form","Object hiding","Method hiding"], correct: 0 },
+      { q: "Abstraction hides?", a: ["Implementation details","Data","Methods","Objects"], correct: 0 },
+      { q: "Constructor used for?", a: ["Initialize object","Delete object","Call method","Return value"], correct: 0 },
+      { q: "Destructor used for?", a: ["Cleanup object","Initialize object","Create object","Modify object"], correct: 0 },
+      { q: "Method overriding?", a: ["Child class redefines parent method","Child class adds new method","Parent calls child method","Method overloading"], correct: 0 },
+      { q: "Method overloading?", a: ["Same method name, different params","Override parent method","Delete method","Private method"], correct: 0 },
+      { q: "Access modifier for private?", a: ["private","protected","public","default"], correct: 0 },
+      { q: "Access modifier for public?", a: ["public","private","protected","default"], correct: 0 },
+      { q: "Access modifier for protected?", a: ["protected","private","public","default"], correct: 0 },
+      { q: "Getter method used for?", a: ["Access private variables","Modify variable","Delete variable","Create variable"], correct: 0 },
+      { q: "Setter method used for?", a: ["Modify private variables","Access variable","Delete variable","Call method"], correct: 0 },
+      { q: "Abstract class cannot?", a: ["Be instantiated","Be inherited","Have methods","Have variables"], correct: 0 },
+      { q: "Interface cannot have?", a: ["Concrete method","Abstract method","Signature","Implementations"], correct: 0 },
+      { q: "Multiple inheritance supported by?", a: ["Interface","Abstract class","Class","Struct"], correct: 0 },
+      { q: "Composition means?", a: ["Has-a relationship","Is-a relationship","Encapsulation","Polymorphism"], correct: 0 },
+      { q: "Aggregation means?", a: ["Weak has-a relationship","Strong has-a relationship","Is-a relationship","Polymorphism"], correct: 0 },
+      { q: "Static method belongs to?", a: ["Class","Object","Instance","Module"], correct: 0 },
+      { q: "Instance method belongs to?", a: ["Object","Class","Static","Module"], correct: 0 },
+      { q: "this keyword refers to?", a: ["Current object","Class object","Parent object","Static object"], correct: 0 },
+      { q: "super keyword refers to?", a: ["Parent class","Child class","Current object","Static object"], correct: 0 },
+      { q: "Final class cannot?", a: ["Be inherited","Have methods","Have variables","Be instantiated"], correct: 0 },
+      { q: "Final method cannot?", a: ["Be overridden","Be called","Be private","Be static"], correct: 0 },
+      { q: "Encapsulated data accessed via?", a: ["Getter/Setter","Direct variable","Method overriding","Constructor"], correct: 0 },
+      { q: "Polymorphism types?", a: ["Compile-time and Run-time","Single and Multi","Static and Dynamic","Object and Class"], correct: 0 },
+      { q: "Abstract method has?", a: ["Signature only","Implementation","Variables","Constructor"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
