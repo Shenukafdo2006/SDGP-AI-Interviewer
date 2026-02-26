@@ -537,6 +537,45 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 21,
+    title: "Python",
+    description: "Expert Level Python Programming",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Python is?", a: ["Compiled","Interpreted","Both","None"], correct: 1 },
+      { q: "Mutable data type?", a: ["tuple","list","str","int"], correct: 1 },
+      { q: "Immutable data type?", a: ["list","dict","tuple","set"], correct: 2 },
+      { q: "Keyword for function?", a: ["def","function","func","define"], correct: 0 },
+      { q: "Keyword for class?", a: ["class","object","def","struct"], correct: 0 },
+      { q: "Decorators start with?", a: ["@","$","%","&"], correct: 0 },
+      { q: "Lambda defines?", a: ["Anonymous function","Class","Loop","Variable"], correct: 0 },
+      { q: "List comprehension syntax?", a: ["[x for x in iterable]","{x for x in iterable}","(x for x in iterable)","<x for x in iterable>"], correct: 0 },
+      { q: "Dictionary key must be?", a: ["Mutable","Immutable","Optional","Duplicate allowed"], correct: 1 },
+      { q: "Global variable keyword?", a: ["global","public","static","extern"], correct: 0 },
+      { q: "Local variable scope?", a: ["Function","Class","Global","Module"], correct: 0 },
+      { q: "Python loop with else?", a: ["for/while","do-while","foreach","loop-until"], correct: 0 },
+      { q: "Exception handling keyword?", a: ["try/except","catch","handle","throw"], correct: 0 },
+      { q: "Raise exception keyword?", a: ["raise","throw","error","except"], correct: 0 },
+      { q: "Pass statement?", a: ["Does nothing","Stops program","Breaks loop","Returns value"], correct: 0 },
+      { q: "Break statement?", a: ["Exits loop","Skips iteration","Does nothing","Returns value"], correct: 0 },
+      { q: "Continue statement?", a: ["Skips iteration","Exits loop","Does nothing","Stops program"], correct: 0 },
+      { q: "With statement used for?", a: ["Context management","Looping","Condition","Function"], correct: 0 },
+      { q: "Python module import?", a: ["import module","include module","require module","use module"], correct: 0 },
+      { q: "Python package init file?", a: ["__init__.py","init.py","package.py","start.py"], correct: 0 },
+      { q: "Python iterator method?", a: ["__iter__()","__next__()","__getitem__()","__len__()"], correct: 0 },
+      { q: "Python generator uses?", a: ["yield","return","generate","produce"], correct: 0 },
+      { q: "Decorators can modify?", a: ["Function","Class","Loop","Variable"], correct: 0 },
+      { q: "Python type hint?", a: ["variable: type","type variable","hint variable","var type"], correct: 0 },
+      { q: "F-string uses?", a: ["f''","%","{}","format()"], correct: 0 },
+      { q: "Python set property?", a: ["Unique items","Duplicates allowed","Ordered","Mutable keys"], correct: 0 },
+      { q: "Python dictionary comprehension?", a: ["{k:v for k,v in iterable}","[k:v for k,v in iterable]","(k:v for k,v in iterable)","<k:v for k,v in iterable>"], correct: 0 },
+      { q: "Python multiple inheritance?", a: ["class C(A,B):","class C(A&B):","class C(A+B):","class C inherits A,B:"], correct: 0 },
+      { q: "Python private variable?", a: ["__var","_var","var","private var"], correct: 0 },
+      { q: "Python property decorator?", a: ["@property","@decorator","@func","@method"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
