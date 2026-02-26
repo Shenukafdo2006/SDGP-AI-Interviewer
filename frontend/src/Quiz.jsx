@@ -352,10 +352,38 @@ const quizzes = [
     ],
   },
 
-  
-
   {
     id: 16,
+    title: "CSS",
+    description: "Intermediate CSS Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "CSS stands for?", a: ["Cascading Style Sheets", "Computer Style Sheets", "Creative Style System", "Color Style Sheets"], correct: 0 },
+      { q: "Which selector selects id?", a: ["#id", ".id", "*id", "@id"], correct: 0 },
+      { q: "Which selector selects class?", a: [".class", "#class", "*class", "@class"], correct: 0 },
+      { q: "Display flex enables?", a: ["Flexible layout", "Colors", "Fonts", "Animation"], correct: 0 },
+      { q: "Flex direction row means?", a: ["Horizontal layout", "Vertical layout", "Diagonal", "None"], correct: 0 },
+      { q: "Position absolute means?", a: ["Relative to parent", "Screen fixed", "Normal flow", "Inline"], correct: 0 },
+      { q: "Position fixed means?", a: ["Fixed on screen", "Relative parent", "Inline", "Hidden"], correct: 0 },
+      { q: "Z-index controls?", a: ["Layer order", "Color", "Size", "Font"], correct: 0 },
+      { q: "Margin controls?", a: ["Outside space", "Inside space", "Border", "Color"], correct: 0 },
+      { q: "Padding controls?", a: ["Inside space", "Outside space", "Border", "Height"], correct: 0 },
+      { q: "Grid layout uses?", a: ["display: grid", "display: flex", "display: block", "display: inline"], correct: 0 },
+      { q: "Responsive design uses?", a: ["Media queries", "Loops", "Variables", "Functions"], correct: 0 },
+      { q: "Hover effect selector?", a: [":hover", ".hover", "#hover", "*hover"], correct: 0 },
+      { q: "Font size property?", a: ["font-size", "text-size", "size", "fontstyle"], correct: 0 },
+      { q: "Background color property?", a: ["background-color", "bgcolor", "color-bg", "backgroundstyle"], correct: 0 },
+      { q: "Center text property?", a: ["text-align", "align-text", "center-text", "font-align"], correct: 0 },
+      { q: "Border property controls?", a: ["Element border", "Text", "Layout", "Spacing"], correct: 0 },
+      { q: "Overflow hidden means?", a: ["Hide extra content", "Scroll", "Expand", "Zoom"], correct: 0 },
+      { q: "Inline element example?", a: ["span", "div", "section", "header"], correct: 0 },
+      { q: "Block element example?", a: ["div", "span", "a", "b"], correct: 0 }
+    ],
+  },
+
+
+  {
+    id: 17,
     title: "CSS ",
     description: "Styling the Web",
     difficulty: "Advanced",
