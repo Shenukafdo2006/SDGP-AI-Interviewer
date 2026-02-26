@@ -295,6 +295,36 @@ const quizzes = [
   },
 
   {
+  id: 14,
+    title: "OOP",
+    description: "Intermediate Object-Oriented Programming Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "OOP stands for?", a: ["Object Oriented Programming", "Open Object Program", "Object Operating Program", "Ordered Object Programming"], correct: 0 },
+      { q: "OOP basic unit is?", a: ["Object", "Loop", "Variable", "Function"], correct: 0 },
+      { q: "Blueprint of object?", a: ["Class", "Method", "Variable", "Loop"], correct: 0 },
+      { q: "Encapsulation means?", a: ["Data hiding", "Inheritance", "Looping", "Printing"], correct: 0 },
+      { q: "Inheritance means?", a: ["Reuse properties", "Hide data", "Looping", "Printing"], correct: 0 },
+      { q: "Polymorphism means?", a: ["Many forms", "Single form", "No form", "Data hiding"], correct: 0 },
+      { q: "Abstraction means?", a: ["Hide implementation", "Show everything", "Looping", "Printing"], correct: 0 },
+      { q: "Object is?", a: ["Instance of class", "Function", "Loop", "Variable"], correct: 0 },
+      { q: "Access modifier example?", a: ["private", "loop", "switch", "array"], correct: 0 },
+      { q: "Public means?", a: ["Accessible everywhere", "Hidden", "Protected", "Private"], correct: 0 },
+      { q: "Private means?", a: ["Accessible inside class", "Everywhere", "Outside only", "Protected"], correct: 0 },
+      { q: "Protected means?", a: ["Class and subclass", "Everywhere", "Only object", "None"], correct: 0 },
+      { q: "Constructor is?", a: ["Special method", "Loop", "Variable", "Operator"], correct: 0 },
+      { q: "Constructor runs when?", a: ["Object created", "Program ends", "Loop runs", "Method called"], correct: 0 },
+      { q: "Method is?", a: ["Function in class", "Variable", "Loop", "Object"], correct: 0 },
+      { q: "Overloading means?", a: ["Same name different parameters", "Same class", "Same variable", "Inheritance"], correct: 0 },
+      { q: "Overriding requires?", a: ["Inheritance", "Loop", "Array", "Variable"], correct: 0 },
+      { q: "this keyword refers?", a: ["Current object", "Parent class", "Function", "Loop"], correct: 0 },
+      { q: "Super keyword refers?", a: ["Parent class", "Child class", "Object", "Loop"], correct: 0 },
+      { q: "Multiple objects share?", a: ["Class", "Loop", "Variable", "Array"], correct: 0 }
+    ],
+  },
+
+  {
+    id: 15,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
