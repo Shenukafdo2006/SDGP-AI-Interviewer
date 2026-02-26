@@ -1,58 +1,88 @@
-.learning-resources-page {
+.learning-desktop-container {
+  display: flex;
   background: #0B1220;
   min-height: 100vh;
-  padding: 40px;
-  color: #FFFFFF;
+  color: #fff;
 }
 
-.resources-header {
-  margin-bottom: 40px;
+/* Sidebar Styling */
+.resources-sidebar {
+  width: 260px;
+  background: #111a2a;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
-.back-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-
-.resources-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.resource-card {
-  background: #172033;
-  border-radius: 16px;
-  padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
-}
-
-.resource-card:hover { transform: translateY(-5px); }
-
-.card-top { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 12px; font-weight: bold; }
-
-.res-tags { display: flex; gap: 8px; margin: 15px 0; flex-wrap: wrap; }
-.tag { background: #1E293B; padding: 4px 10px; border-radius: 6px; font-size: 11px; color: #94A3B8; }
-
-.res-progress-section { margin-bottom: 20px; }
-.progress-text { display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8; margin-bottom: 6px; }
-.progress-bar-bg { height: 6px; background: #0B1220; border-radius: 10px; overflow: hidden; }
-.progress-bar-fill { height: 100%; transition: width 0.3s ease; }
-
-.view-btn {
+.back-nav-btn {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366F1;
+  border: none;
   width: 100%;
   padding: 12px;
-  border: none;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
+.filter-group h4 { font-size: 14px; color: #94A3B8; margin-bottom: 15px; text-transform: uppercase; }
+.filter-group label { display: block; margin-bottom: 10px; font-size: 14px; cursor: pointer; }
+
+/* Main Content Area */
+.resources-main {
+  flex: 1;
+  padding: 40px 60px;
+}
+
+.desktop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.header-stats { display: flex; gap: 20px; }
+.stat-box { background: #172033; padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
+.stat-box span { display: block; font-weight: bold; font-size: 20px; color: #6366F1; }
+
+/* Grid Styling */
+.resources-desktop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.desktop-res-card {
+  background: #172033;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: transform 0.3s;
+}
+
+.desktop-res-card:hover { transform: translateY(-10px); }
+
+.res-banner { height: 120px; position: relative; }
+.res-duration { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; font-size: 11px; }
+
+.res-body { padding: 24px; }
+.res-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+
+.res-tags-row { display: flex; gap: 8px; margin: 15px 0; }
+.d-tag { background: #1E293B; color: #94A3B8; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
+
+.res-progress-wrap { margin: 20px 0; }
+.p-bar-bg { height: 6px; background: #0B1220; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+.p-bar-fill { height: 100%; transition: width 0.4s; }
+
+.d-view-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid;
   border-radius: 10px;
-  color: white;
   font-weight: 600;
   cursor: pointer;
 }
