@@ -380,26 +380,48 @@ const quizzes = [
       { q: "Block element example?", a: ["div", "span", "a", "b"], correct: 0 }
     ],
   },
-
-
+  
   {
     id: 17,
-    title: "CSS ",
-    description: "Styling the Web",
+    title: "CSS",
+    description: "Expert Level Styling",
     difficulty: "Advanced",
     questions: [
-      { q: "CSS stands for?", a: ["Cascading Style Sheets", "Creative Style", "Color Style", "None"], correct: 0 },
-      { q: "Text color property?", a: ["font-color", "color", "text-style", "fg"], correct: 1 },
-      { q: "Inside spacing?", a: ["margin", "padding", "border", "space"], correct: 1 },
-      { q: "Outside spacing?", a: ["margin", "padding", "gap", "border"], correct: 0 },
-      { q: "Flexbox property?", a: ["display:flex", "flexbox:true", "align:flex", "box:flex"], correct: 0 },
-      { q: "Center text?", a: ["align:center", "text-align:center", "center:true", "justify:center"], correct: 1 },
-      { q: "Background color?", a: ["bgcolor", "background-color", "color-bg", "fill"], correct: 1 },
-      { q: "Border radius?", a: ["corner", "border-radius", "round", "radius"], correct: 1 },
-      { q: "Grid layout?", a: ["display:grid", "layout:grid", "grid:true", "use:grid"], correct: 0 },
-      { q: "Hover effect?", a: [":hover", "::hover", ".hover", "#hover"], correct: 0 },
+      { q: "Which selector has highest specificity?", a: ["Class", "Element", "ID", "Universal"], correct: 2 },
+      { q: "What does z-index control?", a: ["Font size", "Stacking order", "Spacing", "Opacity"], correct: 1 },
+      { q: "Position relative means?", a: ["Relative to viewport", "Relative to parent", "Relative to itself", "Fixed position"], correct: 2 },
+      { q: "Position fixed is relative to?", a: ["Parent", "Viewport", "Body", "Div"], correct: 1 },
+      { q: "Which unit is relative to root font size?", a: ["em", "px", "rem", "%"], correct: 2 },
+      { q: "Flexbox main axis controlled by?", a: ["align-items", "justify-content", "flex-wrap", "gap"], correct: 1 },
+      { q: "Flexbox cross axis controlled by?", a: ["justify-content", "align-items", "order", "grow"], correct: 1 },
+      { q: "Grid columns define property?", a: ["grid-template-columns", "grid-columns", "column-layout", "grid-style"], correct: 0 },
+      { q: "Auto-fit vs auto-fill used in?", a: ["Flexbox", "Grid", "Positioning", "Animation"], correct: 1 },
+      { q: "Overflow hidden does?", a: ["Shows scroll", "Hides extra content", "Resizes box", "Centers content"], correct: 1 },
+      { q: "Which property creates smooth animation?", a: ["transition", "animate", "motion", "effect"], correct: 0 },
+      { q: "Animation infinite loop?", a: ["loop:true", "animation-loop", "animation-iteration-count: infinite", "repeat:infinite"], correct: 2 },
+      { q: "Transform rotate example?", a: ["rotate(45deg)", "turn(45)", "angle(45)", "spin(45)"], correct: 0 },
+      { q: "Scale element property?", a: ["resize()", "scale()", "grow()", "expand()"], correct: 1 },
+      { q: "Which pseudo-class selects first child?", a: [":first", ":child-first", ":first-child", ":start"], correct: 2 },
+      { q: "Which pseudo-element selects first letter?", a: ["::letter", "::first-letter", ":letter", ":first-letter"], correct: 1 },
+      { q: "Variable declaration syntax?", a: ["$color:red", "--color:red", "var=color", "@color:red"], correct: 1 },
+      { q: "Using CSS variable?", a: ["use(--color)", "get(color)", "var(--color)", "color(var)"], correct: 2 },
+      { q: "Media query syntax?", a: ["@media screen", "@screen", "media()", "screen@"], correct: 0 },
+      { q: "Responsive unit?", a: ["px", "cm", "vw", "pt"], correct: 2 },
+      { q: "Center div horizontally?", a: ["margin:auto", "align:center", "position:center", "center:true"], correct: 0 },
+      { q: "Shadow property?", a: ["shadow-box", "box-shadow", "element-shadow", "shadow"], correct: 1 },
+      { q: "Text shadow property?", a: ["font-shadow", "text-shadow", "shadow-text", "text-effect"], correct: 1 },
+      { q: "Opacity range?", a: ["0-1", "0-10", "1-100", "0-255"], correct: 0 },
+      { q: "Display none does?", a: ["Hidden but space remains", "Removes element", "Transparent", "Disabled"], correct: 1 },
+      { q: "Visibility hidden does?", a: ["Remove element", "Keep space but hide", "Delete element", "Opacity 0"], correct: 1 },
+      { q: "Object-fit cover means?", a: ["Stretch image", "Crop to fill", "Repeat image", "Hide image"], correct: 1 },
+      { q: "Min width property?", a: ["width-min", "min-width", "minimum-width", "limit-width"], correct: 1 },
+      { q: "Max width property?", a: ["width-max", "max-width", "limit-width", "width-limit"], correct: 1 },
+      { q: "Which property changes cursor?", a: ["mouse", "cursor", "pointer-style", "hover-cursor"], correct: 1 }
     ],
   },
+
+  
+  
 ];
 
 const Quiz = () => {
