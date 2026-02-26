@@ -653,6 +653,45 @@ const quizzes = [
       { q: "Complexity of linear search?", a: ["O(n)","O(log n)","O(1)","O(n^2)"], correct: 0 }
     ],
   },
+
+  {
+    id: 25,
+    title: "React",
+    description: "Expert Level React",
+    difficulty: "Advanced",
+    questions: [
+      { q: "React is?", a: ["Library","Framework","Language","Database"], correct: 0 },
+      { q: "JSX stands for?", a: ["JavaScript XML","Java Simple XHTML","JavaScript Extra","JSON Syntax eXtended"], correct: 0 },
+      { q: "Component type with state?", a: ["Class component","Functional component","Pure component","Stateless component"], correct: 0 },
+      { q: "Hook for state?", a: ["useState","useEffect","useRef","useMemo"], correct: 0 },
+      { q: "Hook for side effects?", a: ["useEffect","useState","useMemo","useCallback"], correct: 0 },
+      { q: "Props are?", a: ["Read-only","Mutable","Local state","Internal data"], correct: 0 },
+      { q: "Key prop used for?", a: ["Unique list item","Styling","State","Effect"], correct: 0 },
+      { q: "React event handler naming?", a: ["camelCase","snake_case","PascalCase","kebab-case"], correct: 0 },
+      { q: "Default export keyword?", a: ["export default","export main","default export","module export"], correct: 0 },
+      { q: "Import keyword?", a: ["import","require","include","using"], correct: 0 },
+      { q: "React fragment syntax?", a: ["<>...</>","<Fragment>...</Fragment>","Both","None"], correct: 2 },
+      { q: "useRef hook used for?", a: ["Access DOM elements","State management","Effect","Context"], correct: 0 },
+      { q: "useMemo hook used for?", a: ["Memoize value","Effect","State","Ref"], correct: 0 },
+      { q: "useCallback hook used for?", a: ["Memoize function","State","Effect","Ref"], correct: 0 },
+      { q: "Conditional rendering?", a: ["Ternary operator","If statement in JSX","Both","None"], correct: 2 },
+      { q: "React keys must be?", a: ["Unique among siblings","Unique globally","Optional","Duplicate allowed"], correct: 0 },
+      { q: "Higher Order Component?", a: ["Function returning component","Component returning function","JSX element","Hook"], correct: 0 },
+      { q: "Context API used for?", a: ["Global state","Local state","Refs","Effects"], correct: 0 },
+      { q: "React Router used for?", a: ["Navigation","State","Effects","Context"], correct: 0 },
+      { q: "React useReducer used for?", a: ["Complex state","Simple state","Effect","Ref"], correct: 0 },
+      { q: "Controlled component?", a: ["Value from state","Value from DOM","Unmanaged input","Hook input"], correct: 0 },
+      { q: "Uncontrolled component?", a: ["Value from DOM","Value from state","State managed input","Hook input"], correct: 0 },
+      { q: "React.StrictMode purpose?", a: ["Detects problems","Styling","State","Routing"], correct: 0 },
+      { q: "React.lazy used for?", a: ["Code splitting","State","Effect","Refs"], correct: 0 },
+      { q: "Suspense component used with?", a: ["React.lazy","useState","useEffect","Context"], correct: 0 },
+      { q: "Prop drilling means?", a: ["Passing props through many components","State management","Effect","Refs"], correct: 0 },
+      { q: "Default state hook value?", a: ["Initial value","Null","Undefined","Empty array"], correct: 0 },
+      { q: "React.memo used for?", a: ["Prevent re-render","State management","Effect","Routing"], correct: 0 },
+      { q: "useEffect cleanup function?", a: ["Return function inside useEffect","State update","Ref update","Prop update"], correct: 0 },
+      { q: "React portal used for?", a: ["Render outside DOM hierarchy","State","Effect","Routing"], correct: 0 }
+    ],
+  },
 ];
 
 const Quiz = () => {
