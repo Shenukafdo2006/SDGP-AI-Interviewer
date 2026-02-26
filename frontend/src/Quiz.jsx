@@ -297,7 +297,7 @@ const quizzes = [
   {
   id: 14,
     title: "OOP",
-    description: "Intermediate Object-Oriented Programming Concepts",
+    description: "Intermediate OOP Concepts",
     difficulty: "Intermediate",
     questions: [
       { q: "OOP stands for?", a: ["Object Oriented Programming", "Open Object Program", "Object Operating Program", "Ordered Object Programming"], correct: 0 },
@@ -325,7 +325,38 @@ const quizzes = [
 
   {
     id: 15,
-    title: "CSS Fundamentals",
+    title: "Algorithm ",
+    description: "Intermediate Algorithm Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Algorithm is?", a: ["Step-by-step solution", "Programming language", "Database", "Variable"], correct: 0 },
+      { q: "Time complexity measures?", a: ["Execution time growth", "Memory size", "Variables", "Loops only"], correct: 0 },
+      { q: "O(n) means?", a: ["Linear growth", "Constant time", "Quadratic", "Logarithmic"], correct: 0 },
+      { q: "O(1) means?", a: ["Constant time", "Linear time", "Slow time", "Infinite"], correct: 0 },
+      { q: "Binary search requires?", a: ["Sorted array", "Unsorted array", "Object", "Tree"], correct: 0 },
+      { q: "Binary search complexity?", a: ["O(log n)", "O(n)", "O(n²)", "O(1)"], correct: 0 },
+      { q: "Linear search complexity?", a: ["O(n)", "O(log n)", "O(1)", "O(n²)"], correct: 0 },
+      { q: "Bubble sort complexity?", a: ["O(n²)", "O(log n)", "O(n)", "O(1)"], correct: 0 },
+      { q: "Fastest sorting average?", a: ["Quick sort", "Bubble sort", "Linear sort", "Simple sort"], correct: 0 },
+      { q: "Loop inside loop gives?", a: ["O(n²)", "O(n)", "O(1)", "O(log n)"], correct: 0 },
+      { q: "Flowchart represents?", a: ["Algorithm steps", "Database", "Language", "Compiler"], correct: 0 },
+      { q: "Pseudo code is?", a: ["Algorithm description", "Programming language", "Compiler", "Machine code"], correct: 0 },
+      { q: "Recursion means?", a: ["Function calls itself", "Loop", "Variable", "Array"], correct: 0 },
+      { q: "Base case needed for?", a: ["Stop recursion", "Start program", "Loop", "Sorting"], correct: 0 },
+      { q: "Stack uses?", a: ["LIFO", "FIFO", "Random", "Sorted"], correct: 0 },
+      { q: "Queue uses?", a: ["FIFO", "LIFO", "Random", "Sorted"], correct: 0 },
+      { q: "Best search algorithm?", a: ["Binary search", "Linear search", "Bubble search", "Simple search"], correct: 0 },
+      { q: "Worst case complexity?", a: ["Maximum time", "Minimum time", "Average time", "No time"], correct: 0 },
+      { q: "Best case complexity?", a: ["Minimum time", "Maximum time", "Average time", "No time"], correct: 0 },
+      { q: "Divide and conquer example?", a: ["Merge sort", "Linear search", "Bubble sort", "Simple loop"], correct: 0 }
+    ],
+  },
+
+  
+
+  {
+    id: 16,
+    title: "CSS ",
     description: "Styling the Web",
     difficulty: "Advanced",
     questions: [
