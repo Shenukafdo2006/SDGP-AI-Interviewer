@@ -238,6 +238,35 @@ const quizzes = [
 
   {
     id: 12,
+    title: "HTML",
+    description: "Intermediate HTML Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "HTML stands for?", a: ["HyperText Markup Language", "HighText Machine Language", "Hyper Tool Markup", "Home Tool Markup"], correct: 0 },
+      { q: "Semantic tag example?", a: ["<article>", "<div>", "<span>", "<b>"], correct: 0 },
+      { q: "Which tag defines navigation?", a: ["<nav>", "<menu>", "<link>", "<navigate>"], correct: 0 },
+      { q: "Which tag embeds video?", a: ["<video>", "<media>", "<movie>", "<embedvideo>"], correct: 0 },
+      { q: "Which tag embeds audio?", a: ["<audio>", "<sound>", "<music>", "<mp3>"], correct: 0 },
+      { q: "Form submission method attribute?", a: ["method", "type", "actionto", "submit"], correct: 0 },
+      { q: "Form data sent to?", a: ["action", "method", "target", "name"], correct: 0 },
+      { q: "Required input attribute?", a: ["required", "validate", "must", "needed"], correct: 0 },
+      { q: "Placeholder attribute shows?", a: ["Hint text", "Value", "Label", "Title"], correct: 0 },
+      { q: "Which input type for email?", a: ["email", "mail", "textmail", "inputmail"], correct: 0 },
+      { q: "Open link new tab?", a: ['target="_blank"', 'target="new"', 'newtab', 'blank'], correct: 0 },
+      { q: "Image alternative text attribute?", a: ["alt", "title", "src", "text"], correct: 0 },
+      { q: "Table row tag?", a: ["<tr>", "<td>", "<th>", "<table>"], correct: 0 },
+      { q: "Table header tag?", a: ["<th>", "<td>", "<tr>", "<thead>"], correct: 0 },
+      { q: "Grouping form elements?", a: ["<fieldset>", "<group>", "<formgroup>", "<section>"], correct: 0 },
+      { q: "Dropdown list tag?", a: ["<select>", "<dropdown>", "<list>", "<optionlist>"], correct: 0 },
+      { q: "Option inside dropdown?", a: ["<option>", "<item>", "<choice>", "<selectitem>"], correct: 0 },
+      { q: "Meta viewport used for?", a: ["Responsive design", "SEO", "JavaScript", "Forms"], correct: 0 },
+      { q: "Inline element example?", a: ["<span>", "<div>", "<section>", "<article>"], correct: 0 },
+      { q: "Block element example?", a: ["<div>", "<span>", "<a>", "<b>"], correct: 0 }
+    ],
+  },
+
+  {
+    id: 13,
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
