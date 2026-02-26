@@ -459,7 +459,45 @@ const quizzes = [
     ],
   },
   
-  
+  {
+    id: 19,
+    title: "Java",
+    description: "Expert Level Java Programming",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Which keyword creates a class?", a: ["class","object","new","define"], correct: 0 },
+      { q: "Which method is entry point?", a: ["main()","start()","run()","init()"], correct: 0 },
+      { q: "Primitive type for decimal?", a: ["int","float","boolean","char"], correct: 1 },
+      { q: "Primitive type for true/false?", a: ["int","double","boolean","char"], correct: 2 },
+      { q: "Which creates object?", a: ["class","new","object","define"], correct: 1 },
+      { q: "Which is inheritance keyword?", a: ["implements","extends","inherits","super"], correct: 1 },
+      { q: "Abstract method must be in?", a: ["Concrete class","Interface","Abstract class","Object"], correct: 2 },
+      { q: "Interface keyword?", a: ["interface","implements","abstract","extends"], correct: 0 },
+      { q: "Package import keyword?", a: ["include","import","require","package"], correct: 1 },
+      { q: "Static variable belongs to?", a: ["Object","Class","Method","Instance"], correct: 1 },
+      { q: "Final variable means?", a: ["Mutable","Constant","Overridable","Temporary"], correct: 1 },
+      { q: "Which keyword prevents method override?", a: ["final","static","private","const"], correct: 0 },
+      { q: "Constructor has?", a: ["Return type","No return type","void","int"], correct: 1 },
+      { q: "Which loop guarantees at least one execution?", a: ["for","while","do-while","foreach"], correct: 2 },
+      { q: "Which keyword handles exception?", a: ["try","catch","throw","All of these"], correct: 3 },
+      { q: "Throw keyword?", a: ["Raises exception","Catches exception","Defines method","Loops"], correct: 0 },
+      { q: "Which method is used to start thread?", a: ["run()","start()","execute()","init()"], correct: 1 },
+      { q: "Which package contains Thread class?", a: ["java.util","java.lang","java.io","java.thread"], correct: 1 },
+      { q: "Generics used for?", a: ["Type safety","Loops","Exceptions","Objects"], correct: 0 },
+      { q: "Which is checked exception?", a: ["ArithmeticException","IOException","NullPointerException","ArrayIndexOutOfBoundsException"], correct: 1 },
+      { q: "Which is unchecked exception?", a: ["IOException","SQLException","NullPointerException","FileNotFoundException"], correct: 2 },
+      { q: "String is?", a: ["Primitive","Object","Interface","Class"], correct: 1 },
+      { q: "Which method compares strings?", a: ["==","equals()","compareTo()","All"], correct: 3 },
+      { q: "Which collection allows duplicate?", a: ["Set","Map","List","Queue"], correct: 2 },
+      { q: "Which collection no duplicates?", a: ["Set","List","Map","Queue"], correct: 0 },
+      { q: "HashMap key type must?", a: ["Unique","Duplicate","Primitive","Object"], correct: 0 },
+      { q: "Which keyword for interface implementation?", a: ["implements","extends","inherit","override"], correct: 0 },
+      { q: "Super keyword refers to?", a: ["Parent class","Child class","Interface","Method"], correct: 0 },
+      { q: "this keyword refers to?", a: ["Current object","Parent object","Class object","Static object"], correct: 0 },
+      { q: "Synchronized keyword used for?", a: ["Thread safety","Variable declaration","Loop control","Exception handling"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
