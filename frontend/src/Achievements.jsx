@@ -1,109 +1,89 @@
 import React, { useState, useEffect } from "react";
 import "./Achievements.css";
 
-// Initial stats and XP
-const initialStats = [
-  { icon: "🏆", label: "Achievements", value: 4 },
-  { icon: "🔥", label: "Day Streak", value: 15 },
-  { icon: "⚡", label: "Level", value: 10 },
+const userId = "user123";
+
+const defaultStats = [
+  { icon: "🏆", label: "Achievements", value: 0 },
+  { icon: "🔥", label: "Day Streak", value: 0 },
+  { icon: "⚡", label: "Level", value: 1 },
 ];
 
-const initialXp = {
-  level: 10,
-  current: 800,
+const defaultXp = {
+  level: 1,
+  current: 0,
   total: 1000,
-  title: "Career Achiever",
+  title: "Career Starter",
   icon: "⚡",
 };
 
-// Default achievements
-const defaultAchievements = [
-  {
-    name: "First Interview",
-    desc: "Completed your first mock interview",
-    unlocked: true,
-    date: "2024-10-15",
-    color: "#a020f0",
-    icon: "🔒",
-  },
-  {
-    name: "Quiz Master",
-    desc: "Scored 100% on 5 quizzes",
-    unlocked: true,
-    date: "2024-10-22",
-    color: "#ffa500",
-    icon: "🏆",
-  },
-  {
-    name: "Week Warrior",
-    desc: "Maintained a 7-day learning streak",
-    unlocked: true,
-    date: "2024-10-28",
-    color: "#ff0066",
-    icon: "🔥",
-  },
-  {
-    name: "CV Creator",
-    desc: "Created and downloaded your CV",
-    unlocked: true,
-    date: "2024-11-01",
-    color: "#a020f0",
-    icon: "📄",
-  },
-  {
-    name: "Knowledge Seeker",
-    desc: "Read 20 learning resources",
-    unlocked: false,
-    progress: { current: 12, total: 20 },
-    color: "#3b82f6",
-    icon: "⚡",
-  },
-  {
-    name: "Perfect Score",
-    desc: "Get 90%+ on 10 interviews",
-    unlocked: false,
-    progress: { current: 3, total: 10 },
-    color: "#22c55e",
-    icon: "⭕",
-  },
-];
-
 const Achievements = () => {
-  const [stats, setStats] = useState(initialStats);
-  const [xp, setXp] = useState(initialXp);
-  const [achievements, setAchievements] = useState(defaultAchievements);
-  const userId = "user123"; // Firestore user document ID
+  const [stats, setStats] = useState(defaultStats);
+  const [xp, setXp] = useState(defaultXp);
+  const [achievements, setAchievements] = useState([]);
+  const [courses, setCourses] = useState([]);
 
-  // Fetch user data from backend
   const fetchUserData = async () => {
     try {
       const res = await fetch(`http://localhost:5000/api/user/${userId}`);
-      if (!res.ok) throw new Error("Failed to fetch user data");
+      if (!res.ok) throw new Error("User not found");
       const data = await res.json();
 
-      setStats(data.stats || initialStats);
-      setXp(data.xp || initialXp);
-      setAchievements(data.achievements || defaultAchievements);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+      setStats(data.stats || defaultStats);
+      setXp(data.xp || defaultXp);
+      setAchievements(data.achievements || []);
+      setCourses(data.courses || []); // new
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setStats(defaultStats);
+      setXp(defaultXp);
+      setAchievements([]);
+      setCourses([]);
     }
   };
 
-  // Update achievement progress or unlock
-  const updateAchievement = async (achName, unlocked, progress) => {
+  // Unlock course or mark complete
+  const handleCourseProgress = async (course) => {
+    if (course.completed) return;
+
+    const progress = course.progress
+      ? { current: course.progress.total, total: course.progress.total }
+      : null;
+
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/user/${userId}/achievement/${achName}`,
+      await fetch(
+        `http://localhost:5000/api/user/${userId}/course/${course.name}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ unlocked, progress }),
+          body: JSON.stringify({ completed: true, progress }),
         }
       );
-      if (!res.ok) throw new Error("Failed to update achievement");
-      fetchUserData(); // Refresh data after update
-    } catch (error) {
-      console.error("Error updating achievement:", error);
+      fetchUserData();
+    } catch (err) {
+      console.error("Error updating course:", err);
+    }
+  };
+
+  const handleUnlockAchievement = async (ach) => {
+    if (ach.unlocked) return;
+
+    const progress = ach.progress
+      ? { current: ach.progress.total, total: ach.progress.total }
+      : null;
+
+    try {
+      await fetch(
+        `http://localhost:5000/api/user/${userId}/achievement/${ach.name}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ unlocked: true, progress }),
+        }
+      );
+      fetchUserData();
+    } catch (err) {
+      console.error("Error updating achievement:", err);
     }
   };
 
@@ -129,7 +109,6 @@ const Achievements = () => {
         <div className="xp-icon">{xp.icon}</div>
         <div className="xp-level">Level {xp.level}</div>
         <div className="xp-title">{xp.title}</div>
-
         <div className="xp-bar">
           <div
             className="xp-fill"
@@ -141,12 +120,52 @@ const Achievements = () => {
         </div>
       </div>
 
+      {/* Courses */}
+      <div className="courses-grid">
+        {courses.map((course, idx) => {
+          const progressPercent =
+            course.progress &&
+            (course.progress.current / course.progress.total) * 100;
+
+          return (
+            <div
+              key={idx}
+              className={`course-card ${
+                course.completed ? "completed" : "in-progress"
+              }`}
+              onClick={() => handleCourseProgress(course)}
+              style={{
+                borderColor: course.completed ? "#22c55e" : "#e5e7eb",
+              }}
+            >
+              <div className="course-name">{course.name}</div>
+              <div className="course-desc">{course.desc}</div>
+
+              {course.completed ? (
+                <div className="badge completed-badge">Completed</div>
+              ) : (
+                <>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                  <div className="badge locked-badge">
+                    {course.progress?.current}/{course.progress?.total}
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
       {/* Achievements */}
       <div className="achievements-grid">
         {achievements.map((ach, idx) => {
           const progressPercent =
-            ach.progress &&
-            (ach.progress.current / ach.progress.total) * 100;
+            ach.progress && (ach.progress.current / ach.progress.total) * 100;
 
           return (
             <div
@@ -154,9 +173,8 @@ const Achievements = () => {
               className={`achievement-card ${
                 ach.unlocked ? "unlocked" : "locked"
               }`}
-              style={{
-                borderColor: ach.unlocked ? ach.color : "#e5e7eb",
-              }}
+              onClick={() => handleUnlockAchievement(ach)}
+              style={{ borderColor: ach.unlocked ? ach.color : "#e5e7eb" }}
             >
               <div
                 className="achievement-icon"
@@ -164,7 +182,6 @@ const Achievements = () => {
               >
                 {ach.icon}
               </div>
-
               <div className="achievement-name">{ach.name}</div>
               <div className="achievement-desc">{ach.desc}</div>
 
@@ -174,15 +191,16 @@ const Achievements = () => {
                 </div>
               ) : (
                 <>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${progressPercent}%` }}
-                    />
-                  </div>
-
+                  {ach.progress && (
+                    <div className="progress-bar">
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
+                  )}
                   <div className="badge locked-badge">
-                    {ach.progress.current}/{ach.progress.total}
+                    {ach.progress?.current}/{ach.progress?.total}
                   </div>
                 </>
               )}
