@@ -498,6 +498,45 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 20,
+    title: "HTML",
+    description: "Expert Level HTML",
+    difficulty: "Advanced",
+    questions: [
+      { q: "HTML stands for?", a: ["Hyper Text Markup Language","Home Tool Markup Language","Hyperlinks Text Mark Language","Hyper Tool Multi Language"], correct: 0 },
+      { q: "Root element of HTML?", a: ["<html>","<body>","<head>","<div>"], correct: 0 },
+      { q: "Metadata goes inside?", a: ["<head>","<body>","<footer>","<section>"], correct: 0 },
+      { q: "Main content goes inside?", a: ["<body>","<head>","<meta>","<link>"], correct: 0 },
+      { q: "Self-closing tag?", a: ["<br>","<div>","<p>","<span>"], correct: 0 },
+      { q: "HTML comment syntax?", a: ["<!-- Comment -->","// Comment","/* Comment */","# Comment"], correct: 0 },
+      { q: "Which tag defines a hyperlink?", a: ["<a>","<link>","<href>","<hyper>"], correct: 0 },
+      { q: "Open link in new tab?", a: ["target='_blank'","rel='new'","open='_tab'","href='new'"], correct: 0 },
+      { q: "Image tag attribute for source?", a: ["src","href","link","ref"], correct: 0 },
+      { q: "Image alt attribute?", a: ["Alternative text","Source text","Reference text","Hyperlink text"], correct: 0 },
+      { q: "HTML table row?", a: ["<tr>","<td>","<th>","<table>"], correct: 0 },
+      { q: "HTML table header?", a: ["<th>","<td>","<tr>","<thead>"], correct: 0 },
+      { q: "Table data cell?", a: ["<td>","<tr>","<th>","<table>"], correct: 0 },
+      { q: "Form element tag?", a: ["<form>","<input>","<button>","<label>"], correct: 0 },
+      { q: "Input text field type?", a: ["text","password","number","email"], correct: 0 },
+      { q: "Input password field type?", a: ["password","text","hidden","secure"], correct: 0 },
+      { q: "Submit button type?", a: ["submit","button","reset","form"], correct: 0 },
+      { q: "Label for input?", a: ["<label>","<span>","<div>","<input>"], correct: 0 },
+      { q: "HTML5 semantic tag for header?", a: ["<header>","<head>","<top>","<section>"], correct: 0 },
+      { q: "HTML5 semantic tag for footer?", a: ["<footer>","<foot>","<bottom>","<section>"], correct: 0 },
+      { q: "HTML5 semantic tag for main content?", a: ["<main>","<section>","<article>","<div>"], correct: 0 },
+      { q: "HTML5 semantic tag for section?", a: ["<section>","<div>","<article>","<span>"], correct: 0 },
+      { q: "HTML5 semantic tag for article?", a: ["<article>","<section>","<div>","<main>"], correct: 0 },
+      { q: "Meta tag for charset?", a: ["<meta charset='UTF-8'>","<meta type='UTF-8'>","<meta code='UTF-8'>","<meta encoding='UTF-8'>"], correct: 0 },
+      { q: "Favicon tag?", a: ["<link rel='icon' href='favicon.ico'>","<meta icon='favicon.ico'>","<link href='favicon.ico'>","<favicon>"], correct: 0 },
+      { q: "HTML5 video tag?", a: ["<video>","<media>","<movie>","<play>"], correct: 0 },
+      { q: "Video autoplay attribute?", a: ["autoplay","play","start","run"], correct: 0 },
+      { q: "Audio tag?", a: ["<audio>","<sound>","<music>","<media>"], correct: 0 },
+      { q: "Audio autoplay?", a: ["autoplay","play","start","run"], correct: 0 },
+      { q: "HTML5 canvas tag?", a: ["<canvas>","<draw>","<paint>","<svg>"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
