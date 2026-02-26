@@ -267,6 +267,34 @@ const quizzes = [
 
   {
     id: 13,
+    title: "Python",
+    description: "Intermediate Python Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Python is a?", a: ["Interpreted language", "Database", "Browser", "Operating System"], correct: 0 },
+      { q: "Which keyword defines function?", a: ["def", "function", "func", "method"], correct: 0 },
+      { q: "List is defined using?", a: ["[]", "{}", "()", "<>"], correct: 0 },
+      { q: "Dictionary uses?", a: ["{}", "[]", "()", "<>"], correct: 0 },
+      { q: "Tuple uses?", a: ["()", "[]", "{}", "<>"], correct: 0 },
+      { q: "Lambda is?", a: ["Anonymous function", "Loop", "Variable", "Class"], correct: 0 },
+      { q: "Which handles exceptions?", a: ["try-except", "if-else", "loop", "switch"], correct: 0 },
+      { q: "Which imports module?", a: ["import", "include", "require", "using"], correct: 0 },
+      { q: "len() returns?", a: ["Length", "Value", "Type", "Index"], correct: 0 },
+      { q: "range() used for?", a: ["Loops", "Strings", "Files", "Classes"], correct: 0 },
+      { q: "Append item to list?", a: ["append()", "add()", "insertEnd()", "push()"], correct: 0 },
+      { q: "Remove item from list?", a: ["remove()", "delete()", "erase()", "cut()"], correct: 0 },
+      { q: "Dictionary key-value pair?", a: ["key:value", "key=value", "key->value", "key|value"], correct: 0 },
+      { q: "Class keyword?", a: ["class", "object", "define", "struct"], correct: 0 },
+      { q: "Object created by?", a: ["Class()", "new Class", "object()", "create()"], correct: 0 },
+      { q: "Constructor method?", a: ["__init__", "start()", "constructor()", "main()"], correct: 0 },
+      { q: "Self refers to?", a: ["Current object", "Class", "Function", "Loop"], correct: 0 },
+      { q: "Which reads file?", a: ["open()", "readfile()", "file()", "load()"], correct: 0 },
+      { q: "Which converts string to int?", a: ["int()", "str()", "float()", "number()"], correct: 0 },
+      { q: "List comprehension returns?", a: ["New list", "String", "Boolean", "Tuple"], correct: 0 }
+    ],
+  },
+
+  {
     title: "CSS Fundamentals",
     description: "Styling the Web",
     difficulty: "Advanced",
