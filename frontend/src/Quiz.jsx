@@ -380,7 +380,7 @@ const quizzes = [
       { q: "Block element example?", a: ["div", "span", "a", "b"], correct: 0 }
     ],
   },
-  
+
   {
     id: 17,
     title: "CSS",
@@ -420,6 +420,44 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 18,
+    title: "JavaScript",
+    description: "Expert Level JavaScript",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Closure stores?", a: ["Local scope","Global scope","Parent scope variables","Loop data"], correct: 2 },
+      { q: "Async function returns?", a: ["Object","Promise","String","Number"], correct: 1 },
+      { q: "Await works with?", a: ["Loops","Promises","Objects","Strings"], correct: 1 },
+      { q: "Strict equality operator?", a: ["==","===","!=","="], correct: 1 },
+      { q: "Spread operator symbol?", a: ["...","***","///","+++"], correct: 0 },
+      { q: "Template string uses?", a: ["''","\"\"","``","<>"], correct: 2 },
+      { q: "JSON to object?", a: ["JSON.parse()","JSON.make()","JSON.object()","JSON.convert()"], correct: 0 },
+      { q: "Object to JSON?", a: ["JSON.parse()","JSON.stringify()","JSON.make()","JSON.object()"], correct: 1 },
+      { q: "Block scope variable?", a: ["var","let","const","Both let and const"], correct: 3 },
+      { q: "typeof null returns?", a: ["null","object","undefined","number"], correct: 1 },
+      { q: "Array map returns?", a: ["Boolean","New array","String","Object"], correct: 1 },
+      { q: "Filter returns?", a: ["Single value","New array","Boolean","String"], correct: 1 },
+      { q: "Reduce returns?", a: ["Array","Boolean","Single value","String"], correct: 2 },
+      { q: "Event listener method?", a: ["addEventListener()","listenEvent()","onClick()","attach()"], correct: 0 },
+      { q: "Stop event bubbling?", a: ["prevent()","stop()","stopPropagation()","cancel()"], correct: 2 },
+      { q: "Local storage type?", a: ["Object","String","Function","Array"], correct: 1 },
+      { q: "Session storage ends when?", a: ["Refresh","Browser close","Logout","Forever"], correct: 1 },
+      { q: "Arrow function uses?", a: ["=>","->","==>", "::"], correct: 0 },
+      { q: "Default export keyword?", a: ["export default","export main","default export","module export"], correct: 0 },
+      { q: "Import keyword?", a: ["require","include","import","using"], correct: 2 },
+      { q: "Promise success method?", a: [".then()",".catch()",".error()",".done()"], correct: 0 },
+      { q: "Promise error method?", a: [".then()",".catch()",".done()",".stop()"], correct: 1 },
+      { q: "Delay function?", a: ["setTime()","setTimeout()","delay()","wait()"], correct: 1 },
+      { q: "Repeat function?", a: ["setLoop()","setRepeat()","setInterval()","repeat()"], correct: 2 },
+      { q: "this refers to?", a: ["Window always","Current object","Parent object","Document"], correct: 1 },
+      { q: "Const variable?", a: ["Changeable","Fixed value","Function only","Temporary"], correct: 1 },
+      { q: "Let variable scope?", a: ["Global","Block","Function","Window"], correct: 1 },
+      { q: "NaN means?", a: ["New number","Not a Number","Negative number","Null number"], correct: 1 },
+      { q: "Destructuring does?", a: ["Sort data","Extract values","Delete values","Copy values"], correct: 1 },
+      { q: "Deep copy method?", a: ["=","Object.assign()","JSON.parse(JSON.stringify(obj))","copy(obj)"], correct: 2 }
+    ],
+  },
   
   
 ];
@@ -441,7 +479,7 @@ const Quiz = () => {
     setShowResult(false);
     setSelectedAnswer(null);
     setIsAnswered(false);
-    setTimer(60);
+    setTimer(600);
   };
 
   useEffect(() => {
