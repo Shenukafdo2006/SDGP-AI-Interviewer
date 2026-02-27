@@ -2,8 +2,8 @@ import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
-import Signup from '../authPage/signup'
-import Login from '../authPage/login'
+// import Signup from '../authPage/signup'
+// import Login from '../authPage/login'
 import DashBoard from './DashBoard'
 import InterviewTraining from './InterviewTraining'
 import LiveInterview from './LiveInterview'
@@ -19,18 +19,22 @@ import SkillImprovement from './SkillImprovement'
 import DailyMotivation from './DailyMotivation'
 
 function App() {
- 
-  const [view, setView] = useState('signup')
-
   
+  // 🔹 Start directly from dashboard
+  const [view, setView] = useState('dashboard')
+
+  /*
+  // 🔹 Signup Page
   if (view === 'signup') {
     return (
       <Signup 
         onSignupSuccess={() => setView('dashboard')} 
-         onGoToLogin={() => setView('login')}
+        onGoToLogin={() => setView('login')}
       />
     )
   }
+
+  // 🔹 Login Page
   if (view === 'login') {
     return (
       <Login
@@ -39,7 +43,7 @@ function App() {
       />
     )
   }
-
+  */
 
   // 🔹 Training Page
   if (view === 'training') {
@@ -90,7 +94,6 @@ function App() {
   if (view === 'daily-motivation')
     return <DailyMotivation onBack={() => setView('dashboard')} />
 
-  
   return <DashBoard setView={setView} />
 }
 
