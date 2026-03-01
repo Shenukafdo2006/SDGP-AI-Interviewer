@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "./Achievements.css";
+import React, { useState, useEffect, useCallback } from "react";
+// In your real project, replace the <style> tag below with:
+// import "./Achievements.css";
 
 const API = "http://localhost:5000";
 
@@ -18,214 +19,379 @@ const initialXp = {
 };
 
 const defaultAchievements = [
-  { name: "First Interview",  desc: "Completed your first mock interview", color: "#a855f7", icon: "🎤", xp: 50,  unlocked: false },
-  { name: "Quiz Master",      desc: "Scored 100% on 5 quizzes",           color: "#f59e0b", icon: "🏆", xp: 70,  unlocked: false },
-  { name: "Week Warrior",     desc: "Maintained a 7-day learning streak",  color: "#ef4444", icon: "🔥", xp: 60,  unlocked: false },
-  { name: "CV Creator",       desc: "Created and downloaded your CV",      color: "#8b5cf6", icon: "📄", xp: 40,  unlocked: false },
-  { name: "Knowledge Seeker", desc: "Read 20 learning resources",          color: "#3b82f6", icon: "📚", xp: 80,  unlocked: false },
-  { name: "Perfect Score",    desc: "Get 90%+ on 10 interviews",           color: "#22c55e", icon: "⭐", xp: 90,  unlocked: false },
+  { name: "First Interview",  desc: "Completed your first mock interview", color: "#c084fc", icon: "🎤", xp: 50,  unlocked: false },
+  { name: "Quiz Master",      desc: "Scored 100% on 5 quizzes",           color: "#fbbf24", icon: "🏆", xp: 70,  unlocked: false },
+  { name: "Week Warrior",     desc: "Maintained a 7-day learning streak",  color: "#f87171", icon: "🔥", xp: 60,  unlocked: false },
+  { name: "CV Creator",       desc: "Created and downloaded your CV",      color: "#a78bfa", icon: "📄", xp: 40,  unlocked: false },
+  { name: "Knowledge Seeker", desc: "Read 20 learning resources",          color: "#60a5fa", icon: "📚", xp: 80,  unlocked: false },
+  { name: "Perfect Score",    desc: "Get 90%+ on 10 interviews",           color: "#34d399", icon: "⭐", xp: 90,  unlocked: false },
 ];
 
 function hexAlpha(hex, alpha) {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
+  const safeHex = hex && hex.startsWith("#") && hex.length >= 7 ? hex : "#6366f1";
+  const r = parseInt(safeHex.slice(1, 3), 16);
+  const g = parseInt(safeHex.slice(3, 5), 16);
+  const b = parseInt(safeHex.slice(5, 7), 16);
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+const CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+  html, body, #root {
+    height: 100%; width: 100%; margin: 0; padding: 0;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+
+  .ach-page {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #080b14;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 85% 85%, rgba(168,85,247,0.10) 0%, transparent 50%);
+    min-height: 100vh;
+    width: 100%;
+    color: #e2e8f0;
+    padding: 36px 28px 60px;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .ach-header { text-align: center; margin-bottom: 32px; }
+  .ach-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 50%, #c084fc 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 6px;
+  }
+  .ach-header p { font-size: 13px; color: #475569; }
+
+  /* Stats */
+  .ach-stats-row {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 12px; margin-bottom: 16px;
+  }
+  .ach-stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 20px 12px; text-align: center;
+    transition: border-color 0.3s, transform 0.25s;
+  }
+  .ach-stat-card:hover { border-color: rgba(255,255,255,0.13); transform: translateY(-2px); }
+  .ach-stat-icon  { font-size: 22px; display: block; margin-bottom: 8px; }
+  .ach-stat-value {
+    font-family: 'Syne', sans-serif; font-size: 30px; font-weight: 800;
+    color: #fff; display: block; line-height: 1;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .ach-stat-value.bump { transform: scale(1.4); }
+  .ach-stat-label {
+    font-size: 10px; color: #475569; text-transform: uppercase;
+    letter-spacing: 0.09em; font-weight: 500; margin-top: 5px; display: block;
+  }
+
+  /* XP Card */
+  .ach-xp-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px; padding: 22px 24px; margin-bottom: 32px;
+    position: relative; overflow: hidden;
+  }
+  .ach-xp-card::after {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ach-xp-top { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .ach-xp-emoji {
+    width: 50px; height: 50px;
+    background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.28);
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .ach-xp-level  { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
+  .ach-xp-title  { font-size: 12px; color: #475569; margin-top: 2px; }
+  .ach-xp-bar-wrap {
+    background: rgba(255,255,255,0.06); border-radius: 99px; height: 7px; overflow: hidden;
+  }
+  .ach-xp-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #6366f1 0%, #a855f7 60%, #c084fc 100%);
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1); position: relative;
+  }
+  .ach-xp-bar-fill::after {
+    content: ''; position: absolute; right: -1px; top: 0;
+    width: 8px; height: 100%; background: rgba(255,255,255,0.7);
+    border-radius: 99px; filter: blur(3px);
+  }
+  .ach-xp-numbers {
+    display: flex; justify-content: space-between;
+    margin-top: 8px; font-size: 11px; color: #475569;
+  }
+  .xp-highlight { color: #a5b4fc; font-weight: 500; }
+
+  /* Section title */
+  .ach-section-title {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em; color: #334155;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .ach-section-title::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05);
+  }
+
+  /* Grid */
+  .ach-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  /* Card */
+  .ach-card {
+    border-radius: 18px; padding: 22px 16px 16px; text-align: center;
+    position: relative; overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex; flex-direction: column; align-items: center; cursor: pointer;
+  }
+  .ach-card.locked {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .ach-card.locked:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+  .ach-card.unlocked {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    box-shadow: 0 0 30px var(--c-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .ach-card.unlocked::before {
+    content: ''; position: absolute; top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+    pointer-events: none;
+  }
+  @keyframes pop-in {
+    0%   { transform: scale(0.88); opacity: 0.5; }
+    65%  { transform: scale(1.04); }
+    100% { transform: scale(1);    opacity: 1;   }
+  }
+  .ach-card.just-unlocked { animation: pop-in 0.42s cubic-bezier(0.34,1.56,0.64,1); }
+
+  .ach-card-icon-wrap {
+    width: 58px; height: 58px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 12px; position: relative; z-index: 1;
+    transition: transform 0.3s, background 0.3s, border-color 0.3s;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  }
+  .ach-card.unlocked .ach-card-icon-wrap {
+    background: var(--c-icon-bg); border-color: var(--c-border); transform: scale(1.1);
+  }
+  .ach-card-name {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    color: #cbd5e1; margin-bottom: 5px; position: relative; z-index: 1;
+    transition: color 0.3s;
+  }
+  .ach-card.unlocked .ach-card-name { color: #fff; }
+  .ach-card-desc {
+    font-size: 11px; color: #334155; line-height: 1.55; margin-bottom: 12px;
+    position: relative; z-index: 1; flex: 1; transition: color 0.3s;
+  }
+  .ach-card.unlocked .ach-card-desc { color: #64748b; }
+  .ach-card-xp {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+    margin-bottom: 12px; position: relative; z-index: 1; transition: color 0.3s;
+  }
+
+  /* Button */
+  .ach-unlock-btn {
+    width: 100%; padding: 9px 0; border-radius: 10px;
+    border: 1px solid transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.04em; cursor: pointer;
+    transition: all 0.25s ease; position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .ach-unlock-btn.btn-locked {
+    background: rgba(255,255,255,0.05); color: #475569;
+    border-color: rgba(255,255,255,0.07);
+  }
+  .ach-unlock-btn.btn-locked:hover {
+    background: rgba(255,255,255,0.09); color: #94a3b8;
+    border-color: rgba(255,255,255,0.14);
+  }
+  .ach-unlock-btn.btn-unlocked {
+    background: var(--c-btn-bg); color: #fff;
+    border-color: var(--c-border); cursor: default;
+    box-shadow: 0 2px 14px var(--c-glow);
+  }
+
+  /* Loading */
+  .ach-loading {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 60vh; gap: 16px; color: #334155; font-size: 13px;
+  }
+  .ach-spinner {
+    width: 32px; height: 32px;
+    border: 2px solid rgba(99,102,241,0.2); border-top-color: #6366f1;
+    border-radius: 50%; animation: spin 0.75s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .ach-page { padding: 24px 16px 48px; }
+    .ach-stats-row { gap: 8px; }
+    .ach-stat-value { font-size: 24px; }
+    .ach-grid { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 10px; }
+  }
+`;
 
 const Achievements = () => {
   const [stats,        setStats]        = useState(initialStats);
   const [xp,           setXp]           = useState(initialXp);
   const [achievements, setAchievements] = useState(defaultAchievements);
-  const [courses,      setCourses]      = useState([]);
   const [bumpAch,      setBumpAch]      = useState(false);
+  const [justUnlocked, setJustUnlocked] = useState(null);
   const [loading,      setLoading]      = useState(true);
-  const [error,        setError]        = useState(null);
+  const [retryCount]                    = useState(0);
 
   const userId = "user123";
 
-  useEffect(() => {
-    fetch(`${API}/api/user/${userId}`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
+  const loadUser = useCallback(() => {
+    setLoading(true);
+    fetch(`${API}/api/user/${userId}`, { signal: AbortSignal.timeout(8000) })
+      .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then((data) => {
-        setStats(data.stats               || initialStats);
-        setXp(data.xp                     || initialXp);
-        setAchievements(data.achievements || defaultAchievements);
-        setCourses(data.courses           || []);
+        if (data.stats)        setStats(data.stats);
+        if (data.xp)           setXp(data.xp);
+        if (data.achievements) setAchievements(data.achievements);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setError("Could not connect to server. Showing local data.");
-        setLoading(false);
-      });
-  }, []);
+      .catch(() => setLoading(false));
+  }, [retryCount]);
 
-  const clickAchievement = async (ach) => {
-    if (ach.unlocked) return;
+  useEffect(() => { loadUser(); }, [loadUser]);
 
-    setAchievements((prev) =>
-      prev.map((a) => (a.name === ach.name ? { ...a, unlocked: true } : a))
-    );
-    setStats((prev) =>
-      prev.map((s) =>
-        s.label === "Achievements" ? { ...s, value: s.value + 1 } : s
-      )
-    );
-    setXp((prev) => {
-      let c = prev.current + ach.xp, l = prev.level, t = prev.total;
-      if (c >= t) { l++; c -= t; t += 500; }
-      return { ...prev, current: c, level: l, total: t };
-    });
-    setBumpAch(true);
-    setTimeout(() => setBumpAch(false), 500);
-
-    try {
-      const res = await fetch(
-        `${API}/api/user/${userId}/achievement/${encodeURIComponent(ach.name)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ unlocked: true }),
-        }
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data.xp)    setXp(data.xp);
-      if (data.stats) setStats(data.stats);
-    } catch (err) {
-      console.error(err);
-      setAchievements((prev) =>
-        prev.map((a) => (a.name === ach.name ? { ...a, unlocked: false } : a))
-      );
-      setStats((prev) =>
-        prev.map((s) =>
-          s.label === "Achievements" ? { ...s, value: Math.max(0, s.value - 1) } : s
-        )
-      );
-    }
+  const addXp = (prev, amount) => {
+    let c = prev.current + amount, l = prev.level, t = prev.total;
+    if (c >= t) { l++; c -= t; t += 500; }
+    return { ...prev, current: c, level: l, total: t };
   };
 
-  const clickCourse = async (course) => {
-    if (course.unlocked) return;
+  const clickAchievement = (ach) => {
+    if (ach.unlocked) return;
+    setAchievements((prev) => prev.map((a) => a.name === ach.name ? { ...a, unlocked: true } : a));
+    setStats((prev) => prev.map((s) => s.label === "Achievements" ? { ...s, value: s.value + 1 } : s));
+    setXp((prev) => addXp(prev, ach.xp));
+    setBumpAch(true);
+    setJustUnlocked(ach.name);
+    setTimeout(() => setBumpAch(false), 500);
+    setTimeout(() => setJustUnlocked(null), 450);
 
-    setCourses((prev) =>
-      prev.map((c) => (c.name === course.name ? { ...c, unlocked: true } : c))
-    );
-    setXp((prev) => {
-      let c = prev.current + (course.xp || 50), l = prev.level, t = prev.total;
-      if (c >= t) { l++; c -= t; t += 500; }
-      return { ...prev, current: c, level: l, total: t };
-    });
-
-    try {
-      const res = await fetch(
-        `${API}/api/user/${userId}/course/${encodeURIComponent(course.name)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ unlocked: true }),
-        }
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data.course) {
-        setCourses((prev) =>
-          prev.map((c) =>
-            c.name === course.name ? { ...c, ...data.course, unlocked: true } : c
-          )
-        );
-      }
-      if (data.xp)    setXp(data.xp);
-      if (data.stats) setStats(data.stats);
-    } catch (err) {
-      console.error(err);
-      setCourses((prev) =>
-        prev.map((c) => (c.name === course.name ? { ...c, unlocked: false } : c))
-      );
-    }
+    fetch(`${API}/api/user/${userId}/achievement/${encodeURIComponent(ach.name)}`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ unlocked: true }),
+      signal:  AbortSignal.timeout(8000),
+    })
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.xp)    setXp(data.xp);
+        if (data?.stats) setStats(data.stats);
+      })
+      .catch(() => {});
   };
 
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
+  const xpPct = Math.min((xp.current / xp.total) * 100, 100);
 
   return (
-    <div className="ach-page">
-      {error && <div className="ach-error-banner">⚠️ {error}</div>}
-
-      {loading ? (
-        <div className="ach-loading">Loading achievements…</div>
-      ) : (
-        <>
-          <div className="ach-stats-row">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="ach-stat-card">
-                <span className="ach-stat-icon">{stat.icon}</span>
-                <span className={`ach-stat-value${stat.label === "Achievements" && bumpAch ? " bump" : ""}`}>
-                  {stat.value}
-                </span>
-                <span className="ach-stat-label">{stat.label}</span>
-              </div>
-            ))}
+    <>
+      <style>{CSS}</style>
+      <div className="ach-page">
+        {loading ? (
+          <div className="ach-loading">
+            <div className="ach-spinner" />
+            <span>Loading achievements…</span>
           </div>
-
-          <div className="ach-xp-card">
-            <div className="ach-xp-icon">{xp.icon}</div>
-            <div className="ach-xp-level">Level {xp.level}</div>
-            <div className="ach-xp-title">{xp.title}</div>
-            <div className="ach-xp-bar">
-              <div
-                className="ach-xp-fill"
-                style={{ width: `${Math.min((xp.current / xp.total) * 100, 100)}%` }}
-              />
-              <span className="ach-xp-text">{xp.current} / {xp.total} XP</span>
+        ) : (
+          <>
+            <div className="ach-header">
+              <h1>Your Achievements</h1>
+              <p>{unlockedCount} of {achievements.length} unlocked</p>
             </div>
-          </div>
 
-          <h2 className="ach-section-title">Achievements ({unlockedCount}/{achievements.length})</h2>
-          <div className="ach-grid">
-            {achievements.map((ach, idx) => (
-              <div
-                key={idx}
-                className={`ach-card ${ach.unlocked ? "unlocked" : "locked"}`}
-                style={{ "--c": ach.color, "--c-bg": hexAlpha(ach.color, 0.22) }}
-                onClick={() => clickAchievement(ach)}
-                title={ach.unlocked ? "✓ Achieved!" : "Click to unlock"}
-              >
-                <div className="ach-card-icon">{ach.icon}</div>
-                <div className="ach-card-name">{ach.name}</div>
-                <div className="ach-card-desc">{ach.desc}</div>
-                <div className="ach-card-xp">+{ach.xp} XP</div>
+            <div className="ach-stats-row">
+              {stats.map((stat, idx) => (
+                <div key={idx} className="ach-stat-card">
+                  <span className="ach-stat-icon">{stat.icon}</span>
+                  <span className={`ach-stat-value${stat.label === "Achievements" && bumpAch ? " bump" : ""}`}>
+                    {stat.value}
+                  </span>
+                  <span className="ach-stat-label">{stat.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="ach-xp-card">
+              <div className="ach-xp-top">
+                <div className="ach-xp-emoji">{xp.icon}</div>
+                <div>
+                  <div className="ach-xp-level">Level {xp.level}</div>
+                  <div className="ach-xp-title">{xp.title}</div>
+                </div>
               </div>
-            ))}
-          </div>
+              <div className="ach-xp-bar-wrap">
+                <div className="ach-xp-bar-fill" style={{ width: `${xpPct}%` }} />
+              </div>
+              <div className="ach-xp-numbers">
+                <span>{xp.current} XP earned</span>
+                <span className="xp-highlight">{xp.total - xp.current} XP to next level</span>
+              </div>
+            </div>
 
-          {courses.length > 0 && (
-            <>
-              <h2 className="ach-section-title">Courses</h2>
-              <div className="ach-grid">
-                {courses.map((course, idx) => (
-                  <div
-                    key={idx}
-                    className={`ach-card ${course.unlocked ? "unlocked" : "locked"}`}
-                    style={{ "--c": course.color || "#6366f1", "--c-bg": hexAlpha(course.color || "#6366f1", 0.22) }}
-                    onClick={() => clickCourse(course)}
-                    title={course.unlocked ? "✓ Unlocked!" : "Click to unlock"}
-                  >
-                    <div className="ach-card-icon">{course.icon}</div>
-                    <div className="ach-card-name">{course.name}</div>
-                    <div className="ach-card-desc">{course.desc}</div>
-                    <div className="ach-card-xp">+{course.xp || 50} XP</div>
+            <div className="ach-section-title">Achievements</div>
+            <div className="ach-grid">
+              {achievements.map((ach, idx) => (
+                <div
+                  key={idx}
+                  className={`ach-card ${ach.unlocked ? "unlocked" : "locked"} ${justUnlocked === ach.name ? "just-unlocked" : ""}`}
+                  style={{
+                    "--c-bg":      hexAlpha(ach.color, 0.08),
+                    "--c-border":  hexAlpha(ach.color, 0.35),
+                    "--c-glow":    hexAlpha(ach.color, 0.14),
+                    "--c-icon-bg": hexAlpha(ach.color, 0.2),
+                    "--c-btn-bg":  `linear-gradient(135deg, ${hexAlpha(ach.color, 0.85)}, ${ach.color})`,
+                  }}
+                  onClick={() => clickAchievement(ach)}
+                >
+                  <div className="ach-card-icon-wrap">{ach.icon}</div>
+                  <div className="ach-card-name">{ach.name}</div>
+                  <div className="ach-card-desc">{ach.desc}</div>
+                  <div className="ach-card-xp" style={{ color: ach.unlocked ? ach.color : "#334155" }}>
+                    +{ach.xp} XP
                   </div>
-                ))}
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </div>
+                  <button
+                    className={`ach-unlock-btn ${ach.unlocked ? "btn-unlocked" : "btn-locked"}`}
+                    onClick={(e) => { e.stopPropagation(); clickAchievement(ach); }}
+                    disabled={ach.unlocked}
+                  >
+                    {ach.unlocked ? <><span>✦</span> Unlocked</> : <><span>🔒</span> Locked</>}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
