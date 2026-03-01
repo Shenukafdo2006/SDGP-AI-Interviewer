@@ -1,14 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
 
-/* ── Reset & full-screen base ── */
-html,
-body,
-#root {
+html, body, #root {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 *,
@@ -17,9 +13,9 @@ body,
   box-sizing: border-box;
 }
 
-/* ── Page wrapper ── */
+/* ── Page ── */
 .ach-page {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #080b14;
   background-image:
     radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
@@ -38,7 +34,7 @@ body,
 }
 
 .ach-header h1 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -52,10 +48,9 @@ body,
 .ach-header p {
   font-size: 13px;
   color: #475569;
-  font-weight: 400;
 }
 
-/* ── Stats row ── */
+/* ── Stats Row ── */
 .ach-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -69,7 +64,7 @@ body,
   border-radius: 16px;
   padding: 20px 12px;
   text-align: center;
-  transition: border-color 0.3s ease, transform 0.25s ease;
+  transition: border-color 0.3s, transform 0.25s;
 }
 
 .ach-stat-card:hover {
@@ -84,7 +79,7 @@ body,
 }
 
 .ach-stat-value {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 30px;
   font-weight: 800;
   color: #fff;
@@ -107,7 +102,7 @@ body,
   display: block;
 }
 
-/* ── XP card ── */
+/* ── XP Card ── */
 .ach-xp-card {
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -150,7 +145,7 @@ body,
 }
 
 .ach-xp-level {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 19px;
   font-weight: 800;
   color: #fff;
@@ -197,14 +192,14 @@ body,
   color: #475569;
 }
 
-.ach-xp-numbers .xp-highlight {
+.xp-highlight {
   color: #a5b4fc;
   font-weight: 500;
 }
 
-/* ── Section title ── */
+/* ── Section Title ── */
 .ach-section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -272,18 +267,16 @@ body,
   pointer-events: none;
 }
 
-/* Pop-in animation on unlock */
 @keyframes pop-in {
   0%   { transform: scale(0.88); opacity: 0.5; }
   65%  { transform: scale(1.04); }
-  100% { transform: scale(1);    opacity: 1;   }
+  100% { transform: scale(1);    opacity: 1; }
 }
 
 .ach-card.just-unlocked {
   animation: pop-in 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ── Card internals ── */
 .ach-card-icon-wrap {
   width: 58px;
   height: 58px;
@@ -295,7 +288,7 @@ body,
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.3s, background 0.3s, border-color 0.3s;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
 }
@@ -307,14 +300,14 @@ body,
 }
 
 .ach-card-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: #cbd5e1;
   margin-bottom: 5px;
   position: relative;
   z-index: 1;
-  transition: color 0.3s ease;
+  transition: color 0.3s;
 }
 
 .ach-card.unlocked .ach-card-name {
@@ -329,7 +322,7 @@ body,
   position: relative;
   z-index: 1;
   flex: 1;
-  transition: color 0.3s ease;
+  transition: color 0.3s;
 }
 
 .ach-card.unlocked .ach-card-desc {
@@ -343,16 +336,16 @@ body,
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  transition: color 0.3s ease;
+  transition: color 0.3s;
 }
 
-/* ── Unlock button ── */
+/* ── Button ── */
 .ach-unlock-btn {
   width: 100%;
   padding: 9px 0;
   border-radius: 10px;
   border: 1px solid transparent;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -386,7 +379,7 @@ body,
   box-shadow: 0 2px 14px var(--c-glow);
 }
 
-/* ── Loading state ── */
+/* ── Loading ── */
 .ach-loading {
   display: flex;
   flex-direction: column;
@@ -413,20 +406,8 @@ body,
 
 /* ── Responsive ── */
 @media (max-width: 480px) {
-  .ach-page {
-    padding: 24px 16px 48px;
-  }
-
-  .ach-stats-row {
-    gap: 8px;
-  }
-
-  .ach-stat-value {
-    font-size: 24px;
-  }
-
-  .ach-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-  }
+  .ach-page { padding: 24px 16px 48px; }
+  .ach-stats-row { gap: 8px; }
+  .ach-stat-value { font-size: 24px; }
+  .ach-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 }
