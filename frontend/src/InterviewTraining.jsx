@@ -14,7 +14,7 @@ function InterviewTraining({ onBack, onStartInterview }) {
     setError(null);
 
     try {
-      const data = await startInterview({ role, level });
+      const data = await startInterview({ role, level, interviewType });
       onStartInterview({
         sessionId: data.sessionId,
         question: data.question,
