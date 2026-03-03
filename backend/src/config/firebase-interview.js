@@ -5,26 +5,19 @@ require("dotenv").config();
 
 // ─── Initialize Firebase Admin for Interview Feature ──────────────────────────
 // Uses serviceAccountKey2.json - isolated for interview/achievements feature
+// Hardcoded to avoid conflicts with other features using .env
 let app;
 
-if (process.env.FIREBASE_PROJECT_ID) {
-  // Option A: individual env vars
-  app = admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId:   process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey:  process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    }),
-  });
-} else {
-  // Option B: service account JSON file (serviceAccountKey2.json)
-  const serviceAccount = require(
-    path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "../serviceAccountKey2.json")
-  );
-  app = admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-}
+const serviceAccount = require(
+  path.resolve(__dirname, "../serviceAccountKey2.json")
+);
+app = admin.initializeApp(
+  { credential: admin.credential.cert(serviceAccount) },
+  "interview"  // Named app instance
+);
 
 const db = admin.firestore();
+
 
 // ─── Default data shape ───────────────────────────────────────────────────────
 const DEFAULT_STATS = [
