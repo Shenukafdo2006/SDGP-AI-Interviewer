@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 const path  = require("path");
 require("dotenv").config();
 
-// ─── Initialize Firebase Admin ────────────────────────────────────────────────
+// ─── Initialize Primary Firebase Admin (default app) ───────────────────────────
 let app;
 
 if (process.env.FIREBASE_PROJECT_ID) {
@@ -24,6 +24,27 @@ if (process.env.FIREBASE_PROJECT_ID) {
 }
 
 const db = admin.firestore();
+
+// ─── Initialize Secondary Firebase Admin (for alternative features) ─────────────
+let app2;
+let db2;
+
+try {
+  const serviceAccount2Path = process.env.FIREBASE_SERVICE_ACCOUNT_PATH_2 || "../serviceAccountKey2.json";
+  const fullPath = path.resolve(serviceAccount2Path);
+  const serviceAccount2 = require(fullPath);
+  
+  app2 = admin.initializeApp(
+    { credential: admin.credential.cert(serviceAccount2) },
+    "secondary"  // Named app instance to avoid conflicts
+  );
+  db2 = app2.firestore();
+  console.log("✅ Secondary Firebase app initialized successfully");
+} catch (error) {
+  console.warn("⚠️  Secondary Firebase app not initialized - this is optional:", error.message);
+  app2 = null;
+  db2 = null;
+}
 
 // ─── Default data shape ───────────────────────────────────────────────────────
 const DEFAULT_STATS = [
@@ -89,4 +110,17 @@ async function getOrCreateUser(userId) {
   return { ref, data: defaultData };
 }
 
-module.exports = { db, admin, initCollections, getOrCreateUser };
+module.exports = { 
+  // Primary Firebase app (default)
+  db, 
+  admin, 
+  app,
+  
+  // Secondary Firebase app (optional, for alternative features)
+  db2, 
+  app2,
+  
+  // Utility functions
+  initCollections, 
+  getOrCreateUser 
+};
