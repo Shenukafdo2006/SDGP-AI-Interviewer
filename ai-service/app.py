@@ -1,29 +1,270 @@
-from fastapi import FastAPI
-import random
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+import base64
+from pathlib import Path
+import json
 
-app = FastAPI()
+# Load environment variables
+load_dotenv()
 
-questions = [
-    "Explain OOP.",
-    "What is polymorphism?",
-    "Difference between REST and GraphQL?",
-    "Explain database normalization."
-]
+# Configure Gemini API
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY environment variable not set")
+
+genai.configure(api_key=GEMINI_API_KEY)
+
+app = FastAPI(title="AI Interview Service", version="1.0.0")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Pydantic models
+class QuestionRequest(BaseModel):
+    role: str
+    level: str
+    interview_type: str
+    session_context: dict = {}
+
+class AnswerRequest(BaseModel):
+    question: str
+    answer: str
+    role: str
+    level: str
+
+class FacialAnalysisRequest(BaseModel):
+    frame_base64: str  # Base64 encoded image frame
+    question: str = None
+
+# System prompts for different interview types
+SYSTEM_PROMPTS = {
+    "Technical": """You are an expert technical interviewer. Generate challenging technical questions 
+    appropriate for the candidate's level. Focus on core concepts, problem-solving, and system design.""",
+    
+    "Behavioural": """You are an expert behavioral interviewer. Generate questions that assess 
+    communication skills, teamwork, conflict resolution, and professional growth.""",
+    
+    "Soft Skills": """You are an expert in soft skills assessment. Generate questions to evaluate 
+    communication, leadership, time management, and interpersonal skills.""",
+    
+    "Mixed": """You are a comprehensive interviewer. Generate a mix of technical and behavioral questions 
+    appropriate for the candidate's level and target role."""
+}
 
 @app.get("/")
 def home():
-    return {"message": "AI Service Running"}
+    return {
+        "message": "AI Interview Service Running",
+        "version": "1.0.0",
+        "capabilities": ["question-generation", "answer-evaluation", "facial-recognition"]
+    }
 
 @app.post("/generate-question")
-def generate_question():
-    return {"question": random.choice(questions)}
+async def generate_question(request: QuestionRequest):
+    """Generate AI-powered interview questions using Gemini"""
+    try:
+        model = genai.GenerativeModel("gemini-pro")
+        
+        system_prompt = SYSTEM_PROMPTS.get(request.interview_type, SYSTEM_PROMPTS["Mixed"])
+        
+        user_prompt = f"""
+        Generate a single interview question for the following:
+        - Target Role: {request.role}
+        - Experience Level: {request.level}
+        - Interview Type: {request.interview_type}
+        
+        Requirements:
+        1. Question should be specific and challenging for this level
+        2. Should take 2-3 minutes to answer
+        3. Should assess relevant skills
+        4. Return ONLY the question, no numbering or extra text
+        
+        Context: {json.dumps(request.session_context) if request.session_context else "First question of the interview"}
+        """
+        
+        response = model.generate_content(f"{system_prompt}\n\n{user_prompt}")
+        question = response.text.strip()
+        
+        return {
+            "question": question,
+            "role": request.role,
+            "level": request.level,
+            "interview_type": request.interview_type
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating question: {str(e)}")
 
 @app.post("/evaluate-answer")
-def evaluate_answer(data: dict):
-    answer = data.get("answer", "")
-    score = min(len(answer)/20, 10)
+async def evaluate_answer(request: AnswerRequest):
+    """Evaluate candidate answer using Gemini with detailed feedback"""
+    try:
+        model = genai.GenerativeModel("gemini-pro")
+        
+        eval_prompt = f"""
+        You are an expert interviewer evaluating a candidate's response.
+        
+        Question: {request.question}
+        Candidate's Answer: {request.answer}
+        Role: {request.role}
+        Level: {request.level}
+        
+        Please evaluate this answer and provide:
+        1. Score (0-10)
+        2. Strengths (2-3 points)
+        3. Areas for improvement (2-3 points)
+        4. Brief constructive feedback
+        
+        Format your response as JSON with keys: score, strengths, improvements, feedback
+        """
+        
+        response = model.generate_content(eval_prompt)
+        response_text = response.text.strip()
+        
+        # Try to parse JSON response
+        try:
+            # Extract JSON from response if it contains text before/after
+            if "{{" in response_text:
+                json_start = response_text.index("{{")
+                json_end = response_text.rindex("}}") + 1
+                json_str = response_text[json_start:json_end]
+            else:
+                json_str = response_text
+            
+            evaluation = json.loads(json_str)
+        except json.JSONDecodeError:
+            # Fallback if JSON parsing fails
+            evaluation = {
+                "score": 7,
+                "strengths": ["Clear response"],
+                "improvements": ["More detail could help"],
+                "feedback": response_text
+            }
+        
+        return {
+            "score": min(max(evaluation.get("score", 7), 0), 10),
+            "strengths": evaluation.get("strengths", []),
+            "improvements": evaluation.get("improvements", []),
+            "feedback": evaluation.get("feedback", ""),
+            "question": request.question
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error evaluating answer: {str(e)}")
 
-    return {
-        "score": round(score,1),
-        "feedback": "Good answer" if score > 5 else "Try adding more detail"
-    }
+@app.post("/analyze-facial-expression")
+async def analyze_facial_expression(request: FacialAnalysisRequest):
+    """Analyze facial expressions and engagement during interview using Gemini Vision"""
+    try:
+        # Decode base64 image
+        image_data = base64.b64decode(request.frame_base64)
+        
+        # Use Gemini Vision to analyze the image
+        model = genai.GenerativeModel("gemini-pro-vision")
+        
+        analysis_prompt = f"""
+        Analyze this image of an interview candidate and provide:
+        1. Detected facial expression (e.g., focused, confused, stressed, confident)
+        2. Eye contact assessment (looking at camera/away)
+        3. Engagement level (1-10)
+        4. Any concerns or observations
+        5. Posture/body language observations
+        
+        Format as JSON with keys: expression, eye_contact, engagement_level, concerns, posture
+        
+        {f"Current question: {request.question}" if request.question else ""}
+        """
+        
+        image_part = {
+            "mime_type": "image/jpeg",
+            "data": request.frame_base64
+        }
+        
+        response = model.generate_content([analysis_prompt, image_part])
+        response_text = response.text.strip()
+        
+        # Parse JSON response
+        try:
+            if "{{" in response_text:
+                json_start = response_text.index("{{")
+                json_end = response_text.rindex("}}") + 1
+                json_str = response_text[json_start:json_end]
+            else:
+                json_str = response_text
+            
+            analysis = json.loads(json_str)
+        except json.JSONDecodeError:
+            analysis = {
+                "expression": "neutral",
+                "eye_contact": "unknown",
+                "engagement_level": 5,
+                "concerns": [],
+                "posture": "normal"
+            }
+        
+        return {
+            "expression": analysis.get("expression", "neutral"),
+            "eye_contact": analysis.get("eye_contact", "unknown"),
+            "engagement_level": analysis.get("engagement_level", 5),
+            "concerns": analysis.get("concerns", []),
+            "posture": analysis.get("posture", "normal"),
+            "timestamp": None
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error analyzing facial expression: {str(e)}")
+
+@app.post("/get-interview-feedback")
+async def get_interview_feedback(session_data: dict):
+    """Generate comprehensive interview feedback using Gemini"""
+    try:
+        model = genai.GenerativeModel("gemini-pro")
+        
+        feedback_prompt = f"""
+        Provide comprehensive interview feedback based on this session:
+        
+        Role: {session_data.get('role')}
+        Level: {session_data.get('level')}
+        Interview Type: {session_data.get('interview_type')}
+        
+        Q&A Summary:
+        {json.dumps(session_data.get('qa_pairs', []), indent=2)}
+        
+        Overall Assessment:
+        Average Score: {session_data.get('average_score', 0)}/10
+        
+        Please provide:
+        1. Overall performance summary
+        2. Key strengths demonstrated
+        3. Areas needing improvement
+        4. 3-5 specific action items for improvement
+        5. Recommended next steps
+        
+        Format as JSON with keys: summary, strengths, improvements, action_items, next_steps
+        """
+        
+        response = model.generate_content(feedback_prompt)
+        response_text = response.text.strip()
+        
+        try:
+            if "{{" in response_text:
+                json_start = response_text.index("{{")
+                json_end = response_text.rindex("}}") + 1
+                json_str = response_text[json_start:json_end]
+            else:
+                json_str = response_text
+            
+            feedback = json.loads(json_str)
+        except json.JSONDecodeError:
+            feedback = {"summary": response_text}
+        
+        return feedback
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating feedback: {str(e)}")
