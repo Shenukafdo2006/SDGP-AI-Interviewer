@@ -2,6 +2,9 @@ import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
+import Signup from './signup.jsx'
+import Login from './login.jsx'
+
 import DashBoard from './DashBoard'
 import InterviewTraining from './InterviewTraining'
 import LiveInterview from './LiveInterview'
@@ -18,12 +21,32 @@ import SkillImprovement from './SkillImprovement'
 import DailyMotivation from './DailyMotivation'
 
 function App() {
-  // Navigation state
-  const [view, setView] = useState('dashboard')
-  
+  // ✅ Start from signup
+  const [view, setView] = useState('signup')
+
   // Interview session state
   const [interviewSessionData, setInterviewSessionData] = useState(null)
   const [currentSessionId, setCurrentSessionId] = useState(null)
+
+  // ✅ Signup Page
+  if (view === 'signup') {
+    return (
+      <Signup
+        onSignupSuccess={() => setView('login')}  // ✅ after signup go to login
+        onGoToLogin={() => setView('login')}      // ✅ "Already have account? Login"
+      />
+    )
+  }
+
+  // ✅ Login Page
+  if (view === 'login') {
+    return (
+      <Login
+        onLoginSuccess={() => setView('dashboard')} // ✅ after login go dashboard
+        onGoToSignup={() => setView('signup')}      // ✅ "No account? Signup"
+      />
+    )
+  }
 
   // 🔹 Training Page
   if (view === 'training') {
@@ -48,7 +71,7 @@ function App() {
           setView('training')
           setInterviewSessionData(null)
         }}
-        onComplete={(results) => {
+        onComplete={() => {
           setView('interview-results')
         }}
       />
@@ -70,35 +93,16 @@ function App() {
     )
   }
 
-  if (view === 'quiz')
-    return <Quiz onBack={() => setView('dashboard')} />
-
-  if (view === 'learning-resources')
-    return <LearningResources onBack={() => setView('dashboard')} />
-
-  if (view === 'cv-maker')
-    return <CVMaker onBack={() => setView('dashboard')} />
-
-  if (view === 'cv-filtering')
-    return <CVFiltering onBack={() => setView('dashboard')} />
-
-  if (view === 'achievements')
-    return <Achievements onBack={() => setView('dashboard')} />
-
-  if (view === 'activity-calendar')
-    return <ActivityCalendar onBack={() => setView('dashboard')} />
-
-  if (view === 'linkedin-integration')
-    return <LinkedInIntegration onBack={() => setView('dashboard')} />
-
-  if (view === 'career-suggestions')
-    return <CareerSuggestions onBack={() => setView('dashboard')} />
-
-  if (view === 'skill-improvement')
-    return <SkillImprovement onBack={() => setView('dashboard')} />
-
-  if (view === 'daily-motivation')
-    return <DailyMotivation onBack={() => setView('dashboard')} />
+  if (view === 'quiz') return <Quiz onBack={() => setView('dashboard')} />
+  if (view === 'learning-resources') return <LearningResources onBack={() => setView('dashboard')} />
+  if (view === 'cv-maker') return <CVMaker onBack={() => setView('dashboard')} />
+  if (view === 'cv-filtering') return <CVFiltering onBack={() => setView('dashboard')} />
+  if (view === 'achievements') return <Achievements onBack={() => setView('dashboard')} />
+  if (view === 'activity-calendar') return <ActivityCalendar onBack={() => setView('dashboard')} />
+  if (view === 'linkedin-integration') return <LinkedInIntegration onBack={() => setView('dashboard')} />
+  if (view === 'career-suggestions') return <CareerSuggestions onBack={() => setView('dashboard')} />
+  if (view === 'skill-improvement') return <SkillImprovement onBack={() => setView('dashboard')} />
+  if (view === 'daily-motivation') return <DailyMotivation onBack={() => setView('dashboard')} />
 
   return <DashBoard setView={setView} />
 }
