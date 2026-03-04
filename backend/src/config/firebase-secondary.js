@@ -12,7 +12,7 @@ let app2;
 let db2;
 
 const serviceAccount2 = require(
-  path.resolve(__dirname, "../serviceAccountKey.json")
+  path.resolve(__dirname, "../../serviceAccountKey.json")
 );
 
 app2 = admin.initializeApp(

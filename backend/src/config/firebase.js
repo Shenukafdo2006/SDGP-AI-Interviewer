@@ -5,8 +5,22 @@ require("dotenv").config();
 
 // ─── Initialize Primary Firebase Admin (default app) ───────────────────────────
 let app;
+const backendRoot = path.resolve(__dirname, "..", "..");
+const resolveServiceAccountPath = (configuredPath, fallbackFile) => {
+  if (configuredPath) {
+    return path.isAbsolute(configuredPath)
+      ? configuredPath
+      : path.resolve(backendRoot, configuredPath);
+  }
+  return path.resolve(backendRoot, fallbackFile);
+};
 
-if (process.env.FIREBASE_PROJECT_ID) {
+const hasEnvServiceAccount =
+  Boolean(process.env.FIREBASE_PROJECT_ID) &&
+  Boolean(process.env.FIREBASE_CLIENT_EMAIL) &&
+  Boolean(process.env.FIREBASE_PRIVATE_KEY);
+
+if (hasEnvServiceAccount) {
   // Option A: individual env vars
   app = admin.initializeApp({
     credential: admin.credential.cert({
@@ -17,10 +31,17 @@ if (process.env.FIREBASE_PROJECT_ID) {
   });
 } else {
   // Option B: service account JSON file
-  const serviceAccount = require(
-    path.resolve(process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "../serviceAccountKey.json")
+  const primaryServiceAccountPath = resolveServiceAccountPath(
+    process.env.FIREBASE_SERVICE_ACCOUNT_PATH,
+    "serviceAccountKey.json"
   );
+  const serviceAccount = require(primaryServiceAccountPath);
   app = admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  if (process.env.FIREBASE_PROJECT_ID && !hasEnvServiceAccount) {
+    console.warn(
+      "⚠️ FIREBASE_PROJECT_ID is set but FIREBASE_CLIENT_EMAIL/FIREBASE_PRIVATE_KEY are missing. Using FIREBASE_SERVICE_ACCOUNT_PATH instead."
+    );
+  }
 }
 
 const db = admin.firestore();
@@ -30,8 +51,10 @@ let app2;
 let db2;
 
 try {
-  const serviceAccount2Path = process.env.FIREBASE_SERVICE_ACCOUNT_PATH_2 || "../serviceAccountKey2.json";
-  const fullPath = path.resolve(serviceAccount2Path);
+  const fullPath = resolveServiceAccountPath(
+    process.env.FIREBASE_SERVICE_ACCOUNT_PATH_2,
+    "serviceAccountKey2.json"
+  );
   const serviceAccount2 = require(fullPath);
   
   app2 = admin.initializeApp(

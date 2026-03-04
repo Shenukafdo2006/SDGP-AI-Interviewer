@@ -9,7 +9,7 @@ require("dotenv").config();
 let app;
 
 const serviceAccount = require(
-  path.resolve(__dirname, "../serviceAccountKey2.json")
+  path.resolve(__dirname, "../../serviceAccountKey2.json")
 );
 app = admin.initializeApp(
   { credential: admin.credential.cert(serviceAccount) },
