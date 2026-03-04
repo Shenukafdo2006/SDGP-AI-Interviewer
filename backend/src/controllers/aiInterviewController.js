@@ -2,6 +2,37 @@ const { randomUUID } = require("crypto");
 const aiService = require("../services/ai.service");
 
 const sessions = new Map();
+const MAX_QUESTIONS = 5;
+
+const clampEngagement = (value) => {
+  const numeric = Number(value);
+  if (Number.isNaN(numeric)) return null;
+  return Math.min(Math.max(numeric, 1), 10);
+};
+
+const normalizeFacialSample = (sample) => {
+  if (!sample || typeof sample !== "object") return null;
+  return {
+    expression: sample.expression || "unknown",
+    eye_contact: sample.eye_contact || "unknown",
+    engagement_level: clampEngagement(sample.engagement_level),
+    concerns: Array.isArray(sample.concerns) ? sample.concerns : [],
+    posture: sample.posture || "unknown",
+    timestamp: sample.timestamp || sample.capturedAt || new Date().toISOString(),
+  };
+};
+
+const toFacialSamples = (facialData) => {
+  if (!facialData) return [];
+  if (Array.isArray(facialData)) {
+    return facialData.map(normalizeFacialSample).filter(Boolean);
+  }
+  if (Array.isArray(facialData.samples)) {
+    return facialData.samples.map(normalizeFacialSample).filter(Boolean);
+  }
+  const one = normalizeFacialSample(facialData);
+  return one ? [one] : [];
+};
 
 const startInterview = async (req, res) => {
   try {
@@ -94,12 +125,15 @@ const submitAnswer = async (req, res) => {
       };
     }
 
-    // Store facial analysis if provided
-    if (facialData) {
-      session.facialAnalysis.push({
-        questionIndex: session.currentIndex,
-        data: facialData,
-        timestamp: new Date().toISOString(),
+    // Store live facial analysis samples (single payload or array payload)
+    const facialSamples = toFacialSamples(facialData);
+    if (facialSamples.length > 0) {
+      facialSamples.forEach((sample) => {
+        session.facialAnalysis.push({
+          questionIndex: session.currentIndex,
+          data: sample,
+          timestamp: sample.timestamp || new Date().toISOString(),
+        });
       });
     }
 
@@ -115,8 +149,6 @@ const submitAnswer = async (req, res) => {
     session.currentIndex += 1;
 
     // Decide if interview is complete
-    // For now, let's do 5 questions per interview
-    const MAX_QUESTIONS = 5;
     const isComplete = session.currentIndex >= MAX_QUESTIONS;
 
     if (isComplete) {
@@ -216,14 +248,16 @@ const getSession = (req, res) => {
 
 const analyzeFacialData = async (req, res) => {
   try {
-    const { frameBase64, currentQuestion } = req.body;
+    const { frameBase64, frame_base64, currentQuestion, question } = req.body || {};
+    const imageFrame = frameBase64 || frame_base64;
+    const activeQuestion = currentQuestion || question || null;
 
-    if (!frameBase64) {
+    if (!imageFrame) {
       return res.status(400).json({ error: "Frame data required" });
     }
 
     // Call Gemini Vision API via AI service
-    const analysis = await aiService.analyzeFacialExpression(frameBase64, currentQuestion);
+    const analysis = await aiService.analyzeFacialExpression(imageFrame, activeQuestion);
 
     res.json({
       success: true,

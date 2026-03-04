@@ -1,12 +1,12 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 import base64
-from pathlib import Path
 import json
+import re
 
 # Load environment variables
 load_dotenv()
@@ -17,6 +17,9 @@ if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY environment variable not set")
 
 genai.configure(api_key=GEMINI_API_KEY)
+
+TEXT_MODEL = os.getenv("GEMINI_TEXT_MODEL", "gemini-1.5-flash")
+VISION_MODEL = os.getenv("GEMINI_VISION_MODEL", TEXT_MODEL)
 
 app = FastAPI(title="AI Interview Service", version="1.0.0")
 
@@ -61,19 +64,59 @@ SYSTEM_PROMPTS = {
     appropriate for the candidate's level and target role."""
 }
 
+def _extract_json_object(response_text: str, fallback: dict):
+    """
+    Gemini may return plain JSON, fenced JSON, or explanatory text around JSON.
+    Extract and parse the first JSON object safely.
+    """
+    text = (response_text or "").strip()
+
+    if text.startswith("```"):
+        text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+        text = re.sub(r"\n?```$", "", text).strip()
+
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, dict):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+
+    match = re.search(r"\{[\s\S]*\}", text)
+    if match:
+        try:
+            parsed = json.loads(match.group(0))
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
+
+    return fallback
+
+def _parse_engagement_level(value, default=5):
+    try:
+        numeric = int(value)
+    except (TypeError, ValueError):
+        numeric = default
+    return min(max(numeric, 1), 10)
+
 @app.get("/")
 def home():
     return {
         "message": "AI Interview Service Running",
         "version": "1.0.0",
-        "capabilities": ["question-generation", "answer-evaluation", "facial-recognition"]
+        "capabilities": ["question-generation", "answer-evaluation", "facial-recognition"],
+        "models": {
+            "text": TEXT_MODEL,
+            "vision": VISION_MODEL,
+        },
     }
 
 @app.post("/generate-question")
 async def generate_question(request: QuestionRequest):
     """Generate AI-powered interview questions using Gemini"""
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel(TEXT_MODEL)
         
         system_prompt = SYSTEM_PROMPTS.get(request.interview_type, SYSTEM_PROMPTS["Mixed"])
         
@@ -108,7 +151,7 @@ async def generate_question(request: QuestionRequest):
 async def evaluate_answer(request: AnswerRequest):
     """Evaluate candidate answer using Gemini with detailed feedback"""
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel(TEXT_MODEL)
         
         eval_prompt = f"""
         You are an expert interviewer evaluating a candidate's response.
@@ -129,26 +172,15 @@ async def evaluate_answer(request: AnswerRequest):
         
         response = model.generate_content(eval_prompt)
         response_text = response.text.strip()
-        
-        # Try to parse JSON response
-        try:
-            # Extract JSON from response if it contains text before/after
-            if "{{" in response_text:
-                json_start = response_text.index("{{")
-                json_end = response_text.rindex("}}") + 1
-                json_str = response_text[json_start:json_end]
-            else:
-                json_str = response_text
-            
-            evaluation = json.loads(json_str)
-        except json.JSONDecodeError:
-            # Fallback if JSON parsing fails
-            evaluation = {
+        evaluation = _extract_json_object(
+            response_text,
+            {
                 "score": 7,
                 "strengths": ["Clear response"],
                 "improvements": ["More detail could help"],
-                "feedback": response_text
-            }
+                "feedback": response_text,
+            },
+        )
         
         return {
             "score": min(max(evaluation.get("score", 7), 0), 10),
@@ -164,11 +196,11 @@ async def evaluate_answer(request: AnswerRequest):
 async def analyze_facial_expression(request: FacialAnalysisRequest):
     """Analyze facial expressions and engagement during interview using Gemini Vision"""
     try:
-        # Decode base64 image
-        image_data = base64.b64decode(request.frame_base64)
+        # Validate base64 input early
+        base64.b64decode(request.frame_base64, validate=True)
         
         # Use Gemini Vision to analyze the image
-        model = genai.GenerativeModel("gemini-pro-vision")
+        model = genai.GenerativeModel(VISION_MODEL)
         
         analysis_prompt = f"""
         Analyze this image of an interview candidate and provide:
@@ -190,30 +222,21 @@ async def analyze_facial_expression(request: FacialAnalysisRequest):
         
         response = model.generate_content([analysis_prompt, image_part])
         response_text = response.text.strip()
-        
-        # Parse JSON response
-        try:
-            if "{{" in response_text:
-                json_start = response_text.index("{{")
-                json_end = response_text.rindex("}}") + 1
-                json_str = response_text[json_start:json_end]
-            else:
-                json_str = response_text
-            
-            analysis = json.loads(json_str)
-        except json.JSONDecodeError:
-            analysis = {
+        analysis = _extract_json_object(
+            response_text,
+            {
                 "expression": "neutral",
                 "eye_contact": "unknown",
                 "engagement_level": 5,
                 "concerns": [],
-                "posture": "normal"
-            }
+                "posture": "normal",
+            },
+        )
         
         return {
             "expression": analysis.get("expression", "neutral"),
             "eye_contact": analysis.get("eye_contact", "unknown"),
-            "engagement_level": analysis.get("engagement_level", 5),
+            "engagement_level": _parse_engagement_level(analysis.get("engagement_level", 5)),
             "concerns": analysis.get("concerns", []),
             "posture": analysis.get("posture", "normal"),
             "timestamp": None
@@ -225,7 +248,7 @@ async def analyze_facial_expression(request: FacialAnalysisRequest):
 async def get_interview_feedback(session_data: dict):
     """Generate comprehensive interview feedback using Gemini"""
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel(TEXT_MODEL)
         
         feedback_prompt = f"""
         Provide comprehensive interview feedback based on this session:
@@ -252,18 +275,7 @@ async def get_interview_feedback(session_data: dict):
         
         response = model.generate_content(feedback_prompt)
         response_text = response.text.strip()
-        
-        try:
-            if "{{" in response_text:
-                json_start = response_text.index("{{")
-                json_end = response_text.rindex("}}") + 1
-                json_str = response_text[json_start:json_end]
-            else:
-                json_str = response_text
-            
-            feedback = json.loads(json_str)
-        except json.JSONDecodeError:
-            feedback = {"summary": response_text}
+        feedback = _extract_json_object(response_text, {"summary": response_text})
         
         return feedback
     except Exception as e:

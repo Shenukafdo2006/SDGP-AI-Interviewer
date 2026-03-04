@@ -4,18 +4,28 @@ import { submitAnswer, analyzeFacialExpression } from "./api/interviewApi";
 function LiveInterview({ sessionData, onBack, onComplete }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const facialLoopRef = useRef(null);
+  const facialBusyRef = useRef(false);
+  const facialSamplesRef = useRef([]);
+
   const [transcript, setTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(sessionData?.question || "");
   const [currentIndex, setCurrentIndex] = useState(sessionData?.index || 0);
   const [error, setError] = useState(null);
   const [facialData, setFacialData] = useState(null);
-  const recognitionRef = useRef(null);
-  const frameCaptureSwitchRef = useRef(null);
+  const [analysisCount, setAnalysisCount] = useState(0);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [lastSpokenFeedback, setLastSpokenFeedback] = useState("");
+  const interviewMode = sessionData?.interviewMode || "video";
+  const isVideoInterview = interviewMode === "video";
 
-  // Camera setup
   useEffect(() => {
+    if (!isVideoInterview) return undefined;
+
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: false })
       .then((stream) => {
@@ -31,35 +41,42 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
         videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       }
     };
-  }, []);
+  }, [isVideoInterview]);
 
-  // Speech-to-text setup
   useEffect(() => {
-    if (!("webkitSpeechRecognition" in window)) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
       setError("Speech recognition not supported in this browser");
       return;
     }
 
-    const recognition = new window.webkitSpeechRecognition();
+    const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "en-US";
 
     recognition.onstart = () => {
       setIsListening(true);
-      setTranscript("");
+      setInterimTranscript("");
     };
 
     recognition.onresult = (event) => {
       let finalTranscript = "";
+      let interim = "";
+
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
           finalTranscript += event.results[i][0].transcript + " ";
+        } else {
+          interim += event.results[i][0].transcript + " ";
         }
       }
+
       if (finalTranscript) {
         setTranscript((prev) => prev + finalTranscript);
       }
+      setInterimTranscript(interim);
     };
 
     recognition.onerror = (event) => {
@@ -68,6 +85,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
     recognition.onend = () => {
       setIsListening(false);
+      setInterimTranscript("");
     };
 
     recognitionRef.current = recognition;
@@ -77,87 +95,147 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
   }, []);
 
-  // Capture video frame for facial analysis
+  useEffect(() => {
+    if (!voiceEnabled || !currentQuestion) return;
+    if (!window.speechSynthesis) return;
+
+    const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
+    utterance.lang = "en-US";
+    utterance.rate = 0.95;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  }, [currentQuestion, currentIndex, voiceEnabled]);
+
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      if (facialLoopRef.current) {
+        clearInterval(facialLoopRef.current);
+      }
+    };
+  }, []);
+
   const captureFrame = () => {
+    if (!isVideoInterview) return null;
     if (videoRef.current && canvasRef.current) {
+      if (!videoRef.current.videoWidth || !videoRef.current.videoHeight) return null;
       const ctx = canvasRef.current.getContext("2d");
       canvasRef.current.width = videoRef.current.videoWidth;
       canvasRef.current.height = videoRef.current.videoHeight;
       ctx.drawImage(videoRef.current, 0, 0);
-      return canvasRef.current.toDataURL("image/jpeg", 0.8).split(",")[1]; // base64
+      return canvasRef.current.toDataURL("image/jpeg", 0.7).split(",")[1];
     }
     return null;
   };
 
-  // Analyze facial expression
   const analyzeFacial = async () => {
+    if (!isVideoInterview) return;
+    if (facialBusyRef.current) return;
+    facialBusyRef.current = true;
+
     try {
       const frameBase64 = captureFrame();
-      if (!frameBase64) {
-        console.warn("Could not capture frame");
-        return;
-      }
+      if (!frameBase64) return;
 
       const analysis = await analyzeFacialExpression({
         frameBase64,
         question: currentQuestion,
       });
 
-      setFacialData(analysis.analysis);
+      const sample = {
+        ...(analysis.analysis || {}),
+        capturedAt: new Date().toISOString(),
+      };
+      setFacialData(sample);
+      facialSamplesRef.current.push(sample);
+      setAnalysisCount(facialSamplesRef.current.length);
     } catch (err) {
-      console.error("Facial analysis error:", err);
-      // Don't show error to user - facial analysis is optional
+      console.error("Facial analysis error:", err.message || err);
+    } finally {
+      facialBusyRef.current = false;
     }
   };
 
-  // Periodically capture facial data while listening
   useEffect(() => {
-    if (!isListening) return;
+    if (!isVideoInterview) return undefined;
 
-    const interval = setInterval(() => {
+    if (facialLoopRef.current) clearInterval(facialLoopRef.current);
+    facialLoopRef.current = setInterval(() => {
       analyzeFacial();
-    }, 3000); // Every 3 seconds
+    }, 3500);
 
-    return () => clearInterval(interval);
-  }, [isListening]);
+    analyzeFacial();
+    return () => {
+      if (facialLoopRef.current) clearInterval(facialLoopRef.current);
+    };
+  }, [currentQuestion, isVideoInterview]);
+
+  const speakFeedback = (text) => {
+    if (!voiceEnabled || !text || !window.speechSynthesis) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.96;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  };
 
   const startListening = () => {
-    if (recognitionRef.current) {
+    if (recognitionRef.current && !isListening) {
+      setError(null);
       recognitionRef.current.start();
     }
   };
 
   const stopListening = () => {
-    if (recognitionRef.current) {
+    if (recognitionRef.current && isListening) {
       recognitionRef.current.stop();
     }
   };
 
   const handleSubmitAnswer = async () => {
-    if (!transcript.trim()) {
+    const answerText = `${transcript}${interimTranscript}`.trim();
+    if (!answerText) {
       setError("Please provide an answer before submitting");
       return;
     }
 
+    stopListening();
+    if (isVideoInterview) {
+      await analyzeFacial();
+    }
     setIsSubmitting(true);
     setError(null);
 
     try {
       const response = await submitAnswer({
         sessionId: sessionData.sessionId,
-        answer: transcript,
-        facialData: facialData,
+        answer: answerText,
+        facialData: isVideoInterview
+          ? (facialSamplesRef.current.length > 0
+            ? facialSamplesRef.current
+            : facialData)
+          : null,
       });
 
       if (response.status === "completed") {
-        // Interview completed
+        speakFeedback("Interview completed. Great job.");
         onComplete(response);
       } else {
-        // Move to next question
+        const feedback = response?.lastEvaluation?.feedback || "";
+        if (feedback) {
+          setLastSpokenFeedback(feedback);
+          speakFeedback(`Feedback for your previous answer: ${feedback}`);
+        }
+
         setCurrentQuestion(response.question);
         setCurrentIndex(response.index);
         setTranscript("");
+        setInterimTranscript("");
         setFacialData(null);
+        facialSamplesRef.current = [];
+        setAnalysisCount(0);
       }
     } catch (err) {
       setError(err.message || "Failed to submit answer");
@@ -182,31 +260,53 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
       <div className="interview-main">
         <div className="video-section">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            style={{
-              width: 400,
-              borderRadius: 8,
-              border: "2px solid #333",
-            }}
-          />
+          {isVideoInterview ? (
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              style={{
+                width: 400,
+                borderRadius: 8,
+                border: "2px solid #333",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: 400,
+                minHeight: 230,
+                borderRadius: 8,
+                border: "2px solid #333",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#f9fafb",
+                color: "#374151",
+                fontWeight: 600,
+              }}
+            >
+              Voice Interview Mode
+            </div>
+          )}
           <canvas ref={canvasRef} style={{ display: "none" }} />
 
           {/* Facial Analysis Display */}
-          {facialData && (
-            <div style={{
-              marginTop: "15px",
-              padding: "12px",
-              backgroundColor: "#f0f9ff",
-              borderRadius: "8px",
-              fontSize: "12px",
-              color: "#064e3b"
-            }}>
+          {isVideoInterview && facialData && (
+            <div
+              style={{
+                marginTop: "15px",
+                padding: "12px",
+                backgroundColor: "#f0f9ff",
+                borderRadius: "8px",
+                fontSize: "12px",
+                color: "#064e3b",
+              }}
+            >
               <p><strong>👁️ Engagement:</strong> {facialData.engagement_level}/10</p>
               <p><strong>😊 Expression:</strong> {facialData.expression}</p>
               <p><strong>👀 Eye Contact:</strong> {facialData.eye_contact}</p>
+              <p><strong>📸 Samples:</strong> {analysisCount}</p>
             </div>
           )}
         </div>
@@ -225,19 +325,38 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
             </p>
           </div>
 
+          {lastSpokenFeedback && (
+            <div
+              style={{
+                marginTop: "12px",
+                padding: "10px",
+                backgroundColor: "#eff6ff",
+                borderRadius: "6px",
+                fontSize: "13px",
+                color: "#1e3a8a",
+              }}
+            >
+              <strong>Last Voice Feedback:</strong> {lastSpokenFeedback}
+            </div>
+          )}
+
           {/* Transcript */}
           <div className="user-subtitle">
             <strong>Your Answer:</strong>
-            <p style={{
-              marginTop: "10px",
-              padding: "12px",
-              backgroundColor: "#f3f4f6",
-              borderRadius: "6px",
-              minHeight: "80px",
-              fontSize: "14px",
-              color: transcript ? "#333" : "#999"
-            }}>
-              {transcript || "(Your speech will appear here...)"}
+            <p
+              style={{
+                marginTop: "10px",
+                padding: "12px",
+                backgroundColor: "#f3f4f6",
+                borderRadius: "6px",
+                minHeight: "80px",
+                fontSize: "14px",
+                color: transcript || interimTranscript ? "#333" : "#999",
+              }}
+            >
+              {transcript || interimTranscript
+                ? `${transcript}${interimTranscript}`
+                : "(Your speech will appear here...)"}
             </p>
           </div>
 
@@ -276,8 +395,24 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
             </button>
 
             <button
+              onClick={() => setVoiceEnabled((prev) => !prev)}
+              disabled={isSubmitting}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: voiceEnabled ? "#8b5cf6" : "#9ca3af",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: isSubmitting ? "not-allowed" : "pointer",
+                opacity: isSubmitting ? 0.6 : 1,
+              }}
+            >
+              {voiceEnabled ? "🔊 Voice On" : "🔈 Voice Off"}
+            </button>
+
+            <button
               onClick={handleSubmitAnswer}
-              disabled={isSubmitting || !transcript.trim()}
+              disabled={isSubmitting || !`${transcript}${interimTranscript}`.trim()}
               style={{
                 flex: 1,
                 minWidth: "150px",
@@ -287,8 +422,8 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
                 border: "none",
                 borderRadius: "6px",
                 fontWeight: "bold",
-                cursor: isSubmitting || !transcript.trim() ? "not-allowed" : "pointer",
-                opacity: isSubmitting || !transcript.trim() ? 0.6 : 1
+                cursor: isSubmitting || !`${transcript}${interimTranscript}`.trim() ? "not-allowed" : "pointer",
+                opacity: isSubmitting || !`${transcript}${interimTranscript}`.trim() ? 0.6 : 1,
               }}
             >
               {isSubmitting ? "⏳ Submitting..." : "✓ Submit Answer"}
@@ -318,7 +453,11 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
             fontSize: "12px",
             color: "#166534"
           }}>
-            💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. Your facial engagement is being tracked.
+            {isVideoInterview ? (
+              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. Your facial engagement is being tracked.</>
+            ) : (
+              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. This is a voice-only interview.</>
+            )}
           </div>
         </div>
       </div>

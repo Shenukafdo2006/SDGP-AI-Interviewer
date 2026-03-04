@@ -4,6 +4,7 @@ import { startInterview } from "./api/interviewApi";
 
 function InterviewTraining({ onBack, onStartInterview }) {
   const [interviewType, setInterviewType] = useState("Technical");
+  const [interviewMode, setInterviewMode] = useState("video");
   const [role, setRole] = useState("Software Engineer");
   const [level, setLevel] = useState("Entry Level (0-1 Years)");
   const [isStarting, setIsStarting] = useState(false);
@@ -23,6 +24,7 @@ function InterviewTraining({ onBack, onStartInterview }) {
         role,
         level,
         interviewType,
+        interviewMode,
       });
     } catch (err) {
       setError(err.message || "Unable to start interview");
@@ -91,6 +93,22 @@ function InterviewTraining({ onBack, onStartInterview }) {
               onClick={() => setInterviewType("Mixed")}
             >
               🔀 Mixed
+            </button>
+          </div>
+          {/* Interview Mode */}
+          <label>Interview Mode</label>
+          <div className="type-grid">
+            <button
+              className={`type ${interviewMode === "video" ? "active" : ""}`}
+              onClick={() => setInterviewMode("video")}
+            >
+              🎥 Video + Voice
+            </button>
+            <button
+              className={`type ${interviewMode === "voice" ? "active" : ""}`}
+              onClick={() => setInterviewMode("voice")}
+            >
+              🎙️ Voice Only
             </button>
           </div>
           {/* Experience Level */}
