@@ -3,12 +3,14 @@ const cors    = require("cors");
 require("dotenv").config();
 
 const { admin, initCollections, getOrCreateUser } = require("./config/firebase");
+const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/interview", aiInterviewRoutes);
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get("/", (req, res) => {
