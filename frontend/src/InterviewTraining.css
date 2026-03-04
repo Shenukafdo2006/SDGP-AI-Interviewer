@@ -14,20 +14,22 @@
 
 /* PAGE */
 .interview-page{
-  min-height:100vh;
+  height:100vh;
   background:var(--page-bg);
   color:var(--text);
   font-family: Georgia, 'Times New Roman', serif;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 
 /* HEADER */
 .header{
-  height:72px;
+  min-height:64px;
   background:linear-gradient(90deg,var(--purple-dark),#2563eb);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 24px;
+  padding:0 20px;
   box-shadow:0 6px 18px rgba(0,0,0,0.4);
 }
 
@@ -45,14 +47,14 @@
 /*  CENTERED CONTENT FIX  */
 .interview-container{
   width:100%;
-  max-width:1100px;     
+  max-width:980px;
   margin:0 auto;        
-  padding:32px 24px;
+  padding:24px 20px 30px;
 }
 
 /* TITLES */
 .title{
-  font-size:30px;
+  font-size:26px;
   margin-bottom:6px;
 }
 
@@ -68,7 +70,7 @@
     rgba(255,255,255,0.05),
     rgba(255,255,255,0.02)
   );
-  padding:26px;
+  padding:20px;
   border-radius:16px;
   border:1px solid rgba(255,255,255,0.06);
   box-shadow:0 14px 34px rgba(0,0,0,0.45);
@@ -108,7 +110,7 @@ select{
 }
 
 .type{
-  padding:12px;
+  padding:10px;
   border-radius:12px;
   background:#1f2430;
   border:1px solid rgba(255,255,255,0.12);
@@ -126,7 +128,7 @@ select{
 .start-btn{
   margin-top:22px;
   width:100%;
-  padding:14px;
+  padding:12px;
   border-radius:12px;
   border:none;
   background:var(--purple-dark);
