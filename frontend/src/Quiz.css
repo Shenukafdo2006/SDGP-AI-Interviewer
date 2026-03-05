@@ -2,8 +2,8 @@
   min-height: 100vh;
   padding: 40px;
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: white;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color:#e2e8f0;
   overflow-y: auto;
   box-sizing: border-box;
 }
@@ -49,16 +49,16 @@
   padding: 10px 20px;
   border-radius: 8px;
   border: none;
-  background: rgba(255,255,255,0.2);
-  color: white;
+  background: #334155;
+  color: #e2e8f0;
   font-weight: 500;
   cursor: pointer;
   transition: 0.3s;
 }
 
 .tab-btn.active {
-  background: #00c6ff;
-  color: #fff;
+  background: #6366f1;
+  color: white;
   transform: translateY(-2px);
 }
 
@@ -107,16 +107,17 @@
 }
 
 .quiz-card {
-  background: rgba(255, 255, 255, 0.1);
+  background:#1e293b;
   padding: 25px;
   border-radius: 14px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
+  border: 1px solid #334155;
   transition: 0.3s ease;
 }
 
 .quiz-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .quiz-count {
@@ -131,7 +132,7 @@
   padding: 10px 16px;
   border: none;
   border-radius: 8px;
-  background: #00c6ff;
+  background: #6366f1;
   color: white;
   cursor: pointer;
   font-weight: 500;
@@ -139,7 +140,7 @@
 }
 
 .primary-btn:hover {
-  background: #0096cc;
+  background: #4f46e5;
   transform: translateY(-2px);
 }
 
@@ -160,13 +161,14 @@
 
 .quiz-player,
 .result-box {
-  background: rgba(255, 255, 255, 0.12);
-  padding: 30px;
+  background: #1e293b;
+  padding: 25px;
   border-radius: 14px;
   backdrop-filter: blur(10px);
   max-width: 650px;
   margin: auto;
   animation: fadeIn 0.4s ease;
+  border : 1px solid #334155;
 }
 
 @keyframes fadeIn {
@@ -176,7 +178,7 @@
 
 .progress-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.3);
+  background: #38bdf8;
   border-radius: 10px;
   margin: 20px 0;
   overflow: hidden;
@@ -254,7 +256,7 @@
   font-weight: 600;
   margin-bottom: 15px;
   font-size: 18px;
-  color: #ffd600;
+  color: #facc15;
   text-align: right;
   animation: pulse 1s infinite;
 }
