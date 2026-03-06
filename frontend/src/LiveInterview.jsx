@@ -80,6 +80,10 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
 
     recognition.onerror = (event) => {
+      if (event.error === "service-not-allowed" || event.error === "not-allowed") {
+        setError("Microphone access is blocked. Please allow microphone permission in your browser settings.");
+        return;
+      }
       setError(`Speech error: ${event.error}`);
     };
 
@@ -181,10 +185,24 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     window.speechSynthesis.speak(utterance);
   };
 
-  const startListening = () => {
-    if (recognitionRef.current && !isListening) {
-      setError(null);
+  const startListening = async () => {
+    if (!recognitionRef.current || isListening) return;
+
+    setError(null);
+
+    try {
+      if (navigator.mediaDevices?.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach((track) => track.stop());
+      }
       recognitionRef.current.start();
+    } catch (err) {
+      const errorName = err?.name || err?.error || "";
+      if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
+        setError("Microphone permission denied. Please allow microphone access and try again.");
+      } else {
+        setError(err?.message || "Unable to access microphone");
+      }
     }
   };
 
