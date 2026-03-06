@@ -43,12 +43,12 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
   }, [isVideoInterview]);
 
-  useEffect(() => {
+  const createRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       setError("Speech recognition not supported in this browser");
-      return;
+      return null;
     }
 
     const recognition = new SpeechRecognition();
@@ -80,8 +80,12 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
 
     recognition.onerror = (event) => {
-      if (event.error === "service-not-allowed" || event.error === "not-allowed") {
+      if (event.error === "not-allowed") {
         setError("Microphone access is blocked. Please allow microphone permission in your browser settings.");
+        return;
+      }
+      if (event.error === "service-not-allowed") {
+        setError("Speech recognition service is unavailable in this browser/context. Try Chrome on HTTPS or localhost.");
         return;
       }
       setError(`Speech error: ${event.error}`);
@@ -92,10 +96,14 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
       setInterimTranscript("");
     };
 
-    recognitionRef.current = recognition;
+    return recognition;
+  };
 
+  useEffect(() => {
     return () => {
-      recognition.stop();
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
     };
   }, []);
 
@@ -186,20 +194,44 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   };
 
   const startListening = async () => {
-    if (!recognitionRef.current || isListening) return;
+    if (isListening) return;
 
     setError(null);
 
     try {
-      if (navigator.mediaDevices?.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach((track) => track.stop());
+      if (!recognitionRef.current) {
+        recognitionRef.current = createRecognition();
       }
+      if (!recognitionRef.current) return;
+
+      if (
+        window.isSecureContext === false &&
+        window.location.hostname !== "localhost" &&
+        window.location.hostname !== "127.0.0.1"
+      ) {
+        setError("Speech recognition requires HTTPS (or localhost).");
+        return;
+      }
+
+      if (navigator.permissions?.query) {
+        try {
+          const permission = await navigator.permissions.query({ name: "microphone" });
+          if (permission.state === "denied") {
+            setError("Microphone permission denied. Please allow microphone access and try again.");
+            return;
+          }
+        } catch {
+          // Permission query is not supported in some browsers.
+        }
+      }
+
       recognitionRef.current.start();
     } catch (err) {
       const errorName = err?.name || err?.error || "";
       if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
         setError("Microphone permission denied. Please allow microphone access and try again.");
+      } else if (errorName === "InvalidStateError") {
+        // Recognition may already be starting/running.
       } else {
         setError(err?.message || "Unable to access microphone");
       }
