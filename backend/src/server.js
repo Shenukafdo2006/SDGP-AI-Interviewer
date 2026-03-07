@@ -129,9 +129,6 @@ async function start() {
   await initCollections();         // auto-create Firestore collection on startup
   app.listen(PORT, () => {
     console.log(`\n🚀 Server running at http://localhost:${PORT}`);
-    console.log(`   GET  /api/user/:userId`);
-    console.log(`   POST /api/user/:userId/achievement/:name`);
-    console.log(`   DEL  /api/user/:userId/reset\n`);
   });
 }
 
