@@ -2,8 +2,8 @@ import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 
-import Signup from './signup.jsx'
-import Login from './login.jsx'
+// import Signup from './signup.jsx'
+// import Login from './login.jsx'
 
 import DashBoard from './DashBoard'
 import InterviewTraining from './InterviewTraining'
@@ -21,32 +21,34 @@ import SkillImprovement from './SkillImprovement'
 import DailyMotivation from './DailyMotivation'
 
 function App() {
-  // ✅ Start from signup
-  const [view, setView] = useState('signup')
 
-  // Interview session state
+  // ✅ Start directly from dashboard
+  const [view, setView] = useState('dashboard')
+
   const [interviewSessionData, setInterviewSessionData] = useState(null)
   const [currentSessionId, setCurrentSessionId] = useState(null)
 
-  // ✅ Signup Page
+  /*
+  // ❌ Signup Page (disabled)
   if (view === 'signup') {
     return (
       <Signup
-        onSignupSuccess={() => setView('login')}  // ✅ after signup go to login
-        onGoToLogin={() => setView('login')}      // ✅ "Already have account? Login"
+        onSignupSuccess={() => setView('login')}
+        onGoToLogin={() => setView('login')}
       />
     )
   }
 
-  // ✅ Login Page
+  // ❌ Login Page (disabled)
   if (view === 'login') {
     return (
       <Login
-        onLoginSuccess={() => setView('dashboard')} // ✅ after login go dashboard
-        onGoToSignup={() => setView('signup')}      // ✅ "No account? Signup"
+        onLoginSuccess={() => setView('dashboard')}
+        onGoToSignup={() => setView('signup')}
       />
     )
   }
+  */
 
   // 🔹 Training Page
   if (view === 'training') {
