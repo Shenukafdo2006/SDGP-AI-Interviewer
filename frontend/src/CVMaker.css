@@ -2738,24 +2738,46 @@
   }
 }
 
-/* ============================================
+
+  /* ============================================
    Scrollbar Styling
    ============================================ */
+
+/* Scrollbar Styling */
+
+.cvmaker-sidebar,
+.cvmaker-content {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+/* Chrome / Edge / Safari */
 
 .cvmaker-sidebar::-webkit-scrollbar,
 .cvmaker-content::-webkit-scrollbar {
   width: 8px;
 }
 
-.cvmaker-sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+.cvmaker-sidebar::-webkit-scrollbar-track,
+.cvmaker-content::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
 }
 
-.cvmaker-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
+.cvmaker-sidebar::-webkit-scrollbar-thumb,
+.cvmaker-content::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
   border-radius: 4px;
 }
 
-.cvmaker-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+.cvmaker-sidebar::-webkit-scrollbar-thumb:hover,
+.cvmaker-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
+
+/* Firefox */
+
+.cvmaker-sidebar,
+.cvmaker-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.1);
 }
