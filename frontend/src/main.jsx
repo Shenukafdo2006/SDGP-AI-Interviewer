@@ -2,8 +2,8 @@ import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
-import Signup from "./signup.jsx";
-import Login from "./login.jsx";
+import Signup from "../authPage/signup.jsx";
+import Login from "../authPage/login.jsx";;
 
 import DashBoard from "./DashBoard";
 import InterviewTraining from "./InterviewTraining";
