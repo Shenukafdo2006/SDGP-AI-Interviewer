@@ -43,19 +43,43 @@ const LinkedInIntegration = ({ onBack }) => {
             {isConnected ? "Account Linked: Professional User" : "Account Not Linked"}
           </div>
 
-          <div className="li-option-item">
-            <div className="li-info">
-              <h4>Skill Import</h4>
-              <p>Add LinkedIn endorsements to your skills list.</p>
+          <div className="li-sync-controls">
+            <div className="sync-row">
+              <div className="sync-text">
+                <span className="sync-label">Profile Auto-Sync</span>
+                <span className="sync-sub">Keep your bio and headline updated</span>
+              </div>
+              <label className="li-toggle">
+                <input type="checkbox" checked={isConnected} disabled={!isConnected} readOnly />
+                <span className="li-slider"></span>
+              </label>
             </div>
-            <label className="li-toggle">
-              <input 
-                type="checkbox" 
-                checked={syncOptions.skills} 
-                onChange={() => toggleOption('skills')} 
-              />
-              <span className="li-slider"></span>
-            </label>
-          </div>
-        </div>
 
+            <div className="sync-row">
+              <div className="sync-text">
+                <span className="sync-label">Skill Import</span>
+                <span className="sync-sub">Automatically import endorsed skills</span>
+              </div>
+              <label className="li-toggle">
+                <input type="checkbox" checked={isConnected} disabled={!isConnected} readOnly />
+                <span className="li-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <button 
+            className={`li-action-btn ${isConnected ? 'disconnect' : 'connect'} ${isSyncing ? 'loading' : ''}`}
+            onClick={handleToggleConnection}
+            disabled={isSyncing}
+          >
+            {isSyncing ? "Connecting..." : isConnected ? "Disconnect Account" : "Connect with LinkedIn"}
+          </button>
+
+          {isConnected && <p className="li-timestamp">Last updated: Just now</p>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LinkedInIntegration;
