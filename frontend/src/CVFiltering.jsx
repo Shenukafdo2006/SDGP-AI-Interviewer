@@ -16,25 +16,25 @@ const STATUS_COLORS = {
 
 const SAMPLE_CVS = [
   {
-    id: 1, name: 'Alex Chen', position: 'Senior Software Engineer',
-    experience: '5 years', education: 'M.Tech CS', location: 'Bangalore',
-    skills: ['React', 'Python', 'Java', 'AWS', 'Docker'], noticePeriod: '30 days',
-    salary: '18L', graduationYear: '2018', gender: 'Male', status: 'Shortlisted',
-    tags: ['Team Lead', 'Full Stack'], rating: 4.8, uploadDate: '2024-01-15',
-    matchPercentage: 92, email: 'alex.chen@email.com', phone: '+91 98765 43210',
-    avatar: 'AC', university: 'IIT Bombay', interviews: 3, offers: 1,
+    id: 1, name: 'Pavithri pabasara', position: 'Intern Software Engineer',
+    experience: '2 years', education: 'IIT Sri Lanka', location: 'Galle',
+    skills: ['React', 'Python', 'Java','Docker'], noticePeriod: '30 days',
+    gender: 'FeMale', status: 'Shortlisted',
+    tags: [ 'Full Stack'], uploadDate: '2026-02-15',
+    matchPercentage: 92, email: 'pavithripabasara@gmail.com', phone: '0765018265',
+     interviews: 3, offers: 1,
   },
   {
-    id: 2, name: 'Priya Sharma', position: 'Product Manager',
-    experience: '7 years', education: 'MBA', location: 'Mumbai',
+    id: 2, name: 'Sadewini Tharumini', position: 'Intern Product Manager',
+    experience: '2 yaers', education: 'IIT Sri Lanaka', location: 'Colombo',
     skills: ['Product Strategy', 'Agile', 'User Research', 'Analytics'], noticePeriod: '60 days',
-    salary: '25L', graduationYear: '2016', gender: 'Female', status: 'Interview Scheduled',
-    tags: ['IIM Alumnus', 'Certified Scrum Master'], rating: 4.9, uploadDate: '2024-01-14',
-    matchPercentage: 88, email: 'priya.s@email.com', phone: '+91 98765 43211',
-    avatar: 'PS', university: 'IIM Ahmedabad', interviews: 5, offers: 2,
+     gender: 'Female', status: 'Interview Scheduled',
+    uploadDate: '2026-01-14',
+    matchPercentage: 88, email: 'sadewini@gmail.com', phone: ' 077765 4321',
+     interviews: 5, offers: 2,
   },
   {
-    id: 3, name: 'Rahul Verma', position: 'UX Designer',
+    id: 3, name: 'Rahul Verma', position: 'Intern UX Designer',
     experience: '3 years', education: 'B.Des', location: 'Delhi',
     skills: ['Figma', 'Adobe XD', 'UI Design', 'Wireframing'], noticePeriod: '15 days',
     salary: '12L', graduationYear: '2020', gender: 'Male', status: 'New',
@@ -43,7 +43,7 @@ const SAMPLE_CVS = [
     avatar: 'RV', university: 'NID Ahmedabad', interviews: 2, offers: 0,
   },
   {
-    id: 4, name: 'Neha Gupta', position: 'Data Scientist',
+    id: 4, name: 'Neha Gupta', position: 'Intern Data Scientist',
     experience: '4 years', education: 'PhD', location: 'Pune',
     skills: ['Python', 'Machine Learning', 'TensorFlow', 'SQL'], noticePeriod: '45 days',
     salary: '22L', graduationYear: '2019', gender: 'Female', status: 'Viewed',
@@ -52,7 +52,7 @@ const SAMPLE_CVS = [
     avatar: 'NG', university: 'IIT Delhi', interviews: 4, offers: 1,
   },
   {
-    id: 5, name: 'Vikram Singh', position: 'DevOps Engineer',
+    id: 5, name: 'Vikram Singh', position: 'Intern DevOps Engineer',
     experience: '6 years', education: 'B.Tech', location: 'Hyderabad',
     skills: ['Kubernetes', 'Jenkins', 'Terraform', 'AWS'], noticePeriod: '30 days',
     salary: '20L', graduationYear: '2017', gender: 'Male', status: 'Shortlisted',
@@ -61,7 +61,7 @@ const SAMPLE_CVS = [
     avatar: 'VS', university: 'NIT Trichy', interviews: 3, offers: 1,
   },
   {
-    id: 6, name: 'Aisha Patel', position: 'Frontend Developer',
+    id: 6, name: 'Aisha Patel', position: 'Intern Frontend Developer',
     experience: '2 years', education: 'B.Tech', location: 'Bangalore',
     skills: ['React', 'TypeScript', 'CSS', 'Next.js'], noticePeriod: 'Immediate',
     salary: '10L', graduationYear: '2022', gender: 'Female', status: 'New',
@@ -364,18 +364,18 @@ const FilterTab = ({
               <button className="cvf-btn-ghost" onClick={onClearFilters}>Clear all</button>
             </div>
 
-            <FilterInput label="Position" name="position" options={[
+                        <FilterInput label="Position" name="position" options={[
               { value: '', label: 'All Positions' },
-              { value: ' Intern Software Engineer', label: 'Software Engineer' },
-              { value: ' Intern Product Manager', label: 'Product Manager' },
-              { value: ' Intern UX Designer', label: 'UX Designer' },
-              { value: ' Intern Data Scientist', label: 'Data Scientist' },
-              { value: ' Intern DevOps Engineer', label: 'DevOps Engineer' },
-              { value: ' Intern Frontend Developer', label: 'Frontend Developer' },
+              { value: 'Intern Software Engineer', label: 'Intern Software Engineer' },
+              { value: 'Intern Product Manager', label: 'Intern Product Manager' },
+              { value: 'Intern UX Designer', label: 'Intern UX Designer' },
+              { value: 'Intern Data Scientist', label: 'Intern Data Scientist' },
+              { value: 'Intern DevOps Engineer', label: 'Intern DevOps Engineer' },
+              { value: 'Intern Frontend Developer', label: 'Intern Frontend Developer' },
             ]} />
 
-            <FilterInput label="Location" name="location" type="text" placeholder="e.g. Bangalore" />
-            <FilterInput label="Skills" name="skills" type="text" placeholder="e.g. React, Python" />
+            <FilterInput label="Location" name="location" type="text" placeholder="e.g. Colombo" />
+            <FilterInput label="Skills" name="skills" type="text" placeholder="e.g. Java, Python" />
 
             <FilterInput label="Notice Period" name="noticePeriod" options={[
               { value: '', label: 'Any' },
