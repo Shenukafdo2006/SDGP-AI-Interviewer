@@ -1,25 +1,23 @@
-.linkedin-integration-page {
-  background: #0B1220; /* Matches Achievements.css */
+.li-page-wrapper {
+  background-color: #080b14;
+  background-image: 
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 85% 85%, rgba(168, 85, 247, 0.10) 0%, transparent 50%);
   min-height: 100vh;
   padding: 40px;
-  color: #FFFFFF;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #e2e8f0;
 }
 
-.li-page-header {
-  max-width: 1000px;
-  margin: 0 auto 40px;
-}
-
-.li-back-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94A3B8;
+.li-back-nav {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366F1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
   padding: 10px 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 500;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
 .li-back-btn:hover {
