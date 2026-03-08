@@ -881,7 +881,20 @@ const CVFiltering = ({ onBack }) => {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className={`cvf-root cvf-root--${theme}`}>
+    <div 
+      className={`cvf-root cvf-root--${theme}`} 
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflowY: 'scroll',
+        overflowX: 'hidden',
+        zIndex: 9999,
+        backgroundColor: theme === 'dark' ? '#0f1117' : '#f4f5f9'
+      }}
+    >
       <div className="cvf-bg" aria-hidden>
         <div className="cvf-orb cvf-orb--1" />
         <div className="cvf-orb cvf-orb--2" />
@@ -890,7 +903,7 @@ const CVFiltering = ({ onBack }) => {
 
       <Notification notifications={notifications} />
 
-      <div className="cvf-shell">
+      <div className="cvf-shell" style={{ paddingBottom: '60px' }}>
         {/* Header */}
         <header className="cvf-header">
           <div className="cvf-header__left">
