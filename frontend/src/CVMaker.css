@@ -1,5 +1,5 @@
 /* ============================================
-   CV Maker Dashboard - Complete Styles
+   CV Maker Dashboard - Complete Styles (Dark Navy Theme)
    ============================================ */
 
 .cvmaker-dashboard {
@@ -7,7 +7,7 @@
   min-height: 100vh;
   height: 100vh;
   overflow: hidden;
-  background: #f5f7fa;
+  background: #0f1420;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
@@ -19,17 +19,18 @@
 .cvmaker-sidebar {
   width: 280px;
   min-width: 280px;
-  background: linear-gradient(180deg, #2c3e50 0%, #1a1a2e 100%);
+  background: linear-gradient(180deg, #1a1f35 0%, #0f1420 100%);
   color: white;
   padding: 25px 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
   height: 100vh;
   overflow-y: auto;
   position: sticky;
   top: 0;
   flex-shrink: 0;
+  border-right: 1px solid #2d3460;
 }
 
 .cvmaker-sidebar-brand {
@@ -37,7 +38,7 @@
   align-items: center;
   gap: 12px;
   padding: 0 25px 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #2d3460;
 }
 
 .cvmaker-sidebar-logo {
@@ -47,7 +48,7 @@
 .cvmaker-sidebar-brand h2 {
   font-size: 1.6rem;
   margin: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -63,7 +64,7 @@
   padding: 15px 25px;
   background: none;
   border: none;
-  color: #cbd5e0;
+  color: #64748b;
   text-align: left;
   display: flex;
   align-items: center;
@@ -74,15 +75,15 @@
 }
 
 .cvmaker-sidebar-feature:hover {
-  background: rgba(102, 126, 234, 0.1);
-  color: white;
+  background: rgba(129, 140, 248, 0.1);
+  color: #f1f5f9;
   padding-left: 30px;
 }
 
 .cvmaker-sidebar-feature.cvmaker-active {
-  background: linear-gradient(90deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-  color: white;
-  border-left: 4px solid #667eea;
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.25) 0%, rgba(124, 58, 237, 0.25) 100%);
+  color: #a5b4fc;
+  border-left: 4px solid #7c3aed;
 }
 
 .cvmaker-nav-icon {
@@ -92,9 +93,9 @@
 .cvmaker-back-btn {
   margin: 0 20px 20px;
   padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid #2d3460;
+  color: #a5b4fc;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
@@ -102,7 +103,7 @@
 }
 
 .cvmaker-back-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(129, 140, 248, 0.2);
   transform: translateX(-5px);
 }
 
@@ -113,18 +114,19 @@
 .cvmaker-content {
   flex: 1;
   padding: 30px;
-  background: #f5f7fa;
+  background: #0f1420;
   height: 100vh;
   overflow-y: auto;
 }
 
 .cvmaker-feature-container {
-  background: white;
+  background: #1a1f35;
   border-radius: 15px;
   padding: 30px;
   margin-bottom: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
   min-height: 500px;
+  border: 1px solid #2d3460;
 }
 
 /* ============================================
@@ -140,13 +142,13 @@
 }
 
 .cvmaker-panel-header h3 {
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 1.8rem;
   margin: 0 0 8px 0;
 }
 
 .cvmaker-panel-subtitle {
-  color: #718096;
+  color: #94a3b8;
   font-size: 1rem;
 }
 
@@ -163,10 +165,10 @@
 .cvmaker-mode-btn {
   flex: 1;
   padding: 14px 20px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #2d3460;
   border-radius: 10px;
-  background: #f8f9fa;
-  color: #555;
+  background: #1e2440;
+  color: #94a3b8;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -175,15 +177,15 @@
 
 .cvmaker-mode-btn:hover {
   border-color: #667eea;
-  background: #f0f3ff;
-  color: #667eea;
+  background: #252b4a;
+  color: #a5b4fc;
 }
 
 .cvmaker-mode-btn.cvmaker-mode-active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   color: white;
   border-color: transparent;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
 }
 
 /* ============================================
@@ -191,11 +193,11 @@
    ============================================ */
 
 .cvmaker-upload-dropzone {
-  border: 2.5px dashed #667eea;
+  border: 2.5px dashed #4f46e5;
   border-radius: 16px;
   padding: 50px 30px;
   text-align: center;
-  background: linear-gradient(135deg, #f8f9ff 0%, #f3f0ff 100%);
+  background: linear-gradient(135deg, #1e2440 0%, #252b4a 100%);
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 20px;
@@ -204,10 +206,10 @@
 
 .cvmaker-upload-dropzone:hover,
 .cvmaker-upload-dropzone.cvmaker-drag-over {
-  background: linear-gradient(135deg, #eef0ff 0%, #ede8ff 100%);
-  border-color: #5a6fd8;
+  background: linear-gradient(135deg, #252b4a 0%, #2d3460 100%);
+  border-color: #7c3aed;
   transform: scale(1.01);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 8px 30px rgba(79, 70, 229, 0.2);
 }
 
 .cvmaker-upload-icon-large {
@@ -216,14 +218,14 @@
 }
 
 .cvmaker-upload-main-text {
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 1.15rem;
   font-weight: 600;
   margin: 0 0 8px 0;
 }
 
 .cvmaker-upload-hint {
-  color: #718096;
+  color: #94a3b8;
   font-size: 0.9rem;
   margin: 0 0 20px 0;
 }
@@ -235,7 +237,7 @@
 }
 
 .cvmaker-format-badge {
-  background: #667eea;
+  background: #4f46e5;
   color: white;
   padding: 5px 14px;
   border-radius: 20px;
@@ -245,7 +247,7 @@
 }
 
 .cvmaker-upload-success-text {
-  color: #2e7d32;
+  color: #34d399;
   font-size: 1.05rem;
   font-weight: 600;
   margin: 0 0 8px 0;
@@ -256,8 +258,8 @@
    ============================================ */
 
 .cvmaker-extracted-preview {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
+  background: #1e2440;
+  border: 1px solid #2d3460;
   border-radius: 10px;
   margin-bottom: 20px;
   overflow: hidden;
@@ -268,21 +270,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 15px;
-  background: #e9ecef;
+  background: #252b4a;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #f1f5f9;
 }
 
 .cvmaker-extracted-chars {
-  color: #667eea;
+  color: #818cf8;
   font-size: 0.85rem;
 }
 
 .cvmaker-extracted-text {
   padding: 15px;
   font-size: 0.85rem;
-  color: #555;
+  color: #94a3b8;
   line-height: 1.6;
   max-height: 120px;
   overflow: hidden;
@@ -296,12 +298,13 @@
 .cvmaker-cv-input {
   width: 100%;
   padding: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #2d3460;
   border-radius: 10px;
   font-size: 1rem;
   font-family: inherit;
   resize: vertical;
-  background: #fafafa;
+  background: #1e2440;
+  color: #f1f5f9;
   box-sizing: border-box;
   margin-bottom: 15px;
 }
@@ -309,11 +312,15 @@
 .cvmaker-cv-input:focus {
   outline: none;
   border-color: #667eea;
-  background: white;
+  background: #252b4a;
+}
+
+.cvmaker-cv-input::placeholder {
+  color: #64748b;
 }
 
 .cvmaker-analyze-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   color: white;
   border: none;
   padding: 15px 40px;
@@ -330,7 +337,7 @@
 
 .cvmaker-analyze-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5);
 }
 
 .cvmaker-analyze-btn:disabled {
@@ -339,7 +346,7 @@
 }
 
 .cvmaker-analyze-btn.cvmaker-analyzing {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a3f9a 100%);
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
 }
 
 .cvmaker-loading-text {
@@ -366,7 +373,7 @@
   display: flex;
   gap: 8px;
   margin-bottom: 25px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid #2d3460;
   padding-bottom: 0;
 }
 
@@ -375,7 +382,7 @@
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
-  color: #718096;
+  color: #64748b;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -384,12 +391,12 @@
 }
 
 .cvmaker-score-tab:hover {
-  color: #667eea;
+  color: #818cf8;
 }
 
 .cvmaker-score-tab.cvmaker-score-tab-active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: #818cf8;
+  border-bottom-color: #818cf8;
 }
 
 /* ============================================
@@ -408,17 +415,13 @@
   width: 130px;
   height: 130px;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--score-color) calc(var(--score-color, 0) * 1%),
-    #e0e0e0 0
-  );
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border: 8px solid var(--score-color);
   flex-shrink: 0;
-  box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.3);
 }
 
 .cvmaker-score-number {
@@ -430,7 +433,7 @@
 
 .cvmaker-score-label {
   font-size: 0.75rem;
-  color: #718096;
+  color: #64748b;
   font-weight: 600;
 }
 
@@ -445,27 +448,28 @@
 .cvmaker-improvements-box {
   flex: 1;
   min-width: 180px;
-  background: #f8f9fa;
+  background: #1e2440;
   border-radius: 10px;
   padding: 15px;
+  border: 1px solid #2d3460;
 }
 
 .cvmaker-strengths-box h5,
 .cvmaker-improvements-box h5 {
   margin: 0 0 10px 0;
   font-size: 0.9rem;
-  color: #2c3e50;
+  color: #f1f5f9;
 }
 
 .cvmaker-strength-item {
   font-size: 0.85rem;
-  color: #2e7d32;
+  color: #34d399;
   padding: 4px 0;
 }
 
 .cvmaker-improvement-item {
   font-size: 0.85rem;
-  color: #e65100;
+  color: #fb923c;
   padding: 4px 0;
 }
 
@@ -481,15 +485,15 @@
 }
 
 .cvmaker-score-card {
-  background: #f8f9fa;
+  background: #1e2440;
   padding: 18px;
   border-radius: 10px;
-  border: 1px solid #e9ecef;
+  border: 1px solid #2d3460;
 }
 
 .cvmaker-score-bar-outer {
   height: 8px;
-  background: #e0e0e0;
+  background: #2d3460;
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -509,13 +513,14 @@
 
 .cvmaker-score-card-label {
   font-size: 0.85rem;
-  color: #718096;
+  color: #64748b;
   font-weight: 500;
 }
 
 .cvmaker-score-card-value {
   font-size: 0.95rem;
   font-weight: 700;
+  color: #f1f5f9;
 }
 
 /* ============================================
@@ -523,13 +528,14 @@
    ============================================ */
 
 .cvmaker-trend {
-  background: #f8f9fa;
+  background: #1e2440;
   padding: 20px;
   border-radius: 12px;
+  border: 1px solid #2d3460;
 }
 
 .cvmaker-trend h4 {
-  color: #2c3e50;
+  color: #f1f5f9;
   margin: 0 0 20px 0;
   font-size: 1rem;
 }
@@ -558,7 +564,7 @@
 
 .cvmaker-trend-bar-wrap span {
   font-size: 0.8rem;
-  color: #718096;
+  color: #64748b;
 }
 
 /* ============================================
@@ -570,7 +576,7 @@
 }
 
 .cvmaker-section-health h4 {
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 1.1rem;
   margin-bottom: 20px;
 }
@@ -586,14 +592,14 @@
   width: 110px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #94a3b8;
   flex-shrink: 0;
 }
 
 .cvmaker-section-bar-outer {
   flex: 1;
   height: 10px;
-  background: #e0e0e0;
+  background: #2d3460;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -608,7 +614,7 @@
   width: 42px;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #f1f5f9;
   text-align: right;
 }
 
@@ -649,21 +655,21 @@
 }
 
 .cvmaker-feedback-item.cvmaker-feedback-success {
-  background: #e8f5e9;
-  color: #2e7d32;
-  border-color: #4caf50;
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+  border-color: #34d399;
 }
 
 .cvmaker-feedback-item.cvmaker-feedback-warning {
-  background: #fff3e0;
-  color: #e65100;
-  border-color: #ff9800;
+  background: rgba(251, 146, 60, 0.1);
+  color: #fb923c;
+  border-color: #fb923c;
 }
 
 .cvmaker-feedback-item.cvmaker-feedback-info {
-  background: #e3f2fd;
-  color: #1565c0;
-  border-color: #2196f3;
+  background: rgba(129, 140, 248, 0.1);
+  color: #818cf8;
+  border-color: #818cf8;
 }
 
 /* ============================================
@@ -675,21 +681,21 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 20px;
-  background: #f0f3ff;
+  background: rgba(79, 70, 229, 0.1);
   padding: 12px 18px;
   border-radius: 10px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #4f46e5;
   flex-wrap: wrap;
 }
 
 .cvmaker-filter-label {
   font-weight: 700;
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 0.9rem;
 }
 
 .cvmaker-filter-tag {
-  color: #667eea;
+  color: #818cf8;
   font-size: 0.9rem;
 }
 
@@ -702,8 +708,8 @@
 }
 
 .cvmaker-template-card {
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: #1e2440;
+  border: 2px solid #2d3460;
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -713,13 +719,14 @@
 
 .cvmaker-template-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border-color: #4f46e5;
 }
 
 .cvmaker-template-card.cvmaker-selected {
-  border-color: #667eea;
+  border-color: #7c3aed;
   border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 
 .cvmaker-template-preview {
@@ -748,7 +755,7 @@
 
 .cvmaker-template-industry {
   font-size: 0.75rem;
-  color: #667eea;
+  color: #818cf8;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -756,13 +763,13 @@
 }
 
 .cvmaker-template-details h4 {
-  color: #2c3e50;
+  color: #f1f5f9;
   margin: 0 0 8px 0;
   font-size: 1.15rem;
 }
 
 .cvmaker-template-details p {
-  color: #718096;
+  color: #94a3b8;
   font-size: 0.88rem;
   margin: 0 0 12px 0;
 }
@@ -774,8 +781,8 @@
 }
 
 .cvmaker-tag {
-  background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  background: rgba(79, 70, 229, 0.15);
+  color: #818cf8;
   padding: 3px 10px;
   border-radius: 15px;
   font-size: 0.75rem;
@@ -783,7 +790,7 @@
 }
 
 .cvmaker-selected-check {
-  background: #667eea;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   text-align: center;
   padding: 8px;
@@ -792,14 +799,14 @@
 }
 
 .cvmaker-ats-info-box {
-  background: #e8f5e9;
-  border: 1px solid #c8e6c9;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.25);
   border-radius: 12px;
   padding: 20px 25px;
 }
 
 .cvmaker-ats-info-box h4 {
-  color: #2e7d32;
+  color: #34d399;
   margin: 0 0 15px 0;
   font-size: 1rem;
 }
@@ -811,7 +818,7 @@
 }
 
 .cvmaker-ats-features span {
-  color: #2e7d32;
+  color: #34d399;
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -826,7 +833,7 @@
 
 .cvmaker-tone-selector label {
   display: block;
-  color: #2c3e50;
+  color: #f1f5f9;
   font-weight: 700;
   margin-bottom: 12px;
   font-size: 1rem;
@@ -840,10 +847,10 @@
 
 .cvmaker-tone-btn {
   padding: 10px 20px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #2d3460;
   border-radius: 8px;
-  background: #f8f9fa;
-  color: #555;
+  background: #1e2440;
+  color: #94a3b8;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
@@ -852,25 +859,26 @@
 
 .cvmaker-tone-btn:hover {
   border-color: #667eea;
-  color: #667eea;
+  color: #818cf8;
 }
 
 .cvmaker-tone-btn.cvmaker-tone-active {
-  background: #667eea;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
-  border-color: #667eea;
+  border-color: transparent;
 }
 
 .cvmaker-structure-info {
-  background: #f8f9fa;
+  background: #1e2440;
   padding: 18px 22px;
   border-radius: 10px;
   margin-bottom: 22px;
+  border: 1px solid #2d3460;
 }
 
 .cvmaker-structure-info h4 {
   margin: 0 0 12px 0;
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 0.95rem;
 }
 
@@ -882,7 +890,7 @@
 }
 
 .cvmaker-structure-parts span {
-  color: #667eea;
+  color: #818cf8;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -890,13 +898,14 @@
 .cvmaker-cover-letter-textarea {
   width: 100%;
   padding: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #2d3460;
   border-radius: 10px;
   font-size: 1rem;
   font-family: 'Georgia', serif;
   line-height: 1.8;
   resize: vertical;
-  background: white;
+  background: #1e2440;
+  color: #f1f5f9;
   box-sizing: border-box;
   margin-bottom: 15px;
 }
@@ -906,6 +915,10 @@
   border-color: #667eea;
 }
 
+.cvmaker-cover-letter-textarea::placeholder {
+  color: #64748b;
+}
+
 .cvmaker-cl-actions {
   display: flex;
   gap: 12px;
@@ -913,7 +926,7 @@
 
 .cvmaker-cl-action-btn {
   padding: 11px 25px;
-  background: #667eea;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   border: none;
   border-radius: 8px;
@@ -923,7 +936,7 @@
 }
 
 .cvmaker-cl-action-btn:hover {
-  background: #5a6fd8;
+  opacity: 0.9;
   transform: translateY(-2px);
 }
 
@@ -937,7 +950,7 @@
 
 .cvmaker-export-section h4,
 .cvmaker-share-section h4 {
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 1.1rem;
   margin-bottom: 18px;
 }
@@ -954,8 +967,8 @@
   align-items: flex-start;
   gap: 4px;
   padding: 20px;
-  background: #f8f9fa;
-  border: 2px solid #e0e0e0;
+  background: #1e2440;
+  border: 2px solid #2d3460;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -963,10 +976,10 @@
 }
 
 .cvmaker-export-btn:hover {
-  border-color: #667eea;
-  background: #f0f3ff;
+  border-color: #4f46e5;
+  background: #252b4a;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.2);
 }
 
 .cvmaker-export-icon {
@@ -975,13 +988,13 @@
 
 .cvmaker-export-name {
   font-weight: 700;
-  color: #2c3e50;
+  color: #f1f5f9;
   font-size: 0.95rem;
 }
 
 .cvmaker-export-desc {
   font-size: 0.82rem;
-  color: #718096;
+  color: #64748b;
 }
 
 .cvmaker-share-section {
@@ -997,7 +1010,7 @@
 
 .cvmaker-share-btn {
   padding: 12px 22px;
-  background: #667eea;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
   color: white;
   border: none;
   border-radius: 8px;
@@ -1007,7 +1020,7 @@
 }
 
 .cvmaker-share-btn:hover {
-  background: #5a6fd8;
+  opacity: 0.9;
   transform: translateY(-2px);
 }
 
@@ -1015,24 +1028,25 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  background: #f8f9fa;
+  background: #1e2440;
   padding: 12px;
   border-radius: 10px;
+  border: 1px solid #2d3460;
 }
 
 .cvmaker-share-link-input {
   flex: 1;
   padding: 10px 14px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #2d3460;
   border-radius: 6px;
   font-size: 0.9rem;
-  background: white;
-  color: #555;
+  background: #252b4a;
+  color: #94a3b8;
 }
 
 .cvmaker-copy-btn {
   padding: 10px 20px;
-  background: #2c3e50;
+  background: #4f46e5;
   color: white;
   border: none;
   border-radius: 6px;
@@ -1042,7 +1056,7 @@
 }
 
 .cvmaker-copy-btn:hover {
-  background: #1a1a2e;
+  background: #4338ca;
 }
 
 /* ============================================
@@ -1103,16 +1117,20 @@
    Scrollbar Styling
    ============================================ */
 
-.cvmaker-sidebar::-webkit-scrollbar {
+.cvmaker-sidebar::-webkit-scrollbar,
+.cvmaker-content::-webkit-scrollbar {
   width: 6px;
 }
-.cvmaker-sidebar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+.cvmaker-sidebar::-webkit-scrollbar-track,
+.cvmaker-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
 }
-.cvmaker-sidebar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.25);
+.cvmaker-sidebar::-webkit-scrollbar-thumb,
+.cvmaker-content::-webkit-scrollbar-thumb {
+  background: #2d3460;
   border-radius: 3px;
 }
-.cvmaker-sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.45);
+.cvmaker-sidebar::-webkit-scrollbar-thumb:hover,
+.cvmaker-content::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
 }
