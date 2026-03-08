@@ -26,28 +26,21 @@ const LinkedInIntegration = ({ onBack }) => {
         </button>
       </div>
 
-<div className={`li-status-banner ${isConnected ? 'connected' : ''}`}>
-          {isConnected ? (
-            <span>● Account Connected: <strong>LinkedIn User</strong></span>
-          ) : (
-            <span>Account Not Linked</span>
-          )}
-        </div>
+      <div className="li-content-center">
+        <div className="li-main-card">
+          <div className="li-card-glow"></div>
+          
+          <div className="li-branding-section">
+            <div className="li-logo-box">in</div>
+            <h1 className="li-title">LinkedIn Integration</h1>
+            <p className="li-desc">
+              Connect your professional profile to sync skills and achievements with your REVOLVE dashboard.
+            </p>
+          </div>
 
-        <div className="li-options-grid">
-          <div className="li-option-item">
-            <div className="li-info">
-              <h4>Profile Auto-Sync</h4>
-              <p>Keep your bio and contact info up to date.</p>
-            </div>
-            <label className="li-toggle">
-              <input 
-                type="checkbox" 
-                checked={syncOptions.profile} 
-                onChange={() => toggleOption('profile')} 
-              />
-              <span className="li-slider"></span>
-            </label>
+          <div className={`li-status-tag ${isConnected ? 'active' : 'inactive'}`}>
+            <span className="dot"></span>
+            {isConnected ? "Account Linked: Professional User" : "Account Not Linked"}
           </div>
 
           <div className="li-option-item">
