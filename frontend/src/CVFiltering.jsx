@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import './CVFiltering.css';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -220,7 +220,7 @@ const UploadTab = ({ cvData, uploadedFiles, uploadProgress, onUpload, onDrop }) 
 
 // ─── CV Card (Grid) ───────────────────────────────────────────────────────────
 
-const CVCardGrid = ({ cv, selected, onSelect, onCompare, onClick }) => (
+const CVCardGrid = ({ cv, selected, onSelect, onClick }) => (
   <div
     className={`cvf-cv-card cvf-cv-card--grid ${selected ? 'cvf-cv-card--selected' : ''}`}
     onClick={() => onClick(cv)}
@@ -260,7 +260,6 @@ const CVCardGrid = ({ cv, selected, onSelect, onCompare, onClick }) => (
     <div className="cvf-cv-card__footer">
       <StatusBadge status={cv.status} />
       <div className="cvf-action-row">
-        <button className="cvf-icon-btn" title="Compare" onClick={e => { e.stopPropagation(); onCompare(cv); }}>👥</button>
         <button className="cvf-icon-btn" title="Star" onClick={e => e.stopPropagation()}>⭐</button>
         <button className="cvf-icon-btn" title="More" onClick={e => e.stopPropagation()}>⋯</button>
       </div>
@@ -315,8 +314,7 @@ const CVCardList = ({ cv, selected, onSelect, onClick }) => (
 const FilterTab = ({
   cvData, filters, onFilterChange, onApply, onClearFilters,
   viewMode, setViewMode, sortBy, setSortBy,
-  selectedCVs, onToggleSelect, onSelectAll, onClearSelection,
-  compareList, onToggleCompare,
+  selectedCVs, onToggleSelect,
   onOpenCV,
   onBulkAction,
   filterResults,
@@ -393,7 +391,6 @@ const FilterTab = ({
             ]} />
 
             <FilterInput label="Location" name="location" type="text" placeholder="e.g. Bangalore" />
-
             <FilterInput label="Skills" name="skills" type="text" placeholder="e.g. React, Python" />
 
             <FilterInput label="Notice Period" name="noticePeriod" options={[
@@ -464,7 +461,6 @@ const FilterTab = ({
                 key={cv.id} cv={cv}
                 selected={selectedCVs.includes(cv.id)}
                 onSelect={onToggleSelect}
-                onCompare={onToggleCompare}
                 onClick={onOpenCV}
               />
             ) : (
@@ -671,228 +667,6 @@ const SavedTab = ({ savedFilters, onSaveFilter, onDeleteFilter }) => {
   );
 };
 
-// ─── Analytics Tab ────────────────────────────────────────────────────────────
-
-const AnalyticsTab = () => {
-  const STATS = [
-    { icon: '📄', label: 'Total CVs', value: '156', change: '+12 this week', positive: true },
-    { icon: '✓', label: 'Shortlisted', value: '45', change: '29% of total', positive: false },
-    { icon: '⏳', label: 'In Pipeline', value: '28', change: '18% of total', positive: false },
-    { icon: '⭐', label: 'Avg. Rating', value: '4.2', change: '/ 5.0', positive: false },
-  ];
-
-  const SKILLS = [
-    { name: 'React', size: 'xl' }, { name: 'Python', size: 'lg' }, { name: 'Java', size: 'md' },
-    { name: 'AWS', size: 'sm' }, { name: 'JavaScript', size: 'xl' }, { name: 'Node.js', size: 'lg' },
-    { name: 'TypeScript', size: 'lg' }, { name: 'Docker', size: 'sm' }, { name: 'GraphQL', size: 'md' },
-  ];
-
-  const UNIVERSITIES = [
-    { name: 'IIT Bombay', pct: 85 }, { name: 'IIT Delhi', pct: 72 },
-    { name: 'NIT Trichy', pct: 68 }, { name: 'BITS Pilani', pct: 65 },
-  ];
-
-  const LOCATIONS = [
-    { name: 'Bangalore', pct: 42 }, { name: 'Mumbai', pct: 28 },
-    { name: 'Delhi', pct: 18 }, { name: 'Pune', pct: 12 },
-  ];
-
-  return (
-    <div className="cvf-tab-content cvf-analytics">
-      <h2 className="cvf-mb-24">Analytics Dashboard</h2>
-
-      <div className="cvf-stats-grid">
-        {STATS.map(s => (
-          <div key={s.label} className="cvf-stat-card">
-            <div className="cvf-stat-card__icon">{s.icon}</div>
-            <div>
-              <span className="cvf-text-muted cvf-text-sm">{s.label}</span>
-              <div className="cvf-stat-card__value">{s.value}</div>
-              <span className={`cvf-text-sm ${s.positive ? 'cvf-text-success' : 'cvf-text-muted'}`}>{s.change}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="cvf-charts-grid">
-        <div className="cvf-chart-card">
-          <h3>Skills Distribution</h3>
-          <div className="cvf-skill-cloud">
-            {SKILLS.map(s => (
-              <span key={s.name} className={`cvf-cloud-tag cvf-cloud-tag--${s.size}`}>{s.name}</span>
-            ))}
-          </div>
-        </div>
-
-        <div className="cvf-chart-card">
-          <h3>Experience Breakdown</h3>
-          <div className="cvf-donut-wrapper">
-            <div
-              className="cvf-donut"
-              style={{
-                background: `conic-gradient(
-                  #6366f1 0deg 108deg,
-                  #8b5cf6 108deg 270deg,
-                  #10b981 270deg 360deg
-                )`
-              }}
-            >
-              <div className="cvf-donut__hole" />
-            </div>
-            <div className="cvf-donut-legend">
-              <div className="cvf-legend-item"><span style={{ background: '#6366f1' }} />0-2 yrs (30%)</div>
-              <div className="cvf-legend-item"><span style={{ background: '#8b5cf6' }} />3-5 yrs (45%)</div>
-              <div className="cvf-legend-item"><span style={{ background: '#10b981' }} />6+ yrs (25%)</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="cvf-chart-card">
-          <h3>Top Universities</h3>
-          <div className="cvf-bar-list">
-            {UNIVERSITIES.map(u => (
-              <div key={u.name} className="cvf-bar-item">
-                <span className="cvf-bar-item__label">{u.name}</span>
-                <div className="cvf-bar-item__track">
-                  <div className="cvf-bar-item__fill" style={{ width: `${u.pct}%` }}>
-                    <span>{u.pct}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="cvf-chart-card">
-          <h3>Location Distribution</h3>
-          <div className="cvf-bar-list">
-            {LOCATIONS.map(l => (
-              <div key={l.name} className="cvf-bar-item">
-                <span className="cvf-bar-item__label">{l.name}</span>
-                <div className="cvf-bar-item__track">
-                  <div className="cvf-bar-item__fill cvf-bar-item__fill--alt" style={{ width: `${l.pct}%` }}>
-                    <span>{l.pct}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ─── Compare Tab ──────────────────────────────────────────────────────────────
-
-const CompareTab = ({ compareList, onRemove, onClear, onGoFilter }) => {
-  const ROWS = [
-    { label: 'Experience', key: 'experience' },
-    { label: 'Education', key: 'education' },
-    { label: 'University', key: 'university' },
-    { label: 'Notice Period', key: 'noticePeriod' },
-    { label: 'Expected Salary', key: 'salary' },
-    { label: 'Interviews', key: 'interviews' },
-  ];
-
-  if (compareList.length === 0) {
-    return (
-      <div className="cvf-tab-content">
-        <div className="cvf-empty-state">
-          <div className="cvf-empty-state__icon">👥</div>
-          <h3>No candidates to compare</h3>
-          <p>Select candidates from the Filter tab using the 👥 button (up to 3)</p>
-          <button className="cvf-btn-primary" onClick={onGoFilter}>Go to Candidates</button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="cvf-tab-content cvf-compare">
-      <div className="cvf-row-between cvf-mb-24">
-        <h2>Compare Candidates</h2>
-        <button className="cvf-btn-ghost cvf-btn-danger" onClick={onClear}>Clear All</button>
-      </div>
-
-      <div className="cvf-compare-table-wrapper">
-        <table className="cvf-compare-table">
-          <thead>
-            <tr>
-              <th>Criteria</th>
-              {compareList.map(cv => (
-                <th key={cv.id}>
-                  <div className="cvf-compare-header">
-                    <AvatarCircle initials={cv.avatar} status={cv.status} />
-                    <div>
-                      <div className="cvf-compare-header__name">{cv.name}</div>
-                      <div className="cvf-text-muted cvf-text-sm">{cv.position}</div>
-                    </div>
-                    <button className="cvf-remove-btn" onClick={() => onRemove(cv.id)}>✕</button>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Match Score</td>
-              {compareList.map(cv => (
-                <td key={cv.id}>
-                  <div
-                    className="cvf-score-ring"
-                    style={{
-                      background: `conic-gradient(#10b981 0deg ${cv.matchPercentage * 3.6}deg, #e5e7eb ${cv.matchPercentage * 3.6}deg 360deg)`
-                    }}
-                  >
-                    <span>{cv.matchPercentage}%</span>
-                  </div>
-                </td>
-              ))}
-            </tr>
-            {ROWS.map(row => (
-              <tr key={row.key}>
-                <td>{row.label}</td>
-                {compareList.map(cv => <td key={cv.id}>{cv[row.key]}</td>)}
-              </tr>
-            ))}
-            <tr>
-              <td>Skills</td>
-              {compareList.map(cv => (
-                <td key={cv.id}>
-                  <div className="cvf-skills-row">
-                    {cv.skills.map((s, i) => <SkillTag key={i} skill={s} size="sm" />)}
-                  </div>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td>Rating</td>
-              {compareList.map(cv => (
-                <td key={cv.id}>
-                  <span className="cvf-stars">{getRatingStars(cv.rating)}</span>
-                  <span className="cvf-text-muted"> {cv.rating}</span>
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td>Status</td>
-              {compareList.map(cv => (
-                <td key={cv.id}><StatusBadge status={cv.status} /></td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className="cvf-compare-actions">
-        <button className="cvf-btn-primary">Shortlist Selected</button>
-        <button className="cvf-btn-outline">Export Comparison</button>
-      </div>
-    </div>
-  );
-};
-
 // ─── CV Preview Modal ─────────────────────────────────────────────────────────
 
 const CVModal = ({ cv, onClose }) => {
@@ -980,36 +754,28 @@ const CVFiltering = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState('upload');
   const [theme, setTheme] = useState('light');
 
-  // CV Data
   const [cvData] = useState(SAMPLE_CVS);
   const [filterResults, setFilterResults] = useState([]);
 
-  // Upload state
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({});
 
-  // Filter state
   const [filters, setFilters] = useState({
     position: '', experience: '', education: '', location: '',
     skills: '', noticePeriod: '', salaryRange: '', gender: '', currentStatus: '',
   });
 
-  // Search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('basic');
-
-  // Saved filters
   const [savedFilters, setSavedFilters] = useState([]);
 
-  // UI state
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
   const [selectedCVs, setSelectedCVs] = useState([]);
-  const [compareList, setCompareList] = useState([]);
   const [selectedCV, setSelectedCV] = useState(null);
   const [notifications, setNotifications] = useState([]);
 
-  // ── Notifications ────────────────────────────────────────────────────────────
+  // ── Notifications ─────────────────────────────────────────────────────────
 
   const addNotification = useCallback((type, message) => {
     const id = Date.now();
@@ -1017,7 +783,7 @@ const CVFiltering = ({ onBack }) => {
     setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== id)), 3000);
   }, []);
 
-  // ── Upload Logic ─────────────────────────────────────────────────────────────
+  // ── Upload Logic ──────────────────────────────────────────────────────────
 
   const handleUpload = (e) => {
     const files = Array.from(e.target.files);
@@ -1047,7 +813,7 @@ const CVFiltering = ({ onBack }) => {
     handleUpload({ target: { files: Array.from(e.dataTransfer.files) } });
   };
 
-  // ── Filter Logic ─────────────────────────────────────────────────────────────
+  // ── Filter Logic ──────────────────────────────────────────────────────────
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -1072,20 +838,12 @@ const CVFiltering = ({ onBack }) => {
     addNotification('success', `Found ${result.length} matching CVs`);
   };
 
-  // ── Selection Logic ──────────────────────────────────────────────────────────
+  // ── Selection Logic ───────────────────────────────────────────────────────
 
   const toggleSelect = (id) =>
     setSelectedCVs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
-  const toggleCompare = (cv) => {
-    setCompareList(prev => {
-      if (prev.find(c => c.id === cv.id)) return prev.filter(c => c.id !== cv.id);
-      if (prev.length >= 3) { addNotification('warning', 'Max 3 candidates for comparison'); return prev; }
-      return [...prev, cv];
-    });
-  };
-
-  // ── Saved Filters ────────────────────────────────────────────────────────────
+  // ── Saved Filters ─────────────────────────────────────────────────────────
 
   const saveFilter = () => {
     const name = prompt('Enter filter name:');
@@ -1097,7 +855,7 @@ const CVFiltering = ({ onBack }) => {
 
   const deleteFilter = (id) => setSavedFilters(prev => prev.filter(f => f.id !== id));
 
-  // ── Bulk Actions ─────────────────────────────────────────────────────────────
+  // ── Bulk Actions ──────────────────────────────────────────────────────────
 
   const handleBulkAction = (action) => {
     const msgs = {
@@ -1111,22 +869,19 @@ const CVFiltering = ({ onBack }) => {
     if (action === 'delete') setSelectedCVs([]);
   };
 
-  // ── Tabs Config ──────────────────────────────────────────────────────────────
+  // ── Tabs Config ───────────────────────────────────────────────────────────
 
   const TABS = [
-    { id: 'upload',    icon: '📤', label: 'Upload' },
-    { id: 'filter',    icon: '🔍', label: 'Filter' },
-    { id: 'advanced',  icon: '🎯', label: 'Advanced' },
-    { id: 'saved',     icon: '💾', label: 'Saved' },
-    { id: 'analytics', icon: '📊', label: 'Analytics' },
-    { id: 'compare',   icon: '👥', label: `Compare${compareList.length ? ` (${compareList.length})` : ''}` },
+    { id: 'upload',   icon: '📤', label: 'Upload' },
+    { id: 'filter',   icon: '🔍', label: 'Filter' },
+    { id: 'advanced', icon: '🎯', label: 'Advanced' },
+    { id: 'saved',    icon: '💾', label: 'Saved' },
   ];
 
-  // ── Render ───────────────────────────────────────────────────────────────────
+  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <div className={`cvf-root cvf-root--${theme}`}>
-      {/* Ambient Background */}
       <div className="cvf-bg" aria-hidden>
         <div className="cvf-orb cvf-orb--1" />
         <div className="cvf-orb cvf-orb--2" />
@@ -1136,7 +891,7 @@ const CVFiltering = ({ onBack }) => {
       <Notification notifications={notifications} />
 
       <div className="cvf-shell">
-        {/* Top Bar */}
+        {/* Header */}
         <header className="cvf-header">
           <div className="cvf-header__left">
             {onBack && (
@@ -1210,8 +965,6 @@ const CVFiltering = ({ onBack }) => {
               setSortBy={setSortBy}
               selectedCVs={selectedCVs}
               onToggleSelect={toggleSelect}
-              compareList={compareList}
-              onToggleCompare={toggleCompare}
               onOpenCV={setSelectedCV}
               onBulkAction={handleBulkAction}
               filterResults={filterResults}
@@ -1236,21 +989,9 @@ const CVFiltering = ({ onBack }) => {
               onDeleteFilter={deleteFilter}
             />
           )}
-
-          {activeTab === 'analytics' && <AnalyticsTab />}
-
-          {activeTab === 'compare' && (
-            <CompareTab
-              compareList={compareList}
-              onRemove={(id) => setCompareList(prev => prev.filter(c => c.id !== id))}
-              onClear={() => setCompareList([])}
-              onGoFilter={() => setActiveTab('filter')}
-            />
-          )}
         </main>
       </div>
 
-      {/* CV Detail Modal */}
       {selectedCV && <CVModal cv={selectedCV} onClose={() => setSelectedCV(null)} />}
     </div>
   );
