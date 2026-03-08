@@ -374,22 +374,6 @@ const FilterTab = ({
               { value: 'Frontend Developer', label: 'Frontend Developer' },
             ]} />
 
-            <FilterInput label="Experience" name="experience" options={[
-              { value: '', label: 'All Experience' },
-              { value: '2 years', label: '0-2 years' },
-              { value: '3 years', label: '3-5 years' },
-              { value: '6 years', label: '6-8 years' },
-            ]} />
-
-            <FilterInput label="Education" name="education" options={[
-              { value: '', label: 'All Education' },
-              { value: 'B.Tech', label: 'B.Tech' },
-              { value: 'M.Tech', label: 'M.Tech' },
-              { value: 'MBA', label: 'MBA' },
-              { value: 'PhD', label: 'PhD' },
-              { value: 'B.Des', label: 'B.Des' },
-            ]} />
-
             <FilterInput label="Location" name="location" type="text" placeholder="e.g. Bangalore" />
             <FilterInput label="Skills" name="skills" type="text" placeholder="e.g. React, Python" />
 
@@ -399,12 +383,6 @@ const FilterTab = ({
               { value: '15 days', label: '15 days' },
               { value: '30 days', label: '30 days' },
               { value: '60 days', label: '60 days' },
-            ]} />
-
-            <FilterInput label="Gender" name="gender" options={[
-              { value: '', label: 'Any' },
-              { value: 'Male', label: 'Male' },
-              { value: 'Female', label: 'Female' },
             ]} />
 
             <FilterInput label="Status" name="currentStatus" options={[
