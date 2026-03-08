@@ -20,41 +20,44 @@
   transition: 0.3s;
 }
 
-.li-back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
+.li-back-nav:hover {
+  background: rgba(99, 102, 241, 0.2);
+  transform: translateX(-5px);
 }
 
-.li-main-container {
+.li-content-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 60px;
+  padding-top: 50px;
 }
 
-.li-glass-card {
-  background: #172033; /* Matches var(--color-gray-100) */
+.li-main-card {
+  background: rgba(17, 26, 42, 0.8);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
-  padding: 48px;
   width: 100%;
-  max-width: 480px;
+  max-width: 460px;
+  padding: 40px;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
 }
 
-.li-icon-square {
-  background: #0077B5;
-  width: 64px;
-  height: 64px;
+.li-logo-box {
+  background: #0077b5;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   color: white;
+  box-shadow: 0 0 20px rgba(0, 119, 181, 0.3);
 }
 
 .li-branding h1 {
@@ -68,35 +71,30 @@
   line-height: 1.6;
   margin-bottom: 32px;
 }
+.li-title { font-size: 24px; margin-bottom: 12px; font-weight: 700; color: #fff; }
+.li-desc { font-size: 14px; color: #94a3b8; line-height: 1.6; margin-bottom: 24px; }
 
-.li-status-indicator {
+.li-status-tag {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
   padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 32px;
+  border-radius: 30px;
+  font-size: 12px;
+  margin-bottom: 30px;
 }
 
-.li-status-indicator.active { background: rgba(16, 185, 129, 0.1); color: #10B981; }
-.li-status-indicator.inactive { background: rgba(255, 255, 255, 0.05); color: #94A3B8; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #64748b; }
+.active .dot { background: #10b981; box-shadow: 0 0 8px #10b981; }
 
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.setting-item {
+.sync-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   text-align: left;
-  padding: 20px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .setting-info h4 { font-size: 15px; margin-bottom: 4px; color: #E2E8F0; }
