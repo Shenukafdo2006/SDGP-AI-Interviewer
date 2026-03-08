@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff, Github, UserPlus } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Github } from "lucide-react";
 import "./login.css";
 
-function Login({ onLoginSuccess, onBackToSignup }) {
+function Login({ onLoginSuccess, onGoToSignup }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -10,12 +10,12 @@ function Login({ onLoginSuccess, onBackToSignup }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Simple Validation
+
     if (!email.includes("@")) {
       setError("Please enter a valid email address.");
       return;
     }
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
@@ -23,24 +23,24 @@ function Login({ onLoginSuccess, onBackToSignup }) {
 
     setError("");
     console.log("Logging in...", { email, password });
-    onLoginSuccess(); 
+    onLoginSuccess();
   };
 
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        {/* Top Branding Icon */}
-        <div className="brand-icon">
-          <div className="icon-container">
-            <UserPlus size={28} color="#fff" strokeWidth={2.5} />
-          </div>
+        <div className="brand-block">
+          <img
+            src="/logos/revolvelogo.jpeg"
+            alt="Revolve Interview"
+            className="brand-logo"
+          />
         </div>
 
         <h2>Welcome back</h2>
         <p className="subtitle">Log in to your account</p>
 
         <form onSubmit={handleSubmit}>
-          {/* Email Input */}
           <div className="input-group">
             <label>Email Address</label>
             <div className="input-inner">
@@ -51,14 +51,13 @@ function Login({ onLoginSuccess, onBackToSignup }) {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  if(error) setError("");
+                  if (error) setError("");
                 }}
                 required
               />
             </div>
           </div>
 
-          {/* Password Input */}
           <div className="input-group">
             <label>Password</label>
             <div className="input-inner">
@@ -69,13 +68,13 @@ function Login({ onLoginSuccess, onBackToSignup }) {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if(error) setError("");
+                  if (error) setError("");
                 }}
                 required
               />
-              <button 
-                type="button" 
-                className="toggle-eye" 
+              <button
+                type="button"
+                className="toggle-eye"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -87,13 +86,17 @@ function Login({ onLoginSuccess, onBackToSignup }) {
 
           <div className="options">
             <label className="remember-me">
-              <input type="checkbox" /> 
+              <input type="checkbox" />
               <span>Remember me</span>
             </label>
-            <a href="#" className="forgot-link">Forgot password?</a>
+            <a href="#" className="forgot-link">
+              Forgot password?
+            </a>
           </div>
 
-          <button type="submit" className="login-btn">Log In</button>
+          <button type="submit" className="login-btn">
+            Log In
+          </button>
         </form>
 
         <div className="divider">
@@ -101,19 +104,26 @@ function Login({ onLoginSuccess, onBackToSignup }) {
         </div>
 
         <div className="social-row">
-          <button className="social-btn">
-            <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width="18" />
+          <button className="social-btn" type="button">
+            <img
+              src="https://www.svgrepo.com/show/355037/google.svg"
+              alt="Google"
+              width="18"
+            />
             Google
           </button>
-          <button className="social-btn">
+
+          <button className="social-btn" type="button">
             <Github size={18} />
             GitHub
           </button>
         </div>
 
         <p className="footer-note">
-          Don’t have an account? 
-          <span className="link-text" onClick={onBackToSignup}>Sign up</span>
+          Don’t have an account?
+          <span className="link-text" onClick={onGoToSignup}>
+            Sign up
+          </span>
         </p>
       </div>
     </div>
