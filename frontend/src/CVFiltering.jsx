@@ -366,12 +366,12 @@ const FilterTab = ({
 
             <FilterInput label="Position" name="position" options={[
               { value: '', label: 'All Positions' },
-              { value: 'Software Engineer', label: 'Software Engineer' },
-              { value: 'Product Manager', label: 'Product Manager' },
-              { value: 'UX Designer', label: 'UX Designer' },
-              { value: 'Data Scientist', label: 'Data Scientist' },
-              { value: 'DevOps Engineer', label: 'DevOps Engineer' },
-              { value: 'Frontend Developer', label: 'Frontend Developer' },
+              { value: ' Intern Software Engineer', label: 'Software Engineer' },
+              { value: ' Intern Product Manager', label: 'Product Manager' },
+              { value: ' Intern UX Designer', label: 'UX Designer' },
+              { value: ' Intern Data Scientist', label: 'Data Scientist' },
+              { value: ' Intern DevOps Engineer', label: 'DevOps Engineer' },
+              { value: ' Intern Frontend Developer', label: 'Frontend Developer' },
             ]} />
 
             <FilterInput label="Location" name="location" type="text" placeholder="e.g. Bangalore" />
