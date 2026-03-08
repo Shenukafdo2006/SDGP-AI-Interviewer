@@ -22,6 +22,31 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const [lastSpokenFeedback, setLastSpokenFeedback] = useState("");
   const interviewMode = sessionData?.interviewMode || "video";
   const isVideoInterview = interviewMode === "video";
+  const preferredVoiceRef = useRef(null);
+
+  const getPreferredVoice = () => {
+    if (!window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    const preferredNamePatterns = [
+      "Google US English",
+      "Aria",
+      "Jenny",
+      "Samantha",
+      "Ava",
+      "Zira",
+    ];
+
+    const preferredVoice = voices.find((voice) =>
+      preferredNamePatterns.some((pattern) => voice.name.includes(pattern))
+    );
+
+    if (preferredVoice) return preferredVoice;
+    return voices.find((voice) => voice.lang === "en-US")
+      || voices.find((voice) => voice.lang.startsWith("en"))
+      || voices[0];
+  };
 
   useEffect(() => {
     if (!isVideoInterview) return undefined;
@@ -43,12 +68,12 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
   }, [isVideoInterview]);
 
-  useEffect(() => {
+  const createRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       setError("Speech recognition not supported in this browser");
-      return;
+      return null;
     }
 
     const recognition = new SpeechRecognition();
@@ -80,6 +105,14 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     };
 
     recognition.onerror = (event) => {
+      if (event.error === "not-allowed") {
+        setError("Microphone access is blocked. Please allow microphone permission in your browser settings.");
+        return;
+      }
+      if (event.error === "service-not-allowed") {
+        setError("Speech recognition service is unavailable in this browser/context. Try Chrome on HTTPS or localhost.");
+        return;
+      }
       setError(`Speech error: ${event.error}`);
     };
 
@@ -88,10 +121,29 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
       setInterimTranscript("");
     };
 
-    recognitionRef.current = recognition;
+    return recognition;
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!window.speechSynthesis) return undefined;
+
+    const updatePreferredVoice = () => {
+      preferredVoiceRef.current = getPreferredVoice();
+    };
+
+    updatePreferredVoice();
+    window.speechSynthesis.onvoiceschanged = updatePreferredVoice;
 
     return () => {
-      recognition.stop();
+      window.speechSynthesis.onvoiceschanged = null;
     };
   }, []);
 
@@ -102,6 +154,9 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
     utterance.lang = "en-US";
     utterance.rate = 0.95;
+    if (preferredVoiceRef.current) {
+      utterance.voice = preferredVoiceRef.current;
+    }
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }, [currentQuestion, currentIndex, voiceEnabled]);
@@ -177,14 +232,55 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
     utterance.rate = 0.96;
+    if (preferredVoiceRef.current) {
+      utterance.voice = preferredVoiceRef.current;
+    }
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   };
 
-  const startListening = () => {
-    if (recognitionRef.current && !isListening) {
-      setError(null);
+  const startListening = async () => {
+    if (isListening) return;
+
+    setError(null);
+
+    try {
+      if (!recognitionRef.current) {
+        recognitionRef.current = createRecognition();
+      }
+      if (!recognitionRef.current) return;
+
+      if (
+        window.isSecureContext === false &&
+        window.location.hostname !== "localhost" &&
+        window.location.hostname !== "127.0.0.1"
+      ) {
+        setError("Speech recognition requires HTTPS (or localhost).");
+        return;
+      }
+
+      if (navigator.permissions?.query) {
+        try {
+          const permission = await navigator.permissions.query({ name: "microphone" });
+          if (permission.state === "denied") {
+            setError("Microphone permission denied. Please allow microphone access and try again.");
+            return;
+          }
+        } catch {
+          // Permission query is not supported in some browsers.
+        }
+      }
+
       recognitionRef.current.start();
+    } catch (err) {
+      const errorName = err?.name || err?.error || "";
+      if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
+        setError("Microphone permission denied. Please allow microphone access and try again.");
+      } else if (errorName === "InvalidStateError") {
+        // Recognition may already be starting/running.
+      } else {
+        setError(err?.message || "Unable to access microphone");
+      }
     }
   };
 
