@@ -779,7 +779,9 @@ const Quiz = () => {
   return (
     <div className="quiz-page">
       <header className="header">
-        <div className="menu-icon" onClick={resetQuiz}>←</div>
+        {selectedQuiz && (
+          <div className="menu-icon" onClick={resetQuiz}>← Back</div>
+        )}
         <div className="logo">📝 Skills Quiz</div>
       </header>
 
