@@ -2,8 +2,8 @@ import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
-import Signup from "../authPage/signup.jsx";
-import Login from "../authPage/login.jsx";;
+// import Signup from "../authPage/signup.jsx";
+// import Login from "../authPage/login.jsx";
 
 import DashBoard from "./DashBoard";
 import InterviewTraining from "./InterviewTraining";
@@ -21,13 +21,14 @@ import SkillImprovement from "./SkillImprovement";
 import DailyMotivation from "./DailyMotivation";
 
 function App() {
-  // Start from login page
-  const [view, setView] = useState("login");
+  // Start directly from dashboard
+  const [view, setView] = useState("dashboard");
 
   // Interview session state
   const [interviewSessionData, setInterviewSessionData] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
 
+  /*
   // Signup Page
   if (view === "signup") {
     return (
@@ -47,6 +48,7 @@ function App() {
       />
     );
   }
+  */
 
   // Training Page
   if (view === "training") {
