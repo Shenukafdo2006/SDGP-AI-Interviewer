@@ -20,9 +20,13 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const [analysisCount, setAnalysisCount] = useState(0);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [lastSpokenFeedback, setLastSpokenFeedback] = useState("");
+  const [isVoiceReady, setIsVoiceReady] = useState(false);
   const interviewMode = sessionData?.interviewMode || "video";
   const isVideoInterview = interviewMode === "video";
   const preferredVoiceRef = useRef(null);
+  const SPEECH_RATE = 0.9;
+  const SPEECH_PITCH = 0.82;
+  const SPEECH_VOLUME = 1;
 
   const getPreferredVoice = () => {
     if (!window.speechSynthesis) return null;
@@ -124,32 +128,39 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     if (!window.speechSynthesis) return undefined;
 
     const updatePreferredVoice = () => {
-      preferredVoiceRef.current = getPreferredVoice();
+      const preferredVoice = getPreferredVoice();
+      preferredVoiceRef.current = preferredVoice;
+      setIsVoiceReady(Boolean(preferredVoice));
     };
 
     updatePreferredVoice();
     window.speechSynthesis.onvoiceschanged = updatePreferredVoice;
+    const voiceCheckA = window.setTimeout(updatePreferredVoice, 250);
+    const voiceCheckB = window.setTimeout(updatePreferredVoice, 1000);
 
     return () => {
       window.speechSynthesis.onvoiceschanged = null;
+      window.clearTimeout(voiceCheckA);
+      window.clearTimeout(voiceCheckB);
     };
   }, []);
 
   useEffect(() => {
     if (!voiceEnabled || !currentQuestion) return;
     if (!window.speechSynthesis) return;
+    if (!isVoiceReady) return;
 
     const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
     utterance.lang = "en-US";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.volume = 1;
+    utterance.rate = SPEECH_RATE;
+    utterance.pitch = SPEECH_PITCH;
+    utterance.volume = SPEECH_VOLUME;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
-  }, [currentQuestion, currentIndex, voiceEnabled]);
+  }, [currentQuestion, currentIndex, voiceEnabled, isVoiceReady]);
 
   useEffect(() => {
     return () => {
@@ -219,11 +230,12 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
   const speakFeedback = (text) => {
     if (!voiceEnabled || !text || !window.speechSynthesis) return;
+    if (!isVoiceReady) return;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.volume = 1;
+    utterance.rate = SPEECH_RATE;
+    utterance.pitch = SPEECH_PITCH;
+    utterance.volume = SPEECH_VOLUME;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }
