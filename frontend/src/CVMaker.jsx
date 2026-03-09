@@ -75,7 +75,7 @@ const CVMaker = ({ onBack }) => {
       id: "minimal",
       name: "Minimal",
       icon: "📄",
-      color: "#4caf50",
+      color: "#4facfe",
       industry: "General",
       description: "Simple, machine-readable layout",
       atsScore: 99,

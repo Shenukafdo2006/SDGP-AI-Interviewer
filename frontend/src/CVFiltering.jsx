@@ -6,12 +6,12 @@ import './CVFiltering.css';
 const STATUS_COLORS = {
   New: '#3b82f6',
   Viewed: '#8b5cf6',
-  Shortlisted: '#10b981',
-  'Interview Scheduled': '#f59e0b',
+  Shortlisted: '#3b82f6',
+  'Interview Scheduled': '#8b5cf6',
   'Interview Done': '#6366f1',
-  Selected: '#059669',
-  Rejected: '#ef4444',
-  'On Hold': '#6b7280',
+  Selected: '#8b5cf6',
+  Rejected: '#3b82f6',
+  'On Hold': '#3b82f6',
 };
 
 const SAMPLE_CVS = [
@@ -43,22 +43,22 @@ const SAMPLE_CVS = [
     avatar: 'SF',  interviews: 2, offers: 0,
   },
   {
-    id: 4, name: 'Raveen Randeniy', position: 'Intern Data Scientist',
-     education: 'IIT Sri Lanka(Undergrauate Student)', location: 'Galle',
+    id: 4, name: 'Kaveesha Fernandupulle', position: 'Intern Data Scientist',
+     education: 'IIT Sri Lanka(Undergrauate Student)', location: 'Neogmbo',
     skills: ['Python', 'Machine Learning', 'TensorFlow', 'SQL'], noticePeriod: '45 days',
-     gender: 'Male', status: 'Viewed',
+     gender: 'FeMale', status: 'Viewed',
     tags: ['Kaggle Expert'],  uploadDate: '2026-02-12',
-    matchPercentage: 95, email: 'raveen@gmail.com', phone: '+91 98765 43213',
-    avatar: 'RR',  interviews: 4, offers: 1,
+    matchPercentage: 95, email: 'kaveesha@gamil.com', phone: '+91 98765 43213',
+    avatar: 'KF',  interviews: 4, offers: 1,
   },
   {
-    id: 5, name: 'Saddh Jawadh', position: 'Intern DevOps Engineer',
+    id: 5, name: 'Charula Somathilaka', position: 'Intern DevOps Engineer',
      education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Colombo',
     skills: ['Kubernetes', 'Jenkins', 'Terraform', 'AWS'], noticePeriod: '30 days',
      gender: 'Male', status: 'Shortlisted',
     tags: ['Certified Kubernetes Admin'],  uploadDate: '2026-01-11',
-    matchPercentage: 82, email: 'saddh@gmail.com', phone: '07765 43214',
-    avatar: 'SJ',  interviews: 3, offers: 1,
+    matchPercentage: 82, email: 'charula@gmail.com', phone: '07765 43214',
+    avatar: 'CS',  interviews: 3, offers: 1,
   },
   {
     id: 6, name: 'Mithusha Perera', position: 'Intern Frontend Developer',
@@ -73,7 +73,7 @@ const SAMPLE_CVS = [
 
 // ─── Utility Helpers ──────────────────────────────────────────────────────────
 
-const getStatusColor = (status) => STATUS_COLORS[status] || '#6b7280';
+const getStatusColor = (status) => STATUS_COLORS[status] || '#3b82f6';
 
 const getRatingStars = (rating) => {
   const full = Math.floor(rating);
@@ -242,7 +242,7 @@ const CVCardGrid = ({ cv, selected, onSelect, onClick }) => (
     <MatchBar pct={cv.matchPercentage} />
 
     <div className="cvf-cv-card__meta">
-      <span>💼 {cv.experience}</span>
+      
       <span>🎓 {cv.education}</span>
       <span>📍 {cv.location}</span>
     </div>
@@ -739,8 +739,8 @@ const CVFiltering = ({ onBack }) => {
   const [uploadProgress, setUploadProgress] = useState({});
 
   const [filters, setFilters] = useState({
-    position: '', experience: '', education: '', location: '',
-    skills: '', noticePeriod: '', salaryRange: '', gender: '', currentStatus: '',
+    position: '',  education: '', location: '',
+    skills: '', noticePeriod: '',  gender: '', currentStatus: '',
   });
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -910,7 +910,7 @@ const CVFiltering = ({ onBack }) => {
             <div className="cvf-user">
               <div className="cvf-user__avatar">JD</div>
               <div className="cvf-user__info">
-                <span>John Doe</span>
+                <span>Pavithri Pabasara</span>
                 <span className="cvf-text-muted cvf-text-sm">Recruiter</span>
               </div>
             </div>
