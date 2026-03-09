@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -16,3 +17,31 @@ const firebaseConfig = {
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const db = getFirestore(app);
+=======
+// Firebase core
+import { initializeApp } from "firebase/app";
+
+// Firebase services we need
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+// Your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAuWIEaozkTnGT2bUu_g4SbowXQOg5I16M",
+  authDomain: "revolve-software-241af.firebaseapp.com",
+  projectId: "revolve-software-241af",
+  storageBucket: "revolve-software-241af.firebasestorage.app",
+  messagingSenderId: "85485290642",
+  appId: "1:85485290642:web:8e74ea9f79b38cbcbd124b",
+  measurementId: "G-8FVLJBK8NB"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+// Initialize services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+export default app;
+>>>>>>> Stashed changes

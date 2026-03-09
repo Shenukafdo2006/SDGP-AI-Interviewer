@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff, Github } from "lucide-react";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "../src/firebase";
 import "./signup.css";
 
 function Signup({ onSignupSuccess, onGoToLogin }) {
@@ -33,23 +35,54 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
     const newErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Full name is required";
-    if (!/\S+@\S+\.\S+/.test(formData.email))
-      newErrors.email = "Invalid email address";
-    if (formData.password.length < 8)
-      newErrors.password = "Must be at least 8 characters";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email address";
+    if (formData.password.length < 8) newErrors.password = "Must be at least 8 characters";
     if (!formData.agree) newErrors.agree = "You must agree to the terms";
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validate()) {
-      console.log("Signup data:", formData);
+    if (!validate()) return;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      const response = await fetch("http://localhost:5001/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          name: formData.name,
+          email: formData.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to save user");
+      }
+
+      console.log("Signup success:", data);
       onSignupSuccess();
+    } catch (error) {
+      console.error(error);
+      setErrors((prev) => ({
+        ...prev,
+        general: error.message,
+      }));
     }
   };
 
@@ -57,8 +90,6 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
     <div className="signup-page">
       <div className="signup-wrapper">
         <div className="signup-card">
-
-          {/* Top icon */}
           <div className="header-icon">
             <div className="icon-box">
               <User size={28} color="#fff" strokeWidth={2.5} />
@@ -72,14 +103,10 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
           </p>
 
           <form onSubmit={handleSubmit}>
-
-            {/* Name */}
             <div className="input-field">
               <label>Full Name</label>
-
               <div className={`input-wrapper ${errors.name ? "error-border" : ""}`}>
                 <User className="icon" size={18} />
-
                 <input
                   type="text"
                   name="name"
@@ -88,17 +115,13 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                   onChange={handleChange}
                 />
               </div>
-
               {errors.name && <span className="error-msg">{errors.name}</span>}
             </div>
 
-            {/* Email */}
             <div className="input-field">
               <label>Email Address</label>
-
               <div className={`input-wrapper ${errors.email ? "error-border" : ""}`}>
                 <Mail className="icon" size={18} />
-
                 <input
                   type="email"
                   name="email"
@@ -107,17 +130,13 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                   onChange={handleChange}
                 />
               </div>
-
               {errors.email && <span className="error-msg">{errors.email}</span>}
             </div>
 
-            {/* Password */}
             <div className="input-field">
               <label>Password</label>
-
               <div className={`input-wrapper ${errors.password ? "error-border" : ""}`}>
                 <Lock className="icon" size={18} />
-
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -125,7 +144,6 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                   value={formData.password}
                   onChange={handleChange}
                 />
-
                 <button
                   type="button"
                   className="toggle-pass"
@@ -134,15 +152,10 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-
               <p className="hint">Must be at least 8 characters</p>
-
-              {errors.password && (
-                <span className="error-msg">{errors.password}</span>
-              )}
+              {errors.password && <span className="error-msg">{errors.password}</span>}
             </div>
 
-            {/* Terms */}
             <div className="checkbox-field">
               <input
                 type="checkbox"
@@ -151,21 +164,17 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
                 checked={formData.agree}
                 onChange={handleChange}
               />
-
               <label htmlFor="agree">
-                I agree to the <span>Terms of Service</span> and{" "}
-                <span>Privacy Policy</span>
+                I agree to the <span>Terms of Service</span> and <span>Privacy Policy</span>
               </label>
             </div>
 
-            {errors.agree && (
-              <p className="error-msg agree-error">{errors.agree}</p>
-            )}
+            {errors.agree && <p className="error-msg agree-error">{errors.agree}</p>}
+            {errors.general && <p className="error-msg agree-error">{errors.general}</p>}
 
             <button type="submit" className="btn-primary">
               Create Account
             </button>
-
           </form>
 
           <div className="divider">
@@ -173,7 +182,7 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
           </div>
 
           <div className="social-group">
-            <button className="btn-social">
+            <button className="btn-social" type="button">
               <img
                 src="https://www.svgrepo.com/show/355037/google.svg"
                 alt="Google"
@@ -181,18 +190,15 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
               />
               Google
             </button>
-
-            <button className="btn-social">
+            <button className="btn-social" type="button">
               <Github size={18} />
               GitHub
             </button>
           </div>
 
           <p className="footer-text">
-            Already have an account?
-            <span onClick={onGoToLogin}> Log in</span>
+            Already have an account? <span onClick={onGoToLogin}>Log in</span>
           </p>
-
         </div>
       </div>
     </div>
