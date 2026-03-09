@@ -28,22 +28,10 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     if (!window.speechSynthesis) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices.length) return null;
-
-    const preferredNamePatterns = [
-      "Google US English",
-      "Aria",
-      "Jenny",
-      "Samantha",
-      "Ava",
-      "Zira",
-    ];
-
-    const preferredVoice = voices.find((voice) =>
-      preferredNamePatterns.some((pattern) => voice.name.includes(pattern))
-    );
-
-    if (preferredVoice) return preferredVoice;
-    return voices.find((voice) => voice.lang === "en-US")
+    const enUsDefault = voices.find((voice) => voice.lang === "en-US" && voice.default);
+    if (enUsDefault) return enUsDefault;
+    return voices.find((voice) => voice.default)
+      || voices.find((voice) => voice.lang === "en-US")
       || voices.find((voice) => voice.lang.startsWith("en"))
       || voices[0];
   };
@@ -153,7 +141,9 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
     const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
     utterance.lang = "en-US";
-    utterance.rate = 0.95;
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }
@@ -231,7 +221,9 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     if (!voiceEnabled || !text || !window.speechSynthesis) return;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
-    utterance.rate = 0.96;
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }
