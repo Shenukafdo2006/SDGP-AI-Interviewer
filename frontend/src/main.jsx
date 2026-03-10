@@ -1,3 +1,4 @@
+
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -21,12 +22,14 @@ import SkillImprovement from "./SkillImprovement";
 import DailyMotivation from "./DailyMotivation";
 
 function App() {
+
   // Start from login page
   const [view, setView] = useState("login");
 
   // Interview session state
   const [interviewSessionData, setInterviewSessionData] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
+
 
   // Signup Page
   if (view === "signup") {
@@ -146,3 +149,4 @@ createRoot(document.getElementById("root")).render(
     <App />
   </StrictMode>
 );
+

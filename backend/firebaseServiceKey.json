@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "revolve-software-75233",
+  "private_key_id": "9cab53b37a3f217abb17176aff9cb978108ab5cc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQCW7djUKZ4I+MdI\nw6dxmdLsDiSRuJtK+o35Ms//nJL0EdjETV1Yd16VkmAjBwmG44XLV/I0tqcjf4Cl\nNNiZx3SAQy1i9BfS7vx1fnXApTGDDY6OmFzZ5S0TTl54o7nHv+zTd/j6UJxbyS4s\nzXfKIAt//WxsifR90CFL382lExikn7CxckNbNvgiIZZqRk0WfDLjtMPLpLILe1dV\nPC1iZS+fBOUyzu+3GbeFE37M88OoWvz9ikbfHjdKotpSaa5qoxMkwm1+e8QxmfiY\nOnd64ANIswY1y9V3yhdfpspJHnSsedpIN0LfW+lOVTsCec8bUZoxrLa1oplNvmy7\nakJIZ3F9AgMBAAECggEAA2G/y0c3jxy9C/SKIyYkIqvDO7qLPkALtUocNbysYNbT\nbC3xfWyOMcArzublGp1Xj4xVrhhOpGGfFZ8+GR2ReZF9G9SmLJDez623MiCqWNFt\n61Y0XxOicbvFq2nYa3hOF+5hrKu+Ag230oNXimFr76fhkKVfBxz/IKpaiT4P/guf\n8OA9SewrVIogJvX6CSSAC/D07uKSFmnXLdWYdTnbc6yd8k0fMIQe1sbPIcauUlhl\naVtZU+7USaclHFvcNwvNhTLgu/Q3yYH48MdhjrpTu8HkU9aOqddNDhn+jGgv8tLh\nb0DI0j2jD8AQIyS1TTdkd+EUQInvLEoweCBOifM26QKBgQDG8WuRwJ4WkmAu9aj9\nCVY7OExFzVaFKBZ3+jgugL3lPNHd8HNqZh3HjFacTy9M2IKBV77ojO2+dqj5Lrpb\nSqThm7cnQ5l+klFmLfSgiqujw3t+mijwkHxlJO5eRu7HRzQq4tv4la454jDrhgDP\n1ANPOLvCDLKSNouZRDqKZ9s1iQKBgQDCNzLBmEBEbIsjp6HZyml+FYHcHbQhOHXt\nHxNOHylanDhae4fsaLO4zd7GLT1mFgntxpTQdCqJCz2zkhIFlppEIV5sJu5sZA7J\nEo1zR5B/y6xThncrtZJ37YgZ7PRKIu9qBJu+6SZo8JZcoa9xCuU58Tz60/5vnvpT\npTq6/pmTVQJ/G/nXJqfvkz0CSZhCK1MkzS8dirNVd2QrxLNrMx7nlVT4Lj2h/VRe\n27DgfRqljCjmMUoljo5C4IXPPTtU+YGFrjQ3jU30R9hLmhLcU7csa9sRgrwrBalL\n1O1cl+VhrqRUsbM1O7/QwFMOjhBKDO/Dh2BzBtbCRc1l1CfEE7KHIQKBgQCXFefH\nURDV6fbH8vVm/x7X9hVCzly95zVeFOmowXcjRRpV0XmpAL6nSog+dR0pmIV60xwb\nmfMpD3SdiEm6zTEPRUI2MocSDTivVV5yyr5vnFtf0uBMQYFDCKbzPDHCprDHMfST\nLL8zrc3bG/DmqMowLCn7GwX5gZxNi+FHbR69zQKBgGbNJweQiiaQ1r/NHlvzUN2R\nx6GaP2HaPKtI+0fATQVTopmeYnQ1Fmhtf+TmommFqKzIcUREB4bsA9fWmuGYEtaw\nC7IsFSf26edE4g8LwSrrHuuI2c8R51ZCYPTdsykhTx2IswKs4jQjMwU2l+KOg6fb\nigNt8z7xsJInmYWQWGr4\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@revolve-software-75233.iam.gserviceaccount.com",
+  "client_id": "116169529447597948977",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40revolve-software-75233.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
