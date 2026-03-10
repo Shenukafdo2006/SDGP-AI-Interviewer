@@ -20,22 +20,30 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const [analysisCount, setAnalysisCount] = useState(0);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [lastSpokenFeedback, setLastSpokenFeedback] = useState("");
-  const [isVoiceReady, setIsVoiceReady] = useState(false);
   const interviewMode = sessionData?.interviewMode || "video";
   const isVideoInterview = interviewMode === "video";
   const preferredVoiceRef = useRef(null);
-  const SPEECH_RATE = 0.9;
-  const SPEECH_PITCH = 0.82;
-  const SPEECH_VOLUME = 1;
 
   const getPreferredVoice = () => {
     if (!window.speechSynthesis) return null;
     const voices = window.speechSynthesis.getVoices();
     if (!voices.length) return null;
-    const enUsDefault = voices.find((voice) => voice.lang === "en-US" && voice.default);
-    if (enUsDefault) return enUsDefault;
-    return voices.find((voice) => voice.default)
-      || voices.find((voice) => voice.lang === "en-US")
+
+    const preferredNamePatterns = [
+      "Google US English",
+      "Aria",
+      "Jenny",
+      "Samantha",
+      "Ava",
+      "Zira",
+    ];
+
+    const preferredVoice = voices.find((voice) =>
+      preferredNamePatterns.some((pattern) => voice.name.includes(pattern))
+    );
+
+    if (preferredVoice) return preferredVoice;
+    return voices.find((voice) => voice.lang === "en-US")
       || voices.find((voice) => voice.lang.startsWith("en"))
       || voices[0];
   };
@@ -128,39 +136,30 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
     if (!window.speechSynthesis) return undefined;
 
     const updatePreferredVoice = () => {
-      const preferredVoice = getPreferredVoice();
-      preferredVoiceRef.current = preferredVoice;
-      setIsVoiceReady(Boolean(preferredVoice));
+      preferredVoiceRef.current = getPreferredVoice();
     };
 
     updatePreferredVoice();
     window.speechSynthesis.onvoiceschanged = updatePreferredVoice;
-    const voiceCheckA = window.setTimeout(updatePreferredVoice, 250);
-    const voiceCheckB = window.setTimeout(updatePreferredVoice, 1000);
 
     return () => {
       window.speechSynthesis.onvoiceschanged = null;
-      window.clearTimeout(voiceCheckA);
-      window.clearTimeout(voiceCheckB);
     };
   }, []);
 
   useEffect(() => {
     if (!voiceEnabled || !currentQuestion) return;
     if (!window.speechSynthesis) return;
-    if (!isVoiceReady) return;
 
     const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
     utterance.lang = "en-US";
-    utterance.rate = SPEECH_RATE;
-    utterance.pitch = SPEECH_PITCH;
-    utterance.volume = SPEECH_VOLUME;
+    utterance.rate = 0.95;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
-  }, [currentQuestion, currentIndex, voiceEnabled, isVoiceReady]);
+  }, [currentQuestion, currentIndex, voiceEnabled]);
 
   useEffect(() => {
     return () => {
@@ -230,12 +229,9 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
   const speakFeedback = (text) => {
     if (!voiceEnabled || !text || !window.speechSynthesis) return;
-    if (!isVoiceReady) return;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
-    utterance.rate = SPEECH_RATE;
-    utterance.pitch = SPEECH_PITCH;
-    utterance.volume = SPEECH_VOLUME;
+    utterance.rate = 0.96;
     if (preferredVoiceRef.current) {
       utterance.voice = preferredVoiceRef.current;
     }

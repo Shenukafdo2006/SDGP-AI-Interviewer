@@ -149,14 +149,6 @@ html, body, #root {
   font-size: 19px;
   font-weight: 800;
   color: #fff;
-  display: inline-block;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
-}
-
-/* Level number pops on level-up */
-.ach-xp-level.level-up {
-  transform: scale(1.35);
-  color: #a5b4fc;
 }
 
 .ach-xp-title {
@@ -165,25 +157,21 @@ html, body, #root {
   margin-top: 2px;
 }
 
-/* ── XP Bar ── */
 .ach-xp-bar-wrap {
   background: rgba(255, 255, 255, 0.06);
   border-radius: 99px;
   height: 7px;
   overflow: hidden;
-  position: relative;
 }
 
 .ach-xp-bar-fill {
   height: 100%;
   border-radius: 99px;
   background: linear-gradient(90deg, #6366f1 0%, #a855f7 60%, #c084fc 100%);
-  /* 0.7s fill → matches JS timeout so bar fully fills before reset */
-  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
-/* Glowing tip on the bar */
 .ach-xp-bar-fill::after {
   content: '';
   position: absolute;
@@ -191,27 +179,9 @@ html, body, #root {
   top: 0;
   width: 8px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 99px;
   filter: blur(3px);
-}
-
-/* Shimmer sweep animation on fill */
-@keyframes xp-shimmer {
-  0%   { left: -60%; }
-  100% { left: 120%; }
-}
-
-.ach-xp-bar-fill::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 40%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  animation: xp-shimmer 1.4s ease infinite;
-  border-radius: 99px;
 }
 
 .ach-xp-numbers {
@@ -225,35 +195,6 @@ html, body, #root {
 .xp-highlight {
   color: #a5b4fc;
   font-weight: 500;
-}
-
-/* ── Level Up Toast ── */
-@keyframes toast-in-out {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.88); }
-  18%  { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1.04); }
-  25%  { transform: translateX(-50%) translateY(0) scale(1); }
-  78%  { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.95); }
-}
-
-.level-up-toast {
-  position: fixed;
-  bottom: 36px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, rgba(99,102,241,0.92), rgba(168,85,247,0.92));
-  color: #fff;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 11px 26px;
-  border-radius: 99px;
-  box-shadow: 0 4px 28px rgba(99,102,241,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset;
-  pointer-events: none;
-  z-index: 9999;
-  white-space: nowrap;
-  letter-spacing: -0.2px;
-  animation: toast-in-out 0.7s ease forwards;
 }
 
 /* ── Section Title ── */
@@ -277,10 +218,10 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* ── Grid — always 3 columns ── */
+/* ── Grid ── */
 .ach-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 14px;
 }
 
@@ -464,13 +405,9 @@ html, body, #root {
 }
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
-  .ach-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-}
-
 @media (max-width: 480px) {
-  .ach-page       { padding: 24px 16px 48px; }
-  .ach-stats-row  { gap: 8px; }
+  .ach-page { padding: 24px 16px 48px; }
+  .ach-stats-row { gap: 8px; }
   .ach-stat-value { font-size: 24px; }
-  .ach-grid       { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ach-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 }

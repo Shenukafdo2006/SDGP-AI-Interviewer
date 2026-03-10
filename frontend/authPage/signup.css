@@ -1,24 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
-.signup-page,
-.signup-page * {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-.signup-page {
+body {
   font-family: 'Inter', sans-serif;
-  min-height: 100vh;
   background-color: #0b0e14;
-  background-image:
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
     radial-gradient(at 100% 0%, hsla(225,39%,30%,1) 0, transparent 50%);
-}
-
-.signup-wrapper {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 
 .signup-card {
@@ -33,6 +26,7 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
+/* Header Icon */
 .header-icon {
   display: flex;
   justify-content: center;
@@ -59,28 +53,12 @@
   font-weight: bold;
 }
 
-.signup-page h2 {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
+h2 { font-size: 24px; margin-bottom: 8px; letter-spacing: -0.5px; }
+.subtitle { color: #9ca3af; font-size: 14px; margin-bottom: 32px; }
 
-.subtitle {
-  color: #9ca3af;
-  font-size: 14px;
-  margin-bottom: 32px;
-}
-
-.input-field {
-  text-align: left;
-  margin-bottom: 20px;
-}
-
-.input-field label {
-  display: block;
-  font-size: 13px;
-  color: #d1d5db;
-  margin-bottom: 8px;
-}
+/* Inputs */
+.input-field { text-align: left; margin-bottom: 20px; }
+.input-field label { display: block; font-size: 13px; font-weight: 500; color: #d1d5db; margin-bottom: 8px; }
 
 .input-wrapper {
   background: rgba(31, 41, 55, 0.5);
@@ -89,6 +67,13 @@
   display: flex;
   align-items: center;
   padding: 0 14px;
+  transition: all 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: #8b5cf6;
+  background: rgba(31, 41, 55, 0.8);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
 .input-wrapper input {
@@ -98,25 +83,13 @@
   width: 100%;
   padding: 12px 10px;
   outline: none;
+  font-size: 14px;
 }
 
-.icon {
-  color: #6b7280;
-}
+.icon { color: #6b7280; }
+.hint { font-size: 11px; color: #6b7280; margin-top: 6px; }
 
-.toggle-pass {
-  background: none;
-  border: none;
-  color: #6b7280;
-  cursor: pointer;
-}
-
-.hint {
-  font-size: 11px;
-  color: #6b7280;
-  margin-top: 6px;
-}
-
+/* Buttons */
 .btn-primary {
   width: 100%;
   padding: 14px;
@@ -127,18 +100,13 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 10px;
+  transition: 0.2s;
 }
 
-.btn-primary:hover {
-  background: #7c3aed;
-}
+.btn-primary:hover { background: #7c3aed; transform: translateY(-1px); }
 
-.social-group {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
+/* Social Buttons */
+.social-group { display: flex; gap: 12px; margin-top: 20px; }
 .btn-social {
   flex: 1;
   background: rgba(31, 41, 55, 0.5);
@@ -150,6 +118,8 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .divider {
@@ -157,11 +127,9 @@
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 .divider span {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   background: #111827;
   padding: 0 10px;
@@ -169,40 +137,18 @@
   color: #6b7280;
 }
 
-.footer-text {
-  margin-top: 24px;
-  font-size: 13px;
-  color: #9ca3af;
-}
-
-.footer-text span {
-  color: #8b5cf6;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.error-msg {
-  color: #f87171;
-  font-size: 11px;
-}
-
-.error-border {
-  border-color: #f87171 !important;
-}
+/* Footer */
+.footer-text { margin-top: 24px; font-size: 13px; color: #9ca3af; }
+.footer-text span { color: #8b5cf6; cursor: pointer; font-weight: 600; margin-left: 4px; }
+.error-msg { color: #f87171; font-size: 11px; margin-top: 4px; display: block;}
+.error-border { border-color: #f87171 !important; }
 
 .checkbox-field {
   display: flex;
+  align-items: center;
   gap: 8px;
   text-align: left;
   margin: 15px 0;
 }
-
-.checkbox-field label {
-  font-size: 12px;
-  color: #9ca3af;
-}
-
-.checkbox-field span {
-  color: #8b5cf6;
-  cursor: pointer;
-}
+.checkbox-field label { font-size: 12px; color: #9ca3af; }
+.checkbox-field span { color: #8b5cf6; cursor: pointer; }

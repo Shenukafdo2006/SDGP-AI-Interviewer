@@ -1,4 +1,3 @@
-const authRoutes = require("./routes/authRoutes");
 const express = require("express");
 const cors = require("cors");
 
@@ -15,7 +14,6 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/interview", aiInterviewRoutes);
-app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });

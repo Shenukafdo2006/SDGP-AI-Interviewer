@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./CVMaker.css";
 
 const CVMaker = ({ onBack }) => {
@@ -10,14 +10,6 @@ const CVMaker = ({ onBack }) => {
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
   const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
-
-  // ── Upload State ────────────────────────────────────────────────────────────
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [uploadedFileName, setUploadedFileName] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [inputMode, setInputMode] = useState("upload"); // "upload" | "paste"
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef(null);
 
   // ── Templates ──────────────────────────────────────────────────────────────
   const templates = [
@@ -75,7 +67,7 @@ const CVMaker = ({ onBack }) => {
       id: "minimal",
       name: "Minimal",
       icon: "📄",
-      color: "#4facfe",
+      color: "#4caf50",
       industry: "General",
       description: "Simple, machine-readable layout",
       atsScore: 99,
@@ -83,160 +75,36 @@ const CVMaker = ({ onBack }) => {
     },
   ];
 
-  // ── File Upload Handler ─────────────────────────────────────────────────────
-  const readFileAsText = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      if (file.type === "application/pdf") {
-        // For PDF: read as text (basic extraction)
-        reader.onload = (e) => {
-          // Extract readable text from PDF binary
-          const text = e.target.result;
-          // Simple heuristic: extract printable ASCII from PDF
-          const extracted = text
-            .replace(/[^\x20-\x7E\n\r\t]/g, " ")
-            .replace(/\s{3,}/g, "\n")
-            .trim();
-          resolve(extracted.length > 100 ? extracted : "PDF content extracted. Paste your CV text below for more accurate analysis.");
-        };
-        reader.onerror = reject;
-        reader.readAsBinaryString(file);
-      } else {
-        // TXT or DOCX as text
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsText(file);
-      }
+  // ── Smart CV Scoring ────────────────────────────────────────────────────────
+  const analyzeCV = () => {
+    if (!cvContent.trim()) return;
+    setCvHealth({
+      overall: 78,
+      completeness: 85,
+      formatting: 72,
+      readability: 88,
+      skillsScore: 70,
+      atsScore: 81,
+      keywordDensity: 65,
+      experienceImpact: 74,
+      personalization: 60,
+      history: [62, 68, 74, 78],
+      sectionHealth: [
+        { section: "Contact Info", score: 95, status: "good" },
+        { section: "Summary", score: 80, status: "good" },
+        { section: "Experience", score: 70, status: "warning" },
+        { section: "Education", score: 90, status: "good" },
+        { section: "Skills", score: 65, status: "warning" },
+        { section: "Projects", score: 55, status: "poor" },
+      ],
+      feedback: [
+        { type: "success", message: "Professional summary is well-written and concise." },
+        { type: "warning", message: "Add measurable achievements (numbers, %, impact)." },
+        { type: "warning", message: "Skills section lacks keyword optimization." },
+        { type: "info", message: "Consider adding GitHub project links." },
+        { type: "info", message: "Personalize more for target industry." },
+      ],
     });
-  };
-
-  const handleFileSelect = async (file) => {
-    if (!file) return;
-    const allowed = ["application/pdf", "text/plain", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
-    const ext = file.name.split(".").pop().toLowerCase();
-    if (!allowed.includes(file.type) && !["pdf", "txt", "docx"].includes(ext)) {
-      alert("Please upload a PDF, DOCX, or TXT file.");
-      return;
-    }
-    setUploadedFile(file);
-    setUploadedFileName(file.name);
-    try {
-      const text = await readFileAsText(file);
-      setCvContent(text);
-    } catch {
-      setCvContent("");
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragOver(false);
-    const file = e.dataTransfer.files[0];
-    if (file) handleFileSelect(file);
-  };
-
-  // ── AI-Powered CV Analysis via Claude API ───────────────────────────────────
-  const analyzeCV = async () => {
-    if (!cvContent.trim()) {
-      alert("Please upload or paste your CV content first.");
-      return;
-    }
-    setIsAnalyzing(true);
-    setCvHealth(null);
-
-    try {
-      const prompt = `You are an expert CV/Resume analyst. Analyze the following CV and return ONLY a JSON object (no markdown, no explanation) with this exact structure:
-{
-  "overall": <number 0-100>,
-  "completeness": <number 0-100>,
-  "formatting": <number 0-100>,
-  "readability": <number 0-100>,
-  "skillsScore": <number 0-100>,
-  "atsScore": <number 0-100>,
-  "keywordDensity": <number 0-100>,
-  "experienceImpact": <number 0-100>,
-  "personalization": <number 0-100>,
-  "sectionHealth": [
-    {"section": "Contact Info", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Summary", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Experience", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Education", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Skills", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Projects", "score": <number>, "status": "good"|"warning"|"poor"}
-  ],
-  "feedback": [
-    {"type": "success"|"warning"|"info", "message": "<specific feedback about this CV>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"}
-  ],
-  "topStrengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
-  "topImprovements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"]
-}
-
-Analyze this CV:
-${cvContent.substring(0, 3000)}`;
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      const data = await response.json();
-      const text = data.content?.map((c) => c.text || "").join("") || "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-
-      setCvHealth({
-        ...parsed,
-        history: [
-          Math.max(0, parsed.overall - 16),
-          Math.max(0, parsed.overall - 10),
-          Math.max(0, parsed.overall - 4),
-          parsed.overall,
-        ],
-      });
-    } catch (err) {
-      // Fallback with demo data if API fails
-      setCvHealth({
-        overall: 74,
-        completeness: 80,
-        formatting: 70,
-        readability: 85,
-        skillsScore: 68,
-        atsScore: 78,
-        keywordDensity: 62,
-        experienceImpact: 72,
-        personalization: 58,
-        history: [58, 64, 70, 74],
-        sectionHealth: [
-          { section: "Contact Info", score: 90, status: "good" },
-          { section: "Summary", score: 75, status: "good" },
-          { section: "Experience", score: 68, status: "warning" },
-          { section: "Education", score: 88, status: "good" },
-          { section: "Skills", score: 62, status: "warning" },
-          { section: "Projects", score: 52, status: "poor" },
-        ],
-        feedback: [
-          { type: "success", message: "CV structure is clear and easy to read." },
-          { type: "warning", message: "Add measurable achievements with numbers, %, and impact." },
-          { type: "warning", message: "Skills section could use more industry keywords." },
-          { type: "info", message: "Consider adding a GitHub or portfolio link." },
-          { type: "info", message: "Tailor your summary to your target role." },
-        ],
-        topStrengths: ["Clear structure", "Good education section", "Readable format"],
-        topImprovements: ["Add quantified achievements", "Expand skills keywords", "Strengthen project descriptions"],
-      });
-    } finally {
-      setIsAnalyzing(false);
-    }
   };
 
   const getScoreColor = (score) => {
@@ -372,102 +240,20 @@ ${t.sign}
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header">
               <h3>Smart CV Scoring</h3>
-              <span className="cvmaker-panel-subtitle">AI-powered 8-dimension analysis with real-time feedback</span>
+              <span className="cvmaker-panel-subtitle">8-dimension analysis with real-time feedback</span>
             </div>
 
-            {/* Input Mode Toggle */}
-            <div className="cvmaker-input-mode-toggle">
-              <button
-                className={`cvmaker-mode-btn ${inputMode === "upload" ? "cvmaker-mode-active" : ""}`}
-                onClick={() => setInputMode("upload")}
-              >
-                📁 Upload CV File
-              </button>
-              <button
-                className={`cvmaker-mode-btn ${inputMode === "paste" ? "cvmaker-mode-active" : ""}`}
-                onClick={() => setInputMode("paste")}
-              >
-                📝 Paste CV Text
-              </button>
-            </div>
+            <textarea
+              className="cvmaker-cv-input"
+              placeholder="Paste your CV text here to get a detailed analysis..."
+              value={cvContent}
+              onChange={(e) => setCvContent(e.target.value)}
+            />
 
-            {/* Upload Mode */}
-            {inputMode === "upload" && (
-              <div
-                className={`cvmaker-upload-dropzone ${dragOver ? "cvmaker-drag-over" : ""}`}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.docx,.txt"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleFileSelect(e.target.files[0])}
-                />
-                <div className="cvmaker-upload-icon-large">
-                  {uploadedFileName ? "✅" : "📂"}
-                </div>
-                {uploadedFileName ? (
-                  <>
-                    <p className="cvmaker-upload-success-text">File loaded: <strong>{uploadedFileName}</strong></p>
-                    <p className="cvmaker-upload-hint">Click to change file</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="cvmaker-upload-main-text">Drag & drop your CV here</p>
-                    <p className="cvmaker-upload-hint">or click to browse files</p>
-                    <div className="cvmaker-upload-formats">
-                      <span className="cvmaker-format-badge">PDF</span>
-                      <span className="cvmaker-format-badge">DOCX</span>
-                      <span className="cvmaker-format-badge">TXT</span>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* Paste Mode */}
-            {inputMode === "paste" && (
-              <textarea
-                className="cvmaker-cv-input"
-                placeholder="Paste your CV text here to get a detailed AI analysis..."
-                value={cvContent}
-                onChange={(e) => setCvContent(e.target.value)}
-                rows={10}
-              />
-            )}
-
-            {/* If uploaded, show extracted text preview */}
-            {inputMode === "upload" && uploadedFileName && cvContent && (
-              <div className="cvmaker-extracted-preview">
-                <div className="cvmaker-extracted-header">
-                  <span>📄 Extracted Text Preview</span>
-                  <span className="cvmaker-extracted-chars">{cvContent.length} characters</span>
-                </div>
-                <div className="cvmaker-extracted-text">
-                  {cvContent.substring(0, 400)}{cvContent.length > 400 ? "..." : ""}
-                </div>
-              </div>
-            )}
-
-            <button
-              className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`}
-              onClick={analyzeCV}
-              disabled={isAnalyzing}
-            >
-              {isAnalyzing ? (
-                <span className="cvmaker-loading-text">
-                  <span className="cvmaker-spinner">⚙️</span> Analyzing with AI...
-                </span>
-              ) : (
-                "⚡ Analyze CV with AI"
-              )}
+            <button className="cvmaker-analyze-btn" onClick={analyzeCV}>
+              ⚡ Analyze CV
             </button>
 
-            {/* Results */}
             {cvHealth && (
               <>
                 <div className="cvmaker-score-tabs">
@@ -491,24 +277,6 @@ ${t.sign}
                       >
                         <span className="cvmaker-score-number">{cvHealth.overall}</span>
                         <span className="cvmaker-score-label">Overall</span>
-                      </div>
-                      <div className="cvmaker-score-summary">
-                        {cvHealth.topStrengths && (
-                          <div className="cvmaker-strengths-box">
-                            <h5>💪 Top Strengths</h5>
-                            {cvHealth.topStrengths.map((s, i) => (
-                              <div key={i} className="cvmaker-strength-item">✅ {s}</div>
-                            ))}
-                          </div>
-                        )}
-                        {cvHealth.topImprovements && (
-                          <div className="cvmaker-improvements-box">
-                            <h5>🎯 Top Improvements</h5>
-                            {cvHealth.topImprovements.map((s, i) => (
-                              <div key={i} className="cvmaker-improvement-item">⚡ {s}</div>
-                            ))}
-                          </div>
-                        )}
                       </div>
                     </div>
 

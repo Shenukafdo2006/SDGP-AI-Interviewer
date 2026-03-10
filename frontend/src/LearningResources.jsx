@@ -2,10 +2,10 @@ import React from 'react';
 import './LearningResources.css';
 
 const resources = [
-  { id: 1, title: 'Complete Web Development Bootcamp', provider: 'Online Academy', tags: ['HTML', 'React', 'Node'], level: 'Beginner', rating: 4.8, progress: 65, color: "#6366F1", duration: "45h 30m", link: "#" },
-  { id: 2, title: 'Advanced React Patterns', provider: 'React Masters', tags: ['React', 'TypeScript'], level: 'Advanced', rating: 4.9, progress: 30, color: "#8B5CF6", duration: "12h 15m", link: "#" },
-  { id: 3, title: 'System Design Interview Prep', provider: 'Tech Pro', tags: ['Cloud', 'Architecture'], level: 'Intermediate', rating: 4.7, progress: 10, color: "#10B981", duration: "20h 00m", link: "#" },
-  { id: 4, title: 'UI/UX Principles for Devs', provider: 'Design School', tags: ['Figma', 'CSS'], level: 'Beginner', rating: 4.6, progress: 0, color: "#F59E0B", duration: "08h 45m", link: "#" },
+  { id: 1, title: 'Complete Web Development Bootcamp', provider: 'Online Academy', tags: ['HTML', 'React', 'Node'], level: 'Beginner', rating: 4.8, progress: 65, color: "#6366F1", duration: "45h 30m" },
+  { id: 2, title: 'Advanced React Patterns', provider: 'React Masters', tags: ['React', 'TypeScript'], level: 'Advanced', rating: 4.9, progress: 30, color: "#8B5CF6", duration: "12h 15m" },
+  { id: 3, title: 'System Design Interview Prep', provider: 'Tech Pro', tags: ['Cloud', 'Architecture'], level: 'Intermediate', rating: 4.7, progress: 10, color: "#10B981", duration: "20h 00m" },
+  { id: 4, title: 'UI/UX Principles for Devs', provider: 'Design School', tags: ['Figma', 'CSS'], level: 'Beginner', rating: 4.6, progress: 0, color: "#F59E0B", duration: "08h 45m" },
 ];
 
 const LearningResources = ({ onBack }) => {
@@ -62,13 +62,9 @@ const LearningResources = ({ onBack }) => {
                   <div className="p-bar-bg"><div className="p-bar-fill" style={{ width: `${res.progress}%`, background: res.color }} /></div>
                 </div>
 
-                <a
-                  className="d-view-btn"
-                  style={{ borderColor: res.color, color: res.color }}
-                  href={res.link}
-                >
+                <button className="d-view-btn" style={{ borderColor: res.color, color: res.color }}>
                   {res.progress > 0 ? 'Continue' : 'Start Course'}
-                </a>
+                </button>
               </div>
             </div>
           ))}
