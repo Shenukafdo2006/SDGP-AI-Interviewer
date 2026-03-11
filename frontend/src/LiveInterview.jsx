@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import "./InterviewTraining.css";
 import { submitAnswer, analyzeFacialExpression } from "./api/interviewApi";
 
 function LiveInterview({ sessionData, onBack, onComplete }) {
@@ -20,9 +21,11 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const [analysisCount, setAnalysisCount] = useState(0);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [lastSpokenFeedback, setLastSpokenFeedback] = useState("");
+  const [speechReady, setSpeechReady] = useState(false);
   const interviewMode = sessionData?.interviewMode || "video";
   const isVideoInterview = interviewMode === "video";
   const preferredVoiceRef = useRef(null);
+  const speechTimeoutRef = useRef(null);
 
   const getPreferredVoice = () => {
     if (!window.speechSynthesis) return null;
@@ -137,6 +140,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
     const updatePreferredVoice = () => {
       preferredVoiceRef.current = getPreferredVoice();
+      setSpeechReady(window.speechSynthesis.getVoices().length > 0);
     };
 
     updatePreferredVoice();
@@ -150,27 +154,60 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   useEffect(() => {
     if (!voiceEnabled || !currentQuestion) return;
     if (!window.speechSynthesis) return;
+    if (!speechReady) return;
 
-    const utterance = new SpeechSynthesisUtterance(`Question ${currentIndex + 1}. ${currentQuestion}`);
-    utterance.lang = "en-US";
-    utterance.rate = 0.95;
-    if (preferredVoiceRef.current) {
-      utterance.voice = preferredVoiceRef.current;
+    if (speechTimeoutRef.current) {
+      clearTimeout(speechTimeoutRef.current);
     }
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  }, [currentQuestion, currentIndex, voiceEnabled]);
+
+    speechTimeoutRef.current = setTimeout(() => {
+      speakText(`Question ${currentIndex + 1}. ${currentQuestion}`, 0.95);
+    }, 150);
+
+    return () => {
+      if (speechTimeoutRef.current) {
+        clearTimeout(speechTimeoutRef.current);
+      }
+    };
+  }, [currentQuestion, currentIndex, voiceEnabled, speechReady]);
 
   useEffect(() => {
     return () => {
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
       }
+      if (speechTimeoutRef.current) {
+        clearTimeout(speechTimeoutRef.current);
+      }
       if (facialLoopRef.current) {
         clearInterval(facialLoopRef.current);
       }
     };
   }, []);
+
+  const speakText = (text, rate = 0.96) => {
+    if (!voiceEnabled || !text || !window.speechSynthesis) return false;
+
+    try {
+      preferredVoiceRef.current = getPreferredVoice();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = rate;
+      if (preferredVoiceRef.current) {
+        utterance.voice = preferredVoiceRef.current;
+      }
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      return true;
+    } catch (err) {
+      console.error("Speech synthesis error:", err);
+      setError("Voice playback is not available in this browser.");
+      return false;
+    }
+  };
+
+  const speakCurrentQuestion = () =>
+    speakText(`Question ${currentIndex + 1}. ${currentQuestion}`, 0.95);
 
   const captureFrame = () => {
     if (!isVideoInterview) return null;
@@ -228,15 +265,29 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   }, [currentQuestion, isVideoInterview]);
 
   const speakFeedback = (text) => {
-    if (!voiceEnabled || !text || !window.speechSynthesis) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.96;
-    if (preferredVoiceRef.current) {
-      utterance.voice = preferredVoiceRef.current;
+    speakText(text, 0.96);
+  };
+
+  const handleVoiceToggle = () => {
+    if (!window.speechSynthesis) {
+      setError("Voice playback is not supported in this browser.");
+      return;
     }
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+
+    setError(null);
+    setVoiceEnabled((prev) => {
+      const next = !prev;
+      if (!next) {
+        window.speechSynthesis.cancel();
+      } else if (currentQuestion) {
+        preferredVoiceRef.current = getPreferredVoice();
+        setSpeechReady(window.speechSynthesis.getVoices().length > 0);
+        setTimeout(() => {
+          speakCurrentQuestion();
+        }, 150);
+      }
+      return next;
+    });
   };
 
   const startListening = async () => {
@@ -416,7 +467,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
           {/* Question */}
           <div className="question-subtitle">
             <strong>Question:</strong>
-            <p style={{ marginTop: "10px", fontSize: "16px", color: "#333" }}>
+            <p className="live-question-text">
               {currentQuestion}
             </p>
           </div>
@@ -491,7 +542,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
             </button>
 
             <button
-              onClick={() => setVoiceEnabled((prev) => !prev)}
+              onClick={handleVoiceToggle}
               disabled={isSubmitting}
               style={{
                 padding: "10px 20px",
@@ -504,6 +555,22 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
               }}
             >
               {voiceEnabled ? "🔊 Voice On" : "🔈 Voice Off"}
+            </button>
+
+            <button
+              onClick={speakCurrentQuestion}
+              disabled={isSubmitting || !voiceEnabled || !currentQuestion}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#1d4ed8",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: isSubmitting || !voiceEnabled || !currentQuestion ? "not-allowed" : "pointer",
+                opacity: isSubmitting || !voiceEnabled || !currentQuestion ? 0.6 : 1,
+              }}
+            >
+              🔁 Repeat Question
             </button>
 
             <button

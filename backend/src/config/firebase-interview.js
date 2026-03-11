@@ -16,7 +16,7 @@ app = admin.initializeApp(
   "interview"  // Named app instance
 );
 
-const db = admin.firestore();
+const db = app.firestore();
 
 
 // ─── Default data shape ───────────────────────────────────────────────────────

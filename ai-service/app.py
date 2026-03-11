@@ -120,6 +120,8 @@ async def generate_question(request: QuestionRequest):
         
         system_prompt = SYSTEM_PROMPTS.get(request.interview_type, SYSTEM_PROMPTS["Mixed"])
         
+        context = request.session_context or {}
+        previous_questions = context.get("previousQuestions", [])
         user_prompt = f"""
         Generate a single interview question for the following:
         - Target Role: {request.role}
@@ -130,13 +132,16 @@ async def generate_question(request: QuestionRequest):
         1. Question should be specific and challenging for this level
         2. Should take 2-3 minutes to answer
         3. Should assess relevant skills
-        4. Return ONLY the question, no numbering or extra text
+        4. It MUST be different from all previous questions
+        5. Return ONLY the question, no numbering, labels, quotes, or extra text
         
-        Context: {json.dumps(request.session_context) if request.session_context else "First question of the interview"}
+        Context: {json.dumps(context) if context else "First question of the interview"}
+        Previously asked questions (do not repeat or paraphrase too closely): {json.dumps(previous_questions)}
         """
         
         response = model.generate_content(f"{system_prompt}\n\n{user_prompt}")
-        question = response.text.strip()
+        question = response.text.strip().strip('"').strip("'")
+        question = re.sub(r"^\s*\d+[\).\s-]+", "", question).strip()
         
         return {
             "question": question,

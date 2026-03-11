@@ -3,6 +3,7 @@ const aiService = require("../services/ai.service");
 
 const sessions = new Map();
 const MAX_QUESTIONS = 5;
+const MAX_QUESTION_GENERATION_ATTEMPTS = 3;
 
 const clampEngagement = (value) => {
   const numeric = Number(value);
@@ -32,6 +33,32 @@ const toFacialSamples = (facialData) => {
   }
   const one = normalizeFacialSample(facialData);
   return one ? [one] : [];
+};
+
+const normalizeQuestion = (question = "") =>
+  String(question)
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/[^\w\s]/g, "")
+    .trim();
+
+const isDuplicateQuestion = (question, previousQuestions = []) => {
+  const normalizedCandidate = normalizeQuestion(question);
+  if (!normalizedCandidate) return true;
+  return previousQuestions.some(
+    (previous) => normalizeQuestion(previous) === normalizedCandidate
+  );
+};
+
+const buildFallbackQuestion = (session, attempt = 0) => {
+  const fallbacks = [
+    `Walk me through a challenging project you delivered as a ${session.role}, including your specific technical decisions and trade-offs.`,
+    `Describe a situation where you had to debug a difficult issue under pressure. What was your process and final outcome?`,
+    `How would you plan and execute your first 90 days in a ${session.role} role at the ${session.level} level?`,
+    `Tell me about a time you disagreed with a teammate on implementation details. How did you resolve it and what did you learn?`,
+    `If asked to improve performance of a production feature, how would you identify bottlenecks and prioritize improvements?`,
+  ];
+  return fallbacks[attempt % fallbacks.length];
 };
 
 const startInterview = async (req, res) => {
@@ -173,26 +200,53 @@ const submitAnswer = async (req, res) => {
       });
     }
 
-    // Generate next question
+    // Generate next unique question
     let nextQuestion;
-    try {
-      const sessionContext = {
-        questionsAsked: session.currentIndex,
-        averageScore:
-          session.answers.reduce((sum, a) => sum + (a.evaluation?.score || 0), 0) /
-          session.answers.length,
-      };
+    const previousQuestions = [...session.questions];
+    const averageScore =
+      session.answers.reduce((sum, a) => sum + (a.evaluation?.score || 0), 0) /
+      session.answers.length;
+    const lastAnswer = session.answers[session.answers.length - 1];
 
-      const questionData = await aiService.generateQuestion(
-        session.role,
-        session.level,
-        session.interviewType,
-        sessionContext
+    for (let attempt = 0; attempt < MAX_QUESTION_GENERATION_ATTEMPTS; attempt += 1) {
+      try {
+        const sessionContext = {
+          questionsAsked: session.currentIndex,
+          averageScore,
+          previousQuestions,
+          lastAnswerSummary: {
+            question: lastAnswer?.question || "",
+            score: lastAnswer?.evaluation?.score || 0,
+            strengths: lastAnswer?.evaluation?.strengths || [],
+            improvements: lastAnswer?.evaluation?.improvements || [],
+          },
+        };
+
+        const questionData = await aiService.generateQuestion(
+          session.role,
+          session.level,
+          session.interviewType,
+          sessionContext
+        );
+
+        if (!isDuplicateQuestion(questionData?.question, previousQuestions)) {
+          nextQuestion = questionData.question;
+          break;
+        }
+      } catch (aiError) {
+        console.error("Failed to generate next question:", aiError);
+      }
+    }
+
+    if (!nextQuestion) {
+      let fallbackAttempt = 0;
+      do {
+        nextQuestion = buildFallbackQuestion(session, fallbackAttempt);
+        fallbackAttempt += 1;
+      } while (
+        isDuplicateQuestion(nextQuestion, previousQuestions) &&
+        fallbackAttempt < 10
       );
-      nextQuestion = questionData.question;
-    } catch (aiError) {
-      console.error("Failed to generate next question:", aiError);
-      nextQuestion = `Tell me about your experience with ${session.role} responsibilities.`;
     }
 
     session.questions.push(nextQuestion);

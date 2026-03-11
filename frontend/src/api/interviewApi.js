@@ -42,6 +42,14 @@ export const getSessionData = (sessionId) =>
     },
   });
 
+export const getSessionFeedback = (sessionId) =>
+  request(`/api/interview/${sessionId}/feedback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
 export const analyzeFacialExpression = ({ frameBase64, question }) =>
   request("/api/interview/facial-analysis", {
     method: "POST",

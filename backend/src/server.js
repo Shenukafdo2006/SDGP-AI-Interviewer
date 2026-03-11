@@ -2,7 +2,12 @@ const express = require("express");
 const cors    = require("cors");
 require("dotenv").config();
 
-const { admin, initCollections, getOrCreateUser } = require("./config/firebase");
+const {
+  admin: achievementsAdmin,
+  initCollections,
+  getOrCreateUser,
+} = require("./config/firebase");
+require("./config/firebase-interview");
 const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
 
 const app  = express();
@@ -76,7 +81,7 @@ app.post("/api/user/:userId/achievement/:name", async (req, res) => {
       [`achievements.${achIndex}.unlocked`]: true,
       stats:     newStats,
       xp:        newXp,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: achievementsAdmin.firestore.FieldValue.serverTimestamp(),
     });
 
     // Build the full updated list to return to the frontend
@@ -129,7 +134,7 @@ app.delete("/api/user/:userId/reset", async (req, res) => {
       stats:        DEFAULT_STATS,
       xp:           DEFAULT_XP,
       achievements: DEFAULT_ACHIEVEMENTS,
-      updatedAt:    admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt:    achievementsAdmin.firestore.FieldValue.serverTimestamp(),
     });
 
     res.json({ message: `User ${userId} reset to defaults.` });
@@ -141,9 +146,12 @@ app.delete("/api/user/:userId/reset", async (req, res) => {
 
 // ─── Boot ─────────────────────────────────────────────────────────────────────
 async function start() {
-  await initCollections();
   app.listen(PORT, () => {
     console.log(`\n🚀 Server running at http://localhost:${PORT}`);
+  });
+
+  initCollections().catch((err) => {
+    console.warn("⚠️ Firestore initialization skipped:", err.message);
   });
 }
 
