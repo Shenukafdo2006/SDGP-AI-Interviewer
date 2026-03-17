@@ -48,7 +48,6 @@ function DashBoard({ setView }) {
             <NavItem onClick={() => setView('cv-filtering')}>CV Filtering</NavItem>
             <NavItem onClick={() => setView('achievements')}>Achievements</NavItem>
             <NavItem onClick={() => setView('activity-calendar')}>Activity Calendar</NavItem>
-            <NavItem onClick={() => setView('linkedin-integration')}>LinkedIn Integration</NavItem>
             <NavItem onClick={() => setView('career-suggestions')}>Career Suggestions</NavItem>
             <NavItem onClick={() => setView('skill-improvement')}>Skill Improvement</NavItem>
             <NavItem onClick={() => setView('daily-motivation')}>Daily Motivation</NavItem>

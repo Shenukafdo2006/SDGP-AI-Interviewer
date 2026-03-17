@@ -16,7 +16,6 @@ import CVMaker from "./CVMaker";
 import CVFiltering from "./CVFiltering";
 import Achievements from "./Achievements";
 import ActivityCalendar from "./ActivityCalendar";
-import LinkedInIntegration from "./LinkedInIntegration";
 import CareerSuggestions from "./CareerSuggestions";
 import SkillImprovement from "./SkillImprovement";
 import DailyMotivation from "./DailyMotivation";
@@ -124,9 +123,6 @@ function App() {
     return <ActivityCalendar onBack={() => setView("dashboard")} />;
   }
 
-  if (view === "linkedin-integration") {
-    return <LinkedInIntegration onBack={() => setView("dashboard")} />;
-  }
 
   if (view === "career-suggestions") {
     return <CareerSuggestions onBack={() => setView("dashboard")} />;
