@@ -781,6 +781,24 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 28,
+    title: "PHP",
+    description: "Basic PHP Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "What does PHP stand for?", a: ["Private Home Page", "Personal Hypertext Processor", "PHP: Hypertext Preprocessor", "Public Hyper Processor"], correct: 2 },
+      { q: "Which symbol is used to start a variable in PHP?", a: ["#", "$", "@", "&"], correct: 1 },
+      { q: "Which tag starts PHP code?", a: ["<script>", "<?php", "<php>", "<code>"], correct: 1 },
+      { q: "Which function outputs text?", a: ["echo()", "print()", "write()", "display()"], correct: 0 },
+      { q: "Which symbol is used for comments (single line)?", a: ["//", "/* */", "#", "<!-- -->"], correct: 0 },
+      { q: "Which data type is used for text?", a: ["int", "float", "string", "boolean"], correct: 2 },
+      { q: "How to concatenate strings?", a: ["+", ".", "&", ","], correct: 1 },
+      { q: "Which function gets string length?", a: ["count()", "size()", "strlen()", "length()"], correct: 2 },
+      { q: "Which superglobal holds form data?", a: ["$_POST", "$_FORM", "$_DATA", "$_INPUT"], correct: 0 },
+      { q: "Which operator compares value and type?", a: ["==", "=", "===", "!="], correct: 2 }
+    ],
+  },
 ];
 
 const Quiz = () => {
