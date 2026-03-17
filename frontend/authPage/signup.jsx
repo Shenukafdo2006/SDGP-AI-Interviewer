@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { User, Mail, Lock, Eye, EyeOff, Github } from "lucide-react";
-import "./Signup.css";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { auth } from "../src/firebase";
+import "./signup.css";
 
 function Signup({ onSignupSuccess, onGoToLogin }) {
   const [formData, setFormData] = useState({
@@ -15,16 +17,23 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
-    // Clear error when user interacts
-    if (errors[name]) setErrors({ ...errors, [name]: "" });
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
   };
 
   const validate = () => {
-    let newErrors = {};
+    const newErrors = {};
+
     if (!formData.name.trim()) newErrors.name = "Full name is required";
     if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email address";
     if (formData.password.length < 8) newErrors.password = "Must be at least 8 characters";
@@ -34,119 +43,163 @@ function Signup({ onSignupSuccess, onGoToLogin }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form Submitted", formData);
+
+    if (!validate()) return;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      const response = await fetch("http://localhost:5001/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          name: formData.name,
+          email: formData.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to save user");
+      }
+
+      console.log("Signup success:", data);
       onSignupSuccess();
+    } catch (error) {
+      console.error(error);
+      setErrors((prev) => ({
+        ...prev,
+        general: error.message,
+      }));
     }
   };
 
   return (
-    <div className="signup-wrapper">
-      <div className="signup-card">
-        {/* Top Icon */}
-        <div className="header-icon">
-          <div className="icon-box">
-            <User size={28} color="#fff" strokeWidth={2.5} />
-            <div className="plus-badge">+</div>
-          </div>
-        </div>
-
-        <h2>Create your account</h2>
-        <p className="subtitle">Join thousands of users building amazing things</p>
-
-        <form onSubmit={handleSubmit}>
-          {/* Full Name */}
-          <div className="input-field">
-            <label>Full Name</label>
-            <div className={`input-wrapper ${errors.name ? "error-border" : ""}`}>
-              <User className="icon" size={18} />
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            {errors.name && <span className="error-msg">{errors.name}</span>}
-          </div>
-
-          {/* Email */}
-          <div className="input-field">
-            <label>Email Address</label>
-            <div className={`input-wrapper ${errors.email ? "error-border" : ""}`}>
-              <Mail className="icon" size={18} />
-              <input
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={handleChange}
-              />
+    <div className="signup-page">
+      <div className="signup-wrapper">
+        <div className="signup-card">
+          <div className="header-icon">
+            <div className="icon-box">
+              <User size={28} color="#fff" strokeWidth={2.5} />
+              <div className="plus-badge">+</div>
             </div>
           </div>
 
-          {/* Password */}
-          <div className="input-field">
-            <label>Password</label>
-            <div className={`input-wrapper ${errors.password ? "error-border" : ""}`}>
-              <Lock className="icon" size={18} />
+          <h2>Create your account</h2>
+          <p className="subtitle">
+            Join thousands of users building amazing things
+          </p>
+
+          <form onSubmit={handleSubmit}>
+            <div className="input-field">
+              <label>Full Name</label>
+              <div className={`input-wrapper ${errors.name ? "error-border" : ""}`}>
+                <User className="icon" size={18} />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.name && <span className="error-msg">{errors.name}</span>}
+            </div>
+
+            <div className="input-field">
+              <label>Email Address</label>
+              <div className={`input-wrapper ${errors.email ? "error-border" : ""}`}>
+                <Mail className="icon" size={18} />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              {errors.email && <span className="error-msg">{errors.email}</span>}
+            </div>
+
+            <div className="input-field">
+              <label>Password</label>
+              <div className={`input-wrapper ${errors.password ? "error-border" : ""}`}>
+                <Lock className="icon" size={18} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a strong password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="toggle-pass"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              <p className="hint">Must be at least 8 characters</p>
+              {errors.password && <span className="error-msg">{errors.password}</span>}
+            </div>
+
+            <div className="checkbox-field">
               <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Create a strong password"
-                value={formData.password}
+                type="checkbox"
+                name="agree"
+                id="agree"
+                checked={formData.agree}
                 onChange={handleChange}
               />
-              <button 
-                type="button" 
-                className="toggle-pass" 
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
+              <label htmlFor="agree">
+                I agree to the <span>Terms of Service</span> and <span>Privacy Policy</span>
+              </label>
             </div>
-            <p className="hint">Must be at least 8 characters</p>
+
+            {errors.agree && <p className="error-msg agree-error">{errors.agree}</p>}
+            {errors.general && <p className="error-msg agree-error">{errors.general}</p>}
+
+            <button type="submit" className="btn-primary">
+              Create Account
+            </button>
+          </form>
+
+          <div className="divider">
+            <span>or continue with</span>
           </div>
 
-          {/* Agreement */}
-          <div className="checkbox-field">
-            <input
-              type="checkbox"
-              name="agree"
-              id="agree"
-              checked={formData.agree}
-              onChange={handleChange}
-            />
-            <label htmlFor="agree">
-              I agree to the <span>Terms of Service</span> and <span>Privacy Policy</span>
-            </label>
+          <div className="social-group">
+            <button className="btn-social" type="button">
+              <img
+                src="https://www.svgrepo.com/show/355037/google.svg"
+                alt="Google"
+                width="18"
+              />
+              Google
+            </button>
+            <button className="btn-social" type="button">
+              <Github size={18} />
+              GitHub
+            </button>
           </div>
-          {errors.agree && <p className="error-msg text-center">{errors.agree}</p>}
 
-          <button type="submit" className="btn-primary">Create Account</button>
-        </form>
-
-        <div className="divider">
-          <span>or continue with</span>
+          <p className="footer-text">
+            Already have an account? <span onClick={onGoToLogin}>Log in</span>
+          </p>
         </div>
-
-        <div className="social-group">
-          <button className="btn-social">
-            <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width="18" />
-            Google
-          </button>
-          <button className="btn-social">
-            <Github size={18} />
-            GitHub
-          </button>
-        </div>
-
-        <p className="footer-text">
-          Already have an account? <span onClick={onGoToLogin}>Log in</span>
-        </p>
       </div>
     </div>
   );

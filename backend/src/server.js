@@ -1,36 +1,23 @@
-const express = require("express");
-const cors    = require("cors");
-require("dotenv").config();
-
+const dotenv = require("dotenv");
+const app = require("./app");
 const {
-  admin: achievementsAdmin,
+  admin,
   initCollections,
   getOrCreateUser,
-} = require("./config/firebase");
-require("./config/firebase-interview");
-const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
+} = require("./config/firebase-interview");
 
-const app  = express();
-const PORT = process.env.PORT || 5001;
+dotenv.config();
 
-app.use(cors());
-app.use(express.json());
-app.use("/api/interview", aiInterviewRoutes);
+const port = Number(process.env.PORT) || 5001;
 
-// ─── Health check ─────────────────────────────────────────────────────────────
-app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "Achievements API is running 🚀" });
-});
-
-// ─── GET /api/user/:userId ────────────────────────────────────────────────────
 app.get("/api/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { data }   = await getOrCreateUser(userId);
+    const { data } = await getOrCreateUser(userId);
 
     res.json({
-      stats:        data.stats,
-      xp:           data.xp,
+      stats: data.stats,
+      xp: data.xp,
       achievements: data.achievements,
     });
   } catch (err) {
@@ -39,123 +26,170 @@ app.get("/api/user/:userId", async (req, res) => {
   }
 });
 
-// ─── POST /api/user/:userId/achievement/:name ─────────────────────────────────
-// Unlocks ONE achievement only — only that achievement's unlocked flag is saved.
 app.post("/api/user/:userId/achievement/:name", async (req, res) => {
   try {
     const { userId, name } = req.params;
-    const { ref, data }    = await getOrCreateUser(userId);
+    const { ref, data } = await getOrCreateUser(userId);
 
-    const achName = decodeURIComponent(name);
+    const achievementName = decodeURIComponent(name);
     const { stats, xp, achievements } = data;
+    const achievementIndex = achievements.findIndex(
+      (achievement) => achievement.name === achievementName
+    );
 
-    // Find the achievement
-    const achIndex = achievements.findIndex((a) => a.name === achName);
-    if (achIndex === -1) {
-      return res.status(404).json({ error: `Achievement "${achName}" not found.` });
+    if (achievementIndex === -1) {
+      return res
+        .status(404)
+        .json({ error: `Achievement "${achievementName}" not found.` });
     }
-    if (achievements[achIndex].unlocked) {
+
+    if (achievements[achievementIndex].unlocked) {
       return res.status(400).json({ error: "Achievement already unlocked." });
     }
 
-    const xpReward = achievements[achIndex].xp ?? 50;
-
-    // ── XP calculation ───────────────────────────────────────────────────────
+    const xpReward = achievements[achievementIndex].xp ?? 50;
     let current = xp.current + xpReward;
-    let level   = xp.level;
-    let total   = xp.total;
-    while (current >= total) { current -= total; level += 1; total += 500; }
+    let level = xp.level;
+    let total = xp.total;
+
+    while (current >= total) {
+      current -= total;
+      level += 1;
+      total += 500;
+    }
 
     const newXp = { ...xp, current, level, total };
+    const newStats = stats.map((stat) => {
+      if (stat.label === "Achievements") {
+        return { ...stat, value: stat.value + 1 };
+      }
 
-    // ── Stats update ─────────────────────────────────────────────────────────
-    const newStats = stats.map((s) => {
-      if (s.label === "Achievements") return { ...s, value: s.value + 1 };
-      if (s.label === "Level")        return { ...s, value: level };
-      return s;
+      if (stat.label === "Level") {
+        return { ...stat, value: level };
+      }
+
+      return stat;
     });
 
-    // ── Targeted Firestore write — only touch the ONE achievement field ───────
-    // Dot-notation updates a single array element without overwriting the rest.
     await ref.update({
-      [`achievements.${achIndex}.unlocked`]: true,
-      stats:     newStats,
-      xp:        newXp,
-      updatedAt: achievementsAdmin.firestore.FieldValue.serverTimestamp(),
+      [`achievements.${achievementIndex}.unlocked`]: true,
+      stats: newStats,
+      xp: newXp,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    // Build the full updated list to return to the frontend
-    const updatedAchievements = achievements.map((a, i) =>
-      i === achIndex ? { ...a, unlocked: true } : a
+    const updatedAchievements = achievements.map((achievement, index) =>
+      index === achievementIndex
+        ? { ...achievement, unlocked: true }
+        : achievement
     );
 
-    res.json({
-      stats:        newStats,
-      xp:           newXp,
+    return res.json({
+      stats: newStats,
+      xp: newXp,
       achievements: updatedAchievements,
     });
-
   } catch (err) {
     console.error("POST /api/user/achievement error:", err);
-    res.status(500).json({ error: "Failed to save achievement." });
+    return res.status(500).json({ error: "Failed to save achievement." });
   }
 });
 
-// ─── DELETE /api/user/:userId/reset ──────────────────────────────────────────
 app.delete("/api/user/:userId/reset", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { ref }    = await getOrCreateUser(userId);
+    const { ref } = await getOrCreateUser(userId);
 
-    const DEFAULT_STATS = [
+    const defaultStats = [
       { icon: "🏆", label: "Achievements", value: 0 },
-      { icon: "🔥", label: "Day Streak",   value: 0 },
-      { icon: "⚡",  label: "Level",        value: 0 },
+      { icon: "🔥", label: "Day Streak", value: 0 },
+      { icon: "⚡", label: "Level", value: 0 },
     ];
 
-    const DEFAULT_XP = {
-      level:   0,
+    const defaultXp = {
+      level: 0,
       current: 0,
-      total:   1000,
-      title:   "Career Achiever",
-      icon:    "⚡",
+      total: 1000,
+      title: "Career Achiever",
+      icon: "⚡",
     };
 
-    const DEFAULT_ACHIEVEMENTS = [
-      { name: "First Interview",  desc: "Completed your first mock interview", color: "#c084fc", icon: "🎤", xp: 50,  unlocked: false },
-      { name: "Quiz Master",      desc: "Scored 100% on 5 quizzes",            color: "#fbbf24", icon: "🏆", xp: 70,  unlocked: false },
-      { name: "Week Warrior",     desc: "Maintained a 7-day learning streak",  color: "#f87171", icon: "🔥", xp: 60,  unlocked: false },
-      { name: "CV Creator",       desc: "Created and downloaded your CV",      color: "#a78bfa", icon: "📄", xp: 40,  unlocked: false },
-      { name: "Knowledge Seeker", desc: "Read 20 learning resources",          color: "#60a5fa", icon: "📚", xp: 80,  unlocked: false },
-      { name: "Perfect Score",    desc: "Get 90%+ on 10 interviews",           color: "#34d399", icon: "⭐", xp: 90,  unlocked: false },
+    const defaultAchievements = [
+      {
+        name: "First Interview",
+        desc: "Completed your first mock interview",
+        color: "#c084fc",
+        icon: "🎤",
+        xp: 50,
+        unlocked: false,
+      },
+      {
+        name: "Quiz Master",
+        desc: "Scored 100% on 5 quizzes",
+        color: "#fbbf24",
+        icon: "🏆",
+        xp: 70,
+        unlocked: false,
+      },
+      {
+        name: "Week Warrior",
+        desc: "Maintained a 7-day learning streak",
+        color: "#f87171",
+        icon: "🔥",
+        xp: 60,
+        unlocked: false,
+      },
+      {
+        name: "CV Creator",
+        desc: "Created and downloaded your CV",
+        color: "#a78bfa",
+        icon: "📄",
+        xp: 40,
+        unlocked: false,
+      },
+      {
+        name: "Knowledge Seeker",
+        desc: "Read 20 learning resources",
+        color: "#60a5fa",
+        icon: "📚",
+        xp: 80,
+        unlocked: false,
+      },
+      {
+        name: "Perfect Score",
+        desc: "Get 90%+ on 10 interviews",
+        color: "#34d399",
+        icon: "⭐",
+        xp: 90,
+        unlocked: false,
+      },
     ];
 
     await ref.update({
-      stats:        DEFAULT_STATS,
-      xp:           DEFAULT_XP,
-      achievements: DEFAULT_ACHIEVEMENTS,
-      updatedAt:    achievementsAdmin.firestore.FieldValue.serverTimestamp(),
+      stats: defaultStats,
+      xp: defaultXp,
+      achievements: defaultAchievements,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    res.json({ message: `User ${userId} reset to defaults.` });
+    return res.json({ message: `User ${userId} reset to defaults.` });
   } catch (err) {
     console.error("DELETE /api/user/reset error:", err);
-    res.status(500).json({ error: "Failed to reset user." });
+    return res.status(500).json({ error: "Failed to reset user." });
   }
 });
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
 async function start() {
-  app.listen(PORT, () => {
-    console.log(`\n🚀 Server running at http://localhost:${PORT}`);
+  app.listen(port, () => {
+    console.log(`Backend server listening on port ${port}`);
   });
 
   initCollections().catch((err) => {
-    console.warn("⚠️ Firestore initialization skipped:", err.message);
+    console.warn("Firestore initialization skipped:", err.message);
   });
 }
 
 start().catch((err) => {
-  console.error("❌ Failed to start server:", err);
+  console.error("Failed to start server:", err);
   process.exit(1);
 });

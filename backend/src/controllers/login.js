@@ -1,27 +1,23 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const { db } = require("../config/firebase-admin");
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const loginController = async (req, res) => {
+  try {
+    const uid = req.user.uid;
 
+    const userDoc = await db.collection("users").doc(uid).get();
 
-const USER = {
-  email: "admin@gmail.com",
-  password: "123456"
+    if (!userDoc.exists) {
+      return res.status(404).json({ message: "User profile not found" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: userDoc.data(),
+    });
+  } catch (error) {
+    console.error("Login controller error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  if (email === USER.email && password === USER.password) {
-    return res.json({ success: true, message: "Login successful" });
-  }
-
-  return res.status(401).json({ success: false, message: "Invalid credentials" });
-});
-
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
-});
+module.exports = loginController;

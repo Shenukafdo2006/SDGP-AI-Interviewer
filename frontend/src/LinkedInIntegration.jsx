@@ -1,3 +1,4 @@
+/*
 import React, { useState } from 'react';
 import './LinkedinIntergration.css';
 
@@ -29,7 +30,7 @@ const LinkedInIntegration = ({ onBack }) => {
       <div className="li-content-center">
         <div className="li-main-card">
           <div className="li-card-glow"></div>
-          
+
           <div className="li-branding-section">
             <div className="li-logo-box">in</div>
             <h1 className="li-title">LinkedIn Integration</h1>
@@ -67,7 +68,7 @@ const LinkedInIntegration = ({ onBack }) => {
             </div>
           </div>
 
-          <button 
+          <button
             className={`li-action-btn ${isConnected ? 'disconnect' : 'connect'} ${isSyncing ? 'loading' : ''}`}
             onClick={handleToggleConnection}
             disabled={isSyncing}
@@ -83,3 +84,4 @@ const LinkedInIntegration = ({ onBack }) => {
 };
 
 export default LinkedInIntegration;
+*/

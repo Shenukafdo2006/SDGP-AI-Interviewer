@@ -79,10 +79,14 @@
 
 .d-view-btn {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px;
   background: transparent;
   border: 1px solid;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
 }

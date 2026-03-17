@@ -28,7 +28,7 @@ const quizzes = [
     questions: [
       { q: "Which keyword is used to create a class?", a: ["class", "struct", "function", "object"], correct: 0 },
       { q: "Java is ___ language?", a: ["Compiled", "Interpreted", "Both", "None"], correct: 2 },
-      { q: "Which method starts execution?", a: ["main()","start()", "main()", "run()", "execute()"], correct: 0 },
+      { q: "Which method starts execution?", a: ["main()","start()",  "run()", "execute()"], correct: 0 },
       { q: "Primitive type for decimal?", a: ["int", "double", "String", "float"], correct: 1 },
       { q: "Inheritance keyword?", a: ["extend", "implements", "inherit","extends"], correct: 3 },
       { q: "Java supports multiple inheritance via?", a: ["Class", "Interface", "Abstract", "Package"], correct: 1 },
@@ -50,7 +50,7 @@ const quizzes = [
       { q: "Largest heading?", a: ["<h6>", "<h1>", "<head>", "<title>"], correct: 1 },
       { q: "Paragraph tag?", a: ["<para>", "<p>", "<text>", "<pg>"], correct: 1 },
       { q: "Line break tag?", a: ["<br>", "<lb>", "<break>", "<hr>"], correct: 0 },
-      { q: "Table row?", a: ["<td>", "<tr>", "<th>", "<table>"], correct: 1 },
+      { q: "Table row?", a: ["<td>", "<tr>", "<th>", "<table>"], correct: 3 },
       { q: "List tag?", a: ["<ul>", "<li>", "<ol>", "All"], correct: 3 },
       { q: "Meta tag inside?", a: ["body", "footer", "head", "title"], correct: 2 },
       { q: "Form tag?", a: ["<form>", "<input>", "<label>", "<submit>"], correct: 0 },
@@ -782,6 +782,7 @@ const Quiz = () => {
     setSelectedAnswer(null);
     setIsAnswered(false);
     setTimer(60);
+    
   };
 
   const restartQuiz = () => {
@@ -798,7 +799,9 @@ const Quiz = () => {
   return (
     <div className="quiz-page">
       <header className="header">
-        <div className="menu-icon" onClick={resetQuiz}>←</div>
+        {selectedQuiz && (
+          <div className="menu-icon" onClick={resetQuiz}>← Back</div>
+        )}
         <div className="logo">📝 Skills Quiz</div>
       </header>
 
@@ -816,6 +819,7 @@ const Quiz = () => {
                 </button>
               ))}
             </div>
+        
 
             <div className="quiz-grid">
               {filteredQuizzes.map((quiz) => (

@@ -1,6 +1,7 @@
+/*
 .li-page-wrapper {
   background-color: #080b14;
-  background-image: 
+  background-image:
     radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
     radial-gradient(ellipse 40% 30% at 85% 85%, rgba(168, 85, 247, 0.10) 0%, transparent 50%);
   min-height: 100vh;
@@ -89,7 +90,6 @@
 .sync-label { display: block; font-size: 15px; font-weight: 600; color: #f1f5f9; }
 .sync-sub { font-size: 11px; color: #64748b; }
 
-/* Toggle Switch Styles */
 .li-toggle { position: relative; width: 42px; height: 22px; }
 .li-toggle input { opacity: 0; width: 0; height: 0; }
 .li-slider {
@@ -119,3 +119,4 @@ input:checked + .li-slider:before { transform: translateX(20px); }
 .disconnect { background: transparent; border: 1px solid #ef4444; color: #ef4444; }
 
 .li-timestamp { font-size: 11px; color: #64748b; margin-top: 15px; }
+*/
