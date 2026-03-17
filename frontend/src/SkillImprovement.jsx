@@ -63,7 +63,7 @@ const SkillImprovement = () => {
 
       <button 
         className="back-btn" 
-        onClick={()=> window.location.href = "/dashboard"}
+        onClick={()=> window.location.replace("/dashboard")}
       >
         ← Back
       </button>

@@ -2,7 +2,7 @@ import "./Quiz.css";
 import React, { useState, useMemo, useEffect } from "react";
 
 const quizzes = [
-  {
+    {
     id: 1,
     title: "JavaScript ",
     description: "Core JavaScript Concepts",
@@ -693,6 +693,26 @@ const quizzes = [
       { q: "React portal used for?", a: ["State","Effect","Routing","Render outside DOM hierarchy"], correct: 3 }
     ],
   },
+
+  {
+    id: 25,
+    title: "SQL",
+    description: "Basic SQL Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "What does SQL stand for?", a: ["Structured Query Language", "Simple Query Language", "Standard Question Language", "System Query Logic"], correct: 0 },
+      { q: "Which command is used to retrieve data?", a: ["GET", "SELECT", "FETCH", "OPEN"], correct: 1 },
+      { q: "Which clause is used to filter records?", a: ["WHERE", "ORDER BY", "GROUP BY", "FILTER"], correct: 0 },
+      { q: "Which keyword is used to sort results?", a: ["SORT BY", "ORDER BY", "GROUP BY", "ARRANGE"], correct: 1 },
+      { q: "Which command is used to insert data?", a: ["ADD", "INSERT INTO", "PUT", "CREATE"], correct: 1 },
+      { q: "Which command deletes data?", a: ["REMOVE", "DELETE", "DROP", "CLEAR"], correct: 1 },
+      { q: "Which command updates data?", a: ["CHANGE", "MODIFY", "UPDATE", "SET"], correct: 2 },
+      { q: "Which keyword selects all columns?", a: ["ALL", "*", "EVERY", "FULL"], correct: 1 },
+      { q: "Which command creates a table?", a: ["MAKE TABLE", "CREATE TABLE", "NEW TABLE", "BUILD"], correct: 1 },
+      { q: "Primary key is used to?", a: ["Store duplicates", "Identify unique rows", "Delete rows", "Sort data"], correct: 1 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
