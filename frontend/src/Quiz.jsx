@@ -799,6 +799,36 @@ const quizzes = [
       { q: "Which operator compares value and type?", a: ["==", "=", "===", "!="], correct: 2 }
     ],
   },
+
+  {
+    id: 29,
+    title: "PHP",
+    description: "Intermediate PHP Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Which function includes a file only once?", a: ["include()", "require()", "include_once()", "require_once()"], correct: 2 },
+      { q: "What does require() do if file not found?", a: ["Warning", "Fatal error", "Ignore", "Retry"], correct: 1 },
+      { q: "Which superglobal stores session data?", a: ["$_POST", "$_SESSION", "$_COOKIE", "$_GET"], correct: 1 },
+      { q: "Which function starts a session?", a: ["session_start()", "start_session()", "init_session()", "session_begin()"], correct: 0 },
+      { q: "Which function destroys a session?", a: ["session_destroy()", "session_remove()", "session_delete()", "unset_session()"], correct: 0 },
+      { q: "Which superglobal is used for cookies?", a: ["$_SESSION", "$_POST", "$_COOKIE", "$_GET"], correct: 2 },
+      { q: "Which function sets a cookie?", a: ["create_cookie()", "setcookie()", "cookie_set()", "addcookie()"], correct: 1 },
+      { q: "Which array type uses key-value pairs?", a: ["Indexed", "Multidimensional", "Associative", "Numeric"], correct: 2 },
+      { q: "Which loop is used to iterate arrays?", a: ["for", "while", "foreach", "loop"], correct: 2 },
+      { q: "Which function checks if variable exists?", a: ["isset()", "check()", "exists()", "defined()"], correct: 0 },
+      { q: "Which function removes a variable?", a: ["remove()", "unset()", "delete()", "clear()"], correct: 1 },
+      { q: "Which function counts array elements?", a: ["size()", "count()", "length()", "total()"], correct: 1 },
+      { q: "Which function merges arrays?", a: ["array_join()", "array_merge()", "combine()", "merge_array()"], correct: 1 },
+      { q: "Which operator is used for error control?", a: ["@", "#", "!", "&"], correct: 0 },
+      { q: "Which function redirects page?", a: ["redirect()", "header()", "move()", "goto()"], correct: 1 },
+      { q: "Which function stops script execution?", a: ["stop()", "break()", "exit()", "end()"], correct: 2 },
+      { q: "Which keyword defines a function?", a: ["func", "function", "define", "method"], correct: 1 },
+      { q: "Which function returns JSON?", a: ["json_make()", "json_create()", "json_encode()", "json_convert()"], correct: 2 },
+      { q: "Which function converts JSON to array/object?", a: ["json_decode()", "json_parse()", "json_read()", "json_to_array()"], correct: 0 },
+      { q: "Which method is more secure for form submission?", a: ["GET", "POST", "PUT", "FETCH"], correct: 1 }
+    ],
+  },
+  
 ];
 
 const Quiz = () => {
