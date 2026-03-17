@@ -867,6 +867,26 @@ const quizzes = [
       { q: "Which global handles file upload?", a: ["$_FILES", "$_UPLOAD", "$_FILE", "$_DATA"], correct: 0 }
     ],
   },
+
+  {
+    id: 31,
+    title: "C Programming",
+    description: "Basic C Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Who developed C language?", a: ["James Gosling", "Dennis Ritchie", "Bjarne Stroustrup", "Guido van Rossum"], correct: 1 },
+      { q: "Which symbol ends a statement in C?", a: [":", ";", ".", ","], correct: 1 },
+      { q: "Which function is entry point of C program?", a: ["start()", "run()", "main()", "init()"], correct: 2 },
+      { q: "Which header file is used for input/output?", a: ["stdlib.h", "math.h", "conio.h", "stdio.h"], correct: 3 },
+      { q: "Which keyword declares integer?", a: ["int", "float", "char", "double"], correct: 0 },
+      { q: "Which format specifier is for integer?", a: ["%f", "%d", "%c", "%s"], correct: 1 },
+      { q: "Which format specifier is for float?", a: ["%d", "%c", "%f", "%s"], correct: 2 },
+      { q: "Which format specifier is for character?", a: ["%d", "%f", "%s", "%c"], correct: 3 },
+      { q: "Which function prints output?", a: ["scanf()", "input()", "printf()", "print()"], correct: 2 },
+      { q: "Which function takes input?", a: ["printf()", "input()", "scanf()", "read()"], correct: 2 }
+    ], 
+  },
+
   
 ];
 
