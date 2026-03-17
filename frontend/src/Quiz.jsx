@@ -828,6 +828,45 @@ const quizzes = [
       { q: "Which method is more secure for form submission?", a: ["GET", "POST", "PUT", "FETCH"], correct: 1 }
     ],
   },
+
+  {
+    id: 30,
+    title: "PHP",
+    description: "Advanced PHP Concepts",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Which concept allows code reuse in PHP?", a: ["Encapsulation", "Inheritance", "Polymorphism", "All"], correct: 3 },
+      { q: "Which keyword is used to define a class?", a: ["define", "class", "object", "new"], correct: 1 },
+      { q: "Which keyword creates object?", a: ["class", "new", "create", "init"], correct: 1 },
+      { q: "Constructor method name?", a: ["init()", "__construct()", "create()", "start()"], correct: 1 },
+      { q: "Destructor method name?", a: ["__destroy()", "__destruct()", "destroy()", "end()"], correct: 1 },
+      { q: "Access modifier for public access?", a: ["private", "protected", "public", "global"], correct: 2 },
+      { q: "Access modifier for same class only?", a: ["private", "protected", "public", "static"], correct: 0 },
+      { q: "Access modifier for class + subclass?", a: ["private", "protected", "public", "global"], correct: 1 },
+      { q: "Which keyword is used for inheritance?", a: ["extend", "inherits", "extends", "implement"], correct: 2 },
+      { q: "Which keyword is used for interfaces?", a: ["interface", "implements", "extends", "abstract"], correct: 0 },
+      { q: "Which keyword implements interface?", a: ["use", "implements", "extends", "apply"], correct: 1 },
+      { q: "Abstract class keyword?", a: ["class", "interface", "abstract", "define"], correct: 2 },
+      { q: "Which keyword prevents override?", a: ["const", "static", "final", "private"], correct: 2 },
+      { q: "Static keyword is used for?", a: ["Object only", "Class level access", "Loop", "Condition"], correct: 1 },
+      { q: "Which symbol is used for object access?", a: ["->", "::", ".", ":"], correct: 0 },
+      { q: "Which operator is used for static access?", a: ["->", "::", ".", ":"], correct: 1 },
+      { q: "Which function handles exceptions?", a: ["catch", "try", "throw", "handle"], correct: 1 },
+      { q: "Which keyword throws exception?", a: ["throw", "catch", "error", "break"], correct: 0 },
+      { q: "Which block catches exception?", a: ["try", "throw", "catch", "final"], correct: 2 },
+      { q: "Which block always executes?", a: ["try", "catch", "final", "finally"], correct: 3 },
+      { q: "PDO stands for?", a: ["PHP Data Object", "Personal Data Object", "PHP Database Object", "Program Data Object"], correct: 0 },
+      { q: "PDO is used for?", a: ["UI", "Database connection", "Session", "Loop"], correct: 1 },
+      { q: "Which method prepares SQL statement?", a: ["query()", "prepare()", "execute()", "run()"], correct: 1 },
+      { q: "Which method executes prepared statement?", a: ["run()", "execute()", "prepare()", "query()"], correct: 1 },
+      { q: "Which function hashes password?", a: ["md5()", "sha1()", "password_hash()", "encrypt()"], correct: 2 },
+      { q: "Which function verifies password?", a: ["password_check()", "verify()", "password_verify()", "check()"], correct: 2 },
+      { q: "Which function sanitizes input?", a: ["clean()", "sanitize()", "filter_input()", "secure()"], correct: 2 },
+      { q: "Which header prevents caching?", a: ["cache-control", "no-cache", "header()", "expires"], correct: 0 },
+      { q: "Which function uploads files?", a: ["move_uploaded_file()", "upload_file()", "file_send()", "send_file()"], correct: 0 },
+      { q: "Which global handles file upload?", a: ["$_FILES", "$_UPLOAD", "$_FILE", "$_DATA"], correct: 0 }
+    ],
+  },
   
 ];
 
