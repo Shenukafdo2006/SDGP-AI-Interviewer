@@ -16,6 +16,7 @@
   position: relative;
 }
 
+
 .menu-icon {
   font-size: 24px;
   cursor: pointer;
@@ -37,7 +38,6 @@
   padding-top: 10px;
 }
 
-/* Dashboard Tabs */
 .dashboard-tabs {
   display: flex;
   justify-content: center;
@@ -144,19 +144,18 @@
   transform: translateY(-2px);
 }
 
-.ghost-btn {
-  margin-left: 10px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid white;
+.ghost-btn{
   background: transparent;
-  color: white;
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
+  margin-bottom: 10px;
+  color:#e2e8f0;
 }
 
 .ghost-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background:#6366f1;
 }
 
 .quiz-player,
@@ -250,6 +249,7 @@
 
 .result-actions {
   margin-top: 20px;
+  
 }
 
 .timer {

@@ -1,7 +1,7 @@
-const express = require("express");
-const cors    = require("cors");
-require("dotenv").config();
+const dotenv = require("dotenv");
+const app = require("./app");
 
+<<<<<<< HEAD
 const {
   admin: achievementsAdmin,
   initCollections,
@@ -9,18 +9,16 @@ const {
 } = require("./config/firebase");
 require("./config/firebase-interview");
 const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
+=======
+dotenv.config();
+>>>>>>> parent of ce7ae85 (Revert "Merge branch 'main' of https://github.com/Shenukafdo2006/SDGP-AI-Interviewer")
 
-const app  = express();
-const PORT = process.env.PORT || 5001;
+const port = Number(process.env.PORT) || 5001;
 
-app.use(cors());
-app.use(express.json());
-app.use("/api/interview", aiInterviewRoutes);
-
-// ─── Health check ─────────────────────────────────────────────────────────────
-app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "Achievements API is running 🚀" });
+app.listen(port, () => {
+  console.log(`Backend server listening on port ${port}`);
 });
+<<<<<<< HEAD
 
 // ─── GET /api/user/:userId ────────────────────────────────────────────────────
 app.get("/api/user/:userId", async (req, res) => {
@@ -159,3 +157,5 @@ start().catch((err) => {
   console.error("❌ Failed to start server:", err);
   process.exit(1);
 });
+=======
+>>>>>>> parent of ce7ae85 (Revert "Merge branch 'main' of https://github.com/Shenukafdo2006/SDGP-AI-Interviewer")
