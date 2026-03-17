@@ -742,6 +742,45 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 27,
+    title: "SQL",
+    description: "Advanced SQL Concepts",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Which JOIN returns all rows when there is a match in either table?", a: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL OUTER JOIN"], correct: 3 },
+      { q: "What is a subquery?", a: ["Join type", "Constraint", "Query inside another query", "Index"], correct: 2 },
+      { q: "Which clause is used to filter after aggregation?", a: ["WHERE", "GROUP BY", "HAVING", "ORDER BY"], correct: 1 },
+      { q: "What does UNION do?", a: ["Combines and removes duplicates", "Combines with duplicates", "Joins tables", "Filters rows"], correct: 0 },
+      { q: "UNION ALL does?", a: ["Remove duplicates", "Keep duplicates", "Sort data", "Filter data"], correct: 1 },
+      { q: "Which index improves query performance?", a: ["PRIMARY", "FOREIGN", "INDEX", "CHECK"], correct: 2 },
+      { q: "Which constraint ensures uniqueness?", a: ["UNIQUE", "NOT NULL", "CHECK", "DEFAULT"], correct: 3 },
+      { q: "Which keyword is used for temporary result sets?", a: ["VIEW", "CTE", "TABLE", "INDEX"], correct: 0 },
+      { q: "What is a VIEW?", a: ["Virtual table", "Physical table", "Index", "Constraint"], correct: 2 },
+      { q: "Which clause removes duplicate rows?", a: ["UNIQUE", "DISTINCT", "GROUP BY", "HAVING"], correct: 3 },
+      { q: "Which function gives rank?", a: ["ROWNUM()", "RANK()", "ORDER()", "INDEX()"], correct: 0 },
+      { q: "ROW_NUMBER() does?", a: ["Assigns unique numbers", "Counts rows", "Sorts rows", "Groups rows"], correct: 1 },
+      { q: "Which keyword creates index?", a: ["ADD INDEX", "CREATE INDEX", "MAKE INDEX", "NEW INDEX"], correct: 0 },
+      { q: "Which constraint ensures referential integrity?", a: ["PRIMARY KEY", "FOREIGN KEY", "UNIQUE", "CHECK"], correct: 1 },
+      { q: "What is normalization?", a: ["Reduce redundancy", "Increase redundancy", "Delete data", "Sort data"], correct: 2 },
+      { q: "Denormalization is?", a: ["Add redundancy", "Remove redundancy", "Indexing", "Sorting"], correct: 3 },
+      { q: "Which JOIN returns only matching rows?", a: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN"], correct: 0 },
+      { q: "Which clause sorts data?", a: ["GROUP BY", "ORDER BY", "HAVING", "WHERE"], correct: 1 },
+      { q: "Which function finds max value?", a: ["MIN()", "MAX()", "AVG()", "SUM()"], correct: 2 },
+      { q: "Which function finds min value?", a: ["MIN()", "MAX()", "AVG()", "SUM()"], correct: 0 },
+      { q: "Which keyword limits rows?", a: ["TOP/LIMIT", "ORDER", "GROUP", "WHERE"], correct: 1 },
+      { q: "Which operator checks null?", a: ["= NULL", "IS NULL", "== NULL", "NULL()"], correct: 2 },
+      { q: "COALESCE does?", a: ["Return first non-null", "Return null", "Delete null", "Count null"], correct: 3 },
+      { q: "Which keyword renames column?", a: ["AS", "NAME", "RENAME", "CHANGE"], correct: 0 },
+      { q: "Which clause joins tables?", a: ["JOIN", "MERGE", "COMBINE", "CONNECT"], correct: 1 },
+      { q: "Which JOIN returns all left rows?", a: ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL JOIN"], correct: 2 },
+      { q: "Which JOIN returns all right rows?", a: ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "FULL JOIN"], correct: 1 },
+      { q: "Which keyword deletes table?", a: ["DELETE TABLE", "DROP TABLE", "REMOVE TABLE", "CLEAR TABLE"], correct: 2 },
+      { q: "Which keyword removes all rows but keeps table?", a: ["DELETE", "DROP", "TRUNCATE", "CLEAR"], correct: 3 },
+      { q: "Which clause is used in window functions?", a: ["OVER()", "GROUP()", "WINDOW()", "PARTITION()"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
