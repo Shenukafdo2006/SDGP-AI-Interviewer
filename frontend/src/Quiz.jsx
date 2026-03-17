@@ -713,6 +713,35 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 26,
+    title: "SQL",
+    description: "Intermediate SQL Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Which JOIN returns matching rows from both tables?", a: ["INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN"], correct: 0 },
+      { q: "LEFT JOIN returns?", a: ["Only matching rows", "All rows from left + matches", "All rows from right", "Only unmatched rows"], correct: 1 },
+      { q: "RIGHT JOIN returns?", a: ["All rows from right + matches", "All rows from left", "Only matches", "None"], correct: 0 },
+      { q: "Which clause groups rows?", a: ["ORDER BY", "GROUP BY", "WHERE", "HAVING"], correct: 1 },
+      { q: "HAVING is used with?", a: ["SELECT", "GROUP BY", "ORDER BY", "INSERT"], correct: 1 },
+      { q: "Difference between WHERE and HAVING?", a: ["Same", "HAVING filters grouped data", "WHERE groups data", "HAVING sorts data"], correct: 1 },
+      { q: "COUNT(*) does?", a: ["Counts rows", "Counts columns", "Counts NULL", "Counts duplicates only"], correct: 0 },
+      { q: "Which function returns average?", a: ["SUM()", "AVG()", "COUNT()", "TOTAL()"], correct: 1 },
+      { q: "Which function returns total sum?", a: ["ADD()", "SUM()", "TOTAL()", "COUNT()"], correct: 1 },
+      { q: "Which keyword removes duplicates?", a: ["UNIQUE", "DISTINCT", "REMOVE", "FILTER"], correct: 1 },
+      { q: "ORDER BY default order?", a: ["DESC", "ASC", "RANDOM", "NONE"], correct: 1 },
+      { q: "Which keyword sorts descending?", a: ["DOWN", "DESC", "REVERSE", "LOW"], correct: 1 },
+      { q: "LIMIT is used to?", a: ["Limit rows", "Sort rows", "Delete rows", "Group rows"], correct: 0 },
+      { q: "Which operator searches pattern?", a: ["MATCH", "LIKE", "SEARCH", "FIND"], correct: 1 },
+      { q: "Wildcard for multiple characters?", a: ["*", "%", "_", "#"], correct: 1 },
+      { q: "Wildcard for single character?", a: ["*", "%", "_", "#"], correct: 2 },
+      { q: "IN operator does?", a: ["Check range", "Match multiple values", "Sort values", "Group values"], correct: 1 },
+      { q: "BETWEEN is used for?", a: ["Range filtering", "Sorting", "Grouping", "Joining"], correct: 0 },
+      { q: "Which clause is executed first?", a: ["SELECT", "WHERE", "FROM", "ORDER BY"], correct: 2 },
+      { q: "Subquery is?", a: ["Query inside query", "Join type", "Table", "Function"], correct: 0 }
+    ],
+  },
+
 ];
 
 const Quiz = () => {
