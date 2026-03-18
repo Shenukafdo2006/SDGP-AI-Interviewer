@@ -974,6 +974,35 @@ const quizzes = [
     ],
   },
 
+  {
+    id: 35,
+    title: "C++",
+    description: "Intermediate C++ Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Which concept is core of C++?", a: ["OOP", "HTML", "CSS", "SQL"], correct: 0 },
+      { q: "Which keyword defines class?", a: ["struct", "class", "object", "define"], correct: 1 },
+      { q: "Which keyword creates object?", a: ["class", "new", "object", "create"], correct: 1 },
+      { q: "Which function is constructor?", a: ["~class()", "class()", "init()", "start()"], correct: 1 },
+      { q: "Which function is destructor?", a: ["~class()", "delete()", "destroy()", "end()"], correct: 0 },
+      { q: "Which access specifier is default in class?", a: ["public", "private", "protected", "global"], correct: 1 },
+      { q: "Which access specifier allows access everywhere?", a: ["private", "protected", "public", "default"], correct: 2 },
+      { q: "Which keyword is used for inheritance?", a: ["extends", "inherits", "inherit", ":"], correct: 3 },
+      { q: "Which symbol accesses class members?", a: [".", "->", "::", ":"], correct: 0 },
+      { q: "Which keyword is used for function overloading?", a: ["override", "overload", "same name diff params", "function"], correct: 2 },
+      { q: "Which concept allows multiple forms?", a: ["Encapsulation", "Polymorphism", "Inheritance", "Abstraction"], correct: 1 },
+      { q: "Which keyword is used for encapsulation?", a: ["class", "struct", "private/public", "function"], correct: 2 },
+      { q: "Which keyword is used for abstraction?", a: ["virtual", "abstract", "hide", "interface"], correct: 0 },
+      { q: "Which keyword allows runtime polymorphism?", a: ["static", "virtual", "const", "friend"], correct: 1 },
+      { q: "Which pointer refers current object?", a: ["this", "self", "current", "ptr"], correct: 0 },
+      { q: "Which keyword is used for constant?", a: ["const", "final", "static", "fixed"], correct: 0 },
+      { q: "Which operator is used for dynamic memory?", a: ["malloc", "alloc", "new", "create"], correct: 2 },
+      { q: "Which operator frees memory?", a: ["free", "delete", "remove", "clear"], correct: 1 },
+      { q: "Which operator is used for scope resolution?", a: [".", "::", "->", ":"], correct: 1 },
+      { q: "Which function is used to input string?", a: ["cin", "getline()", "input()", "scan()"], correct: 1 }
+    ],
+  }, 
+
 ];
 
 const Quiz = () => {
