@@ -1002,7 +1002,45 @@ const quizzes = [
       { q: "Which function is used to input string?", a: ["cin", "getline()", "input()", "scan()"], correct: 1 }
     ],
   }, 
-
+  
+  {
+    id: 36,
+    title: "C++",
+    description: "Advanced C++ Concepts",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Which feature allows generic programming?", a: ["OOP", "Templates", "Inheritance", "Encapsulation"], correct: 1 },
+      { q: "Which keyword defines template?", a: ["generic", "template", "type", "class"], correct: 1 },
+      { q: "Which container stores key-value pairs?", a: ["vector", "map", "set", "list"], correct: 1 },
+      { q: "Which STL container stores unique values?", a: ["vector", "list", "map", "set"], correct: 3 },
+      { q: "Which STL container allows duplicates?", a: ["set", "map", "vector", "unordered_set"], correct: 2 },
+      { q: "Which function adds element to vector?", a: ["add()", "push_back()", "insert()", "append()"], correct: 1 },
+      { q: "Which function removes last element?", a: ["pop()", "remove()", "delete()", "pop_back()"], correct: 3 },
+      { q: "Which header is used for vectors?", a: ["<list>", "<map>", "<vector>", "<set>"], correct: 2 },
+      { q: "Which keyword is used for exception handling?", a: ["error", "try", "handle", "catch"], correct: 1 },
+      { q: "Which keyword throws exception?", a: ["throw", "catch", "try", "error"], correct: 0 },
+      { q: "Which block catches exception?", a: ["try", "throw", "catch", "final"], correct: 2 },
+      { q: "Which block always executes?", a: ["try", "catch", "final", "finally"], correct: 3 },
+      { q: "Which keyword is used for file handling?", a: ["file", "fstream", "open", "read"], correct: 1 },
+      { q: "Which class is used to write file?", a: ["ifstream", "ofstream", "fstream", "file"], correct: 1 },
+      { q: "Which class is used to read file?", a: ["ifstream", "ofstream", "fstream", "file"], correct: 0 },
+      { q: "Which operator is overloaded?", a: ["+", "-", "*", "All"], correct: 3 },
+      { q: "Which concept hides data?", a: ["Encapsulation", "Inheritance", "Polymorphism", "Abstraction"], correct: 0 },
+      { q: "Which concept allows multiple forms?", a: ["Encapsulation", "Inheritance", "Polymorphism", "Abstraction"], correct: 2 },
+      { q: "Which keyword is used for friend function?", a: ["public", "friend", "static", "virtual"], correct: 1 },
+      { q: "Which keyword prevents inheritance?", a: ["const", "static", "final", "private"], correct: 2 },
+      { q: "Which keyword is used for inline function?", a: ["inline", "fast", "quick", "auto"], correct: 0 },
+      { q: "Which keyword is used for namespace?", a: ["namespace", "space", "scope", "area"], correct: 0 },
+      { q: "Which operator is used for pointer?", a: ["&", "*", "#", "@"], correct: 1 },
+      { q: "Which operator accesses pointer member?", a: [".", "->", "::", ":"], correct: 1 },
+      { q: "Which keyword is used for constant pointer?", a: ["const", "static", "fixed", "final"], correct: 0 },
+      { q: "Which function gets size of container?", a: ["length()", "size()", "count()", "total()"], correct: 1 },
+      { q: "Which iterator points to next element?", a: ["next()", "++it", "it++", "forward()"], correct: 1 },
+      { q: "Which container is FIFO?", a: ["stack", "queue", "vector", "set"], correct: 1 },
+      { q: "Which container is LIFO?", a: ["queue", "vector", "set", "stack"], correct: 3 },
+      { q: "Which header is used for algorithms?", a: ["<math>", "<algo>", "<algorithm>", "<func>"], correct: 2 }
+    ],
+  },
 ];
 
 const Quiz = () => {
