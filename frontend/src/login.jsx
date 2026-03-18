@@ -3,31 +3,62 @@ import "./auth.css";
 
 export default function Login({
   onGoToSignup = () => {},
-  onLoginSuccess = () => {},           // ✅ added
-  onLogin = (data) => console.log("Login data:", data),
+  onLoginSuccess = () => {},
   onGoogle = () => console.log("Google login"),
   onGithub = () => console.log("GitHub login"),
   onForgotPassword = () => console.log("Forgot password"),
 }) {
-  // ---- form states ----
-  const [email, setEmail]       = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error, setError]       = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    if (!email.trim()) return setError("Please enter your email address.");
-    if (!password.trim()) return setError("Please enter your password.");
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      setLoading(false);
+      return;
+    }
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      setLoading(false);
+      return;
+    }
 
-    // ✅ send data to parent (Firebase can be called inside onLogin)
-    onLogin({ email, password, remember });
+    try {
+      const res = await fetch("http://localhost:5001/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // ✅ redirect to dashboard
-    onLoginSuccess();
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || data.message || "Login failed");
+        setLoading(false);
+        return;
+      }
+
+      // Store token/uid if needed
+      if (data.uid) {
+        localStorage.setItem("uid", data.uid);
+        localStorage.setItem("email", email);
+      }
+
+      setLoading(false);
+      onLoginSuccess();
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,6 +113,7 @@ export default function Login({
               placeholder="john@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
             />
           </div>
 
@@ -95,12 +127,14 @@ export default function Login({
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
               />
               <button
                 type="button"
                 className="eye-btn"
                 onClick={() => setShowPass((p) => !p)}
                 aria-label="Toggle password visibility"
+                disabled={loading}
               >
                 {showPass ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -114,6 +148,7 @@ export default function Login({
                 type="checkbox"
                 checked={remember}
                 onChange={(e) => setRemember(e.target.checked)}
+                disabled={loading}
               />
               <span>Remember me</span>
             </label>
@@ -124,8 +159,8 @@ export default function Login({
           </div>
 
           {/* button */}
-          <button className="primary-btn" type="submit">
-            Login
+          <button className="primary-btn" type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
 
           {/* error */}
@@ -135,7 +170,9 @@ export default function Login({
         {/* footer */}
         <div className="bottom-text">
           Don't have an account?{" "}
-          <span className="link" onClick={onGoToSignup}>Create one</span>
+          <span className="link" onClick={onGoToSignup}>
+            Create one
+          </span>
         </div>
       </div>
     </div>
