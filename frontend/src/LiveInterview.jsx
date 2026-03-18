@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./InterviewTraining.css";
 import { submitAnswer, analyzeFacialExpression } from "./api/interviewApi";
 
@@ -6,12 +6,14 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const recognitionRef = useRef(null);
+  const microphoneStreamRef = useRef(null);
   const facialLoopRef = useRef(null);
   const facialBusyRef = useRef(false);
   const facialSamplesRef = useRef([]);
 
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
+  const [manualAnswer, setManualAnswer] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(sessionData?.question || "");
@@ -26,6 +28,10 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   const isVideoInterview = interviewMode === "video";
   const preferredVoiceRef = useRef(null);
   const speechTimeoutRef = useRef(null);
+  const isSafariBrowser = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+    return /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(navigator.userAgent);
+  }, []);
 
   const getPreferredVoice = () => {
     if (!window.speechSynthesis) return null;
@@ -113,7 +119,11 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
         return;
       }
       if (event.error === "service-not-allowed") {
-        setError("Speech recognition service is unavailable in this browser/context. Try Chrome on HTTPS or localhost.");
+        setError(
+          isSafariBrowser
+            ? "Safari blocked speech recognition. Safari speech recognition depends on microphone permission, HTTPS or localhost, and Siri being enabled in macOS/iPhone settings."
+            : "Speech recognition service is unavailable in this browser/context. Use HTTPS or localhost and verify microphone permission."
+        );
         return;
       }
       setError(`Speech error: ${event.error}`);
@@ -132,6 +142,10 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
+      if (microphoneStreamRef.current) {
+        microphoneStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+      setManualAnswer("");
     };
   }, []);
 
@@ -322,11 +336,20 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
         }
       }
 
+      if (!microphoneStreamRef.current) {
+        microphoneStreamRef.current = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false,
+        });
+      }
+
       recognitionRef.current.start();
     } catch (err) {
       const errorName = err?.name || err?.error || "";
       if (errorName === "NotAllowedError" || errorName === "PermissionDeniedError") {
         setError("Microphone permission denied. Please allow microphone access and try again.");
+      } else if (errorName === "NotFoundError") {
+        setError("No microphone was detected. Connect a microphone and try again.");
       } else if (errorName === "InvalidStateError") {
         // Recognition may already be starting/running.
       } else {
@@ -342,7 +365,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
   };
 
   const handleSubmitAnswer = async () => {
-    const answerText = `${transcript}${interimTranscript}`.trim();
+    const answerText = `${manualAnswer || `${transcript}${interimTranscript}`}`.trim();
     if (!answerText) {
       setError("Please provide an answer before submitting");
       return;
@@ -380,6 +403,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
         setCurrentIndex(response.index);
         setTranscript("");
         setInterimTranscript("");
+        setManualAnswer("");
         setFacialData(null);
         facialSamplesRef.current = [];
         setAnalysisCount(0);
@@ -391,6 +415,8 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
       setIsSubmitting(false);
     }
   };
+
+  const answerText = `${manualAnswer || `${transcript}${interimTranscript}`}`.trim();
 
   return (
     <div className="live-interview-page">
@@ -490,21 +516,29 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
           {/* Transcript */}
           <div className="user-subtitle">
             <strong>Your Answer:</strong>
-            <p
+            <textarea
+              value={manualAnswer || `${transcript}${interimTranscript}`}
+              onChange={(event) => {
+                setManualAnswer(event.target.value);
+                if (transcript || interimTranscript) {
+                  setTranscript("");
+                  setInterimTranscript("");
+                }
+              }}
               style={{
                 marginTop: "10px",
                 padding: "12px",
                 backgroundColor: "#f3f4f6",
                 borderRadius: "6px",
-                minHeight: "80px",
+                minHeight: "120px",
+                width: "100%",
+                border: "1px solid #d1d5db",
                 fontSize: "14px",
-                color: transcript || interimTranscript ? "#333" : "#999",
+                color: answerText ? "#333" : "#999",
+                resize: "vertical",
               }}
-            >
-              {transcript || interimTranscript
-                ? `${transcript}${interimTranscript}`
-                : "(Your speech will appear here...)"}
-            </p>
+              placeholder="Speak your answer or type it here..."
+            />
           </div>
 
           {/* Controls */}
@@ -575,7 +609,7 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
 
             <button
               onClick={handleSubmitAnswer}
-              disabled={isSubmitting || !`${transcript}${interimTranscript}`.trim()}
+              disabled={isSubmitting || !answerText}
               style={{
                 flex: 1,
                 minWidth: "150px",
@@ -585,8 +619,8 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
                 border: "none",
                 borderRadius: "6px",
                 fontWeight: "bold",
-                cursor: isSubmitting || !`${transcript}${interimTranscript}`.trim() ? "not-allowed" : "pointer",
-                opacity: isSubmitting || !`${transcript}${interimTranscript}`.trim() ? 0.6 : 1,
+                cursor: isSubmitting || !answerText ? "not-allowed" : "pointer",
+                opacity: isSubmitting || !answerText ? 0.6 : 1,
               }}
             >
               {isSubmitting ? "⏳ Submitting..." : "✓ Submit Answer"}
@@ -617,9 +651,9 @@ function LiveInterview({ sessionData, onBack, onComplete }) {
             color: "#166534"
           }}>
             {isVideoInterview ? (
-              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. Your facial engagement is being tracked.</>
+              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. Your facial engagement is being tracked. {isSafariBrowser ? "If speech capture does not start in Safari, enable Siri and type your answer in the box as a fallback." : ""}</>
             ) : (
-              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. This is a voice-only interview.</>
+              <>💡 <strong>Tips:</strong> Speak clearly, provide detailed answers with examples. This is a voice-only interview. {isSafariBrowser ? "If speech capture does not start in Safari, enable Siri and type your answer in the box as a fallback." : ""}</>
             )}
           </div>
         </div>
