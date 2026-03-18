@@ -916,7 +916,46 @@ const quizzes = [
     ],
   },
 
-  
+  {
+    id: 33,
+    title: "C Programming",
+    description: "Advanced C Concepts",
+    difficulty: "Advanced",
+    questions: [
+      { q: "Which concept allows function to call itself?", a: ["Looping", "Recursion", "Iteration", "Branching"], correct: 1 },
+      { q: "Which keyword defines structure?", a: ["struct", "class", "record", "object"], correct: 0 },
+      { q: "Which keyword defines union?", a: ["union", "struct", "group", "combine"], correct: 0 },
+      { q: "Size of union is based on?", a: ["All members", "Largest member", "Smallest member", "Average"], correct: 1 },
+      { q: "Which operator accesses struct pointer?", a: [".", "::", "->", ":"], correct: 2 },
+      { q: "Which keyword is used for file handling?", a: ["file", "FILE", "open", "fopen"], correct: 1 },
+      { q: "Which function opens file?", a: ["open()", "fopen()", "fileopen()", "start()"], correct: 1 },
+      { q: "Which function closes file?", a: ["close()", "end()", "fclose()", "stop()"], correct: 2 },
+      { q: "Which mode opens file for writing?", a: ["r", "w", "a", "rw"], correct: 1 },
+      { q: "Which mode appends file?", a: ["r", "w", "a", "rw"], correct: 2 },
+      { q: "Which function writes to file?", a: ["fprintf()", "fscanf()", "write()", "put()"], correct: 0 },
+      { q: "Which function reads from file?", a: ["fprintf()", "fscanf()", "read()", "get()"], correct: 1 },
+      { q: "Which function writes single character?", a: ["fputc()", "fgetc()", "put()", "write()"], correct: 0 },
+      { q: "Which function reads single character?", a: ["fputc()", "fgetc()", "get()", "read()"], correct: 1 },
+      { q: "Which keyword defines constant?", a: ["const", "define", "fixed", "static"], correct: 0 },
+      { q: "Which preprocessor directive defines macro?", a: ["#include", "#define", "#macro", "#const"], correct: 1 },
+      { q: "Which directive includes file?", a: ["#include", "#define", "#import", "#load"], correct: 0 },
+      { q: "Which function reallocates memory?", a: ["malloc()", "calloc()", "realloc()", "free()"], correct: 2 },
+      { q: "Which function allocates and initializes memory?", a: ["malloc()", "calloc()", "realloc()", "free()"], correct: 1 },
+      { q: "Which keyword is used for enumeration?", a: ["enum", "list", "array", "type"], correct: 0 },
+      { q: "Which operator gets size of variable?", a: ["length()", "size()", "sizeof()", "count()"], correct: 2 },
+      { q: "Which storage class has global scope?", a: ["auto", "static", "extern", "register"], correct: 2 },
+      { q: "Which storage class is fastest?", a: ["auto", "register", "static", "extern"], correct: 1 },
+      { q: "Which keyword prevents modification?", a: ["const", "static", "final", "fixed"], correct: 0 },
+      { q: "Which concept uses pointer to function?", a: ["Function pointer", "Array pointer", "Loop pointer", "Static pointer"], correct: 0 },
+      { q: "Which function moves file pointer?", a: ["fmove()", "fseek()", "fshift()", "move()"], correct: 1 },
+      { q: "Which function gets current file position?", a: ["ftell()", "fseek()", "fpos()", "tell()"], correct: 0 },
+      { q: "Which function rewinds file?", a: ["rewind()", "reset()", "start()", "fseek()"], correct: 0 },
+      { q: "Which keyword is used for dynamic memory?", a: ["malloc", "dynamic", "new", "alloc"], correct: 0 },
+      { q: "Which header is needed for memory functions?", a: ["stdio.h", "stdlib.h", "string.h", "math.h"], correct: 1 }
+  ],
+},
+
+
 ];
 
 const Quiz = () => {
