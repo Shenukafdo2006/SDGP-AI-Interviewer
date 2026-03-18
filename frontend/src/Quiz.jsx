@@ -1176,11 +1176,24 @@ const Quiz = () => {
 
         {selectedQuiz && !showResult && (
           <div className="quiz-player">
-            <div className="timer">⏱ {timer}s left</div>
+            <div
+              className={`timer ${
+                timer <= 30 ? "danger" : timer <= 60 ? "warning" : ""
+              }`}
+            >
+              ⏱ {String(Math.floor(timer / 60)).padStart(2, "0")}:
+              {String(timer % 60).padStart(2, "0")}
+            </div>
+
             <h2>{selectedQuiz.title}</h2>
+
             <p>Question {currentQ + 1} of {totalQuestions}</p>
+
             <div className="progress-bar">
-              <div className="progress-fill" style={{ width: `${progress}%` }} />
+              <div
+                className="progress-fill"
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
             <div className="question-card">
