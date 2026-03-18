@@ -955,6 +955,24 @@ const quizzes = [
   ],
 },
 
+  {
+   id: 34,
+    title: "C++",
+    description: "Basic C++ Concepts",
+    difficulty: "Beginner",
+    questions: [
+      { q: "Who developed C++?", a: ["Dennis Ritchie", "James Gosling", "Bjarne Stroustrup", "Guido van Rossum"], correct: 2 },
+      { q: "Which symbol is used for output?", a: ["<<", ">>", "::", "->"], correct: 0 },
+      { q: "Which function is entry point?", a: ["start()", "run()", "main()", "init()"], correct: 2 },
+      { q: "Which header is used for input/output?", a: ["stdio.h", "iostream", "math.h", "stdlib.h"], correct: 1 },
+      { q: "Which keyword is used for input?", a: ["cin", "cout", "scan", "input"], correct: 0 },
+      { q: "Which keyword is used for output?", a: ["cin", "cout", "print", "echo"], correct: 1 },
+      { q: "Which operator is used with cout?", a: [">>", "<<", "::", "->"], correct: 1 },
+      { q: "Which operator is used with cin?", a: ["<<", ">>", "::", "->"], correct: 1 },
+      { q: "Which symbol ends statement?", a: [":", ";", ".", ","], correct: 1 },
+      { q: "Which keyword declares variable?", a: ["var", "let", "int", "define"], correct: 2 }
+    ],
+  },
 
 ];
 
