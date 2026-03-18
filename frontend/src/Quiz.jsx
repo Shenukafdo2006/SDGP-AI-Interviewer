@@ -1043,7 +1043,7 @@ const quizzes = [
   },
 ];
 
-const Quiz = () => {
+const Quiz = ({onBack}) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState([]);
@@ -1127,8 +1127,14 @@ const Quiz = () => {
   return (
     <div className="quiz-page">
       <header className="header">
+        {!selectedQuiz && (
+          <button className="main-back-btn" onClick={onBack}>
+            ← Back Dashboard 
+          </button>
+        )}
+
         {selectedQuiz && (
-          <div className="menu-icon" onClick={resetQuiz}>← Back</div>
+          <div className="menu-icon" onClick={resetQuiz}>← Back Quiz Skill</div>
         )}
         <div className="logo">📝 Skills Quiz</div>
       </header>
