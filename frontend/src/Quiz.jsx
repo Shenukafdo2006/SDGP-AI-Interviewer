@@ -887,6 +887,35 @@ const quizzes = [
     ], 
   },
 
+  {
+    id: 32,
+    title: "C Programming",
+    description: "Intermediate C Concepts",
+    difficulty: "Intermediate",
+    questions: [
+      { q: "Which loop is guaranteed to execute at least once?", a: ["for", "while", "do...while", "loop"], correct: 2 },
+      { q: "Which keyword is used to exit loop?", a: ["exit", "break", "stop", "end"], correct: 1 },
+      { q: "Which keyword skips iteration?", a: ["pass", "skip", "continue", "next"], correct: 2 },
+      { q: "Which function returns string length?", a: ["size()", "count()", "strlen()", "length()"], correct: 2 },
+      { q: "Which header file is needed for string functions?", a: ["stdio.h", "string.h", "math.h", "stdlib.h"], correct: 1 },
+      { q: "Which function copies strings?", a: ["strcat()", "strcpy()", "strcmp()", "strlen()"], correct: 1 },
+      { q: "Which function compares strings?", a: ["strcpy()", "strcat()", "strcmp()", "strlen()"], correct: 2 },
+      { q: "Which function concatenates strings?", a: ["strcpy()", "strcmp()", "strcat()", "strlen()"], correct: 2 },
+      { q: "Which keyword is used to define function?", a: ["func", "function", "define", "return type"], correct: 3 },
+      { q: "Which storage class retains value between calls?", a: ["auto", "register", "static", "extern"], correct: 2 },
+      { q: "Which keyword declares external variable?", a: ["auto", "static", "extern", "register"], correct: 2 },
+      { q: "Which symbol is used for pointer?", a: ["&", "*", "#", "@"], correct: 1 },
+      { q: "Which operator gets address of variable?", a: ["*", "&", "%", "#"], correct: 1 },
+      { q: "Which operator accesses pointer value?", a: ["&", "*", "%", "#"], correct: 1 },
+      { q: "Array index starts from?", a: ["0", "1", "-1", "Depends"], correct: 0 },
+      { q: "Which loop is best for known iterations?", a: ["while", "for", "do...while", "loop"], correct: 1 },
+      { q: "Which statement is used in switch?", a: ["if", "case", "loop", "goto"], correct: 1 },
+      { q: "Which keyword ends switch case?", a: ["stop", "end", "break", "return"], correct: 2 },
+      { q: "Which function allocates memory?", a: ["alloc()", "malloc()", "memory()", "create()"], correct: 1 },
+      { q: "Which function frees memory?", a: ["delete()", "remove()", "free()", "clear()"], correct: 2 }
+    ],
+  },
+
   
 ];
 
