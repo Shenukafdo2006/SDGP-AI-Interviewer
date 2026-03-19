@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
 
-const skills = [
-  { name: "React", level: "Intermediate", progress: 75, target: 90, next: "Master React Hooks" },
-  { name: "TypeScript", level: "Beginner", progress: 60, target: 85, next: "Advanced Type Patterns" },
-  { name: "System Design", level: "Beginner", progress: 40, target: 80, next: "Scalability Fundamentals" },
-  { name: "Algorithm & DS", level: "Intermediate", progress: 55, target: 90, next: "Dynamic Programming" },
-];
-
 const weeklyGoalsData = [
   { category: "Coding", goal: "Complete 5 LeetCode problems", current: 3, total: 5 },
   { category: "Learning", goal: "Read 2 technical articles", current: 2, total: 2 },
@@ -16,27 +9,53 @@ const weeklyGoalsData = [
 ];
 
 const recommendations = [
-  { title: "Practice System Design", desc: "Critical skill gap for senior roles", action: "Take System Design Course", level: "High" },
-  { title: "Improve Algorithm Skills", desc: "Below target for FAANG interviews", action: "Solve 2 problems daily", level: "Medium" },
-  { title: "Learn Cloud Technologies", desc: "High demand in job market", action: "Start AWS Fundamentals", level: "Medium" },
+  { 
+    title: "Strengthen Type Script",
+    desc: "Improve type safety and scalability",
+    action: "Practice Generics & Interfaces",
+    level: "Low",
+    link: "https://www.codecademy.com/learn/learn-intermediate-type-script-generics?utm_source=chatgpt.com"
+  },
+  { 
+    title: "Mock Interview Practice",
+    desc: "Boost confidence for real interviews",
+    action: "Schedule Mock Session",
+    level: "Low",
+    link: "https://www.pramp.com/"
+  },
+  { 
+    title: "Algorithm Skills",
+    desc: "Below target for FAANG interviews",
+    action: "Solve 2 problems daily",
+    level: "Medium",
+    link: "https://www.hackerrank.com/domains/algorithms"
+  },
+  { 
+    title: "Learn Cloud Technologies",
+    desc: "High demand in job market",
+    action: "Start AWS Fundamentals",
+    level: "Medium",
+    link: "https://aws.amazon.com/training/"
+  },
+  { 
+    title: "Practice System Design",
+    desc: "Critical skill gap for senior roles",
+    action: "Take System Design Course",
+    level: "High",
+    link: "https://www.educative.io/courses/grokking-the-system-design-interview"
+  },
+  { 
+    title: "Build Real-world Projects",
+    desc: "Projects improve portfolio visibility",
+    action: "Create Full-stack App",
+    level: "High",
+    link: "https://www.freecodecamp.org/learn"
+  },
 ];
 
 const SkillImprovement = ({onBack}) => {
 
-  const [animatedSkills, setAnimatedSkills] = useState(
-    skills.map(skill => ({ ...skill, animatedProgress: 0 }))
-  );
-
   const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimatedSkills(
-        skills.map(skill => ({ ...skill, animatedProgress: skill.progress }))
-      );
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleGoalClick = (idx) => {
     setWeeklyGoals(
@@ -67,33 +86,6 @@ const SkillImprovement = ({onBack}) => {
       >
         ← Back Dashboard
       </button>
-
-      <h2 className="section-title">Skill Progress</h2>
-
-      <div className="skill-container">
-        {animatedSkills.map((skill, idx) => (
-          <div key={idx} className="skill-card">
-            <div className="skill-header">
-              <h4>{skill.name}</h4>
-              <span className="skill-level">{skill.level}</span>
-            </div>
-
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${skill.animatedProgress}%` }}
-              ></div>
-            </div>
-
-            <div className="skill-footer">
-              <span>{skill.animatedProgress}%</span>
-              <span>Target: {skill.target}%</span>
-            </div>
-
-            <p className="next-step">Next: {skill.next}</p>
-          </div>
-        ))}
-      </div>
 
       <h2 className="section-title">Weekly Goals</h2>
 
@@ -136,7 +128,9 @@ const SkillImprovement = ({onBack}) => {
               <span>{rec.level}</span>
             </div>
             <p>{rec.desc}</p>
-            <button>{rec.action}</button>
+            <a href={rec.link} target="_blank" rel="noopener noreferrer">
+              <button>{rec.action}</button>
+            </a>
           </div>
         ))}
       </div>

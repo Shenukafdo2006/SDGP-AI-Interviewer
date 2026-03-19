@@ -32,7 +32,6 @@
   box-shadow: 0 6px 20px rgba(59,130,246,0.6);
 }
 
-.skill-container,
 .goal-container,
 .recommendation-container {
   display: flex;
@@ -40,7 +39,6 @@
   gap: 20px;
 }
 
-.skill-card,
 .goal-card,
 .recommend-card {
   background: rgba(255, 255, 255, 0.08);
@@ -61,21 +59,11 @@
   box-shadow: 0 12px 30px rgba(59,130,246,0.4);
 }
 
-.skill-header,
 .goal-footer,
-.recommend-header,
-.skill-footer {
+.recommend-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.skill-level {
-  font-size: 12px;
-  background: rgba(99, 102, 241, 0.3);
-  padding: 4px 8px;
-  border-radius: 20px;
-  color: #c7d2fe;
 }
 
 .progress-bar {
@@ -99,11 +87,6 @@
 
 .progress-fill.dark {
   background: linear-gradient(90deg, #6366f1, #8b5cf6);
-}
-
-.next-step {
-  font-size: 13px;
-  color: #cbd5e1;
 }
 
 .goal-card button,
