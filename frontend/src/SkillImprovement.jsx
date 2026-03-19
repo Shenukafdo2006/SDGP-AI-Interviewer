@@ -9,13 +9,48 @@ const weeklyGoalsData = [
 ];
 
 const recommendations = [
-  { title: "Strengthen TypeScript", desc: "Improve type safety and scalability", action: "Practice Generics & Interfaces", level: "Low" },
-  { title: "Mock Interview Practice", desc: "Boost confidence for real interviews", action: "Schedule Mock Session", level: "Low" },
-  { title: "Algorithm Skills", desc: "Below target for FAANG interviews", action: "Solve 2 problems daily", level: "Medium" },
-  { title: "Learn Cloud Technologies", desc: "High demand in job market", action: "Start AWS Fundamentals", level: "Medium" },
-  { title: "Practice System Design", desc: "Critical skill gap for senior roles", action: "Take System Design Course", level: "High" },
-  { title: "Build Real-world Projects", desc: "Projects improve portfolio visibility", action: "Create Full-stack App", level: "High" },
-
+  { 
+    title: "Strengthen Type Script",
+    desc: "Improve type safety and scalability",
+    action: "Practice Generics & Interfaces",
+    level: "Low",
+    link: "https://www.codecademy.com/learn/learn-intermediate-type-script-generics?utm_source=chatgpt.com"
+  },
+  { 
+    title: "Mock Interview Practice",
+    desc: "Boost confidence for real interviews",
+    action: "Schedule Mock Session",
+    level: "Low",
+    link: "https://www.pramp.com/"
+  },
+  { 
+    title: "Algorithm Skills",
+    desc: "Below target for FAANG interviews",
+    action: "Solve 2 problems daily",
+    level: "Medium",
+    link: "https://www.hackerrank.com/domains/algorithms"
+  },
+  { 
+    title: "Learn Cloud Technologies",
+    desc: "High demand in job market",
+    action: "Start AWS Fundamentals",
+    level: "Medium",
+    link: "https://aws.amazon.com/training/"
+  },
+  { 
+    title: "Practice System Design",
+    desc: "Critical skill gap for senior roles",
+    action: "Take System Design Course",
+    level: "High",
+    link: "https://www.educative.io/courses/grokking-the-system-design-interview"
+  },
+  { 
+    title: "Build Real-world Projects",
+    desc: "Projects improve portfolio visibility",
+    action: "Create Full-stack App",
+    level: "High",
+    link: "https://www.freecodecamp.org/learn"
+  },
 ];
 
 const SkillImprovement = ({onBack}) => {
@@ -93,7 +128,9 @@ const SkillImprovement = ({onBack}) => {
               <span>{rec.level}</span>
             </div>
             <p>{rec.desc}</p>
-            <button>{rec.action}</button>
+            <a href={rec.link} target="_blank" rel="noopener noreferrer">
+              <button>{rec.action}</button>
+            </a>
           </div>
         ))}
       </div>
