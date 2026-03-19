@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
 
-const skills = [
-  { name: "React", level: "Intermediate", progress: 75, target: 90, next: "Master React Hooks" },
-  { name: "TypeScript", level: "Beginner", progress: 60, target: 85, next: "Advanced Type Patterns" },
-  { name: "System Design", level: "Beginner", progress: 40, target: 80, next: "Scalability Fundamentals" },
-  { name: "Algorithm & DS", level: "Intermediate", progress: 55, target: 90, next: "Dynamic Programming" },
-];
-
 const weeklyGoalsData = [
   { category: "Coding", goal: "Complete 5 LeetCode problems", current: 3, total: 5 },
   { category: "Learning", goal: "Read 2 technical articles", current: 2, total: 2 },
@@ -16,9 +9,13 @@ const weeklyGoalsData = [
 ];
 
 const recommendations = [
-  { title: "Practice System Design", desc: "Critical skill gap for senior roles", action: "Take System Design Course", level: "High" },
-  { title: "Improve Algorithm Skills", desc: "Below target for FAANG interviews", action: "Solve 2 problems daily", level: "Medium" },
+  { title: "Strengthen TypeScript", desc: "Improve type safety and scalability", action: "Practice Generics & Interfaces", level: "Low" },
+  { title: "Mock Interview Practice", desc: "Boost confidence for real interviews", action: "Schedule Mock Session", level: "Low" },
+  { title: "Algorithm Skills", desc: "Below target for FAANG interviews", action: "Solve 2 problems daily", level: "Medium" },
   { title: "Learn Cloud Technologies", desc: "High demand in job market", action: "Start AWS Fundamentals", level: "Medium" },
+  { title: "Practice System Design", desc: "Critical skill gap for senior roles", action: "Take System Design Course", level: "High" },
+  { title: "Build Real-world Projects", desc: "Projects improve portfolio visibility", action: "Create Full-stack App", level: "High" },
+
 ];
 
 const SkillImprovement = ({onBack}) => {
