@@ -1,5 +1,4 @@
-
-import { StrictMode, useState } from "react";
+import { StrictMode, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
@@ -22,20 +21,56 @@ import DailyMotivation from "./DailyMotivation";
 
 function App() {
 
-  // Start from login page
-  const [view, setView] = useState("login");
+  const [view, setView] = useState(null); // null = still checking auth
 
   // Interview session state
   const [interviewSessionData, setInterviewSessionData] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
 
+  useEffect(() => {
+    const uid = localStorage.getItem("uid");         // persists forever
+    const lastView = sessionStorage.getItem("view"); // clears on new tab
+
+    if (uid && lastView) {
+      // Refresh → restore exact page
+      setView(lastView);
+    } else {
+      // New tab OR not logged in → always show login
+      setView("login");
+    }
+  }, []);
+
+  // Use navigate() instead of setView() — saves page to sessionStorage
+  const navigate = (newView) => {
+    sessionStorage.setItem("view", newView);
+    setView(newView);
+  };
+
+  // Still checking → brief loading screen
+  if (view === null) {
+    return (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        background: "#0f0f0f",
+        color: "#fff",
+        fontFamily: "sans-serif",
+        fontSize: "14px",
+        opacity: 0.5,
+      }}>
+        Loading...
+      </div>
+    );
+  }
 
   // Signup Page
   if (view === "signup") {
     return (
       <Signup
-        onSignupSuccess={() => setView("login")}
-        onGoToLogin={() => setView("login")}
+        onSignupSuccess={() => navigate("login")}
+        onGoToLogin={() => navigate("login")}
       />
     );
   }
@@ -44,8 +79,8 @@ function App() {
   if (view === "login") {
     return (
       <Login
-        onLoginSuccess={() => setView("dashboard")}
-        onGoToSignup={() => setView("signup")}
+        onLoginSuccess={() => navigate("dashboard")}
+        onGoToSignup={() => navigate("signup")}
       />
     );
   }
@@ -54,11 +89,11 @@ function App() {
   if (view === "training") {
     return (
       <InterviewTraining
-        onBack={() => setView("dashboard")}
+        onBack={() => navigate("dashboard")}
         onStartInterview={(sessionData) => {
           setInterviewSessionData(sessionData);
           setCurrentSessionId(sessionData?.sessionId || null);
-          setView("live-interview");
+          navigate("live-interview");
         }}
       />
     );
@@ -70,11 +105,11 @@ function App() {
       <LiveInterview
         sessionData={interviewSessionData}
         onBack={() => {
-          setView("training");
+          navigate("training");
           setInterviewSessionData(null);
         }}
         onComplete={() => {
-          setView("interview-results");
+          navigate("interview-results");
         }}
       />
     );
@@ -86,58 +121,57 @@ function App() {
       <InterviewResults
         sessionId={currentSessionId}
         onBack={() => {
-          setView("dashboard");
+          navigate("dashboard");
           setInterviewSessionData(null);
           setCurrentSessionId(null);
         }}
         onRestartInterview={() => {
           setInterviewSessionData(null);
           setCurrentSessionId(null);
-          setView("training");
+          navigate("training");
         }}
       />
     );
   }
 
   if (view === "quiz") {
-    return <Quiz onBack={() => setView("dashboard")} />;
+    return <Quiz onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "learning-resources") {
-    return <LearningResources onBack={() => setView("dashboard")} />;
+    return <LearningResources onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "cv-maker") {
-    return <CVMaker onBack={() => setView("dashboard")} />;
+    return <CVMaker onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "cv-filtering") {
-    return <CVFiltering onBack={() => setView("dashboard")} />;
+    return <CVFiltering onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "achievements") {
-    return <Achievements onBack={() => setView("dashboard")} />;
+    return <Achievements onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "activity-calendar") {
-    return <ActivityCalendar onBack={() => setView("dashboard")} />;
+    return <ActivityCalendar onBack={() => navigate("dashboard")} />;
   }
 
-
   if (view === "career-suggestions") {
-    return <CareerSuggestions onBack={() => setView("dashboard")} />;
+    return <CareerSuggestions onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "skill-improvement") {
-    return <SkillImprovement onBack={() => setView("dashboard")} />;
+    return <SkillImprovement onBack={() => navigate("dashboard")} />;
   }
 
   if (view === "daily-motivation") {
-    return <DailyMotivation onBack={() => setView("dashboard")} />;
+    return <DailyMotivation onBack={() => navigate("dashboard")} />;
   }
 
   // Default dashboard
-  return <DashBoard setView={setView} />;
+  return <DashBoard setView={navigate} />;
 }
 
 createRoot(document.getElementById("root")).render(
@@ -145,4 +179,3 @@ createRoot(document.getElementById("root")).render(
     <App />
   </StrictMode>
 );
-
