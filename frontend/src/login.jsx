@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./auth.css";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "./firebase"; 
+import { auth, googleProvider, githubProvider } from "./firebase";
+
 export default function Login({
   onGoToSignup = () => {},
   onLoginSuccess = () => {},
-  onGithub = () => console.log("GitHub login"),
   onForgotPassword = () => console.log("Forgot password"),
 }) {
   const [email, setEmail] = useState("");
@@ -15,22 +15,36 @@ export default function Login({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
- 
   const handleGoogleLogin = async () => {
     setError("");
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-
       localStorage.setItem("uid", user.uid);
       localStorage.setItem("email", user.email);
-
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
       console.error(err);
       setError(err.message || "Google login failed.");
+      setLoading(false);
+    }
+  };
+
+  const handleGithubLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, githubProvider);
+      const user = result.user;
+      localStorage.setItem("uid", user.uid);
+      localStorage.setItem("email", user.email);
+      setLoading(false);
+      onLoginSuccess();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "GitHub login failed.");
       setLoading(false);
     }
   };
@@ -100,13 +114,12 @@ export default function Login({
 
       <div className="auth-card">
         <div className="social-row">
-         
           <button type="button" className="social-btn" onClick={handleGoogleLogin} disabled={loading}>
             <GoogleIcon />
             Google
           </button>
 
-          <button type="button" className="social-btn" onClick={onGithub} disabled={loading}>
+          <button type="button" className="social-btn" onClick={handleGithubLogin} disabled={loading}>
             <GithubIcon />
             GitHub
           </button>
@@ -186,8 +199,6 @@ export default function Login({
     </div>
   );
 }
-
-/* ---------- Inline SVG Icons ---------- */
 
 function GoogleIcon() {
   return (
