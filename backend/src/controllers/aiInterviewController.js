@@ -1,9 +1,11 @@
 const { randomUUID } = require("crypto");
 const aiService = require("../services/ai.service");
+const { db, admin } = require("../config/firebase-interview");
 
 const sessions = new Map();
 const MAX_QUESTIONS = 5;
 const MAX_QUESTION_GENERATION_ATTEMPTS = 3;
+const interviewSessionsCollection = db.collection("interview_sessions");
 
 const clampEngagement = (value) => {
   const numeric = Number(value);
@@ -61,6 +63,67 @@ const buildFallbackQuestion = (session, attempt = 0) => {
   return fallbacks[attempt % fallbacks.length];
 };
 
+const serializeSession = (session) => ({
+  id: session.id,
+  role: session.role ?? null,
+  level: session.level ?? null,
+  interviewType: session.interviewType ?? "Mixed",
+  questions: Array.isArray(session.questions) ? session.questions : [],
+  answers: Array.isArray(session.answers) ? session.answers : [],
+  currentIndex: Number.isFinite(session.currentIndex) ? session.currentIndex : 0,
+  status: session.status || "in_progress",
+  createdAt: session.createdAt || new Date().toISOString(),
+  completedAt: session.completedAt || null,
+  facialAnalysis: Array.isArray(session.facialAnalysis)
+    ? session.facialAnalysis
+    : [],
+  feedback: session.feedback || null,
+});
+
+const cacheSession = (session) => {
+  sessions.set(session.id, session);
+  return session;
+};
+
+const persistSession = async (session) => {
+  const payload = serializeSession(session);
+  await interviewSessionsCollection.doc(session.id).set(
+    {
+      ...payload,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+};
+
+const persistSessionSafely = async (session) => {
+  try {
+    await persistSession(session);
+  } catch (error) {
+    console.warn(`Failed to persist interview session ${session.id}:`, error.message);
+  }
+};
+
+const getSessionById = async (sessionId) => {
+  if (!sessionId) return null;
+
+  if (sessions.has(sessionId)) {
+    return sessions.get(sessionId);
+  }
+
+  try {
+    const snapshot = await interviewSessionsCollection.doc(sessionId).get();
+    if (!snapshot.exists) {
+      return null;
+    }
+
+    return cacheSession(snapshot.data());
+  } catch (error) {
+    console.warn(`Failed to load interview session ${sessionId}:`, error.message);
+    return null;
+  }
+};
+
 const startInterview = async (req, res) => {
   try {
     const { role, level, interviewType } = req.body || {};
@@ -99,10 +162,13 @@ const startInterview = async (req, res) => {
       currentIndex: 0,
       status: "in_progress",
       createdAt: new Date().toISOString(),
+      completedAt: null,
       facialAnalysis: [],
+      feedback: null,
     };
 
-    sessions.set(sessionId, session);
+    cacheSession(session);
+    await persistSessionSafely(session);
 
     res.json({
       sessionId,
@@ -120,11 +186,11 @@ const submitAnswer = async (req, res) => {
   try {
     const { sessionId, answer, facialData } = req.body || {};
 
-    if (!sessionId || !sessions.has(sessionId)) {
+    const session = await getSessionById(sessionId);
+
+    if (!sessionId || !session) {
       return res.status(404).json({ error: "Session not found" });
     }
-
-    const session = sessions.get(sessionId);
 
     if (session.status !== "in_progress") {
       return res.status(400).json({ error: "Interview already completed" });
@@ -180,6 +246,8 @@ const submitAnswer = async (req, res) => {
 
     if (isComplete) {
       session.status = "completed";
+      session.completedAt = new Date().toISOString();
+      await persistSessionSafely(session);
 
       // Calculate average score
       const avgScore =
@@ -190,7 +258,7 @@ const submitAnswer = async (req, res) => {
         sessionId,
         status: session.status,
         message: "Interview completed!",
-        completedAt: new Date().toISOString(),
+        completedAt: session.completedAt,
         stats: {
           totalQuestions: session.answers.length,
           averageScore: Math.round(avgScore * 10) / 10,
@@ -250,6 +318,7 @@ const submitAnswer = async (req, res) => {
     }
 
     session.questions.push(nextQuestion);
+    await persistSessionSafely(session);
 
     res.json({
       sessionId,
@@ -264,15 +333,14 @@ const submitAnswer = async (req, res) => {
   }
 };
 
-const getSession = (req, res) => {
+const getSession = async (req, res) => {
   try {
     const { sessionId } = req.params;
+    const session = await getSessionById(sessionId);
 
-    if (!sessionId || !sessions.has(sessionId)) {
+    if (!sessionId || !session) {
       return res.status(404).json({ error: "Session not found" });
     }
-
-    const session = sessions.get(sessionId);
 
     // Calculate statistics
     const avgScore =
@@ -336,16 +404,23 @@ const analyzeFacialData = async (req, res) => {
 const getSessionFeedback = async (req, res) => {
   try {
     const { sessionId } = req.params;
+    const session = await getSessionById(sessionId);
 
-    if (!sessionId || !sessions.has(sessionId)) {
+    if (!sessionId || !session) {
       return res.status(404).json({ error: "Session not found" });
     }
-
-    const session = sessions.get(sessionId);
 
     if (session.status !== "completed") {
       return res.status(400).json({
         error: "Session must be completed before generating feedback",
+      });
+    }
+
+    if (session.feedback) {
+      return res.json({
+        success: true,
+        sessionId,
+        feedback: session.feedback,
       });
     }
 
@@ -381,20 +456,23 @@ const getSessionFeedback = async (req, res) => {
 
     // Call Gemini to generate comprehensive feedback
     const feedback = await aiService.getInterviewFeedback(sessionData);
+    session.feedback = {
+      summary: feedback.summary || "Interview completed successfully",
+      strengths: feedback.strengths || [],
+      improvements: feedback.improvements || [],
+      action_items: feedback.action_items || [],
+      next_steps: feedback.next_steps || [],
+      average_score: Math.round(avgScore * 10) / 10,
+      total_questions: session.answers.length,
+      interview_type: session.interviewType,
+      generatedAt: new Date().toISOString(),
+    };
+    await persistSessionSafely(session);
 
     res.json({
       success: true,
       sessionId,
-      feedback: {
-        summary: feedback.summary || "Interview completed successfully",
-        strengths: feedback.strengths || [],
-        improvements: feedback.improvements || [],
-        action_items: feedback.action_items || [],
-        next_steps: feedback.next_steps || [],
-        average_score: Math.round(avgScore * 10) / 10,
-        total_questions: session.answers.length,
-        interview_type: session.interviewType,
-      },
+      feedback: session.feedback,
     });
   } catch (error) {
     console.error("Error generating session feedback:", error);
