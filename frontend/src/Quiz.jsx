@@ -1134,7 +1134,7 @@ const Quiz = ({onBack}) => {
         )}
 
         {selectedQuiz && (
-          <div className="menu-icon" onClick={resetQuiz}>← Back Quiz Skill</div>
+          <div className="menu-icon" onClick={resetQuiz}>← Back Skill Quiz </div>
         )}
         <div className="logo">📝 Skills Quiz</div>
       </header>
