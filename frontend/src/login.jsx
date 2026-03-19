@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import "./auth.css";
 import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "./firebase"; // 👈 import from your firebase.js
-
+import { auth, googleProvider } from "./firebase"; 
 export default function Login({
   onGoToSignup = () => {},
   onLoginSuccess = () => {},
@@ -16,7 +15,7 @@ export default function Login({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Google Auth Handler
+ 
   const handleGoogleLogin = async () => {
     setError("");
     setLoading(true);
@@ -101,7 +100,7 @@ export default function Login({
 
       <div className="auth-card">
         <div className="social-row">
-          {/* ✅ onClick now uses handleGoogleLogin */}
+         
           <button type="button" className="social-btn" onClick={handleGoogleLogin} disabled={loading}>
             <GoogleIcon />
             Google
