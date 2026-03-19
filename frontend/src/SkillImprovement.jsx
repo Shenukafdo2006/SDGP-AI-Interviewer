@@ -23,20 +23,7 @@ const recommendations = [
 
 const SkillImprovement = ({onBack}) => {
 
-  const [animatedSkills, setAnimatedSkills] = useState(
-    skills.map(skill => ({ ...skill, animatedProgress: 0 }))
-  );
-
   const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimatedSkills(
-        skills.map(skill => ({ ...skill, animatedProgress: skill.progress }))
-      );
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleGoalClick = (idx) => {
     setWeeklyGoals(
@@ -67,33 +54,6 @@ const SkillImprovement = ({onBack}) => {
       >
         ← Back Dashboard
       </button>
-
-      <h2 className="section-title">Skill Progress</h2>
-
-      <div className="skill-container">
-        {animatedSkills.map((skill, idx) => (
-          <div key={idx} className="skill-card">
-            <div className="skill-header">
-              <h4>{skill.name}</h4>
-              <span className="skill-level">{skill.level}</span>
-            </div>
-
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{ width: `${skill.animatedProgress}%` }}
-              ></div>
-            </div>
-
-            <div className="skill-footer">
-              <span>{skill.animatedProgress}%</span>
-              <span>Target: {skill.target}%</span>
-            </div>
-
-            <p className="next-step">Next: {skill.next}</p>
-          </div>
-        ))}
-      </div>
 
       <h2 className="section-title">Weekly Goals</h2>
 
