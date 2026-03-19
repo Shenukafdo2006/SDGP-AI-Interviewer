@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./auth.css";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "./firebase"; // 👈 import from your firebase.js
 
 export default function Login({
   onGoToSignup = () => {},
   onLoginSuccess = () => {},
-  onGoogle = () => console.log("Google login"),
   onGithub = () => console.log("GitHub login"),
   onForgotPassword = () => console.log("Forgot password"),
 }) {
@@ -14,6 +15,26 @@ export default function Login({
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // ✅ Google Auth Handler
+  const handleGoogleLogin = async () => {
+    setError("");
+    setLoading(true);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      localStorage.setItem("uid", user.uid);
+      localStorage.setItem("email", user.email);
+
+      setLoading(false);
+      onLoginSuccess();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Google login failed.");
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +67,6 @@ export default function Login({
         return;
       }
 
-      // Store token/uid if needed
       if (data.uid) {
         localStorage.setItem("uid", data.uid);
         localStorage.setItem("email", email);
@@ -63,7 +83,6 @@ export default function Login({
 
   return (
     <div className="auth-page">
-      {/* top icon */}
       <div className="brand-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <path
@@ -75,37 +94,32 @@ export default function Login({
         </svg>
       </div>
 
-      {/* header */}
       <div className="auth-header">
         <h1 className="auth-title">Login</h1>
         <p className="auth-subtitle">Access your account</p>
       </div>
 
-      {/* card */}
       <div className="auth-card">
-        {/* social buttons */}
         <div className="social-row">
-          <button type="button" className="social-btn" onClick={onGoogle}>
+          {/* ✅ onClick now uses handleGoogleLogin */}
+          <button type="button" className="social-btn" onClick={handleGoogleLogin} disabled={loading}>
             <GoogleIcon />
             Google
           </button>
 
-          <button type="button" className="social-btn" onClick={onGithub}>
+          <button type="button" className="social-btn" onClick={onGithub} disabled={loading}>
             <GithubIcon />
             GitHub
           </button>
         </div>
 
-        {/* divider */}
         <div className="divider">
           <span />
           <div>or continue with email</div>
           <span />
         </div>
 
-        {/* form */}
         <form className="form-grid" onSubmit={handleSubmit}>
-          {/* email */}
           <div>
             <label className="label">Email Address</label>
             <input
@@ -117,7 +131,6 @@ export default function Login({
             />
           </div>
 
-          {/* password */}
           <div>
             <label className="label">Password</label>
             <div className="password-wrap">
@@ -141,7 +154,6 @@ export default function Login({
             </div>
           </div>
 
-          {/* remember + forgot */}
           <div className="row">
             <label className="check">
               <input
@@ -158,16 +170,13 @@ export default function Login({
             </span>
           </div>
 
-          {/* button */}
           <button className="primary-btn" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* error */}
           {error ? <div className="error">{error}</div> : null}
         </form>
 
-        {/* footer */}
         <div className="bottom-text">
           Don't have an account?{" "}
           <span className="link" onClick={onGoToSignup}>
