@@ -21,7 +21,7 @@ const recommendations = [
   { title: "Learn Cloud Technologies", desc: "High demand in job market", action: "Start AWS Fundamentals", level: "Medium" },
 ];
 
-const SkillImprovement = () => {
+const SkillImprovement = ({onBack}) => {
 
   const [animatedSkills, setAnimatedSkills] = useState(
     skills.map(skill => ({ ...skill, animatedProgress: 0 }))
@@ -63,9 +63,9 @@ const SkillImprovement = () => {
 
       <button 
         className="back-btn" 
-        onClick={()=> window.location.replace("/dashboard")}
+        onClick={onBack}
       >
-        ← Back
+        ← Back Dashboard
       </button>
 
       <h2 className="section-title">Skill Progress</h2>
