@@ -153,6 +153,180 @@
 }
 
 /* ============================================
+   Role Filter Styles (Searchable Dropdown)
+   ============================================ */
+
+.cvmaker-role-filter-container {
+  margin-bottom: 20px;
+}
+
+.cvmaker-role-filter-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.cvmaker-filter-label-role {
+  font-weight: 700;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  background: rgba(79, 70, 229, 0.15);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.cvmaker-search-dropdown {
+  position: relative;
+  width: 280px;
+}
+
+.cvmaker-search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #1e2440;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-search-input-wrapper:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.cvmaker-role-search-input {
+  flex: 1;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.cvmaker-role-search-input::placeholder {
+  color: #64748b;
+}
+
+.cvmaker-clear-filter-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 8px;
+  transition: color 0.2s;
+}
+
+.cvmaker-clear-filter-btn:hover {
+  color: #f1f5f9;
+}
+
+.cvmaker-dropdown-toggle {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 10px;
+  transition: color 0.2s;
+}
+
+.cvmaker-dropdown-toggle:hover {
+  color: #f1f5f9;
+}
+
+.cvmaker-role-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1e2440;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  margin-top: 5px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.cvmaker-role-option {
+  padding: 10px 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #f1f5f9;
+  transition: background 0.2s;
+}
+
+.cvmaker-role-option:hover {
+  background: #2d3460;
+}
+
+.cvmaker-role-option-selected {
+  background: rgba(79, 70, 229, 0.2);
+  border-left: 3px solid #7c3aed;
+}
+
+.cvmaker-option-check {
+  color: #34d399;
+  font-weight: bold;
+}
+
+.cvmaker-no-results {
+  padding: 12px 15px;
+  text-align: center;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.cvmaker-active-filter {
+  margin-top: 12px;
+}
+
+.cvmaker-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+  padding: 6px 12px;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  color: #a5b4fc;
+  border: 1px solid #4f46e5;
+}
+
+.cvmaker-remove-filter {
+  background: none;
+  border: none;
+  color: #a5b4fc;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 5px;
+  padding: 0 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.cvmaker-remove-filter:hover {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.2);
+}
+
+.cvmaker-no-templates-message {
+  text-align: center;
+  padding: 40px;
+  background: #1e2440;
+  border-radius: 12px;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* ============================================
    Input Mode Toggle (Upload / Paste)
    ============================================ */
 
@@ -1095,6 +1269,13 @@
   }
   .cvmaker-overall-score {
     flex-direction: column;
+  }
+  .cvmaker-search-dropdown {
+    width: 100%;
+  }
+  .cvmaker-role-filter-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

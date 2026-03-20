@@ -19,17 +19,37 @@ const CVMaker = ({ onBack }) => {
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
 
+  // ── Role Filter State for Templates ─────────────────────────────────────────
+  const [roleSearchTerm, setRoleSearchTerm] = useState("");
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const roleDropdownRef = useRef(null);
+
+  // Available intern roles for dropdown
+  const internRoles = [
+    { id: "intern-software-engineer", label: "Intern Software Engineer" },
+    { id: "intern-web-developer", label: "Intern Web Developer" },
+    { id: "intern-ui-ux-designer", label: "Intern UI/UX Designer" },
+    { id: "intern-project-manager", label: "Intern Project Manager" },
+    { id: "intern-data-scientist", label: "Intern Data Scientist" },
+  ];
+
+  // Filter roles based on search term
+  const filteredRoles = internRoles.filter(role =>
+    role.label.toLowerCase().includes(roleSearchTerm.toLowerCase())
+  );
+
   // ── Templates ──────────────────────────────────────────────────────────────
   const templates = [
     {
       id: "intern software-engineer",
-      name: " intern Software Engineer",
+      name: "Intern Software Engineer",
       icon: "💻",
       color: "#667eea",
       industry: "Technology",
       description: "ATS-optimized for dev roles",
       atsScore: 98,
       tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
+      roleCategory: "intern-software-engineer",
     },
     {
       id: "intern data-scientist",
@@ -40,19 +60,21 @@ const CVMaker = ({ onBack }) => {
       description: "Highlight models, metrics & research",
       atsScore: 96,
       tags: ["ML Ready", "Publications", "Metrics Focus"],
+      roleCategory: "intern-data-scientist",
     },
     {
       id: "Intern ux-ui-designer",
-      name: " Intern UX/UI Designer",
+      name: "Intern UX/UI Designer",
       icon: "🎨",
       color: "#4facfe",
       industry: "Design",
       description: "Portfolio-first creative layout",
       atsScore: 94,
       tags: ["Portfolio Link", "Case Studies", "Tools List"],
+      roleCategory: "intern-ui-ux-designer",
     },
     {
-      id: "Intern Quality Assurance ",
+      id: "Intern Quality Assurance",
       name: "Intern Quality Assurance",
       icon: "👔",
       color: "#2c3e50",
@@ -60,6 +82,7 @@ const CVMaker = ({ onBack }) => {
       description: "ATS-optimized for dev role",
       atsScore: 97,
       tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
+      roleCategory: "intern-software-engineer",
     },
     {
       id: "intern Web Developer",
@@ -70,6 +93,7 @@ const CVMaker = ({ onBack }) => {
       description: "ATS-optimized for dev roles",
       atsScore: 88,
       tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
+      roleCategory: "intern-web-developer",
     },
     {
       id: "intern project manager",
@@ -80,8 +104,31 @@ const CVMaker = ({ onBack }) => {
       description: "ATS-optimized for project coordination roles",
       atsScore: 99,
       tags: ["ATS Friendly", "Leadership", "Agile Ready"],
+      roleCategory: "intern-project-manager",
     },
   ];
+
+  // Filter templates based on selected role (if any role selected)
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
+  
+  const filteredTemplates = selectedRoleId
+    ? templates.filter(template => template.roleCategory === selectedRoleId)
+    : templates;
+
+  // Handle role selection from dropdown
+  const handleRoleSelect = (roleId) => {
+    setSelectedRoleId(roleId);
+    setRoleSearchTerm(internRoles.find(r => r.id === roleId)?.label || "");
+    setShowRoleDropdown(false);
+    // Reset selected template when role changes? Optional: you can keep or reset
+    // setSelectedTemplate(null);
+  };
+
+  // Clear role filter
+  const clearRoleFilter = () => {
+    setSelectedRoleId(null);
+    setRoleSearchTerm("");
+  };
 
   // ── File Upload Handler ─────────────────────────────────────────────────────
   const readFileAsText = (file) => {
@@ -286,13 +333,80 @@ ${t.sign}
               <span className="cvmaker-panel-subtitle">Industry-specific, ATS-optimized designs</span>
             </div>
 
+            {/* Role Filter with Searchable Dropdown */}
+            <div className="cvmaker-role-filter-container" ref={roleDropdownRef}>
+              <div className="cvmaker-role-filter-header">
+                <span className="cvmaker-filter-label-role">🎯 Filter by Intern Role:</span>
+                <div className="cvmaker-search-dropdown">
+                  <div className="cvmaker-search-input-wrapper">
+                    <input
+                      type="text"
+                      className="cvmaker-role-search-input"
+                      placeholder="Select an intern role..."
+                      value={roleSearchTerm}
+                      onChange={(e) => {
+                        setRoleSearchTerm(e.target.value);
+                        setShowRoleDropdown(true);
+                        if (e.target.value === "") {
+                          setSelectedRoleId(null);
+                        }
+                      }}
+                      onFocus={() => setShowRoleDropdown(true)}
+                    />
+                    {roleSearchTerm && (
+                      <button 
+                        className="cvmaker-clear-filter-btn"
+                        onClick={clearRoleFilter}
+                        aria-label="Clear filter"
+                      >
+                        ✕
+                      </button>
+                    )}
+                    <button 
+                      className="cvmaker-dropdown-toggle"
+                      onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                    >
+                      ⌵
+                    </button>
+                  </div>
+                  {showRoleDropdown && filteredRoles.length > 0 && (
+                    <div className="cvmaker-role-dropdown">
+                      {filteredRoles.map((role) => (
+                        <div
+                          key={role.id}
+                          className={`cvmaker-role-option ${selectedRoleId === role.id ? "cvmaker-role-option-selected" : ""}`}
+                          onClick={() => handleRoleSelect(role.id)}
+                        >
+                          <span>{role.label}</span>
+                          {selectedRoleId === role.id && <span className="cvmaker-option-check">✓</span>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {showRoleDropdown && filteredRoles.length === 0 && (
+                    <div className="cvmaker-role-dropdown cvmaker-no-results">
+                      No matching roles found
+                    </div>
+                  )}
+                </div>
+              </div>
+              {selectedRoleId && (
+                <div className="cvmaker-active-filter">
+                  <span className="cvmaker-filter-badge">
+                    Showing templates for: {internRoles.find(r => r.id === selectedRoleId)?.label}
+                    <button className="cvmaker-remove-filter" onClick={clearRoleFilter}>×</button>
+                  </span>
+                </div>
+              )}
+            </div>
+
             <div className="cvmaker-template-filter">
               <span className="cvmaker-filter-label">🎯 Smart Recommendation:</span>
               <span className="cvmaker-filter-tag">Software Engineer template best matches your profile</span>
             </div>
 
             <div className="cvmaker-templates-grid">
-              {templates.map((template) => (
+              {filteredTemplates.map((template) => (
                 <div
                   key={template.id}
                   className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`}
@@ -321,6 +435,12 @@ ${t.sign}
                 </div>
               ))}
             </div>
+
+            {filteredTemplates.length === 0 && (
+              <div className="cvmaker-no-templates-message">
+                No templates found for the selected role. Try a different role or clear the filter.
+              </div>
+            )}
 
             <div className="cvmaker-ats-info-box">
               <h4>🤖 ATS-Optimized Templates Include:</h4>
