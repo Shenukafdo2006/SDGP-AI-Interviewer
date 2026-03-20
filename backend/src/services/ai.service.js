@@ -40,6 +40,18 @@ exports.evaluateAnswer = async (question, answer, role, level) => {
   }
 };
 
+exports.analyzeCV = async (cvContent) => {
+  try {
+    const res = await aiClient.post("/analyze-cv", {
+      cv_content: cvContent,
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error analyzing CV:", error.message);
+    throw new Error(`Failed to analyze CV: ${error.message}`);
+  }
+};
+
 exports.analyzeFacialExpression = async (frameBase64, question = null) => {
   try {
     const res = await aiClient.post("/analyze-facial-expression", {

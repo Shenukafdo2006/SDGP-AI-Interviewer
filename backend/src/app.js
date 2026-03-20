@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
+const cvRoutes = require("./routes/cvRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/interview", aiInterviewRoutes);
+app.use("/api/cv", cvRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {

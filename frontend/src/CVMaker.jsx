@@ -136,7 +136,7 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // ── AI-Powered CV Analysis via Claude API ───────────────────────────────────
+  // ── AI-Powered CV Analysis via gemini API ───────────────────────────────────
   const analyzeCV = async () => {
     if (!cvContent.trim()) {
       alert("Please upload or paste your CV content first.");
@@ -146,53 +146,21 @@ const CVMaker = ({ onBack }) => {
     setCvHealth(null);
 
     try {
-      const prompt = `You are an expert CV/Resume analyst. Analyze the following CV and return ONLY a JSON object (no markdown, no explanation) with this exact structure:
-{
-  "overall": <number 0-100>,
-  "completeness": <number 0-100>,
-  "formatting": <number 0-100>,
-  "readability": <number 0-100>,
-  "skillsScore": <number 0-100>,
-  "atsScore": <number 0-100>,
-  "keywordDensity": <number 0-100>,
-  "experienceImpact": <number 0-100>,
-  "personalization": <number 0-100>,
-  "sectionHealth": [
-    {"section": "Contact Info", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Summary", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Experience", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Education", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Skills", "score": <number>, "status": "good"|"warning"|"poor"},
-    {"section": "Projects", "score": <number>, "status": "good"|"warning"|"poor"}
-  ],
-  "feedback": [
-    {"type": "success"|"warning"|"info", "message": "<specific feedback about this CV>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"},
-    {"type": "success"|"warning"|"info", "message": "<specific feedback>"}
-  ],
-  "topStrengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
-  "topImprovements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"]
-}
-
-Analyze this CV:
-${cvContent.substring(0, 3000)}`;
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/cv/analysis", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }],
+          cvContent: cvContent.substring(0, 3000),
         }),
       });
 
-      const data = await response.json();
-      const text = data.content?.map((c) => c.text || "").join("") || "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
+      const parsed = await response.json();
+
+      if (!response.ok) {
+        throw new Error(parsed.error || "Failed to analyze CV");
+      }
 
       setCvHealth({
         ...parsed,

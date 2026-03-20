@@ -49,6 +49,9 @@ class FacialAnalysisRequest(BaseModel):
     frame_base64: str  # Base64 encoded image frame
     question: str = None
 
+class CVAnalysisRequest(BaseModel):
+    cv_content: str
+
 # System prompts for different interview types
 SYSTEM_PROMPTS = {
     "Technical": """You are an expert technical interviewer. Generate challenging technical questions 
@@ -99,6 +102,13 @@ def _parse_engagement_level(value, default=5):
     except (TypeError, ValueError):
         numeric = default
     return min(max(numeric, 1), 10)
+
+def _parse_percentage(value, default=0):
+    try:
+        numeric = int(round(float(value)))
+    except (TypeError, ValueError):
+        numeric = default
+    return min(max(numeric, 0), 100)
 
 @app.get("/")
 def home():
@@ -196,6 +206,128 @@ async def evaluate_answer(request: AnswerRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error evaluating answer: {str(e)}")
+
+@app.post("/analyze-cv")
+async def analyze_cv(request: CVAnalysisRequest):
+    """Analyze CV/resume content using Gemini and return structured scoring"""
+    try:
+        cv_content = (request.cv_content or "").strip()
+        if not cv_content:
+            raise HTTPException(status_code=400, detail="cv_content is required")
+
+        model = genai.GenerativeModel(TEXT_MODEL)
+
+        prompt = f"""
+        You are an expert CV and resume reviewer.
+        Analyze the following CV and return ONLY a JSON object with this exact structure:
+        {{
+          "overall": <number 0-100>,
+          "completeness": <number 0-100>,
+          "formatting": <number 0-100>,
+          "readability": <number 0-100>,
+          "skillsScore": <number 0-100>,
+          "atsScore": <number 0-100>,
+          "keywordDensity": <number 0-100>,
+          "experienceImpact": <number 0-100>,
+          "personalization": <number 0-100>,
+          "sectionHealth": [
+            {{"section": "Contact Info", "score": <number>, "status": "good"|"warning"|"poor"}},
+            {{"section": "Summary", "score": <number>, "status": "good"|"warning"|"poor"}},
+            {{"section": "Experience", "score": <number>, "status": "good"|"warning"|"poor"}},
+            {{"section": "Education", "score": <number>, "status": "good"|"warning"|"poor"}},
+            {{"section": "Skills", "score": <number>, "status": "good"|"warning"|"poor"}},
+            {{"section": "Projects", "score": <number>, "status": "good"|"warning"|"poor"}}
+          ],
+          "feedback": [
+            {{"type": "success"|"warning"|"info", "message": "<specific feedback>"}},
+            {{"type": "success"|"warning"|"info", "message": "<specific feedback>"}},
+            {{"type": "success"|"warning"|"info", "message": "<specific feedback>"}},
+            {{"type": "success"|"warning"|"info", "message": "<specific feedback>"}},
+            {{"type": "success"|"warning"|"info", "message": "<specific feedback>"}}
+          ],
+          "topStrengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
+          "topImprovements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"]
+        }}
+
+        Important rules:
+        - Return JSON only
+        - Keep scores realistic and internally consistent
+        - Use concise, actionable feedback
+        - If a section is missing, score it lower instead of inventing content
+
+        CV:
+        {cv_content[:3000]}
+        """
+
+        response = model.generate_content(prompt)
+        parsed = _extract_json_object(
+            response.text.strip(),
+            {
+                "overall": 70,
+                "completeness": 70,
+                "formatting": 70,
+                "readability": 70,
+                "skillsScore": 70,
+                "atsScore": 70,
+                "keywordDensity": 70,
+                "experienceImpact": 70,
+                "personalization": 70,
+                "sectionHealth": [],
+                "feedback": [],
+                "topStrengths": [],
+                "topImprovements": [],
+            },
+        )
+
+        for field in [
+            "overall",
+            "completeness",
+            "formatting",
+            "readability",
+            "skillsScore",
+            "atsScore",
+            "keywordDensity",
+            "experienceImpact",
+            "personalization",
+        ]:
+            parsed[field] = _parse_percentage(parsed.get(field, 70), 70)
+
+        section_health = parsed.get("sectionHealth", [])
+        if not isinstance(section_health, list):
+            section_health = []
+        parsed["sectionHealth"] = [
+            {
+                "section": str(item.get("section", "Unknown")),
+                "score": _parse_percentage(item.get("score", 0), 0),
+                "status": item.get("status", "warning") if item.get("status") in ["good", "warning", "poor"] else "warning",
+            }
+            for item in section_health
+            if isinstance(item, dict)
+        ]
+
+        feedback = parsed.get("feedback", [])
+        if not isinstance(feedback, list):
+            feedback = []
+        parsed["feedback"] = [
+            {
+                "type": item.get("type", "info") if item.get("type") in ["success", "warning", "info"] else "info",
+                "message": str(item.get("message", "")).strip(),
+            }
+            for item in feedback
+            if isinstance(item, dict) and str(item.get("message", "")).strip()
+        ]
+
+        for field in ["topStrengths", "topImprovements"]:
+            values = parsed.get(field, [])
+            if not isinstance(values, list):
+                values = []
+            parsed[field] = [str(item).strip() for item in values if str(item).strip()]
+
+        return parsed
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error analyzing CV: {str(e)}")
 
 @app.post("/analyze-facial-expression")
 async def analyze_facial_expression(request: FacialAnalysisRequest):
