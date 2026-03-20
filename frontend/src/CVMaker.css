@@ -1659,3 +1659,35 @@
     opacity: 0.85;
   }
 }
+/* ============================================
+   AI Info Banner
+   ============================================ */
+
+.cvmaker-ai-info {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.15));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #c4b5fd;
+  font-size: 0.9rem;
+}
+
+.cvmaker-ai-info-icon {
+  font-size: 1.2rem;
+  animation: cvmaker-spin-slow 3s linear infinite;
+  display: inline-block;
+}
+
+@keyframes cvmaker-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
