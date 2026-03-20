@@ -18,57 +18,63 @@ const STATUS_COLORS = {
 const SAMPLE_CVS = [
   {
     id: 1, name: 'Pavithri pabasara', position: 'Intern Software Engineer',
-      education: 'IIT Sri Lanka(Undergraduate student)', location: 'Galle',
-    skills: ['React', 'Python', 'Java','Docker'], noticePeriod: '30 days',
+    education: 'IIT Sri Lanka(Undergraduate student)', location: 'Galle',
+    skills: ['React', 'Python', 'Java', 'Docker'], noticePeriod: '30 days',
     gender: 'FeMale', status: 'Shortlisted',
-    tags: [ 'Full Stack'], uploadDate: '2026-02-15',
+    tags: ['Full Stack'], uploadDate: '2026-02-15',
     matchPercentage: 92, email: 'pavithripabasara@gmail.com', phone: '0765018265',
-     avatar: 'PV',interviews: 3, offers: 1,
+    avatar: 'PV', interviews: 3, offers: 1,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 4.5
   },
   {
     id: 2, name: 'Sadewini Tharumini', position: 'Intern Product Manager',
-     education: 'IIT Sri Lanaka(Undergraduate student)', location: 'Colombo',
+    education: 'IIT Sri Lanaka(Undergraduate student)', location: 'Colombo',
     skills: ['Product Strategy', 'Agile', 'User Research', 'Analytics'], noticePeriod: '60 days',
-     gender: 'Female', status: 'Interview Scheduled',
+    gender: 'Female', status: 'Interview Scheduled',
     uploadDate: '2026-01-14',
-    matchPercentage: 88, email: 'sadewini@gmail.com', phone: ' 077765 4321',
-     avatar: 'ST',interviews: 5, offers: 2,
+    matchPercentage: 88, email: 'sadewini@gmail.com', phone: '077765 4321',
+    avatar: 'ST', interviews: 5, offers: 2,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 4.2
   },
   {
     id: 3, name: 'Shuneka Fernando', position: 'Intern UX Designer',
-     education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Colombo',
+    education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Colombo',
     skills: ['Figma', 'Adobe XD', 'UI Design', 'Wireframing'], noticePeriod: '15 days',
-     gender: 'Male', status: 'New',
-    tags: ['Creative', 'Portfolio Available'],  uploadDate: '2026-02-13',
+    gender: 'Male', status: 'New',
+    tags: ['Creative', 'Portfolio Available'], uploadDate: '2026-02-13',
     matchPercentage: 75, email: 'shenuaka@gmail.com', phone: '07765 43212',
-    avatar: 'SF',  interviews: 2, offers: 0,
+    avatar: 'SF', interviews: 2, offers: 0,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 3.8
   },
   {
     id: 4, name: 'Kaveesha Fernandupulle', position: 'Intern Data Scientist',
-     education: 'IIT Sri Lanka(Undergrauate Student)', location: 'Neogmbo',
+    education: 'IIT Sri Lanka(Undergrauate Student)', location: 'Neogmbo',
     skills: ['Python', 'Machine Learning', 'TensorFlow', 'SQL'], noticePeriod: '45 days',
-     gender: 'FeMale', status: 'Viewed',
-    tags: ['Kaggle Expert'],  uploadDate: '2026-02-12',
+    gender: 'FeMale', status: 'Viewed',
+    tags: ['Kaggle Expert'], uploadDate: '2026-02-12',
     matchPercentage: 95, email: 'kaveesha@gamil.com', phone: '+91 98765 43213',
-    avatar: 'KF',  interviews: 4, offers: 1,
+    avatar: 'KF', interviews: 4, offers: 1,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 4.8
   },
   {
     id: 5, name: 'Charula Somathilaka', position: 'Intern DevOps Engineer',
-     education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Colombo',
+    education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Colombo',
     skills: ['Kubernetes', 'Jenkins', 'Terraform', 'AWS'], noticePeriod: '30 days',
-     gender: 'Male', status: 'Shortlisted',
-    tags: ['Certified Kubernetes Admin'],  uploadDate: '2026-01-11',
+    gender: 'Male', status: 'Shortlisted',
+    tags: ['Certified Kubernetes Admin'], uploadDate: '2026-01-11',
     matchPercentage: 82, email: 'charula@gmail.com', phone: '07765 43214',
-    avatar: 'CS',  interviews: 3, offers: 1,
+    avatar: 'CS', interviews: 3, offers: 1,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 4.0
   },
   {
     id: 6, name: 'Mithusha Perera', position: 'Intern Frontend Developer',
-     education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Galle',
+    education: 'IIT Sri Lanka(Undergraduate Student)', location: 'Galle',
     skills: ['React', 'TypeScript', 'CSS', 'Next.js'], noticePeriod: 'Immediate',
     gender: 'Female', status: 'New',
-    tags: ['Open Source Contributor'],  uploadDate: '2026-01-10',
+    tags: ['Open Source Contributor'], uploadDate: '2026-01-10',
     matchPercentage: 79, email: 'mithusha@gmail.com', phone: '07765 43215',
-    avatar: 'MP',  interviews: 1, offers: 0,
+    avatar: 'MP', interviews: 1, offers: 0,
+    experience: 'Fresher', university: 'IIT Sri Lanka', graduationYear: '2026', salary: 'Negotiable', rating: 3.9
   },
 ];
 
@@ -82,7 +88,13 @@ const getRatingStars = (rating) => {
   return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half ? 1 : 0));
 };
 
-const formatFileSize = (bytes) => (bytes / 1024 / 1024).toFixed(2) + ' MB';
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+};
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -162,7 +174,7 @@ const UploadTab = ({ cvData, uploadedFiles, uploadProgress, onUpload, onDrop }) 
         </div>
         <h3>Drag & Drop CVs Here</h3>
         <p>or <span className="cvf-link">browse files</span></p>
-        <p className="cvf-dropzone__hint">Supports: PDF, DOCX, DOC, TXT · Max 8MB per file</p>
+        <p className="cvf-dropzone__hint">Supports: PDF, DOCX, DOC, TXT · No file size limit</p>
       </div>
 
       {uploadedFiles.length > 0 && (
@@ -668,13 +680,14 @@ const CVFiltering = ({ onBack }) => {
 
   const [cvData] = useState(SAMPLE_CVS);
   const [filterResults, setFilterResults] = useState([]);
+  const [uploadedCVs, setUploadedCVs] = useState([]);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({});
 
   const [filters, setFilters] = useState({
-    position: '',  education: '', location: '',
-    skills: '', noticePeriod: '',  gender: '', currentStatus: '',
+    position: '', education: '', location: '',
+    skills: '', noticePeriod: '', gender: '', currentStatus: '',
   });
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -694,17 +707,21 @@ const CVFiltering = ({ onBack }) => {
     setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== id)), 3000);
   }, []);
 
-  // ── Upload Logic ──────────────────────────────────────────────────────────
+  // ── Upload Logic (No size limit) ──────────────────────────────────────────
 
   const handleUpload = (e) => {
     const files = Array.from(e.target.files);
     files.forEach(file => {
-      if (file.size > 8 * 1024 * 1024) {
-        addNotification('error', `${file.name} exceeds 8MB limit`);
-        return;
-      }
+      // No file size check - allow any size
       const id = Date.now() + file.name;
-      setUploadedFiles(prev => [...prev, { id, name: file.name, size: file.size, type: file.type, status: 'uploading' }]);
+      setUploadedFiles(prev => [...prev, { 
+        id, 
+        name: file.name, 
+        size: file.size, 
+        type: file.type, 
+        status: 'uploading' 
+      }]);
+      
       let progress = 0;
       const iv = setInterval(() => {
         progress += 10;
@@ -712,9 +729,37 @@ const CVFiltering = ({ onBack }) => {
         if (progress >= 100) {
           clearInterval(iv);
           setUploadedFiles(prev => prev.map(f => f.id === id ? { ...f, status: 'completed' } : f));
+          
+          // Create a new CV entry from uploaded file
+          const newCV = {
+            id: Date.now() + Math.random(),
+            name: file.name.replace(/\.[^/.]+$/, ""),
+            position: 'Uploaded CV',
+            education: 'Information Pending',
+            location: 'Not Specified',
+            skills: [],
+            noticePeriod: 'Not Specified',
+            gender: 'Not Specified',
+            status: 'New',
+            tags: ['New Upload'],
+            uploadDate: new Date().toISOString().split('T')[0],
+            matchPercentage: Math.floor(Math.random() * 30) + 70,
+            email: 'pending@upload.com',
+            phone: 'Pending',
+            avatar: file.name.substring(0, 2).toUpperCase(),
+            interviews: 0,
+            offers: 0,
+            experience: 'Pending',
+            university: 'Pending',
+            graduationYear: 'Pending',
+            salary: 'Pending',
+            rating: 3.5
+          };
+          
+          setUploadedCVs(prev => [...prev, newCV]);
           addNotification('success', `${file.name} uploaded successfully`);
         }
-      }, 300);
+      }, 200);
     });
   };
 
@@ -724,6 +769,9 @@ const CVFiltering = ({ onBack }) => {
     handleUpload({ target: { files: Array.from(e.dataTransfer.files) } });
   };
 
+  // Combine original CVs with uploaded CVs
+  const allCVs = [...cvData, ...uploadedCVs];
+
   // ── Filter Logic ──────────────────────────────────────────────────────────
 
   const handleFilterChange = (e) => {
@@ -732,7 +780,7 @@ const CVFiltering = ({ onBack }) => {
   };
 
   const applyFilters = () => {
-    let result = [...cvData];
+    let result = [...allCVs];
     Object.entries(filters).forEach(([key, val]) => {
       if (val) {
         result = result.filter(cv => {
@@ -765,14 +813,16 @@ const CVFiltering = ({ onBack }) => {
       delete: `${selectedCVs.length} CVs removed`,
     };
     addNotification('success', msgs[action] || 'Done');
-    if (action === 'delete') setSelectedCVs([]);
+    if (action === 'delete') {
+      setSelectedCVs([]);
+    }
   };
 
   // ── Tabs Config ───────────────────────────────────────────────────────────
 
   const TABS = [
-    { id: 'upload',   icon: '📤', label: 'Upload' },
-    { id: 'filter',   icon: '🔍', label: 'Filter' },
+    { id: 'upload', icon: '📤', label: 'Upload' },
+    { id: 'filter', icon: '🔍', label: 'Filter' },
     { id: 'advanced', icon: '🎯', label: 'Advanced' },
   ];
 
@@ -814,9 +864,9 @@ const CVFiltering = ({ onBack }) => {
               <h1>CV Filtering <span className="cvf-badge">v2.0</span></h1>
             </div>
             <div className="cvf-header__stats">
-              <div className="cvf-hstat"><strong>{cvData.length}</strong><span>Total CVs</span></div>
+              <div className="cvf-hstat"><strong>{allCVs.length}</strong><span>Total CVs</span></div>
               <div className="cvf-hstat"><strong>92%</strong><span>Parsed</span></div>
-              <div className="cvf-hstat"><strong>24</strong><span>New Today</span></div>
+              <div className="cvf-hstat"><strong>{uploadedCVs.length}</strong><span>New Today</span></div>
             </div>
           </div>
 
@@ -855,7 +905,7 @@ const CVFiltering = ({ onBack }) => {
         <main className="cvf-main">
           {activeTab === 'upload' && (
             <UploadTab
-              cvData={cvData}
+              cvData={allCVs}
               uploadedFiles={uploadedFiles}
               uploadProgress={uploadProgress}
               onUpload={handleUpload}
@@ -865,7 +915,7 @@ const CVFiltering = ({ onBack }) => {
 
           {activeTab === 'filter' && (
             <FilterTab
-              cvData={cvData}
+              cvData={allCVs}
               filters={filters}
               onFilterChange={handleFilterChange}
               onApply={applyFilters}
@@ -892,7 +942,7 @@ const CVFiltering = ({ onBack }) => {
               searchType={searchType}
               setSearchType={setSearchType}
               onSearch={applyFilters}
-              cvData={cvData}
+              cvData={allCVs}
             />
           )}
         </main>
