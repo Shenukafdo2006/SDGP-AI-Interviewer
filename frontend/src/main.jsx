@@ -21,32 +21,32 @@ import DailyMotivation from "./DailyMotivation";
 
 function App() {
 
-  const [view, setView] = useState(null); // null = still checking auth
+  const [view, setView] = useState(null); 
 
-  // Interview session state
+  
   const [interviewSessionData, setInterviewSessionData] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
 
   useEffect(() => {
-    const uid = localStorage.getItem("uid");         // persists forever
-    const lastView = sessionStorage.getItem("view"); // clears on new tab
+    const uid = localStorage.getItem("uid");         
+    const lastView = sessionStorage.getItem("view"); 
 
     if (uid && lastView) {
-      // Refresh → restore exact page
+     
       setView(lastView);
     } else {
-      // New tab OR not logged in → always show login
+      
       setView("login");
     }
   }, []);
 
-  // Use navigate() instead of setView() — saves page to sessionStorage
+ 
   const navigate = (newView) => {
     sessionStorage.setItem("view", newView);
     setView(newView);
   };
 
-  // Still checking → brief loading screen
+ 
   if (view === null) {
     return (
       <div style={{
