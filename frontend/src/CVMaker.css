@@ -1605,3 +1605,57 @@
     padding: 10px;
   }
 }
+/* ============================================
+   AI Generated Template Styles
+   ============================================ */
+
+.cvmaker-template-card.cvmaker-ai-generated {
+  border: 2px solid #8b5cf6;
+  background: linear-gradient(135deg, #1e2440 0%, #1a1f35 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cvmaker-template-card.cvmaker-ai-generated::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #8b5cf6, #ec489a, #8b5cf6);
+  animation: cvmaker-shimmer 2s infinite;
+}
+
+@keyframes cvmaker-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.cvmaker-ai-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(135deg, #8b5cf6, #ec489a);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: cvmaker-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cvmaker-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
