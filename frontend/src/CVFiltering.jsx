@@ -243,7 +243,6 @@ const CVCardGrid = ({ cv, selected, onSelect, onClick }) => (
     <MatchBar pct={cv.matchPercentage} />
 
     <div className="cvf-cv-card__meta">
-      
       <span>🎓 {cv.education}</span>
       <span>📍 {cv.location}</span>
     </div>
@@ -365,7 +364,7 @@ const FilterTab = ({
               <button className="cvf-btn-ghost" onClick={onClearFilters}>Clear all</button>
             </div>
 
-                        <FilterInput label="Position" name="position" options={[
+            <FilterInput label="Position" name="position" options={[
               { value: '', label: 'All Positions' },
               { value: 'Intern Software Engineer', label: 'Intern Software Engineer' },
               { value: 'Intern Product Manager', label: 'Intern Product Manager' },
@@ -580,72 +579,6 @@ const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, o
   );
 };
 
-// ─── Saved Filters Tab ────────────────────────────────────────────────────────
-
-const SavedTab = ({ savedFilters, onSaveFilter, onDeleteFilter }) => {
-  const RECENT_SEARCHES = [
-    { query: 'React developers Bangalore', time: '2 hours ago' },
-    { query: 'Python 5+ years experience', time: '5 hours ago' },
-    { query: 'Product Managers IIM', time: '1 day ago' },
-  ];
-
-  return (
-    <div className="cvf-tab-content cvf-saved">
-      <div className="cvf-row-between cvf-mb-24">
-        <h2>Saved Filters</h2>
-        <button className="cvf-btn-primary" onClick={onSaveFilter}>
-          <span>+</span> New Filter
-        </button>
-      </div>
-
-      {savedFilters.length === 0 ? (
-        <div className="cvf-empty-state">
-          <div className="cvf-empty-state__icon">💾</div>
-          <h3>No saved filters yet</h3>
-          <p>Save your filter combinations for quick access later</p>
-          <button className="cvf-btn-primary" onClick={onSaveFilter}>Save Current Filter</button>
-        </div>
-      ) : (
-        <div className="cvf-saved-grid">
-          {savedFilters.map(f => (
-            <div key={f.id} className="cvf-saved-card">
-              <div className="cvf-row-between cvf-mb-12">
-                <h4>{f.name}</h4>
-                <div className="cvf-action-row">
-                  <button className="cvf-icon-btn" title="Apply">▶</button>
-                  <button className="cvf-icon-btn" title="Share">📤</button>
-                  <button className="cvf-icon-btn" title="Delete" onClick={() => onDeleteFilter(f.id)}>🗑️</button>
-                </div>
-              </div>
-              <div className="cvf-skills-row cvf-mb-12">
-                {Object.entries(f.filters).filter(([, v]) => v).map(([k, v]) => (
-                  <span key={k} className="cvf-chip">{k}: {v}</span>
-                ))}
-              </div>
-              <div className="cvf-saved-card__footer">
-                <span className="cvf-text-muted cvf-text-sm">Last used: 2 days ago</span>
-                <span className="cvf-text-success cvf-text-sm">24 results</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="cvf-recent-searches">
-        <h3 className="cvf-mb-16">Recent Searches</h3>
-        <div className="cvf-recent-list">
-          {RECENT_SEARCHES.map((r, i) => (
-            <div key={i} className="cvf-recent-item">
-              <span>🕐 {r.query}</span>
-              <span className="cvf-text-muted cvf-text-sm">{r.time}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // ─── CV Preview Modal ─────────────────────────────────────────────────────────
 
 const CVModal = ({ cv, onClose }) => {
@@ -746,7 +679,6 @@ const CVFiltering = ({ onBack }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('basic');
-  const [savedFilters, setSavedFilters] = useState([]);
 
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
@@ -822,18 +754,6 @@ const CVFiltering = ({ onBack }) => {
   const toggleSelect = (id) =>
     setSelectedCVs(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
 
-  // ── Saved Filters ─────────────────────────────────────────────────────────
-
-  const saveFilter = () => {
-    const name = prompt('Enter filter name:');
-    if (name) {
-      setSavedFilters(prev => [...prev, { id: Date.now(), name, filters: { ...filters }, searchQuery, searchType }]);
-      addNotification('success', 'Filter saved!');
-    }
-  };
-
-  const deleteFilter = (id) => setSavedFilters(prev => prev.filter(f => f.id !== id));
-
   // ── Bulk Actions ──────────────────────────────────────────────────────────
 
   const handleBulkAction = (action) => {
@@ -854,7 +774,6 @@ const CVFiltering = ({ onBack }) => {
     { id: 'upload',   icon: '📤', label: 'Upload' },
     { id: 'filter',   icon: '🔍', label: 'Filter' },
     { id: 'advanced', icon: '🎯', label: 'Advanced' },
-    { id: 'saved',    icon: '💾', label: 'Saved' },
   ];
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -950,7 +869,10 @@ const CVFiltering = ({ onBack }) => {
               filters={filters}
               onFilterChange={handleFilterChange}
               onApply={applyFilters}
-              onClearFilters={() => setFilters({})}
+              onClearFilters={() => setFilters({
+                position: '', education: '', location: '',
+                skills: '', noticePeriod: '', gender: '', currentStatus: '',
+              })}
               viewMode={viewMode}
               setViewMode={setViewMode}
               sortBy={sortBy}
@@ -971,14 +893,6 @@ const CVFiltering = ({ onBack }) => {
               setSearchType={setSearchType}
               onSearch={applyFilters}
               cvData={cvData}
-            />
-          )}
-
-          {activeTab === 'saved' && (
-            <SavedTab
-              savedFilters={savedFilters}
-              onSaveFilter={saveFilter}
-              onDeleteFilter={deleteFilter}
             />
           )}
         </main>
