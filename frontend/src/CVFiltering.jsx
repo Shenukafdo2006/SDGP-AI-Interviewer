@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/static-components */
 import React, { useState, useCallback } from 'react';
 import './CVFiltering.css';
 

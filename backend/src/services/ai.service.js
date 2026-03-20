@@ -39,7 +39,7 @@ exports.evaluateAnswer = async (question, answer, role, level) => {
     throw new Error(`Failed to evaluate answer: ${error.message}`);
   }
 };
-
+//CV MAKER 
 exports.analyzeCV = async (cvContent) => {
   try {
     const res = await aiClient.post("/analyze-cv", {

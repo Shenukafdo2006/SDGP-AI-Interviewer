@@ -12,7 +12,7 @@ const CVMaker = ({ onBack }) => {
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
 
   // ── Upload State ────────────────────────────────────────────────────────────
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [, setUploadedFile] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [inputMode, setInputMode] = useState("upload"); // "upload" | "paste"
@@ -22,8 +22,8 @@ const CVMaker = ({ onBack }) => {
   // ── Templates ──────────────────────────────────────────────────────────────
   const templates = [
     {
-      id: "software-engineer",
-      name: "Software Engineer",
+      id: "intern software-engineer",
+      name: " intern Software Engineer",
       icon: "💻",
       color: "#667eea",
       industry: "Technology",
@@ -32,8 +32,8 @@ const CVMaker = ({ onBack }) => {
       tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
     },
     {
-      id: "data-scientist",
-      name: "Data Scientist",
+      id: "intern data-scientist",
+      name: "Intern Data Scientist",
       icon: "📊",
       color: "#f093fb",
       industry: "Data & AI",
@@ -42,8 +42,8 @@ const CVMaker = ({ onBack }) => {
       tags: ["ML Ready", "Publications", "Metrics Focus"],
     },
     {
-      id: "ux-ui-designer",
-      name: "UX/UI Designer",
+      id: "Intern ux-ui-designer",
+      name: " Intern UX/UI Designer",
       icon: "🎨",
       color: "#4facfe",
       industry: "Design",
@@ -52,34 +52,34 @@ const CVMaker = ({ onBack }) => {
       tags: ["Portfolio Link", "Case Studies", "Tools List"],
     },
     {
-      id: "professional",
-      name: "Professional",
+      id: "Intern Quality Assurance ",
+      name: "Intern Quality Assurance",
       icon: "👔",
       color: "#2c3e50",
-      industry: "Corporate",
-      description: "Classic corporate-grade format",
+      industry: "Technology",
+      description: "ATS-optimized for dev role",
       atsScore: 97,
-      tags: ["Clean Layout", "ATS Safe", "Formal Tone"],
+      tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
     },
     {
-      id: "creative",
-      name: "Creative",
+      id: "intern Web Developer",
+      name: "Intern Web Developer",
       icon: "✨",
       color: "#764ba2",
-      industry: "Creative",
-      description: "Bold design for creative fields",
+      industry: "Technology",
+      description: "ATS-optimized for dev roles",
       atsScore: 88,
-      tags: ["Visual Impact", "Branded", "Color Accents"],
+      tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
     },
     {
-      id: "minimal",
-      name: "Minimal",
+      id: "intern project manager",
+      name: "Intern Project Manager",
       icon: "📄",
       color: "#4facfe",
-      industry: "General",
-      description: "Simple, machine-readable layout",
+      industry: "Management",
+      description: "ATS-optimized for project coordination roles",
       atsScore: 99,
-      tags: ["Max ATS", "Clean", "Universal"],
+      tags: ["ATS Friendly", "Leadership", "Agile Ready"],
     },
   ];
 
@@ -171,6 +171,7 @@ const CVMaker = ({ onBack }) => {
           parsed.overall,
         ],
       });
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // Fallback with demo data if API fails
       setCvHealth({
