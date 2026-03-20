@@ -28,10 +28,12 @@ function App() {
   const [currentSessionId, setCurrentSessionId] = useState(null);
 
   useEffect(() => {
-    const uid = localStorage.getItem("uid"); // persists forever
+    const uid = localStorage.getItem("uid");         // persists forever
+    const lastView = sessionStorage.getItem("view"); // clears on new tab
 
-    if (uid) {
-      setView("dashboard");
+    if (uid && lastView) {
+      // Refresh → restore exact page
+      setView(lastView);
     } else {
       // New tab OR not logged in → always show login
       setView("login");
