@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./CVMaker.css";
 
 const CVMaker = ({ onBack }) => {
   const [activeFeature, setActiveFeature] = useState("templates");
-  const [selectedTemplate, setSelectedTemplate] = useState("software-engineer");
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [cvContent, setCvContent] = useState("");
   const [cvHealth, setCvHealth] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
@@ -15,7 +15,7 @@ const CVMaker = ({ onBack }) => {
   const [, setUploadedFile] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [inputMode, setInputMode] = useState("upload"); // "upload" | "paste"
+  const [inputMode, setInputMode] = useState("upload");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -26,11 +26,11 @@ const CVMaker = ({ onBack }) => {
 
   // Available intern roles for dropdown
   const internRoles = [
-    { id: "intern-software-engineer", label: "Intern Software Engineer" },
-    { id: "intern-web-developer", label: "Intern Web Developer" },
-    { id: "intern-ui-ux-designer", label: "Intern UI/UX Designer" },
-    { id: "intern-project-manager", label: "Intern Project Manager" },
-    { id: "intern-data-scientist", label: "Intern Data Scientist" },
+    { id: "intern-software-engineer", label: "Intern Software Engineer", recommendation: "Software Engineer template best matches your profile" },
+    { id: "intern-web-developer", label: "Intern Web Developer", recommendation: "Web Developer template optimized for frontend/backend roles" },
+    { id: "intern-ui-ux-designer", label: "Intern UI/UX Designer", recommendation: "UI/UX Designer template with portfolio-first layout" },
+    { id: "intern-project-manager", label: "Intern Project Manager", recommendation: "Project Manager template focused on leadership and coordination" },
+    { id: "intern-data-scientist", label: "Intern Data Scientist", recommendation: "Data Scientist template highlighting models, metrics & research" },
   ];
 
   // Filter roles based on search term
@@ -79,9 +79,9 @@ const CVMaker = ({ onBack }) => {
       icon: "👔",
       color: "#2c3e50",
       industry: "Technology",
-      description: "ATS-optimized for dev role",
+      description: "ATS-optimized for QA roles",
       atsScore: 97,
-      tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
+      tags: ["ATS Friendly", "Testing Tools", "Bug Tracking"],
       roleCategory: "intern-software-engineer",
     },
     {
@@ -90,9 +90,9 @@ const CVMaker = ({ onBack }) => {
       icon: "✨",
       color: "#764ba2",
       industry: "Technology",
-      description: "ATS-optimized for dev roles",
+      description: "ATS-optimized for web development roles",
       atsScore: 88,
-      tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
+      tags: ["Frontend", "Backend", "Full Stack Ready"],
       roleCategory: "intern-web-developer",
     },
     {
@@ -103,32 +103,70 @@ const CVMaker = ({ onBack }) => {
       industry: "Management",
       description: "ATS-optimized for project coordination roles",
       atsScore: 99,
-      tags: ["ATS Friendly", "Leadership", "Agile Ready"],
+      tags: ["Leadership", "Agile Ready", "Scrum"],
       roleCategory: "intern-project-manager",
     },
   ];
 
-  // Filter templates based on selected role (if any role selected)
+  // Filter templates based on selected role
   const [selectedRoleId, setSelectedRoleId] = useState(null);
   
   const filteredTemplates = selectedRoleId
     ? templates.filter(template => template.roleCategory === selectedRoleId)
     : templates;
 
+  // Get current recommendation based on selected role
+  const getCurrentRecommendation = () => {
+    if (selectedRoleId) {
+      const selectedRole = internRoles.find(role => role.id === selectedRoleId);
+      return selectedRole ? selectedRole.recommendation : "Select a role to see personalized recommendations";
+    }
+    return "Software Engineer template best matches your profile";
+  };
+
   // Handle role selection from dropdown
   const handleRoleSelect = (roleId) => {
     setSelectedRoleId(roleId);
-    setRoleSearchTerm(internRoles.find(r => r.id === roleId)?.label || "");
+    const selectedRole = internRoles.find(r => r.id === roleId);
+    setRoleSearchTerm(selectedRole?.label || "");
     setShowRoleDropdown(false);
-    // Reset selected template when role changes? Optional: you can keep or reset
-    // setSelectedTemplate(null);
+    // Reset selected template when role changes
+    setSelectedTemplate(null);
   };
 
   // Clear role filter
   const clearRoleFilter = () => {
     setSelectedRoleId(null);
     setRoleSearchTerm("");
+    setSelectedTemplate(null);
   };
+
+  // Handle explore template button click
+  const handleExploreTemplate = (templateId) => {
+    setSelectedTemplate(templateId);
+    // Scroll to the selected template card
+    setTimeout(() => {
+      const selectedCard = document.querySelector(`.cvmaker-template-card[data-template-id="${templateId}"]`);
+      if (selectedCard) {
+        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        selectedCard.classList.add('cvmaker-highlight');
+        setTimeout(() => {
+          selectedCard.classList.remove('cvmaker-highlight');
+        }, 1000);
+      }
+    }, 100);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (roleDropdownRef.current && !roleDropdownRef.current.contains(event.target)) {
+        setShowRoleDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // ── File Upload Handler ─────────────────────────────────────────────────────
   const readFileAsText = (file) => {
@@ -136,11 +174,8 @@ const CVMaker = ({ onBack }) => {
       const reader = new FileReader();
 
       if (file.type === "application/pdf") {
-        // For PDF: read as text (basic extraction)
         reader.onload = (e) => {
-          // Extract readable text from PDF binary
           const text = e.target.result;
-          // Simple heuristic: extract printable ASCII from PDF
           const extracted = text
             .replace(/[^\x20-\x7E\n\r\t]/g, " ")
             .replace(/\s{3,}/g, "\n")
@@ -150,7 +185,6 @@ const CVMaker = ({ onBack }) => {
         reader.onerror = reject;
         reader.readAsBinaryString(file);
       } else {
-        // TXT or DOCX as text
         reader.onload = (e) => resolve(e.target.result);
         reader.onerror = reject;
         reader.readAsText(file);
@@ -183,7 +217,7 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // ── AI-Powered CV Analysis via gemini API ───────────────────────────────────
+  // ── AI-Powered CV Analysis ───────────────────────────────────────────────────
   const analyzeCV = async () => {
     if (!cvContent.trim()) {
       alert("Please upload or paste your CV content first.");
@@ -218,9 +252,7 @@ const CVMaker = ({ onBack }) => {
           parsed.overall,
         ],
       });
-    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      // Fallback with demo data if API fails
       setCvHealth({
         overall: 74,
         completeness: 80,
@@ -323,8 +355,6 @@ ${t.sign}
   // ── Render Feature Panels ───────────────────────────────────────────────────
   const renderActiveFeature = () => {
     switch (activeFeature) {
-
-      // ── TEMPLATES ────────────────────────────────────────────────────────────
       case "templates":
         return (
           <div className="cvmaker-feature-panel">
@@ -400,15 +430,18 @@ ${t.sign}
               )}
             </div>
 
+            {/* Smart Recommendation - Updates based on selected role */}
             <div className="cvmaker-template-filter">
               <span className="cvmaker-filter-label">🎯 Smart Recommendation:</span>
-              <span className="cvmaker-filter-tag">Software Engineer template best matches your profile</span>
+              <span className="cvmaker-filter-tag">{getCurrentRecommendation()}</span>
             </div>
 
+            {/* Templates Grid */}
             <div className="cvmaker-templates-grid">
               {filteredTemplates.map((template) => (
                 <div
                   key={template.id}
+                  data-template-id={template.id}
                   className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`}
                   onClick={() => setSelectedTemplate(template.id)}
                 >
@@ -428,6 +461,16 @@ ${t.sign}
                         <span key={tag} className="cvmaker-tag">{tag}</span>
                       ))}
                     </div>
+                    {/* Explore Templates Button */}
+                    <button 
+                      className="cvmaker-explore-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExploreTemplate(template.id);
+                      }}
+                    >
+                      🔍 Explore Template
+                    </button>
                   </div>
                   {selectedTemplate === template.id && (
                     <div className="cvmaker-selected-check">✓ Selected</div>
@@ -455,7 +498,6 @@ ${t.sign}
           </div>
         );
 
-      // ── SMART SCORING ─────────────────────────────────────────────────────────
       case "scoring":
         return (
           <div className="cvmaker-feature-panel">
@@ -464,7 +506,6 @@ ${t.sign}
               <span className="cvmaker-panel-subtitle">AI-powered 8-dimension analysis with real-time feedback</span>
             </div>
 
-            {/* Input Mode Toggle */}
             <div className="cvmaker-input-mode-toggle">
               <button
                 className={`cvmaker-mode-btn ${inputMode === "upload" ? "cvmaker-mode-active" : ""}`}
@@ -480,7 +521,6 @@ ${t.sign}
               </button>
             </div>
 
-            {/* Upload Mode */}
             {inputMode === "upload" && (
               <div
                 className={`cvmaker-upload-dropzone ${dragOver ? "cvmaker-drag-over" : ""}`}
@@ -518,7 +558,6 @@ ${t.sign}
               </div>
             )}
 
-            {/* Paste Mode */}
             {inputMode === "paste" && (
               <textarea
                 className="cvmaker-cv-input"
@@ -529,7 +568,6 @@ ${t.sign}
               />
             )}
 
-            {/* If uploaded, show extracted text preview */}
             {inputMode === "upload" && uploadedFileName && cvContent && (
               <div className="cvmaker-extracted-preview">
                 <div className="cvmaker-extracted-header">
@@ -556,7 +594,6 @@ ${t.sign}
               )}
             </button>
 
-            {/* Results */}
             {cvHealth && (
               <>
                 <div className="cvmaker-score-tabs">
@@ -693,7 +730,6 @@ ${t.sign}
           </div>
         );
 
-      // ── COVER LETTER ──────────────────────────────────────────────────────────
       case "coverletter":
         return (
           <div className="cvmaker-feature-panel">
@@ -764,7 +800,6 @@ ${t.sign}
           </div>
         );
 
-      // ── EXPORT & SHARING ──────────────────────────────────────────────────────
       case "export":
         return (
           <div className="cvmaker-feature-panel">
