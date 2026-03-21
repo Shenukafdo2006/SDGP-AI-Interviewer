@@ -14,6 +14,20 @@ const resources = [
 ];
 
 const LearningResources = ({ onBack }) => {
+  // Calculate total completed hours based on course progress
+  const totalCompletedHours = resources.reduce((total, res) => {
+    // Assume each course is worth the hours shown in duration (e.g., "45h 30m" = 45.5 hours)
+    const durationMatch = res.duration.match(/(\d+)h\s*(\d+)?m?/);
+    if (durationMatch) {
+      const hours = parseInt(durationMatch[1]) || 0;
+      const minutes = parseInt(durationMatch[2]) || 0;
+      const totalHours = hours + (minutes / 60);
+      return total + (totalHours * res.progress / 100);
+    }
+    return total;
+  }, 0);
+
+  const completedHoursDisplay = Math.round(totalCompletedHours);
   return (
     <div className="learning-desktop-container">
       <aside className="resources-sidebar">
@@ -39,8 +53,8 @@ const LearningResources = ({ onBack }) => {
             <p>Welcome back! You have 3 courses in progress.</p>
           </div>
           <div className="header-stats">
-            <div className="stat-box"><span>12</span> Courses</div>
-            <div className="stat-box"><span>48h</span> Completed</div>
+            <div className="stat-box"><span>{resources.length}</span> Courses</div>
+            <div className="stat-box"><span>{completedHoursDisplay}h</span> Completed</div>
           </div>
         </header>
 

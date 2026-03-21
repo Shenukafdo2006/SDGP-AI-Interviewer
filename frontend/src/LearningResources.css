@@ -1,15 +1,15 @@
 .learning-desktop-container {
   display: flex;
-  background: #0B1220;
+  background: #0f172a;
   min-height: 100vh;
-  color: #fff;
+  color: #ffffff;
 }
 
 /* Sidebar Styling */
 .resources-sidebar {
   width: 260px;
-  background: #111a2a;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: #1e293b;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   padding: 30px;
   position: sticky;
   top: 0;
@@ -17,17 +17,24 @@
 }
 
 .back-nav-btn {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366F1;
-  border: none;
+  background: rgba(99, 102, 241, 0.4);
+  color: #dbeafe;
+  border: 1px solid rgba(99, 102, 241, 0.7);
   width: 100%;
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 40px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.filter-group h4 { font-size: 14px; color: #94A3B8; margin-bottom: 15px; text-transform: uppercase; }
+.back-nav-btn:hover {
+  background: rgba(99, 102, 241, 0.6);
+  color: #f0f8ff;
+  border-color: rgba(99, 102, 241, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
 .filter-group label { display: block; margin-bottom: 10px; font-size: 14px; cursor: pointer; }
 
 /* Main Content Area */
@@ -71,10 +78,10 @@
 .res-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
 
 .res-tags-row { display: flex; gap: 8px; margin: 15px 0; }
-.d-tag { background: #1E293B; color: #94A3B8; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
+.d-tag { background: #334155; color: #cbd5e1; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
 
 .res-progress-wrap { margin: 20px 0; }
-.p-bar-bg { height: 6px; background: #0B1220; border-radius: 10px; margin-top: 8px; overflow: hidden; }
+.p-bar-bg { height: 6px; background: #1e293b; border-radius: 10px; margin-top: 8px; overflow: hidden; }
 .p-bar-fill { height: 100%; transition: width 0.4s; }
 
 .d-view-btn {
