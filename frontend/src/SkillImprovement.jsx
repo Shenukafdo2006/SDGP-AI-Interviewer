@@ -127,64 +127,139 @@ const SkillImprovement = ({onBack}) => {
     total: data.total
   }));
 
+  function getGoalDescription(category) {
+    const descriptions = {
+      coding: "Complete LeetCode problems",
+      learning: "Read technical articles",
+      interview: "Practice mock interviews",
+      project: "Build side project features"
+    };
+    return descriptions[category] || `${category} tasks`;
+  }
+
+  if (loading) {
+    return (
+      <div className="learning-desktop-container">
+        <main className="resources-main" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <div>Loading progress data...</div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="learning-desktop-container">
+        <main className="resources-main" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <div style={{ color: '#ef4444' }}>{error}</div>
+        </main>
+      </div>
+    );
+  }
+
   return (
-    <div className="skill-page">
+    <div className="learning-desktop-container">
+      <aside className="resources-sidebar">
+        <button className="back-nav-btn" onClick={onBack}>← Back to Home</button>
+        <div className="filter-group">
+          <h4>Filter by Priority</h4>
+          <label><input type="checkbox" /> High Priority</label>
+          <label><input type="checkbox" /> Medium Priority</label>
+          <label><input type="checkbox" /> Low Priority</label>
+        </div>
+        <div className="filter-group">
+          <h4>Categories</h4>
+          <span className="sidebar-tag">Coding</span>
+          <span className="sidebar-tag">Interview</span>
+          <span className="sidebar-tag">Projects</span>
+        </div>
+      </aside>
 
-      <button 
-        className="back-btn" 
-        onClick={onBack}
-      >
-        ← Back Dashboard
-      </button>
-
-      <h2 className="section-title">Weekly Goals</h2>
-
-      <div className="goal-container">
-        {weeklyGoals.map((goal, idx) => {
-          const percent = (goal.current / goal.total) * 100;
-          return (
-            <div key={idx} className="goal-card">
-              <h4>{goal.category}</h4>
-              <p>{goal.goal}</p>
-
-              <div className="progress-bar small">
-                <div
-                  className="progress-fill dark"
-                  style={{ width: `${percent}%` }}
-                ></div>
-              </div>
-
-              <div className="goal-footer">
-                <span>{goal.current}/{goal.total}</span>
-                <button
-                  onClick={() => handleGoalClick(idx)}
-                  disabled={goal.current >= goal.total}
-                >
-                  Mark Done
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      <h2 className="section-title">Personalized Recommendations</h2>
-
-      <div className="recommendation-container">
-        {recommendations.map((rec, idx) => (
-          <div key={idx} className={`recommend-card ${getPriorityClass(rec.level)}`}>
-            <div className="recommend-header">
-              <h4>{rec.title}</h4>
-              <span>{rec.level}</span>
-            </div>
-            <p>{rec.desc}</p>
-            <a href={rec.link} target="_blank" rel="noopener noreferrer">
-              <button>{rec.action}</button>
-            </a>
+      <main className="resources-main">
+        <header className="desktop-header">
+          <div className="header-text">
+            <h1>Skill Improvement</h1>
+            <p>Track your progress and get personalized recommendations.</p>
           </div>
-        ))}
-      </div>
+          <div className="header-stats">
+            <div className="stat-box"><span>{goalsArray.filter(g => g.current === g.total).length}</span> Goals Completed</div>
+            <div className="stat-box"><span>{recommendations.length}</span> Recommendations</div>
+          </div>
+        </header>
 
+        <div className="skill-content">
+          <section className="skill-section">
+            <h2>Weekly Goals</h2>
+            <div className="goal-container">
+              {goalsArray.map((goal, idx) => {
+                const percent = (goal.current / goal.total) * 100;
+                return (
+                  <div key={idx} className="goal-card">
+                    <div className="goal-header">
+                      <h4>{goal.category}</h4>
+                      <span className="goal-status">{goal.current}/{goal.total} completed</span>
+                    </div>
+                    <p>{goal.goal}</p>
+
+                    <div className="res-progress-wrap">
+                      <div className="progress-label">
+                        <span>Progress</span>
+                        <span>{Math.round(percent)}%</span>
+                      </div>
+                      <div className="p-bar-bg">
+                        <div className="p-bar-fill" style={{ width: `${percent}%`, background: percent === 100 ? '#10B981' : '#6366F1' }} />
+                      </div>
+                    </div>
+
+                    <button
+                      className="goal-action-btn"
+                      onClick={() => handleGoalClick(goal.category.toLowerCase())}
+                      disabled={goal.current >= goal.total}
+                      style={{
+                        background: goal.current >= goal.total ? '#10B981' : 'rgba(99, 102, 241, 0.1)',
+                        borderColor: goal.current >= goal.total ? '#10B981' : '#6366F1',
+                        color: goal.current >= goal.total ? '#fff' : '#6366F1'
+                      }}
+                    >
+                      {goal.current >= goal.total ? '✓ Completed' : 'Mark as Done'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="skill-section">
+            <h2>Personalized Recommendations</h2>
+            <div className="recommendation-container">
+              {recommendations.map((rec, idx) => (
+                <div key={idx} className={`recommend-card ${getPriorityClass(rec.level)}`}>
+                  <div className="recommend-header">
+                    <h4>{rec.title}</h4>
+                    <span className={`priority-badge ${rec.level.toLowerCase()}`}>{rec.level}</span>
+                  </div>
+                  <p>{rec.desc}</p>
+                  <div className="recommend-action">
+                    <span className="action-text">{rec.action}</span>
+                    <a
+                      href={rec.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="recommend-btn"
+                      style={{
+                        borderColor: rec.level === 'High' ? '#ef4444' : rec.level === 'Medium' ? '#f59e0b' : '#10b981',
+                        color: rec.level === 'High' ? '#ef4444' : rec.level === 'Medium' ? '#f59e0b' : '#10b981'
+                      }}
+                    >
+                      Start Learning
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 };
