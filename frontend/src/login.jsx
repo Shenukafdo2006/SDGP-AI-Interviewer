@@ -3,17 +3,17 @@ import "./auth.css";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "./firebase";
 
-function getDisplayName(user, fallbackEmail = "") {
+function getFirstName(user, fallbackFirstName = "") {
   if (user?.displayName?.trim()) {
-    return user.displayName.trim();
+    return user.displayName.trim().split(/\s+/)[0];
+  }
+
+  if (fallbackFirstName.trim()) {
+    return fallbackFirstName.trim().split(/\s+/)[0];
   }
 
   if (user?.email?.trim()) {
     return user.email.split("@")[0];
-  }
-
-  if (fallbackEmail.trim()) {
-    return fallbackEmail.split("@")[0];
   }
 
   return "User";
@@ -39,7 +39,7 @@ export default function Login({
       const user = result.user;
       localStorage.setItem("uid", user.uid);
       localStorage.setItem("email", user.email);
-      localStorage.setItem("displayName", getDisplayName(user));
+      localStorage.setItem("firstName", getFirstName(user));
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
@@ -57,7 +57,7 @@ export default function Login({
       const user = result.user;
       localStorage.setItem("uid", user.uid);
       localStorage.setItem("email", user.email);
-      localStorage.setItem("displayName", getDisplayName(user));
+      localStorage.setItem("firstName", getFirstName(user));
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
@@ -101,7 +101,7 @@ export default function Login({
       if (data.uid) {
         localStorage.setItem("uid", data.uid);
         localStorage.setItem("email", email);
-        localStorage.setItem("displayName", getDisplayName(null, email));
+        localStorage.setItem("firstName", getFirstName(null, data.firstName));
       }
 
       setLoading(false);
