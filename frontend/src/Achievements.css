@@ -14,25 +14,31 @@ html, body, #root {
 }
 
 .ach-back-btn-wrap {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .ach-back-btn {
   background-color: #6366f1;
   color: white;
-  padding: 6px 12px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color 0.2s, transform 0.15s;
 }
 
 .ach-back-btn:hover {
   background-color: #4f46e5;
+  transform: translateY(-1px);
 }
 
-/* ── Page ── */
+.ach-back-btn:active {
+  transform: translateY(0);
+}
+
 .ach-page {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #080b14;
@@ -42,64 +48,66 @@ html, body, #root {
   min-height: 100vh;
   width: 100%;
   color: #e2e8f0;
-  padding: 36px 28px 60px;
+  padding: 48px 32px 72px;
   overflow-x: hidden;
 }
 
-/* ── Header ── */
 .ach-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 
 .ach-header h1 {
   font-family: 'Outfit', sans-serif;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.8px;
   background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 6px;
+  margin: 0 0 8px;
+  line-height: 1.1;
 }
 
 .ach-header p {
-  font-size: 13px;
-  color: #475569;
+  font-size: 14px;
+  color: #3f4f65;
+  margin: 0;
+  letter-spacing: 0.01em;
 }
 
-/* ── Stats Row ── */
 .ach-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
 .ach-stat-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
-  padding: 20px 12px;
+  border-radius: 20px;
+  padding: 24px 16px;
   text-align: center;
-  transition: border-color 0.3s, transform 0.25s;
+  transition: border-color 0.3s, transform 0.25s, background 0.3s;
 }
 
 .ach-stat-card:hover {
   border-color: rgba(255, 255, 255, 0.13);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
 }
 
 .ach-stat-icon {
-  font-size: 22px;
+  font-size: 24px;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .ach-stat-value {
   font-family: 'Outfit', sans-serif;
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 800;
   color: #fff;
   display: block;
@@ -113,21 +121,20 @@ html, body, #root {
 
 .ach-stat-label {
   font-size: 10px;
-  color: #475569;
+  color: #3f4f65;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  font-weight: 500;
-  margin-top: 5px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-top: 7px;
   display: block;
 }
 
-/* ── XP Card ── */
 .ach-xp-card {
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 20px;
-  padding: 22px 24px;
-  margin-bottom: 32px;
+  border-radius: 24px;
+  padding: 28px 28px 24px;
+  margin-bottom: 40px;
   position: relative;
   overflow: hidden;
 }
@@ -137,42 +144,42 @@ html, body, #root {
   position: absolute;
   top: -60px;
   right: -60px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .ach-xp-top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .ach-xp-emoji {
-  width: 50px;
-  height: 50px;
+  width: 54px;
+  height: 54px;
   background: rgba(99, 102, 241, 0.12);
   border: 1px solid rgba(99, 102, 241, 0.28);
-  border-radius: 14px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 24px;
   flex-shrink: 0;
 }
 
 .ach-xp-level {
   font-family: 'Outfit', sans-serif;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 800;
   color: #fff;
   display: inline-block;
+  letter-spacing: -0.3px;
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
 }
 
-/* Level number pops on level-up */
 .ach-xp-level.level-up {
   transform: scale(1.35);
   color: #a5b4fc;
@@ -180,15 +187,15 @@ html, body, #root {
 
 .ach-xp-title {
   font-size: 12px;
-  color: #475569;
-  margin-top: 2px;
+  color: #3f4f65;
+  margin-top: 3px;
+  letter-spacing: 0.01em;
 }
 
-/* ── XP Bar ── */
 .ach-xp-bar-wrap {
   background: rgba(255, 255, 255, 0.06);
   border-radius: 99px;
-  height: 7px;
+  height: 8px;
   overflow: hidden;
   position: relative;
 }
@@ -197,25 +204,22 @@ html, body, #root {
   height: 100%;
   border-radius: 99px;
   background: linear-gradient(90deg, #6366f1 0%, #a855f7 60%, #c084fc 100%);
-  /* 0.7s fill → matches JS timeout so bar fully fills before reset */
   transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
-/* Glowing tip on the bar */
 .ach-xp-bar-fill::after {
   content: '';
   position: absolute;
   right: -1px;
   top: 0;
-  width: 8px;
+  width: 10px;
   height: 100%;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 99px;
   filter: blur(3px);
 }
 
-/* Shimmer sweep animation on fill */
 @keyframes xp-shimmer {
   0%   { left: -60%; }
   100% { left: 120%; }
@@ -229,24 +233,24 @@ html, body, #root {
   width: 40%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-  animation: xp-shimmer 1.4s ease infinite;
+  animation: xp-shimmer 1.6s ease infinite;
   border-radius: 99px;
 }
 
 .ach-xp-numbers {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
+  margin-top: 10px;
   font-size: 11px;
-  color: #475569;
+  color: #3f4f65;
+  letter-spacing: 0.02em;
 }
 
 .xp-highlight {
   color: #a5b4fc;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* ── Level Up Toast ── */
 @keyframes toast-in-out {
   0%   { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.88); }
   18%  { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1.04); }
@@ -257,17 +261,17 @@ html, body, #root {
 
 .level-up-toast {
   position: fixed;
-  bottom: 36px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, rgba(99,102,241,0.92), rgba(168,85,247,0.92));
+  background: linear-gradient(135deg, rgba(99,102,241,0.94), rgba(168,85,247,0.94));
   color: #fff;
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  padding: 11px 26px;
+  padding: 12px 28px;
   border-radius: 99px;
-  box-shadow: 0 4px 28px rgba(99,102,241,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset;
+  box-shadow: 0 6px 32px rgba(99,102,241,0.45), 0 0 0 1px rgba(255,255,255,0.1) inset;
   pointer-events: none;
   z-index: 9999;
   white-space: nowrap;
@@ -275,18 +279,17 @@ html, body, #root {
   animation: toast-in-out 0.7s ease forwards;
 }
 
-/* ── Section Title ── */
 .ach-section-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #334155;
-  margin-bottom: 14px;
+  letter-spacing: 0.14em;
+  color: #2d3d52;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .ach-section-title::after {
@@ -296,17 +299,15 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* ── Grid — always 3 columns ── */
 .ach-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 16px;
 }
 
-/* ── Card ── */
 .ach-card {
-  border-radius: 18px;
-  padding: 22px 16px 16px;
+  border-radius: 22px;
+  padding: 26px 18px 18px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -323,7 +324,7 @@ html, body, #root {
 }
 
 .ach-card.locked:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   border-color: rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
 }
@@ -331,7 +332,7 @@ html, body, #root {
 .ach-card.unlocked {
   background: var(--c-bg);
   border: 1px solid var(--c-border);
-  box-shadow: 0 0 30px var(--c-glow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 36px var(--c-glow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .ach-card.unlocked::before {
@@ -347,7 +348,7 @@ html, body, #root {
 
 @keyframes pop-in {
   0%   { transform: scale(0.88); opacity: 0.5; }
-  65%  { transform: scale(1.04); }
+  65%  { transform: scale(1.05); }
   100% { transform: scale(1);    opacity: 1; }
 }
 
@@ -356,14 +357,14 @@ html, body, #root {
 }
 
 .ach-card-icon-wrap {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  margin-bottom: 12px;
+  font-size: 28px;
+  margin-bottom: 14px;
   position: relative;
   z-index: 1;
   transition: transform 0.3s, background 0.3s, border-color 0.3s;
@@ -382,10 +383,11 @@ html, body, #root {
   font-weight: 700;
   font-size: 13px;
   color: #cbd5e1;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   position: relative;
   z-index: 1;
   transition: color 0.3s;
+  letter-spacing: -0.1px;
 }
 
 .ach-card.unlocked .ach-card-name {
@@ -394,9 +396,9 @@ html, body, #root {
 
 .ach-card-desc {
   font-size: 11px;
-  color: #334155;
-  line-height: 1.55;
-  margin-bottom: 12px;
+  color: #2d3d52;
+  line-height: 1.6;
+  margin-bottom: 14px;
   position: relative;
   z-index: 1;
   flex: 1;
@@ -404,24 +406,23 @@ html, body, #root {
 }
 
 .ach-card.unlocked .ach-card-desc {
-  color: #64748b;
+  color: #4e6280;
 }
 
 .ach-card-xp {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   position: relative;
   z-index: 1;
   transition: color 0.3s;
 }
 
-/* ── Button ── */
 .ach-unlock-btn {
   width: 100%;
-  padding: 9px 0;
-  border-radius: 10px;
+  padding: 10px 0;
+  border-radius: 12px;
   border: 1px solid transparent;
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
@@ -439,7 +440,7 @@ html, body, #root {
 
 .ach-unlock-btn.btn-locked {
   background: rgba(255, 255, 255, 0.05);
-  color: #475569;
+  color: #3f4f65;
   border-color: rgba(255, 255, 255, 0.07);
 }
 
@@ -447,6 +448,7 @@ html, body, #root {
   background: rgba(255, 255, 255, 0.09);
   color: #94a3b8;
   border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
 }
 
 .ach-unlock-btn.btn-unlocked {
@@ -454,24 +456,24 @@ html, body, #root {
   color: #fff;
   border-color: var(--c-border);
   cursor: default;
-  box-shadow: 0 2px 14px var(--c-glow);
+  box-shadow: 0 2px 16px var(--c-glow);
 }
 
-/* ── Loading ── */
 .ach-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  gap: 16px;
-  color: #334155;
+  gap: 18px;
+  color: #2d3d52;
   font-size: 13px;
+  letter-spacing: 0.02em;
 }
 
 .ach-spinner {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border: 2px solid rgba(99, 102, 241, 0.2);
   border-top-color: #6366f1;
   border-radius: 50%;
@@ -482,14 +484,18 @@ html, body, #root {
   to { transform: rotate(360deg); }
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
-  .ach-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ach-page { padding: 36px 20px 60px; }
+  .ach-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
 
 @media (max-width: 480px) {
-  .ach-page       { padding: 24px 16px 48px; }
-  .ach-stats-row  { gap: 8px; }
-  .ach-stat-value { font-size: 24px; }
+  .ach-page       { padding: 28px 16px 52px; }
+  .ach-header h1  { font-size: 26px; }
+  .ach-stats-row  { gap: 10px; }
+  .ach-stat-card  { padding: 18px 12px; }
+  .ach-stat-value { font-size: 28px; }
   .ach-grid       { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .ach-xp-card    { padding: 22px 20px 20px; }
+  .ach-card       { padding: 22px 14px 14px; }
 }
