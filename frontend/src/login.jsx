@@ -3,6 +3,22 @@ import "./auth.css";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "./firebase";
 
+function getDisplayName(user, fallbackEmail = "") {
+  if (user?.displayName?.trim()) {
+    return user.displayName.trim();
+  }
+
+  if (user?.email?.trim()) {
+    return user.email.split("@")[0];
+  }
+
+  if (fallbackEmail.trim()) {
+    return fallbackEmail.split("@")[0];
+  }
+
+  return "User";
+}
+
 export default function Login({
   onGoToSignup = () => {},
   onLoginSuccess = () => {},
@@ -23,6 +39,7 @@ export default function Login({
       const user = result.user;
       localStorage.setItem("uid", user.uid);
       localStorage.setItem("email", user.email);
+      localStorage.setItem("displayName", getDisplayName(user));
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
@@ -40,6 +57,7 @@ export default function Login({
       const user = result.user;
       localStorage.setItem("uid", user.uid);
       localStorage.setItem("email", user.email);
+      localStorage.setItem("displayName", getDisplayName(user));
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
@@ -83,6 +101,7 @@ export default function Login({
       if (data.uid) {
         localStorage.setItem("uid", data.uid);
         localStorage.setItem("email", email);
+        localStorage.setItem("displayName", getDisplayName(null, email));
       }
 
       setLoading(false);

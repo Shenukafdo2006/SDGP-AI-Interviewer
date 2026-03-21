@@ -16,6 +16,11 @@ function NavItem({ children, onClick }) {
 
 function DashBoard({ setView }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const username =
+    localStorage.getItem("displayName") ||
+    localStorage.getItem("email")?.split("@")[0] ||
+    "User";
+  const avatarInitial = username.charAt(0).toUpperCase();
 
   return (
     <div className="dashboard-page">
@@ -25,17 +30,17 @@ function DashBoard({ setView }) {
           <div className="logo-circle">REVOLVE</div>
         </div>
         <div className="profile">
-          <div className="avatar">U</div>
-          <div className="username">User</div>
+          <div className="avatar">{avatarInitial}</div>
+          <div className="username">{username}</div>
         </div>
       </header>
 
       <div className={`layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <aside className="sidebar">
           <div className="sidebar-top">
-            <div className="avatar-lg">U</div>
+            <div className="avatar-lg">{avatarInitial}</div>
             <div className="user-info">
-              <div className="name">Welcome, User</div>
+              <div className="name">Welcome, {username}</div>
               <div className="role">SDE Candidate</div>
             </div>
           </div>
@@ -57,7 +62,7 @@ function DashBoard({ setView }) {
         <main className="container">
           <section className="hero card">
             <div className="hero-left">
-              <h1>Welcome Back, User!</h1>
+              <h1>Welcome Back, {username}!</h1>
               <p className="next">Next: Technical Round - SDE Role</p>
               <div className="progress-wrap">
                 <div className="progress-label">Overall Progress</div>

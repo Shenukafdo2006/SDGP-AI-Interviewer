@@ -3,6 +3,15 @@ import userEvent from "@testing-library/user-event";
 import DashBoard from "./DashBoard";
 
 describe("DashBoard", () => {
+  test("shows the stored username in the dashboard header", () => {
+    localStorage.setItem("displayName", "Shenuka");
+
+    render(<DashBoard setView={vi.fn()} />);
+
+    expect(screen.getByText("Shenuka")).toBeInTheDocument();
+    expect(screen.getByText("Welcome Back, Shenuka!")).toBeInTheDocument();
+  });
+
   test("opens the training view from the hero button", async () => {
     const setView = vi.fn();
 
@@ -33,5 +42,9 @@ describe("DashBoard", () => {
     expect(setView).toHaveBeenCalledWith("training");
     expect(setView).toHaveBeenCalledWith("quiz");
     expect(setView).toHaveBeenCalledWith("cv-maker");
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 });
