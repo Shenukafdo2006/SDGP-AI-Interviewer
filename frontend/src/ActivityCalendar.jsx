@@ -3,12 +3,6 @@ import './ActivityCalendar.css';
 import { collection, addDoc, onSnapshot, query, where, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 
-const stats = [
-  { label: 'Active Days', value: 7 },
-  { label: 'Activities Complete', value: 6 },
-  { label: 'Day Streak', value: 8 },
-];
-
 const eventColors = {
   Interview: 'interview',
   Quiz: 'quiz',
@@ -30,8 +24,8 @@ function formatDisplayDate(dateStr) {
 }
 
 const ActivityCalendar = ({ onBack = () => {} }) => {
-  const [month, setMonth] = useState(10);
-  const [year, setYear] = useState(2024);
+  const [month, setMonth] = useState(new Date().getMonth());
+  const [year, setYear] = useState(new Date().getFullYear());
   const [events, setEvents] = useState([]);
   const [savedDates, setSavedDates] = useState([]);
   const [bookedMsg, setBookedMsg] = useState('');
@@ -39,7 +33,6 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
 
   const uid = localStorage.getItem('uid');
 
-  // Load saved dates
   useEffect(() => {
     if (!uid) return;
     const q = query(collection(db, 'savedDates'), where('uid', '==', uid));
@@ -51,7 +44,6 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
     return unsub;
   }, [uid]);
 
-  // Load events
   useEffect(() => {
     if (!uid) return;
     const q = query(collection(db, 'calendarEvents'), where('uid', '==', uid));
@@ -72,8 +64,8 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
     if (bookedDateSet.has(dateStr)) {
-      setMsgType('error');
-      setBookedMsg(`Already booked: ${formatDisplayDate(dateStr)}`);
+      setMsgType('info');
+      setBookedMsg(`Date Booked: ${formatDisplayDate(dateStr)}`);
       setTimeout(() => setBookedMsg(''), 3000);
       return;
     }
@@ -119,7 +111,6 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
 
   return (
     <div className="activity-calendar-page">
-      {/* Back button */}
       <div className="calendar-back-btn-wrap">
         <button className="calendar-back-btn" onClick={onBack}>
           ← Back to Dashboard
@@ -128,12 +119,10 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
 
       <div className="calendar-left">
         <div className="stats-row">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="stat-card">
-              <span className="stat-value">{stat.value}</span>
-              {stat.label}
-            </div>
-          ))}
+          <div className="stat-card">
+            <span className="stat-value">{savedDates.length}</span>
+            Days Booked
+          </div>
         </div>
 
         <div className="calendar-card">
@@ -151,9 +140,9 @@ const ActivityCalendar = ({ onBack = () => {} }) => {
               padding: '6px 0',
               fontWeight: 600,
               fontSize: '0.9rem',
-              color: msgType === 'success' ? '#22c55e' : '#ef4444'
+              color: msgType === 'error' ? '#ef4444' : '#22c55e'
             }}>
-              {msgType === 'success' ? '✅' : '❌'} {bookedMsg}
+              {msgType === 'error' ? '❌' : '✅'} {bookedMsg}
             </div>
           )}
 
