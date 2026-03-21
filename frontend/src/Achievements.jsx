@@ -35,7 +35,7 @@ function hexAlpha(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-const Achievements = () => {
+const Achievements = ({ onBack }) => {
   const [userId]       = useState(() => generateUserId());
   const [achievements, setAchievements] = useState(defaultAchievements);
   const [xp,           setXp]           = useState(initialXp);
@@ -124,49 +124,69 @@ const Achievements = () => {
   ];
 
   return (
-    <div className="ach-page">
-      <div className="ach-header">
-        <h1>Your Achievements</h1>
-        <p>{unlockedCount} of {achievements.length} unlocked</p>
-      </div>
+    <div className="learning-desktop-container">
+      <aside className="resources-sidebar">
+        <button className="back-nav-btn" onClick={onBack}>← Back to Home</button>
+        <div className="filter-group">
+          <h4>Filter by Status</h4>
+          <label><input type="checkbox" /> Unlocked</label>
+          <label><input type="checkbox" /> Locked</label>
+        </div>
+        <div className="filter-group">
+          <h4>Categories</h4>
+          <span className="sidebar-tag">Interview</span>
+          <span className="sidebar-tag">Learning</span>
+          <span className="sidebar-tag">Progress</span>
+        </div>
+      </aside>
 
-      {/* Save status */}
-      {saveStatus === "saving" && (
-        <div style={{ textAlign: "center", color: "#60a5fa", marginBottom: 12, fontSize: 12 }}>
-          💾 Saving achievement...
-        </div>
-      )}
-      {saveStatus === "saved" && (
-        <div style={{ textAlign: "center", color: "#34d399", marginBottom: 12, fontSize: 12 }}>
-          ✅ Saved to Firebase!
-        </div>
-      )}
-      {saveStatus === "error" && (
-        <div style={{ textAlign: "center", color: "#f87171", marginBottom: 12, fontSize: 12 }}>
-          ⚠️ Could not save — check your connection.
-        </div>
-      )}
-
-      {/* Stats row */}
-      <div className="ach-stats-row">
-        {stats.map((stat, idx) => (
-          <div key={idx} className="ach-stat-card">
-            <span className="ach-stat-icon">{stat.icon}</span>
-            <span className={`ach-stat-value${stat.label === "Achievements" && bumpAch ? " bump" : ""}${stat.label === "Level" && levelUpAnim ? " bump" : ""}`}>
-              {stat.value}
-            </span>
-            <span className="ach-stat-label">{stat.label}</span>
+      <main className="resources-main">
+        <header className="desktop-header">
+          <div className="header-text">
+            <h1>Achievements</h1>
+            <p>Track your progress and unlock rewards for your learning journey.</p>
           </div>
-        ))}
-      </div>
+          <div className="header-stats">
+            <div className="stat-box"><span>{unlockedCount}</span> Unlocked</div>
+            <div className="stat-box"><span>{xp.level}</span> Level</div>
+          </div>
+        </header>
 
-      {/* XP card */}
-      <div className="ach-xp-card">
-        <div className="ach-xp-top">
-          <div className="ach-xp-emoji">{xp.icon}</div>
-          <div>
-            <div className={`ach-xp-level${levelUpAnim ? " level-up" : ""}`}>
-              Level {xp.level}
+        <div className="achievements-content">
+          {/* Save status */}
+          {saveStatus === "saving" && (
+            <div className="save-status saving">
+              💾 Saving achievement...
+            </div>
+          )}
+          {saveStatus === "saved" && (
+            <div className="save-status saved">
+              ✅ Saved to Firebase!
+            </div>
+          )}
+          {saveStatus === "error" && (
+            <div className="save-status error">
+              ⚠️ Could not save — check your connection.
+            </div>
+          )}
+
+          {/* XP card */}
+          <div className="ach-xp-card">
+            <div className="ach-xp-top">
+              <div className="ach-xp-emoji">{xp.icon}</div>
+              <div>
+                <div className={`ach-xp-level${levelUpAnim ? " level-up" : ""}`}>
+                  Level {xp.level}
+                </div>
+                <div className="ach-xp-title">{xp.title}</div>
+              </div>
+            </div>
+            <div className="ach-xp-bar-wrap">
+              <div className="ach-xp-bar-fill" style={{ width: `${xpPct}%` }} />
+            </div>
+            <div className="ach-xp-numbers">
+              <span>{xp.current} XP earned</span>
+              <span className="xp-highlight">{xp.total - xp.current} XP to next level</span>
             </div>
             <div className="ach-xp-title">{xp.title}</div>
           </div>
