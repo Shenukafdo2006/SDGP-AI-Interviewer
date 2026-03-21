@@ -29,7 +29,7 @@ function formatDisplayDate(dateStr) {
   return d.toLocaleString('default', { month: 'short', day: 'numeric' });
 }
 
-const ActivityCalendar = () => {
+const ActivityCalendar = ({ onBack = () => {} }) => {
   const [month, setMonth] = useState(10);
   const [year, setYear] = useState(2024);
   const [events, setEvents] = useState([]);
@@ -39,36 +39,23 @@ const ActivityCalendar = () => {
 
   const uid = localStorage.getItem('uid');
 
-  // Load saved dates — no orderBy so no index needed
+  // Load saved dates
   useEffect(() => {
     if (!uid) return;
-    const q = query(
-      collection(db, 'savedDates'),
-      where('uid', '==', uid)
-    );
-    const unsub = onSnapshot(q,
-      (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        // sort by date string client-side
-        docs.sort((a, b) => a.date.localeCompare(b.date));
-        setSavedDates(docs);
-      },
-      (err) => console.error('savedDates error:', err)
-    );
+    const q = query(collection(db, 'savedDates'), where('uid', '==', uid));
+    const unsub = onSnapshot(q, snap => {
+      const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      docs.sort((a, b) => a.date.localeCompare(b.date));
+      setSavedDates(docs);
+    }, err => console.error('savedDates error:', err));
     return unsub;
   }, [uid]);
 
-  // Load calendar dot events
+  // Load events
   useEffect(() => {
     if (!uid) return;
-    const q = query(
-      collection(db, 'calendarEvents'),
-      where('uid', '==', uid)
-    );
-    const unsub = onSnapshot(q,
-      (snap) => setEvents(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
-      (err) => console.error('calendarEvents error:', err)
-    );
+    const q = query(collection(db, 'calendarEvents'), where('uid', '==', uid));
+    const unsub = onSnapshot(q, snap => setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() }))), err => console.error('calendarEvents error:', err));
     return unsub;
   }, [uid]);
 
@@ -132,6 +119,13 @@ const ActivityCalendar = () => {
 
   return (
     <div className="activity-calendar-page">
+      {/* Back button */}
+      <div className="calendar-back-btn-wrap">
+        <button className="calendar-back-btn" onClick={onBack}>
+          ← Back to Dashboard
+        </button>
+      </div>
+
       <div className="calendar-left">
         <div className="stats-row">
           {stats.map((stat, idx) => (

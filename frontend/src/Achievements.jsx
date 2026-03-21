@@ -16,7 +16,6 @@ const defaultAchievements = [
   { name: "Perfect Score",    desc: "Get 90%+ on 10 interviews",           color: "#34d399", icon: "⭐", xp: 90,  unlocked: false },
 ];
 
-// XP required per level is always 100
 const XP_PER_LEVEL = 100;
 
 const initialXp = {
@@ -35,7 +34,7 @@ function hexAlpha(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-const Achievements = () => {
+const Achievements = ({ onBack = () => {} }) => {
   const [userId]       = useState(() => generateUserId());
   const [achievements, setAchievements] = useState(defaultAchievements);
   const [xp,           setXp]           = useState(initialXp);
@@ -47,17 +46,9 @@ const Achievements = () => {
   const clickAchievement = async (ach) => {
     if (ach.unlocked) return;
 
-    // ── XP Logic ──────────────────────────────────────────────────────────
-    // Each achievement fills the bar to 100% then resets and levels up.
-    // We animate: first fill bar to 100%, then after short delay reset to 0
-    // and increment level.
-
     const newLevel = xp.level + 1;
-
-    // Step 1: animate bar filling to 100%
     setXp((prev) => ({ ...prev, current: XP_PER_LEVEL }));
 
-    // Step 2: after fill animation, level up and reset bar
     setTimeout(() => {
       setXp({
         level:   newLevel,
@@ -68,18 +59,16 @@ const Achievements = () => {
       });
       setLevelUpAnim(true);
       setTimeout(() => setLevelUpAnim(false), 700);
-    }, 700); // matches CSS transition duration
+    }, 700);
 
-    // ── UI updates ────────────────────────────────────────────────────────
     setAchievements((prev) =>
       prev.map((a) => (a.name === ach.name ? { ...a, unlocked: true } : a))
     );
     setBumpAch(true);
     setJustUnlocked(ach.name);
-    setTimeout(() => setBumpAch(false),     500);
+    setTimeout(() => setBumpAch(false), 500);
     setTimeout(() => setJustUnlocked(null), 450);
 
-    // ── Save to Firebase ──────────────────────────────────────────────────
     setSaveStatus("saving");
     try {
       const ref  = doc(db, "achievements", userId);
@@ -125,6 +114,13 @@ const Achievements = () => {
 
   return (
     <div className="ach-page">
+      {/* Back button */}
+      <div className="ach-back-btn-wrap">
+        <button className="ach-back-btn" onClick={onBack}>
+          ← Back to Dashboard
+        </button>
+      </div>
+
       <div className="ach-header">
         <h1>Your Achievements</h1>
         <p>{unlockedCount} of {achievements.length} unlocked</p>
