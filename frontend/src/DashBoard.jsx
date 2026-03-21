@@ -17,7 +17,7 @@ function NavItem({ children, onClick }) {
 
 
 function DashBoard({ setView }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [progress, setProgress] = useState(0);
   const [badges, setBadges] = useState([]);
   const [strength, setStrength] = useState("Developing Skills");
@@ -124,7 +124,7 @@ function DashBoard({ setView }) {
       </header>
 
       <div className={`layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
-        <aside className="sidebar">
+        <aside className="sidebar" aria-hidden={!sidebarOpen}>
           <div className="sidebar-top">
             <div className="avatar-lg">{avatarInitial}</div>
             <div className="user-info">
