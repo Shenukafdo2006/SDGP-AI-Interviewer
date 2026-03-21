@@ -1,5 +1,7 @@
 import "./DashBoard.css";
 import { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
 import InterviewTraining from "./InterviewTraining";
 // Placeholder imports for new pages
@@ -17,6 +19,7 @@ function NavItem({ children, onClick }) {
 function DashBoard({ setView }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [badges, setBadges] = useState([]);
   const username =
     localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
@@ -60,6 +63,37 @@ function DashBoard({ setView }) {
 
     loadProgress();
   }, [uid]);
+
+  useEffect(() => {
+    const loadAchievements = async () => {
+      try {
+        const achievementsUserId = localStorage.getItem("achievementsUserId");
+        if (!achievementsUserId) {
+          setBadges([]);
+          return;
+        }
+
+        const achievementRef = doc(db, "achievements", achievementsUserId);
+        const achievementSnap = await getDoc(achievementRef);
+
+        if (!achievementSnap.exists()) {
+          setBadges([]);
+          return;
+        }
+
+        const data = achievementSnap.data();
+        const unlockedBadges = (data.unlockedNames || [])
+          .slice(0, 3)
+          .map((achievementName) => achievementName);
+
+        setBadges(unlockedBadges);
+      } catch (error) {
+        console.error("Failed to load dashboard achievements:", error);
+      }
+    };
+
+    loadAchievements();
+  }, []);
 
   return (
     <div className="dashboard-page">
@@ -129,9 +163,13 @@ function DashBoard({ setView }) {
               <div className="meta">
                 <h3>Achievements</h3>
                 <div className="badges">
-                  <span className="badge">DS</span>
-                  <span className="badge">Algo</span>
-                  <span className="badge">Sys</span>
+                  {badges.length > 0 ? (
+                    badges.map((badge) => (
+                      <span key={badge} className="badge">{badge}</span>
+                    ))
+                  ) : (
+                    <span className="badge">No Achievements</span>
+                  )}
                 </div>
               </div>
             </div>
