@@ -2,10 +2,15 @@ import React from 'react';
 import './LearningResources.css';
 
 const resources = [
-  { id: 1, title: 'Complete Web Development Bootcamp', provider: 'Online Academy', tags: ['HTML', 'React', 'Node'], level: 'Beginner', rating: 4.8, progress: 65, color: "#6366F1", duration: "45h 30m", link: "#" },
-  { id: 2, title: 'Advanced React Patterns', provider: 'React Masters', tags: ['React', 'TypeScript'], level: 'Advanced', rating: 4.9, progress: 30, color: "#8B5CF6", duration: "12h 15m", link: "#" },
-  { id: 3, title: 'System Design Interview Prep', provider: 'Tech Pro', tags: ['Cloud', 'Architecture'], level: 'Intermediate', rating: 4.7, progress: 10, color: "#10B981", duration: "20h 00m", link: "#" },
-  { id: 4, title: 'UI/UX Principles for Devs', provider: 'Design School', tags: ['Figma', 'CSS'], level: 'Beginner', rating: 4.6, progress: 0, color: "#F59E0B", duration: "08h 45m", link: "#" },
+  { id: 1, title: 'W3Schools - Learn Web Development', provider: 'W3Schools', tags: ['HTML', 'CSS', 'JavaScript'], level: 'Beginner', rating: 4.5, progress: 0, color: "#04AA6D", duration: "Self-Paced", link: "https://www.w3schools.com/" },
+  { id: 2, title: 'freeCodeCamp - Complete Courses', provider: 'freeCodeCamp', tags: ['Web Dev', 'Python', 'JavaScript'], level: 'Beginner', rating: 4.9, progress: 0, color: "#2563EB", duration: "Self-Paced", link: "https://www.freecodecamp.org/" },
+  { id: 3, title: 'SoloLearn - Interactive Learning', provider: 'SoloLearn', tags: ['JavaScript', 'Python', 'C++'], level: 'Beginner', rating: 4.7, progress: 0, color: "#13C44E", duration: "Self-Paced", link: "https://www.sololearn.com/" },
+  { id: 4, title: 'Programiz - Learn Programming', provider: 'Programiz', tags: ['Java', 'Python', 'C'], level: 'Beginner', rating: 4.6, progress: 0, color: "#E34C26", duration: "Self-Paced", link: "https://www.programiz.com/" },
+  { id: 5, title: 'Mozilla Developer Network', provider: 'Mozilla', tags: ['Web Standards', 'JavaScript', 'CSS'], level: 'Intermediate', rating: 4.8, progress: 0, color: "#FF9500", duration: "Self-Paced", link: "https://developer.mozilla.org/" },
+  { id: 6, title: 'GeeksforGeeks - Programming Tutorials', provider: 'GeeksforGeeks', tags: ['Algorithms', 'Data Structures', 'Java'], level: 'Intermediate', rating: 4.7, progress: 0, color: "#0F9D58", duration: "Self-Paced", link: "https://www.geeksforgeeks.org/" },
+  { id: 7, title: 'Codecademy - Interactive Coding', provider: 'Codecademy', tags: ['Python', 'JavaScript', 'SQL'], level: 'Beginner', rating: 4.6, progress: 0, color: "#FF6B35", duration: "Self-Paced", link: "https://www.codecademy.com/" },
+  { id: 8, title: 'Khan Academy - Computer Science', provider: 'Khan Academy', tags: ['Python', 'JavaScript', 'Algorithms'], level: 'Beginner', rating: 4.8, progress: 0, color: "#14B866", duration: "Self-Paced", link: "https://www.khanacademy.org/computing" },
+  { id: 9, title: 'LeetCode - Coding Interview Prep', provider: 'LeetCode', tags: ['Algorithms', 'Data Structures', 'Interview'], level: 'Advanced', rating: 4.9, progress: 0, color: "#FFA116", duration: "Self-Paced", link: "https://leetcode.com/" },
 ];
 
 const LearningResources = ({ onBack }) => {
@@ -66,6 +71,8 @@ const LearningResources = ({ onBack }) => {
                   className="d-view-btn"
                   style={{ borderColor: res.color, color: res.color }}
                   href={res.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {res.progress > 0 ? 'Continue' : 'Start Course'}
                 </a>
