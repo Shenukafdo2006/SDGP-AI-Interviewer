@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
 const cvRoutes = require("./routes/cvRoutes");
+const skillImprovementRoutes = require("./routes/skillImprovementRoutes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/interview", aiInterviewRoutes);
 app.use("/api/cv", cvRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/skills", skillImprovementRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
