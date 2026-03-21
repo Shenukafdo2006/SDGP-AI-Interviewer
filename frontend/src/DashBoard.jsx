@@ -1,5 +1,5 @@
 import "./DashBoard.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import InterviewTraining from "./InterviewTraining";
 // Placeholder imports for new pages
@@ -16,12 +16,50 @@ function NavItem({ children, onClick }) {
 
 function DashBoard({ setView }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
   const username =
     localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
     localStorage.getItem("email")?.split("@")[0] ||
     "User";
   const avatarInitial = username.charAt(0).toUpperCase();
+  const uid = localStorage.getItem("uid");
+
+  useEffect(() => {
+    if (!uid) {
+      return;
+    }
+
+    const loadProgress = async () => {
+      try {
+        const response = await fetch(`/api/skills/progress?uid=${uid}`);
+        if (!response.ok) {
+          throw new Error(`Progress request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        const goals = Object.values(data.goals || {});
+        const totals = goals.reduce(
+          (acc, goal) => {
+            acc.current += goal.current || 0;
+            acc.total += goal.total || 0;
+            return acc;
+          },
+          { current: 0, total: 0 },
+        );
+
+        const nextProgress = totals.total > 0
+          ? Math.round((totals.current / totals.total) * 100)
+          : 0;
+
+        setProgress(nextProgress);
+      } catch (error) {
+        console.error("Failed to load dashboard progress:", error);
+      }
+    };
+
+    loadProgress();
+  }, [uid]);
 
   return (
     <div className="dashboard-page">
@@ -67,8 +105,8 @@ function DashBoard({ setView }) {
               <p className="next">Next: Technical Round - SDE Role</p>
               <div className="progress-wrap">
                 <div className="progress-label">Overall Progress</div>
-                <div className="progress-bar" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100">
-                  <div className="progress-fill" style={{ width: '78%' }}></div>
+                <div className="progress-bar" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+                  <div className="progress-fill" style={{ width: `${progress}%` }}></div>
                 </div>
               </div>
             </div>
@@ -82,7 +120,7 @@ function DashBoard({ setView }) {
               <div className="icon">📈</div>
               <div className="meta">
                 <h3>Progress</h3>
-                <p className="sub">78% Complete</p>
+                <p className="sub">{progress}% Complete</p>
               </div>
             </div>
 
