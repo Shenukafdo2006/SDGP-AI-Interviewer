@@ -188,57 +188,62 @@ const Achievements = ({ onBack }) => {
               <span>{xp.current} XP earned</span>
               <span className="xp-highlight">{xp.total - xp.current} XP to next level</span>
             </div>
-            <div className="ach-xp-title">{xp.title}</div>
           </div>
-        </div>
-        <div className="ach-xp-bar-wrap">
-          <div className="ach-xp-bar-fill" style={{ width: `${xpPct}%` }} />
-        </div>
-        <div className="ach-xp-numbers">
-          <span>{xp.current} XP earned</span>
-          <span className="xp-highlight">{xp.total - xp.current} XP to next level</span>
-        </div>
-      </div>
 
-      {/* Level up flash */}
-      {levelUpAnim && (
-        <div className="level-up-toast">
-          ⚡ Level Up! You reached Level {xp.level}
-        </div>
-      )}
-
-      {/* Achievements grid */}
-      <div className="ach-section-title">Achievements</div>
-      <div className="ach-grid">
-        {achievements.map((ach, idx) => (
-          <div
-            key={idx}
-            className={`ach-card ${ach.unlocked ? "unlocked" : "locked"} ${justUnlocked === ach.name ? "just-unlocked" : ""}`}
-            style={{
-              "--c-bg":      hexAlpha(ach.color, 0.08),
-              "--c-border":  hexAlpha(ach.color, 0.35),
-              "--c-glow":    hexAlpha(ach.color, 0.14),
-              "--c-icon-bg": hexAlpha(ach.color, 0.2),
-              "--c-btn-bg":  `linear-gradient(135deg, ${hexAlpha(ach.color, 0.85)}, ${ach.color})`,
-            }}
-            onClick={() => clickAchievement(ach)}
-          >
-            <div className="ach-card-icon-wrap">{ach.icon}</div>
-            <div className="ach-card-name">{ach.name}</div>
-            <div className="ach-card-desc">{ach.desc}</div>
-            <div className="ach-card-xp" style={{ color: ach.unlocked ? ach.color : "#334155" }}>
-              +{ach.xp} XP
+          {/* Level up flash */}
+          {levelUpAnim && (
+            <div className="level-up-toast">
+              ⚡ Level Up! You reached Level {xp.level}
             </div>
-            <button
-              className={`ach-unlock-btn ${ach.unlocked ? "btn-unlocked" : "btn-locked"}`}
-              onClick={(e) => { e.stopPropagation(); clickAchievement(ach); }}
-              disabled={ach.unlocked}
-            >
-              {ach.unlocked ? <><span>✦</span> Unlocked</> : <><span>🔒</span> Locked</>}
-            </button>
+          )}
+
+          {/* Stats row */}
+          <div className="ach-stats-row">
+            {stats.map((stat, idx) => (
+              <div key={idx} className="ach-stat-card">
+                <span className="ach-stat-icon">{stat.icon}</span>
+                <span className={`ach-stat-value${stat.label === "Achievements" && bumpAch ? " bump" : ""}${stat.label === "Level" && levelUpAnim ? " bump" : ""}`}>
+                  {stat.value}
+                </span>
+                <span className="ach-stat-label">{stat.label}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+
+          {/* Achievements grid */}
+          <div className="ach-section-title">Achievements</div>
+          <div className="ach-grid">
+            {achievements.map((ach, idx) => (
+              <div
+                key={idx}
+                className={`ach-card ${ach.unlocked ? "unlocked" : "locked"} ${justUnlocked === ach.name ? "just-unlocked" : ""}`}
+                style={{
+                  "--c-bg":      hexAlpha(ach.color, 0.08),
+                  "--c-border":  hexAlpha(ach.color, 0.35),
+                  "--c-glow":    hexAlpha(ach.color, 0.14),
+                  "--c-icon-bg": hexAlpha(ach.color, 0.2),
+                  "--c-btn-bg":  `linear-gradient(135deg, ${hexAlpha(ach.color, 0.85)}, ${ach.color})`,
+                }}
+                onClick={() => clickAchievement(ach)}
+              >
+                <div className="ach-card-icon-wrap">{ach.icon}</div>
+                <div className="ach-card-name">{ach.name}</div>
+                <div className="ach-card-desc">{ach.desc}</div>
+                <div className="ach-card-xp" style={{ color: ach.unlocked ? ach.color : "#cbd5e1" }}>
+                  +{ach.xp} XP
+                </div>
+                <button
+                  className={`ach-unlock-btn ${ach.unlocked ? "btn-unlocked" : "btn-locked"}`}
+                  onClick={(e) => { e.stopPropagation(); clickAchievement(ach); }}
+                  disabled={ach.unlocked}
+                >
+                  {ach.unlocked ? <><span>✦</span> Unlocked</> : <><span>🔒</span> Locked</>}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
