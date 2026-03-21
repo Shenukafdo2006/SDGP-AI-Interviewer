@@ -87,13 +87,12 @@ function DashBoard({ setView }) {
   useEffect(() => {
     const loadAchievements = async () => {
       try {
-        const achievementsUserId = localStorage.getItem("achievementsUserId");
-        if (!achievementsUserId) {
+        if (!uid) {
           setBadges([]);
           return;
         }
 
-        const achievementRef = doc(db, "achievements", achievementsUserId);
+        const achievementRef = doc(db, "achievements", uid);
         const achievementSnap = await getDoc(achievementRef);
 
         if (!achievementSnap.exists()) {
@@ -103,7 +102,6 @@ function DashBoard({ setView }) {
 
         const data = achievementSnap.data();
         const unlockedBadges = (data.unlockedNames || [])
-          .slice(0, 3)
           .map((achievementName) => achievementName);
 
         setBadges(unlockedBadges);
@@ -113,7 +111,7 @@ function DashBoard({ setView }) {
     };
 
     loadAchievements();
-  }, []);
+  }, [uid]);
 
   return (
     <div className="dashboard-page">
