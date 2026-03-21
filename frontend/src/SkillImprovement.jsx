@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./skillimprovement.css";
+import { getUserProgress, updateGoalProgress } from "./api/skillApi";
 
 const weeklyGoalsData = [
   { category: "Coding", goal: "Complete 5 LeetCode problems", current: 3, total: 5 },
@@ -54,17 +55,62 @@ const recommendations = [
 ];
 
 const SkillImprovement = ({onBack}) => {
+  const [weeklyGoals, setWeeklyGoals] = useState({
+    coding: { current: 0, total: 5 },
+    learning: { current: 0, total: 2 },
+    interview: { current: 0, total: 1 },
+    project: { current: 0, total: 1 }
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [weeklyGoals, setWeeklyGoals] = useState(weeklyGoalsData);
+  const uid = localStorage.getItem('uid');
 
-  const handleGoalClick = (idx) => {
-    setWeeklyGoals(
-      weeklyGoals.map((goal, i) =>
-        i === idx && goal.current < goal.total
-          ? { ...goal, current: goal.current + 1 }
-          : goal
-      )
-    );
+  // Fetch user progress on component mount
+  useEffect(() => {
+    if (uid) {
+      fetchUserProgress();
+    } else {
+      setLoading(false);
+    }
+  }, [uid]);
+
+  const fetchUserProgress = async () => {
+    try {
+      setLoading(true);
+      const data = await getUserProgress(uid);
+      if (data.goals) {
+        setWeeklyGoals(data.goals);
+      }
+    } catch (err) {
+      console.error('Error fetching progress:', err);
+      setError('Failed to load progress data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateGoalProgressAPI = async (category, newCurrent) => {
+    try {
+      const data = await updateGoalProgress({
+        uid,
+        category,
+        current: newCurrent
+      });
+      if (data.goals) {
+        setWeeklyGoals(data.goals);
+      }
+    } catch (err) {
+      console.error('Error updating goal:', err);
+      setError('Failed to update goal progress');
+    }
+  };
+
+  const handleGoalClick = (category) => {
+    const currentGoal = weeklyGoals[category];
+    if (currentGoal.current < currentGoal.total) {
+      updateGoalProgressAPI(category, currentGoal.current + 1);
+    }
   };
 
   const getPriorityClass = (level) => {
@@ -73,9 +119,13 @@ const SkillImprovement = ({onBack}) => {
     return "priority-low";
   };
 
-  const goBack = () => {
-    window.history.back();
-  };
+  // Convert goals object to array for rendering
+  const goalsArray = Object.entries(weeklyGoals).map(([category, data]) => ({
+    category: category.charAt(0).toUpperCase() + category.slice(1),
+    goal: getGoalDescription(category),
+    current: data.current,
+    total: data.total
+  }));
 
   return (
     <div className="skill-page">
