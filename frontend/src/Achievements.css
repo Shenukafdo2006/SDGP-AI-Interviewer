@@ -47,29 +47,16 @@ html, body, #root {
 }
 
 @keyframes toast-in-out {
-  0%   { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.84); }
-  16%  { opacity: 1; transform: translateX(-50%) translateY(-3px) scale(1.06); }
-  26%  { transform: translateX(-50%) translateY(0) scale(1); }
-  76%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.93); }
+  0%   { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.9); }
+  18%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  78%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.96); }
 }
 
 @keyframes pop-in {
-  0%   { transform: scale(0.82); opacity: 0.4; }
-  60%  { transform: scale(1.07); }
-  80%  { transform: scale(0.97); }
+  0%   { transform: scale(0.88); opacity: 0.5; }
+  65%  { transform: scale(1.04); }
   100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes float-y {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-5px); }
-}
-
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.5); }
-  70%  { box-shadow: 0 0 0 14px rgba(99,102,241,0); }
-  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
 }
 
 @keyframes gradient-shift {
@@ -78,26 +65,19 @@ html, body, #root {
   100% { background-position: 0% 50%; }
 }
 
-@keyframes aurora {
-  0%, 100% { opacity: 0.18; transform: scale(1) rotate(0deg); }
-  33%       { opacity: 0.28; transform: scale(1.1) rotate(3deg); }
-  66%       { opacity: 0.14; transform: scale(0.95) rotate(-2deg); }
-}
-
 @keyframes border-glow-pulse {
-  0%, 100% { border-color: var(--c-border); box-shadow: 0 0 36px var(--c-glow); }
-  50%       { border-color: rgba(255,255,255,0.22); box-shadow: 0 0 56px var(--c-glow), 0 0 0 1px rgba(255,255,255,0.06) inset; }
+  0%, 100% { box-shadow: 0 0 36px var(--c-glow); }
+  50%       { box-shadow: 0 0 52px var(--c-glow); }
 }
 
 @keyframes stat-count-bump {
   0%   { transform: scale(1); }
-  40%  { transform: scale(1.48) translateY(-3px); color: #a5b4fc; }
-  70%  { transform: scale(0.95); }
+  40%  { transform: scale(1.35) translateY(-2px); color: #a5b4fc; }
   100% { transform: scale(1); }
 }
 
 @keyframes section-reveal {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -112,34 +92,23 @@ html, body, #root {
 
 @keyframes lock-icon-shake {
   0%, 100% { transform: rotate(0deg); }
-  20%  { transform: rotate(-8deg); }
-  40%  { transform: rotate(8deg); }
-  60%  { transform: rotate(-5deg); }
-  80%  { transform: rotate(5deg); }
+  25%  { transform: rotate(-6deg); }
+  75%  { transform: rotate(6deg); }
 }
 
-@keyframes noise-drift {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-2px, 2px); }
-  50%  { transform: translate(2px, -2px); }
-  75%  { transform: translate(-1px, -1px); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes particle-float {
-  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0.6; }
-  33%  { transform: translateY(-12px) translateX(4px) scale(1.1); opacity: 1; }
-  66%  { transform: translateY(-6px) translateX(-3px) scale(0.9); opacity: 0.7; }
-  100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.6; }
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.45); }
+  70%  { box-shadow: 0 0 0 12px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
 }
 
 .ach-page {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--surface-0);
   background-image:
-    radial-gradient(ellipse 90% 45% at 50% -8%, rgba(99,102,241,0.22) 0%, transparent 62%),
-    radial-gradient(ellipse 50% 35% at 88% 88%, rgba(168,85,247,0.14) 0%, transparent 52%),
-    radial-gradient(ellipse 35% 25% at 8% 80%, rgba(99,102,241,0.08) 0%, transparent 50%);
+    radial-gradient(ellipse 90% 45% at 50% -8%, rgba(99,102,241,0.20) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 35% at 88% 88%, rgba(168,85,247,0.12) 0%, transparent 52%),
+    radial-gradient(ellipse 35% 25% at 8% 80%, rgba(99,102,241,0.07) 0%, transparent 50%);
   min-height: 100vh;
   width: 100%;
   color: var(--text-primary);
@@ -157,8 +126,7 @@ html, body, #root {
   background-size: 180px;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.5;
-  animation: noise-drift 8s steps(4) infinite;
+  opacity: 0.4;
 }
 
 .ach-page::after {
@@ -168,10 +136,9 @@ html, body, #root {
   left: 20%;
   width: 60%;
   height: 60%;
-  background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(99,102,241,0.10) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
-  animation: aurora 12s ease-in-out infinite;
 }
 
 .ach-page > * {
@@ -193,8 +160,8 @@ html, body, #root {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.03em;
-  transition: transform 0.2s var(--ease-spring), box-shadow 0.25s var(--ease-smooth), filter 0.2s;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.35), 0 0 0 1px rgba(255,255,255,0.08) inset;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.22s var(--ease-smooth);
+  box-shadow: 0 4px 18px rgba(99,102,241,0.32), 0 0 0 1px rgba(255,255,255,0.08) inset;
   position: relative;
   overflow: hidden;
 }
@@ -203,15 +170,14 @@ html, body, #root {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.2s;
 }
 
 .ach-back-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.12) inset;
-  filter: brightness(1.1);
+  box-shadow: 0 8px 28px rgba(99,102,241,0.45), 0 0 0 1px rgba(255,255,255,0.12) inset;
 }
 
 .ach-back-btn:hover::before {
@@ -220,13 +186,12 @@ html, body, #root {
 
 .ach-back-btn:active {
   transform: translateY(0) scale(0.97);
-  box-shadow: 0 2px 10px rgba(99,102,241,0.35);
 }
 
 .ach-header {
   text-align: center;
   margin-bottom: 48px;
-  animation: section-reveal 0.6s var(--ease-out) both;
+  animation: section-reveal 0.5s var(--ease-out) both;
 }
 
 .ach-header h1 {
@@ -241,7 +206,7 @@ html, body, #root {
   background-clip: text;
   margin: 0 0 10px;
   line-height: 1.08;
-  animation: gradient-shift 5s ease infinite;
+  animation: gradient-shift 6s ease infinite;
 }
 
 .ach-header p {
@@ -257,7 +222,7 @@ html, body, #root {
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
   margin-bottom: 22px;
-  animation: section-reveal 0.6s 0.1s var(--ease-out) both;
+  animation: section-reveal 0.5s 0.08s var(--ease-out) both;
 }
 
 .ach-stat-card {
@@ -266,42 +231,24 @@ html, body, #root {
   border-radius: var(--radius-md);
   padding: 28px 16px 22px;
   text-align: center;
-  transition: border-color 0.35s, transform 0.3s var(--ease-spring), background 0.35s, box-shadow 0.35s;
+  transition: border-color 0.3s, transform 0.28s var(--ease-spring), background 0.3s, box-shadow 0.3s;
   position: relative;
   overflow: hidden;
   cursor: default;
 }
 
-.ach-stat-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 0deg, transparent 0deg, rgba(99,102,241,0.06) 60deg, transparent 120deg);
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-}
-
 .ach-stat-card:hover {
   border-color: var(--border-mid);
   background: var(--surface-2);
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
-}
-
-.ach-stat-card:hover::before {
-  opacity: 1;
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.05) inset;
 }
 
 .ach-stat-icon {
   font-size: 26px;
   display: block;
   margin-bottom: 12px;
-  filter: drop-shadow(0 0 8px rgba(99,102,241,0.4));
-  animation: float-y 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(99,102,241,0.35));
 }
 
 .ach-stat-value {
@@ -312,11 +259,11 @@ html, body, #root {
   display: block;
   line-height: 1;
   letter-spacing: -1px;
-  text-shadow: 0 0 30px rgba(99,102,241,0.4);
+  text-shadow: 0 0 24px rgba(99,102,241,0.35);
 }
 
 .ach-stat-value.bump {
-  animation: stat-count-bump 0.5s var(--ease-spring);
+  animation: stat-count-bump 0.45s var(--ease-spring);
 }
 
 .ach-stat-label {
@@ -337,13 +284,13 @@ html, body, #root {
   margin-bottom: 48px;
   position: relative;
   overflow: hidden;
-  animation: section-reveal 0.6s 0.2s var(--ease-out) both;
-  transition: border-color 0.35s, box-shadow 0.35s;
+  animation: section-reveal 0.5s 0.15s var(--ease-out) both;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .ach-xp-card:hover {
   border-color: var(--border-mid);
-  box-shadow: 0 0 60px rgba(99,102,241,0.08), 0 20px 50px rgba(0,0,0,0.2);
+  box-shadow: 0 0 48px rgba(99,102,241,0.07), 0 18px 44px rgba(0,0,0,0.18);
 }
 
 .ach-xp-card::before {
@@ -351,11 +298,10 @@ html, body, #root {
   position: absolute;
   top: -80px;
   right: -80px;
-  width: 260px;
-  height: 260px;
-  background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 70%);
   pointer-events: none;
-  animation: aurora 8s ease-in-out infinite;
 }
 
 .ach-xp-card::after {
@@ -365,7 +311,7 @@ html, body, #root {
   left: -40px;
   width: 180px;
   height: 180px;
-  background: radial-gradient(circle, rgba(168,85,247,0.10) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -388,13 +334,12 @@ html, body, #root {
   font-size: 26px;
   flex-shrink: 0;
   position: relative;
-  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
-  animation: float-y 4s ease-in-out infinite;
+  transition: transform 0.28s var(--ease-spring), box-shadow 0.28s;
 }
 
 .ach-xp-emoji:hover {
-  transform: scale(1.12) rotate(-4deg);
-  box-shadow: 0 0 24px rgba(99,102,241,0.4);
+  transform: scale(1.1) rotate(-3deg);
+  box-shadow: 0 0 20px rgba(99,102,241,0.35);
 }
 
 .ach-xp-level {
@@ -404,14 +349,14 @@ html, body, #root {
   color: #fff;
   display: inline-block;
   letter-spacing: -0.5px;
-  transition: transform 0.4s var(--ease-spring), color 0.3s;
-  text-shadow: 0 0 20px rgba(99,102,241,0.5);
+  transition: transform 0.35s var(--ease-spring), color 0.3s;
+  text-shadow: 0 0 18px rgba(99,102,241,0.45);
 }
 
 .ach-xp-level.level-up {
-  transform: scale(1.4) translateY(-2px);
+  transform: scale(1.35) translateY(-2px);
   color: #a5b4fc;
-  animation: pulse-ring 0.8s ease-out;
+  animation: pulse-ring 0.7s ease-out;
 }
 
 .ach-xp-title {
@@ -436,7 +381,7 @@ html, body, #root {
   border-radius: 99px;
   background: linear-gradient(90deg, var(--indigo) 0%, var(--purple) 55%, var(--purple-soft) 100%);
   background-size: 200% 100%;
-  animation: gradient-shift 3s ease infinite, xp-bar-entrance 1s var(--ease-smooth) both;
+  animation: gradient-shift 4s ease infinite, xp-bar-entrance 0.9s var(--ease-smooth) both;
   position: relative;
   transition: width 0.85s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -448,7 +393,7 @@ html, body, #root {
   top: -2px;
   bottom: -2px;
   width: 14px;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.8);
   border-radius: 99px;
   filter: blur(4px);
 }
@@ -460,8 +405,8 @@ html, body, #root {
   left: -80%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-  animation: xp-shimmer 2s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: xp-shimmer 2.8s ease-in-out infinite;
   border-radius: 99px;
 }
 
@@ -478,7 +423,7 @@ html, body, #root {
 .xp-highlight {
   color: #a5b4fc;
   font-weight: 700;
-  text-shadow: 0 0 12px rgba(165,180,252,0.4);
+  text-shadow: 0 0 10px rgba(165,180,252,0.35);
 }
 
 .level-up-toast {
@@ -493,16 +438,13 @@ html, body, #root {
   font-weight: 800;
   padding: 14px 32px;
   border-radius: 99px;
-  box-shadow:
-    0 8px 40px rgba(99,102,241,0.55),
-    0 0 0 1px rgba(255,255,255,0.12) inset,
-    0 0 60px rgba(168,85,247,0.25);
+  box-shadow: 0 8px 36px rgba(99,102,241,0.5), 0 0 0 1px rgba(255,255,255,0.12) inset;
   pointer-events: none;
   z-index: 9999;
   white-space: nowrap;
   letter-spacing: -0.3px;
   animation: toast-in-out 3s var(--ease-smooth) forwards;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
 }
 
 .ach-section-title {
@@ -516,7 +458,7 @@ html, body, #root {
   display: flex;
   align-items: center;
   gap: 14px;
-  animation: section-reveal 0.6s 0.25s var(--ease-out) both;
+  animation: section-reveal 0.5s 0.2s var(--ease-out) both;
 }
 
 .ach-section-title::after {
@@ -530,7 +472,7 @@ html, body, #root {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  animation: section-reveal 0.6s 0.3s var(--ease-out) both;
+  animation: section-reveal 0.5s 0.25s var(--ease-out) both;
 }
 
 .ach-card {
@@ -539,30 +481,12 @@ html, body, #root {
   text-align: center;
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s var(--ease-spring), box-shadow 0.35s, border-color 0.35s;
+  transition: transform 0.28s var(--ease-spring), box-shadow 0.3s, border-color 0.3s;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
   isolation: isolate;
-}
-
-.ach-card::after {
-  content: '';
-  position: absolute;
-  top: -60%;
-  left: -60%;
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s, transform 0.4s;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.ach-card:hover::after {
-  opacity: 1;
 }
 
 .ach-card.locked {
@@ -571,21 +495,21 @@ html, body, #root {
 }
 
 .ach-card.locked:hover {
-  transform: translateY(-6px) scale(1.01);
+  transform: translateY(-5px) scale(1.01);
   border-color: var(--border-mid);
   background: var(--surface-2);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  box-shadow: 0 14px 42px rgba(0,0,0,0.28);
 }
 
 .ach-card.locked:hover .ach-card-icon-wrap {
-  animation: lock-icon-shake 0.5s ease;
+  animation: lock-icon-shake 0.4s ease;
 }
 
 .ach-card.unlocked {
   background: var(--c-bg);
   border: 1px solid var(--c-border);
-  box-shadow: 0 0 48px var(--c-glow), inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.2);
-  animation: border-glow-pulse 3s ease-in-out infinite;
+  box-shadow: 0 0 40px var(--c-glow), inset 0 1px 0 rgba(255,255,255,0.07);
+  animation: border-glow-pulse 4s ease-in-out infinite;
 }
 
 .ach-card.unlocked::before {
@@ -595,19 +519,19 @@ html, body, #root {
   left: -80%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%);
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.05) 50%, transparent 65%);
   pointer-events: none;
-  animation: shimmer-card 4s ease-in-out infinite;
+  animation: shimmer-card 5s ease-in-out infinite;
   z-index: 1;
 }
 
 .ach-card.unlocked:hover {
-  transform: translateY(-7px) scale(1.02);
-  box-shadow: 0 0 70px var(--c-glow), 0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 0 60px var(--c-glow), 0 18px 44px rgba(0,0,0,0.3);
 }
 
 .ach-card.just-unlocked {
-  animation: pop-in 0.55s var(--ease-spring);
+  animation: pop-in 0.5s var(--ease-spring);
 }
 
 .ach-card-icon-wrap {
@@ -621,7 +545,7 @@ html, body, #root {
   margin-bottom: 16px;
   position: relative;
   z-index: 2;
-  transition: transform 0.35s var(--ease-spring), background 0.35s, border-color 0.35s, box-shadow 0.35s;
+  transition: transform 0.3s var(--ease-spring), background 0.3s, border-color 0.3s, box-shadow 0.3s;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.07);
 }
@@ -629,13 +553,12 @@ html, body, #root {
 .ach-card.unlocked .ach-card-icon-wrap {
   background: var(--c-icon-bg);
   border-color: var(--c-border);
-  transform: scale(1.12);
-  box-shadow: 0 0 24px var(--c-glow);
-  animation: float-y 3.5s ease-in-out infinite;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--c-glow);
 }
 
 .ach-card.unlocked:hover .ach-card-icon-wrap {
-  transform: scale(1.22) rotate(-5deg);
+  transform: scale(1.18) rotate(-4deg);
 }
 
 .ach-card-name {
@@ -652,7 +575,7 @@ html, body, #root {
 
 .ach-card.unlocked .ach-card-name {
   color: #fff;
-  text-shadow: 0 0 16px rgba(255,255,255,0.2);
+  text-shadow: 0 0 14px rgba(255,255,255,0.18);
 }
 
 .ach-card-desc {
@@ -691,7 +614,7 @@ html, body, #root {
   font-weight: 700;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: all 0.28s var(--ease-smooth);
+  transition: all 0.25s var(--ease-smooth);
   position: relative;
   z-index: 2;
   display: flex;
@@ -705,9 +628,9 @@ html, body, #root {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 60%);
   opacity: 0;
-  transition: opacity 0.25s;
+  transition: opacity 0.22s;
 }
 
 .ach-unlock-btn.btn-locked {
@@ -721,7 +644,7 @@ html, body, #root {
   color: var(--text-secondary);
   border-color: var(--border-mid);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
 }
 
 .ach-unlock-btn.btn-locked:hover::before {
@@ -733,7 +656,7 @@ html, body, #root {
   color: #fff;
   border-color: var(--c-border);
   cursor: default;
-  box-shadow: 0 4px 20px var(--c-glow);
+  box-shadow: 0 4px 18px var(--c-glow);
   font-weight: 800;
 }
 
@@ -759,10 +682,10 @@ html, body, #root {
   height: 36px;
   border: 2px solid rgba(99,102,241,0.15);
   border-top-color: var(--indigo);
-  border-right-color: rgba(168,85,247,0.5);
+  border-right-color: rgba(168,85,247,0.45);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  box-shadow: 0 0 20px rgba(99,102,241,0.2);
+  animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 16px rgba(99,102,241,0.18);
 }
 
 @media (max-width: 768px) {
