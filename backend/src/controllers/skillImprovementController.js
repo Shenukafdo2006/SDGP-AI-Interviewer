@@ -1,4 +1,4 @@
-const { db } = require("../config/firebase-interview");
+const { db } = require("../firebase");
 
 // In-memory storage for demo purposes (replace with Firebase when permissions are fixed)
 let userProgressStore = {};

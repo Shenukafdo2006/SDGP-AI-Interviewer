@@ -163,7 +163,7 @@ function DashBoard({ setView }) {
           </section>
 
           <footer className="footer card">
-            <div>Need help? <a href="#">Contact Support</a></div>
+            <div>Need help? <a href="https://www.revolveinterviewer.com">Contact Support</a></div>
             <div className="small">Version 0.1</div>
           </footer>
         </main>
