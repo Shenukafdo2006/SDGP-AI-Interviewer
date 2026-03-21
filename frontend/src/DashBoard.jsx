@@ -17,6 +17,7 @@ function NavItem({ children, onClick }) {
 function DashBoard({ setView }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const username =
+    localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
     localStorage.getItem("email")?.split("@")[0] ||
     "User";
