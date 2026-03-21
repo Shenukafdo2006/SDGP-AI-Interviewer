@@ -20,6 +20,7 @@ function DashBoard({ setView }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [badges, setBadges] = useState([]);
+  const [strength, setStrength] = useState("Developing Skills");
   const username =
     localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
@@ -42,6 +43,12 @@ function DashBoard({ setView }) {
 
         const data = await response.json();
         const goals = Object.values(data.goals || {});
+        const strengthLabels = {
+          coding: "Problem Solving",
+          learning: "Technical Learning",
+          interview: "Interview Readiness",
+          project: "Project Building",
+        };
         const totals = goals.reduce(
           (acc, goal) => {
             acc.current += goal.current || 0;
@@ -56,6 +63,14 @@ function DashBoard({ setView }) {
           : 0;
 
         setProgress(nextProgress);
+
+        const strongestCategory = Object.entries(data.goals || {}).sort(([, goalA], [, goalB]) => {
+          const ratioA = (goalA.current || 0) / (goalA.total || 1);
+          const ratioB = (goalB.current || 0) / (goalB.total || 1);
+          return ratioB - ratioA;
+        })[0]?.[0];
+
+        setStrength(strengthLabels[strongestCategory] || "Developing Skills");
       } catch (error) {
         console.error("Failed to load dashboard progress:", error);
       }
@@ -178,7 +193,7 @@ function DashBoard({ setView }) {
               <div className="icon">💡</div>
               <div className="meta">
                 <h3>Strengths</h3>
-                <p className="sub">Data Structures</p>
+                <p className="sub">{strength}</p>
               </div>
             </div>
 
