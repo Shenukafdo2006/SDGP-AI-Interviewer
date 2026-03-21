@@ -21,6 +21,7 @@ function DashBoard({ setView }) {
   const [progress, setProgress] = useState(0);
   const [badges, setBadges] = useState([]);
   const [strength, setStrength] = useState("Developing Skills");
+  const [focusArea, setFocusArea] = useState("Growth Opportunities");
   const username =
     localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
@@ -64,13 +65,17 @@ function DashBoard({ setView }) {
 
         setProgress(nextProgress);
 
-        const strongestCategory = Object.entries(data.goals || {}).sort(([, goalA], [, goalB]) => {
+        const sortedGoals = Object.entries(data.goals || {}).sort(([, goalA], [, goalB]) => {
           const ratioA = (goalA.current || 0) / (goalA.total || 1);
           const ratioB = (goalB.current || 0) / (goalB.total || 1);
           return ratioB - ratioA;
-        })[0]?.[0];
+        });
+
+        const strongestCategory = sortedGoals[0]?.[0];
+        const weakestCategory = sortedGoals.at(-1)?.[0];
 
         setStrength(strengthLabels[strongestCategory] || "Developing Skills");
+        setFocusArea(strengthLabels[weakestCategory] || "Growth Opportunities");
       } catch (error) {
         console.error("Failed to load dashboard progress:", error);
       }
@@ -201,7 +206,7 @@ function DashBoard({ setView }) {
               <div className="icon">🎯</div>
               <div className="meta">
                 <h3>Focus Areas</h3>
-                <p className="sub">System Design</p>
+                <p className="sub">{focusArea}</p>
               </div>
             </div>
           </section>
