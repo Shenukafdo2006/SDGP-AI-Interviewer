@@ -12,7 +12,7 @@ const defaultAchievements = [
   { name: "Perfect Score",    desc: "Get 90%+ on 10 interviews",           color: "#34d399", icon: "⭐", xp: 90,  unlocked: false },
 ];
 
-const XP_PER_LEVEL = 100;
+const TOTAL_ACHIEVEMENTS = defaultAchievements.length;
 
 function hexAlpha(hex, alpha) {
   const safeHex = hex && hex.startsWith("#") && hex.length >= 7 ? hex : "#6366f1";
@@ -22,18 +22,14 @@ function hexAlpha(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
+function getXpPct(unlockedCount) {
+  return Math.min((unlockedCount / TOTAL_ACHIEVEMENTS) * 100, 100);
+}
+
 const Achievements = ({ onBack = () => {} }) => {
-  const [userId] = useState(() => {
-    let id = localStorage.getItem("achievementsUserId");
-    if (!id) {
-      id = "user_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
-      localStorage.setItem("achievementsUserId", id);
-    }
-    return id;
-  });
+  const uid = localStorage.getItem("uid");
 
   const [achievements, setAchievements] = useState(defaultAchievements);
-  const [xp, setXp] = useState({ level: 0, current: 0, total: XP_PER_LEVEL, title: "Career Achiever", icon: "⚡" });
   const [bumpAch, setBumpAch] = useState(false);
   const [justUnlocked, setJustUnlocked] = useState(null);
   const [saveStatus, setSaveStatus] = useState(null);
@@ -41,9 +37,17 @@ const Achievements = ({ onBack = () => {} }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setAchievements(defaultAchievements);
+    setLoading(true);
+
+    if (!uid) {
+      setLoading(false);
+      return;
+    }
+
     const loadData = async () => {
       try {
-        const ref = doc(db, "achievements", userId);
+        const ref = doc(db, "achievements", uid);
         const snap = await getDoc(ref);
         if (snap.exists()) {
           const data = snap.data();
@@ -52,9 +56,8 @@ const Achievements = ({ onBack = () => {} }) => {
             ...a,
             unlocked: unlockedNames.includes(a.name),
           })));
-          if (data.xp) {
-            setXp({ ...data.xp, title: "Career Achiever", icon: "⚡" });
-          }
+        } else {
+          setAchievements(defaultAchievements.map(a => ({ ...a, unlocked: false })));
         }
       } catch (err) {
         console.error("Failed to load achievements:", err);
@@ -62,20 +65,27 @@ const Achievements = ({ onBack = () => {} }) => {
         setLoading(false);
       }
     };
+
     loadData();
-  }, [userId]);
+  }, [uid]);
+
+  const unlockedCount = achievements.filter((a) => a.unlocked).length;
+  const xpPct = getXpPct(unlockedCount);
+  const level = unlockedCount;
+  const allUnlocked = unlockedCount === TOTAL_ACHIEVEMENTS;
 
   const clickAchievement = async (ach) => {
     if (ach.unlocked) return;
 
-    const newLevel = xp.level + 1;
-    setXp((prev) => ({ ...prev, current: XP_PER_LEVEL }));
+    if (!uid) {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus(null), 3000);
+      return;
+    }
 
-    setTimeout(() => {
-      setXp({ level: newLevel, current: 0, total: XP_PER_LEVEL, title: "Career Achiever", icon: "⚡" });
-      setLevelUpAnim(true);
-      setTimeout(() => setLevelUpAnim(false), 700);
-    }, 700);
+    const newUnlockedCount = unlockedCount + 1;
+    const newLevel = newUnlockedCount;
+    const prevLevel = unlockedCount;
 
     setAchievements((prev) =>
       prev.map((a) => (a.name === ach.name ? { ...a, unlocked: true } : a))
@@ -85,18 +95,21 @@ const Achievements = ({ onBack = () => {} }) => {
     setTimeout(() => setBumpAch(false), 500);
     setTimeout(() => setJustUnlocked(null), 450);
 
+    if (newLevel > prevLevel) {
+      setLevelUpAnim(true);
+      setTimeout(() => setLevelUpAnim(false), 700);
+    }
+
     setSaveStatus("saving");
     try {
-      const ref = doc(db, "achievements", userId);
+      const ref = doc(db, "achievements", uid);
       const snap = await getDoc(ref);
-      const xpSnapshot = { level: newLevel, current: 0, total: XP_PER_LEVEL };
 
       if (!snap.exists()) {
         await setDoc(ref, {
-          userId,
+          uid,
           unlockedNames: [ach.name],
           lastUnlocked: ach.name,
-          xp: xpSnapshot,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         });
@@ -104,7 +117,6 @@ const Achievements = ({ onBack = () => {} }) => {
         await updateDoc(ref, {
           unlockedNames: arrayUnion(ach.name),
           lastUnlocked: ach.name,
-          xp: xpSnapshot,
           updatedAt: new Date().toISOString(),
         });
       }
@@ -118,18 +130,23 @@ const Achievements = ({ onBack = () => {} }) => {
     }
   };
 
-  const unlockedCount = achievements.filter((a) => a.unlocked).length;
-  const xpPct = Math.min((xp.current / xp.total) * 100, 100);
-
   const stats = [
-    { icon: "🏆", label: "Achievements", value: unlockedCount },
-    { icon: "⚡", label: "Level", value: xp.level },
+    { icon: "🏆", label: "Achievements", value: `${unlockedCount}/${TOTAL_ACHIEVEMENTS}` },
+    { icon: "⚡", label: "Level", value: level },
   ];
 
   if (loading) {
     return (
       <div className="ach-page" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
         <div style={{ color: "#94a3b8", fontSize: 18 }}>Loading achievements...</div>
+      </div>
+    );
+  }
+
+  if (!uid) {
+    return (
+      <div className="ach-page" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ color: "#f87171", fontSize: 18 }}>⚠️ Please log in to view achievements.</div>
       </div>
     );
   }
@@ -144,7 +161,7 @@ const Achievements = ({ onBack = () => {} }) => {
 
       <div className="ach-header">
         <h1>Your Achievements</h1>
-        <p>{unlockedCount} of {achievements.length} unlocked</p>
+        <p>{unlockedCount} of {TOTAL_ACHIEVEMENTS} unlocked</p>
       </div>
 
       {saveStatus === "saving" && (
@@ -159,7 +176,7 @@ const Achievements = ({ onBack = () => {} }) => {
       )}
       {saveStatus === "error" && (
         <div style={{ textAlign: "center", color: "#f87171", marginBottom: 12, fontSize: 12 }}>
-          ⚠️ Could not save — check your connection.
+          ⚠️ {!uid ? "Please log in to save." : "Could not save — check your connection."}
         </div>
       )}
 
@@ -177,26 +194,39 @@ const Achievements = ({ onBack = () => {} }) => {
 
       <div className="ach-xp-card">
         <div className="ach-xp-top">
-          <div className="ach-xp-emoji">{xp.icon}</div>
+          <div className="ach-xp-emoji">⚡</div>
           <div>
             <div className={`ach-xp-level${levelUpAnim ? " level-up" : ""}`}>
-              Level {xp.level}
+              Level {level}
             </div>
-            <div className="ach-xp-title">{xp.title}</div>
+            <div className="ach-xp-title">
+              {allUnlocked ? "🎉 Master Achiever" : "Career Achiever"}
+            </div>
           </div>
         </div>
         <div className="ach-xp-bar-wrap">
-          <div className="ach-xp-bar-fill" style={{ width: `${xpPct}%` }} />
+          <div
+            className="ach-xp-bar-fill"
+            style={{
+              width: `${xpPct}%`,
+              transition: "width 0.6s ease",
+              background: allUnlocked
+                ? "linear-gradient(90deg, #34d399, #22c55e)"
+                : undefined,
+            }}
+          />
         </div>
         <div className="ach-xp-numbers">
-          <span>{xp.current} XP earned</span>
-          <span className="xp-highlight">{xp.total - xp.current} XP to next level</span>
+          <span>{unlockedCount} / {TOTAL_ACHIEVEMENTS} achievements</span>
+          <span className="xp-highlight">
+            {allUnlocked ? "🏅 All unlocked!" : `${TOTAL_ACHIEVEMENTS - unlockedCount} remaining`}
+          </span>
         </div>
       </div>
 
       {levelUpAnim && (
         <div className="level-up-toast">
-          ⚡ Level Up! You reached Level {xp.level}
+          ⚡ Level Up! You reached Level {level}
         </div>
       )}
 
