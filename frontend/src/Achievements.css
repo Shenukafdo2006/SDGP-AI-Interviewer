@@ -1,56 +1,168 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+/* Import LearningResources styles */
+@import url('./LearningResources.css');
 
-html, body, #root {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-/* ── Page ── */
-.ach-page {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #080b14;
-  background-image:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 85% 85%, rgba(168, 85, 247, 0.10) 0%, transparent 50%);
+/* Achievements page base layout */
+.learning-desktop-container {
+  display: flex;
+  background: #0f172a;
   min-height: 100vh;
-  width: 100%;
-  color: #e2e8f0;
-  padding: 36px 28px 60px;
-  overflow-x: hidden;
+  color: #ffffff;
 }
 
-/* ── Header ── */
-.ach-header {
-  text-align: center;
-  margin-bottom: 32px;
+.resources-main {
+  flex: 1;
+  padding: 40px 60px;
 }
 
-.ach-header h1 {
-  font-family: 'Outfit', sans-serif;
+.desktop-header {
+  position: relative;
+}
+
+.resources-sidebar {
+  display: block;
+}
+
+.back-nav-btn {
+  background: rgba(99, 102, 241, 0.45);
+  color: #ffffff;
+  border: 1px solid rgba(99, 102, 241, 0.85);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: auto !important;
+  max-width: 180px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-nav-btn:hover {
+  background: rgba(99, 102, 241, 0.65);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Additional styles for Achievements */
+.achievements-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.ach-section-title {
+  color: #f8fafc;
   font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.save-status {
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.save-status.saving {
+  background: rgba(96, 165, 250, 0.15);
+  color: #dbeafe;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+}
+
+.save-status.saved {
+  background: rgba(52, 211, 153, 0.15);
+  color: #d1fae5;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+.save-status.error {
+  background: rgba(248, 113, 113, 0.15);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.4);
+}
+
+/* XP Card */
+.ach-xp-card {
+  background: #1e293b;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 24px;
+  transition: transform 0.3s;
+}
+
+.ach-xp-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
+}
+
+.ach-xp-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ach-xp-emoji {
+  font-size: 32px;
+  background: rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.6);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ach-xp-level {
+  font-size: 24px;
   font-weight: 800;
-  letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 50%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 6px;
+  color: #ffffff;
+  transition: transform 0.3s ease;
 }
 
-.ach-header p {
-  font-size: 13px;
-  color: #475569;
+.ach-xp-level.level-up {
+  transform: scale(1.1);
+  color: #fbbf24;
 }
 
-/* ── Stats Row ── */
+.ach-xp-title {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ach-xp-bar-wrap {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.ach-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366F1, #8B5CF6);
+  transition: width 0.8s ease;
+  border-radius: 10px;
+}
+
+.ach-xp-numbers {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #e2e8f0;
+}
+
+.xp-highlight {
+  color: #fcd34d;
+  font-weight: 600;
+}
+
+/* Stats Row */
 .ach-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
