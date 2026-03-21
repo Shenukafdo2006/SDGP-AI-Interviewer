@@ -17,9 +17,11 @@ function NavItem({ children, onClick }) {
 
 
 function DashBoard({ setView }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [progress, setProgress] = useState(0);
   const [badges, setBadges] = useState([]);
+  const [strength, setStrength] = useState("Developing Skills");
+  const [focusArea, setFocusArea] = useState("Growth Opportunities");
   const username =
     localStorage.getItem("firstName") ||
     localStorage.getItem("displayName") ||
@@ -42,6 +44,12 @@ function DashBoard({ setView }) {
 
         const data = await response.json();
         const goals = Object.values(data.goals || {});
+        const strengthLabels = {
+          coding: "Problem Solving",
+          learning: "Technical Learning",
+          interview: "Interview Readiness",
+          project: "Project Building",
+        };
         const totals = goals.reduce(
           (acc, goal) => {
             acc.current += goal.current || 0;
@@ -56,6 +64,18 @@ function DashBoard({ setView }) {
           : 0;
 
         setProgress(nextProgress);
+
+        const sortedGoals = Object.entries(data.goals || {}).sort(([, goalA], [, goalB]) => {
+          const ratioA = (goalA.current || 0) / (goalA.total || 1);
+          const ratioB = (goalB.current || 0) / (goalB.total || 1);
+          return ratioB - ratioA;
+        });
+
+        const strongestCategory = sortedGoals[0]?.[0];
+        const weakestCategory = sortedGoals.at(-1)?.[0];
+
+        setStrength(strengthLabels[strongestCategory] || "Developing Skills");
+        setFocusArea(strengthLabels[weakestCategory] || "Growth Opportunities");
       } catch (error) {
         console.error("Failed to load dashboard progress:", error);
       }
@@ -109,7 +129,7 @@ function DashBoard({ setView }) {
       </header>
 
       <div className={`layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
-        <aside className="sidebar">
+        <aside className="sidebar" aria-hidden={!sidebarOpen}>
           <div className="sidebar-top">
             <div className="avatar-lg">{avatarInitial}</div>
             <div className="user-info">
@@ -178,7 +198,7 @@ function DashBoard({ setView }) {
               <div className="icon">💡</div>
               <div className="meta">
                 <h3>Strengths</h3>
-                <p className="sub">Data Structures</p>
+                <p className="sub">{strength}</p>
               </div>
             </div>
 
@@ -186,7 +206,7 @@ function DashBoard({ setView }) {
               <div className="icon">🎯</div>
               <div className="meta">
                 <h3>Focus Areas</h3>
-                <p className="sub">System Design</p>
+                <p className="sub">{focusArea}</p>
               </div>
             </div>
           </section>
