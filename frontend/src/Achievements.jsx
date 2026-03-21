@@ -106,9 +106,9 @@ const Achievements = ({ onBack = () => {} }) => {
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
   const xpPct         = Math.min((xp.current / xp.total) * 100, 100);
 
+  // ✅ Removed Day Streak
   const stats = [
     { icon: "🏆", label: "Achievements", value: unlockedCount },
-    { icon: "🔥", label: "Day Streak",   value: 0 },
     { icon: "⚡",  label: "Level",       value: xp.level },
   ];
 
