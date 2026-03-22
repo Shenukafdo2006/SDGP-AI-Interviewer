@@ -12,6 +12,7 @@ const CVMaker = ({ onBack }) => {
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
+  const [isDownloading, setIsDownloading] = useState(false);
   
   // Rich text formatting states
   const [selectedText, setSelectedText] = useState("");
@@ -373,20 +374,6 @@ const CVMaker = ({ onBack }) => {
     }
   };
 
-  // Generate PDF for download
-  const handleDownloadCV = () => {
-    const cvHTML = generateCVHTML();
-    const blob = new Blob([cvHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${editingCvName.replace(/\s+/g, '_')}_CV.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   // Generate formatted CV HTML for preview and download
   const generateCVHTML = () => {
     const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim() || "Your Name";
@@ -553,6 +540,13 @@ const CVMaker = ({ onBack }) => {
             line-height: 1.5;
             font-size: 0.9rem;
           }
+          @media print {
+            body { padding: 0; background: white; }
+            .cv-container { box-shadow: none; border-radius: 0; }
+            .cv-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .cv-skill-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .cv-avatar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          }
           @media (max-width: 768px) {
             body { padding: 20px; }
             .cv-body { grid-template-columns: 1fr; gap: 20px; }
@@ -560,10 +554,6 @@ const CVMaker = ({ onBack }) => {
             .cv-right { padding-left: 0; }
             .cv-header-content { flex-direction: column; text-align: center; }
             .cv-contact-bar { flex-direction: column; gap: 10px; }
-          }
-          @media print {
-            body { padding: 0; background: white; }
-            .cv-container { box-shadow: none; }
           }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -623,7 +613,7 @@ const CVMaker = ({ onBack }) => {
               ${cvFormData.professionalSummary ? `
               <div class="cv-section">
                 <div class="cv-section-title">Professional Summary</div>
-                <div class="cv-summary-text" dangerouslySetInnerHTML={{ __html: cvFormData.professionalSummary }}></div>
+                <div class="cv-summary-text">${cvFormData.professionalSummary}</div>
               </div>
               ` : ''}
               
@@ -661,6 +651,167 @@ const CVMaker = ({ onBack }) => {
       </body>
       </html>
     `;
+  };
+
+  // Download as PDF using browser's print functionality
+  const downloadAsPDF = () => {
+    setIsDownloading(true);
+    const cvHTML = generateCVHTML();
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${editingCvName} - CV</title>
+        <style>
+          @media print {
+            body { margin: 0; padding: 0; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        ${cvHTML}
+        <div class="no-print" style="position: fixed; bottom: 20px; right: 20px; background: #4f46e5; color: white; padding: 10px 20px; border-radius: 8px; font-size: 12px;">
+          Use Ctrl+P (Cmd+P) to save as PDF
+        </div>
+        <script>
+          setTimeout(() => {
+            window.print();
+            setTimeout(() => window.close(), 1000);
+          }, 500);
+        <\/script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    setTimeout(() => {
+      setIsDownloading(false);
+    }, 2000);
+  };
+
+  // Download as DOCX using Blob
+  const downloadAsDOCX = () => {
+    setIsDownloading(true);
+    const cvHTML = generateCVHTML();
+    
+    // Create a Word-compatible HTML document
+    const docxContent = `<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>${editingCvName} - CV</title>
+      <style>
+        body {
+          font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+          margin: 40px;
+          line-height: 1.5;
+        }
+        .cv-container {
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+        .cv-header {
+          background: #1e293b;
+          padding: 30px;
+          color: white;
+          border-radius: 12px;
+        }
+        .cv-header-content {
+          display: flex;
+          align-items: center;
+          gap: 30px;
+        }
+        .cv-avatar {
+          width: 100px;
+          height: 100px;
+          background: #4f46e5;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 40px;
+          font-weight: bold;
+        }
+        .cv-name-section h1 {
+          margin: 0 0 8px 0;
+          font-size: 28px;
+        }
+        .cv-contact-bar {
+          background: #f1f5f9;
+          padding: 15px 30px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+          margin: 20px 0;
+          border-radius: 8px;
+        }
+        .cv-body {
+          display: flex;
+          gap: 40px;
+          margin-top: 20px;
+        }
+        .cv-left {
+          flex: 1;
+          border-right: 2px solid #e2e8f0;
+          padding-right: 30px;
+        }
+        .cv-right {
+          flex: 2;
+        }
+        .cv-section {
+          margin-bottom: 25px;
+        }
+        .cv-section-title {
+          font-size: 16px;
+          font-weight: bold;
+          color: #4f46e5;
+          border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 5px;
+          margin-bottom: 15px;
+        }
+        .cv-skill-badge {
+          background: #4f46e5;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 20px;
+          display: inline-block;
+          margin: 4px;
+          font-size: 12px;
+        }
+        .cv-skills-list {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .cv-info-item {
+          margin-bottom: 10px;
+        }
+        .cv-info-label {
+          font-weight: bold;
+          font-size: 11px;
+          text-transform: uppercase;
+          color: #64748b;
+        }
+      </style>
+    </head>
+    <body>
+      ${cvHTML.replace('<div class="cv-container">', '<div class="cv-container">').split('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">')[0]}
+    </body>
+    </html>`;
+    
+    const blob = new Blob([docxContent], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${editingCvName.replace(/\s+/g, '_')}_CV.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    setTimeout(() => {
+      setIsDownloading(false);
+    }, 1000);
   };
 
   // Close dropdown when clicking outside
@@ -1128,8 +1279,19 @@ ${t.sign}
                 />
               </div>
               <div className="cvmaker-modal-footer">
-                <button className="cvmaker-download-btn" onClick={handleDownloadCV}>
-                  📥 Download CV
+                <button 
+                  className="cvmaker-download-btn" 
+                  onClick={downloadAsPDF}
+                  disabled={isDownloading}
+                >
+                  {isDownloading ? '⏳ Processing...' : '📄 Download PDF'}
+                </button>
+                <button 
+                  className="cvmaker-download-btn cvmaker-docx-btn" 
+                  onClick={downloadAsDOCX}
+                  disabled={isDownloading}
+                >
+                  {isDownloading ? '⏳ Processing...' : '📝 Download DOCX'}
                 </button>
                 <button className="cvmaker-modal-close-btn" onClick={() => setShowPreviewModal(false)}>
                   Close
