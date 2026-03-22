@@ -13,6 +13,15 @@ const CVMaker = ({ onBack }) => {
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
   const [isDownloading, setIsDownloading] = useState(false);
   const [activeSection, setActiveSection] = useState("personal");
+  
+  // Design customization states
+  const [designSettings, setDesignSettings] = useState({
+    fontFamily: "Inter",
+    fontSize: "medium",
+    primaryColor: "#4f46e5",
+    layout: "modern",
+    spacing: "normal"
+  });
 
   // State for the CV Editor (Edit Mode)
   const [showEditor, setShowEditor] = useState(false);
@@ -455,7 +464,25 @@ const CVMaker = ({ onBack }) => {
     }
   };
 
-  // Generate formatted CV HTML for preview and download
+  // Apply font size class
+  const getFontSizeClass = () => {
+    switch(designSettings.fontSize) {
+      case "small": return "cvmaker-font-small";
+      case "large": return "cvmaker-font-large";
+      default: return "cvmaker-font-medium";
+    }
+  };
+
+  // Apply spacing class
+  const getSpacingClass = () => {
+    switch(designSettings.spacing) {
+      case "compact": return "cvmaker-spacing-compact";
+      case "loose": return "cvmaker-spacing-loose";
+      default: return "cvmaker-spacing-normal";
+    }
+  };
+
+  // Generate formatted CV HTML for preview and download with design settings
   const generateCVHTML = () => {
     const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim() || "Your Name";
     const headline = cvFormData.useAsHeadline && cvFormData.desiredJob ? cvFormData.desiredJob : "";
@@ -507,6 +534,54 @@ const CVMaker = ({ onBack }) => {
     const signatureHTML = additionalSections.signature ? `<div class="cv-section"><div class="cv-section-title">Signature</div><div class="cv-summary-text">${additionalSections.signature}</div></div>` : '';
     const footerHTML = additionalSections.footer ? `<div class="cv-footer">${additionalSections.footer}</div>` : '';
     
+    // Layout styles based on design settings
+    const layoutStyles = designSettings.layout === "minimal" ? `
+      .cv-header { background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); }
+      .cv-section-title { color: ${designSettings.primaryColor}; }
+      .cv-skill-badge { background: ${designSettings.primaryColor}; }
+    ` : designSettings.layout === "creative" ? `
+      .cv-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 0 0 50px 50px; }
+      .cv-section-title { color: ${designSettings.primaryColor}; border-bottom: 3px solid ${designSettings.primaryColor}; }
+      .cv-skill-badge { background: linear-gradient(135deg, ${designSettings.primaryColor}, ${designSettings.primaryColor}cc); }
+    ` : `
+      .cv-header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+      .cv-section-title { color: ${designSettings.primaryColor}; }
+      .cv-skill-badge { background: linear-gradient(135deg, ${designSettings.primaryColor}, ${designSettings.primaryColor}dd); }
+    `;
+    
+    // Font size styles
+    const fontSizeStyles = designSettings.fontSize === "small" ? `
+      body { font-size: 12px; }
+      .cv-name-section h1 { font-size: 1.8rem; }
+      .cv-section-title { font-size: 0.9rem; }
+    ` : designSettings.fontSize === "large" ? `
+      body { font-size: 16px; }
+      .cv-name-section h1 { font-size: 2.8rem; }
+      .cv-section-title { font-size: 1.1rem; }
+    ` : `
+      body { font-size: 14px; }
+      .cv-name-section h1 { font-size: 2.2rem; }
+      .cv-section-title { font-size: 1rem; }
+    `;
+    
+    // Spacing styles
+    const spacingStyles = designSettings.spacing === "compact" ? `
+      .cv-section { margin-bottom: 20px; }
+      .cv-body { padding: 25px; gap: 25px; }
+      .cv-header { padding: 25px; }
+      .cv-contact-bar { padding: 12px 25px; }
+    ` : designSettings.spacing === "loose" ? `
+      .cv-section { margin-bottom: 40px; }
+      .cv-body { padding: 50px; gap: 50px; }
+      .cv-header { padding: 50px; }
+      .cv-contact-bar { padding: 20px 50px; }
+    ` : `
+      .cv-section { margin-bottom: 30px; }
+      .cv-body { padding: 40px; gap: 40px; }
+      .cv-header { padding: 40px; }
+      .cv-contact-bar { padding: 16px 40px; }
+    `;
+    
     return `
       <!DOCTYPE html>
       <html>
@@ -516,26 +591,26 @@ const CVMaker = ({ onBack }) => {
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: '${designSettings.fontFamily}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8fafc;
             padding: 40px;
           }
           .cv-container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; }
-          .cv-header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 40px; color: white; }
+          .cv-header { padding: 40px; color: white; }
           .cv-header-content { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
-          .cv-avatar { width: 120px; height: 120px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 600; color: white; }
+          .cv-avatar { width: 120px; height: 120px; background: linear-gradient(135deg, ${designSettings.primaryColor}, ${designSettings.primaryColor}cc); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 600; color: white; }
           .cv-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-          .cv-name-section h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
+          .cv-name-section h1 { font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
           .cv-name-section .headline { font-size: 1rem; opacity: 0.8; color: #cbd5e1; }
-          .cv-contact-bar { background: #f1f5f9; padding: 16px 40px; display: flex; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid #e2e8f0; }
+          .cv-contact-bar { background: #f1f5f9; display: flex; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid #e2e8f0; }
           .cv-contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #334155; }
-          .cv-body { padding: 40px; display: grid; grid-template-columns: 1fr 2fr; gap: 40px; }
+          .cv-body { display: grid; grid-template-columns: 1fr 2fr; }
           .cv-left { border-right: 2px solid #e2e8f0; padding-right: 30px; }
           .cv-right { padding-left: 10px; }
           .cv-section { margin-bottom: 32px; }
-          .cv-section-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #4f46e5; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+          .cv-section-title { font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
           .cv-skills-list { display: flex; flex-wrap: wrap; gap: 8px; }
-          .cv-skill-badge { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; }
+          .cv-skill-badge { color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; }
           .cv-skill-item, .cv-language-item { margin-bottom: 8px; }
           .cv-skill-name, .cv-language-name { font-weight: 600; color: #1e293b; }
           .cv-skill-level, .cv-language-level { color: #64748b; font-size: 0.8rem; margin-left: 8px; }
@@ -548,6 +623,9 @@ const CVMaker = ({ onBack }) => {
           .cv-education-date, .cv-employment-date { font-size: 0.8rem; color: #64748b; margin-bottom: 8px; }
           .cv-education-description, .cv-employment-description { color: #334155; font-size: 0.85rem; line-height: 1.5; }
           .cv-footer { text-align: center; padding: 20px; background: #f1f5f9; font-size: 0.8rem; color: #64748b; }
+          ${layoutStyles}
+          ${fontSizeStyles}
+          ${spacingStyles}
           @media print {
             body { padding: 0; background: white; }
             .cv-container { box-shadow: none; border-radius: 0; }
@@ -562,7 +640,7 @@ const CVMaker = ({ onBack }) => {
             .cv-contact-bar { flex-direction: column; gap: 10px; }
           }
         </style>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=${designSettings.fontFamily.replace(' ', '+')}:wght@400;500;600;700&display=swap" rel="stylesheet">
       </head>
       <body>
         <div class="cv-container">
@@ -674,7 +752,7 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // AI-Powered CV Analysis - Empty function (no content displayed)
+  // AI-Powered CV Analysis - Empty function
   const analyzeCV = async () => {
     if (!cvContent.trim()) {
       alert("Please upload or paste your CV content first.");
@@ -698,7 +776,7 @@ const CVMaker = ({ onBack }) => {
     return { color: "#f44336", label: "Poor" };
   };
 
-  // Cover Letter Generation - Only Formal and Academic tones
+  // Cover Letter Generation
   const generateCoverLetter = () => {
     const tones = {
       formal: { 
@@ -739,6 +817,124 @@ const CVMaker = ({ onBack }) => {
     </div>
   );
 
+  // Render Design Panel
+  const renderDesignPanel = () => {
+    const fonts = ["Inter", "Arial", "Helvetica", "Georgia", "Times New Roman", "Roboto", "Open Sans"];
+    const fontSizes = [
+      { value: "small", label: "Small", icon: "A⁻" },
+      { value: "medium", label: "Medium", icon: "A" },
+      { value: "large", label: "Large", icon: "A⁺" }
+    ];
+    const layouts = [
+      { value: "modern", label: "Modern", icon: "✨" },
+      { value: "minimal", label: "Minimal", icon: "○" },
+      { value: "creative", label: "Creative", icon: "🎨" }
+    ];
+    const spacings = [
+      { value: "compact", label: "Compact", icon: "▯" },
+      { value: "normal", label: "Normal", icon: "□" },
+      { value: "loose", label: "Loose", icon: "▢" }
+    ];
+
+    return (
+      <div className="cvmaker-design-panel">
+        <div className="cvmaker-design-section">
+          <h4>Typography</h4>
+          <div className="cvmaker-design-group">
+            <label>Font Family</label>
+            <select 
+              value={designSettings.fontFamily} 
+              onChange={(e) => setDesignSettings({...designSettings, fontFamily: e.target.value})}
+              className="cvmaker-design-select"
+            >
+              {fonts.map(font => (
+                <option key={font} value={font}>{font}</option>
+              ))}
+            </select>
+          </div>
+          <div className="cvmaker-design-group">
+            <label>Font Size</label>
+            <div className="cvmaker-design-buttons">
+              {fontSizes.map(size => (
+                <button
+                  key={size.value}
+                  className={`cvmaker-design-btn ${designSettings.fontSize === size.value ? "active" : ""}`}
+                  onClick={() => setDesignSettings({...designSettings, fontSize: size.value})}
+                >
+                  <span className="cvmaker-design-btn-icon">{size.icon}</span>
+                  <span>{size.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="cvmaker-design-section">
+          <h4>Colors</h4>
+          <div className="cvmaker-design-group">
+            <label>Primary Color</label>
+            <div className="cvmaker-color-picker">
+              <input
+                type="color"
+                value={designSettings.primaryColor}
+                onChange={(e) => setDesignSettings({...designSettings, primaryColor: e.target.value})}
+                className="cvmaker-color-input"
+              />
+              <span className="cvmaker-color-value">{designSettings.primaryColor}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="cvmaker-design-section">
+          <h4>Layout</h4>
+          <div className="cvmaker-design-group">
+            <label>Style</label>
+            <div className="cvmaker-design-buttons">
+              {layouts.map(layout => (
+                <button
+                  key={layout.value}
+                  className={`cvmaker-design-btn ${designSettings.layout === layout.value ? "active" : ""}`}
+                  onClick={() => setDesignSettings({...designSettings, layout: layout.value})}
+                >
+                  <span className="cvmaker-design-btn-icon">{layout.icon}</span>
+                  <span>{layout.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="cvmaker-design-group">
+            <label>Spacing</label>
+            <div className="cvmaker-design-buttons">
+              {spacings.map(spacing => (
+                <button
+                  key={spacing.value}
+                  className={`cvmaker-design-btn ${designSettings.spacing === spacing.value ? "active" : ""}`}
+                  onClick={() => setDesignSettings({...designSettings, spacing: spacing.value})}
+                >
+                  <span className="cvmaker-design-btn-icon">{spacing.icon}</span>
+                  <span>{spacing.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="cvmaker-design-preview">
+          <h4>Live Preview</h4>
+          <div className="cvmaker-design-preview-card" style={{ fontFamily: designSettings.fontFamily }}>
+            <div className="cvmaker-preview-name" style={{ color: designSettings.primaryColor }}>
+              {cvFormData.givenName || "John"} {cvFormData.familyName || "Doe"}
+            </div>
+            <div className="cvmaker-preview-title">{cvFormData.desiredJob || "Software Engineer"}</div>
+            <div className="cvmaker-preview-badge" style={{ background: designSettings.primaryColor }}>
+              Sample Text
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // Render CV Editor (Full editor with all sections)
   const renderCVEditor = () => {
     const sections = [
@@ -776,6 +972,7 @@ const CVMaker = ({ onBack }) => {
               <button className="cvmaker-format-btn" onClick={() => applyFormatting('underline')}><u>U</u></button>
             </div>
           )}
+          {activeFormattingTab === "design" && renderDesignPanel()}
         </div>
 
         <div className="cvmaker-section-tabs">
