@@ -13,16 +13,47 @@ const CVMaker = ({ onBack }) => {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
   const [isDownloading, setIsDownloading] = useState(false);
-  
-  // Rich text formatting states
-  const [selectedText, setSelectedText] = useState("");
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
+  const [activeSection, setActiveSection] = useState("personal");
 
   // State for the CV Editor (Edit Mode)
   const [showEditor, setShowEditor] = useState(false);
   const [editingCvName, setEditingCvName] = useState("Untitled CV");
+
+  // Education entries
+  const [educationEntries, setEducationEntries] = useState([
+    { school: "", city: "", startMonth: "", startYear: "", endMonth: "", endYear: "", present: false, description: "" }
+  ]);
+
+  // Employment entries
+  const [employmentEntries, setEmploymentEntries] = useState([
+    { jobTitle: "", company: "", city: "", startMonth: "", startYear: "", endMonth: "", endYear: "", present: false, description: "" }
+  ]);
+
+  // Skills with levels
+  const [skillsEntries, setSkillsEntries] = useState([
+    { skill: "", level: "" }
+  ]);
+
+  // Languages with levels
+  const [languagesEntries, setLanguagesEntries] = useState([
+    { language: "", level: "" }
+  ]);
+
+  // Additional sections
+  const [additionalSections, setAdditionalSections] = useState({
+    profile: "",
+    courses: [],
+    internships: [],
+    extracurricular: [],
+    references: [],
+    qualities: [],
+    certificates: [],
+    achievements: [],
+    signature: "",
+    footer: "",
+    customSections: []
+  });
+
   const [cvFormData, setCvFormData] = useState({
     photo: null,
     givenName: "",
@@ -65,10 +96,6 @@ const CVMaker = ({ onBack }) => {
   
   // ── AI Generated Templates State ────────────────────────────────────────────
   const [aiGeneratedTemplates] = useState([]);
-  // eslint-disable-next-line no-empty-pattern
-  const [] = useState(false);
-  // eslint-disable-next-line no-empty-pattern
-  const [] = useState(null);
 
   // Available intern roles for dropdown
   const internRoles = [
@@ -322,29 +349,90 @@ const CVMaker = ({ onBack }) => {
   };
 
   // Handle skills array
-  const handleSkillsChange = (e) => {
-    const skillsArray = e.target.value.split(',').map(s => s.trim()).filter(s => s);
-    setCvFormData(prev => ({
-      ...prev,
-      keySkills: skillsArray
-    }));
-  };
 
   // Handle experience array
-  const handleExperienceChange = (e) => {
-    const expArray = e.target.value.split('\n').filter(line => line.trim());
-    setCvFormData(prev => ({
+
+  // Handle projects array
+
+  // Education handlers
+  const addEducation = () => {
+    setEducationEntries([...educationEntries, { school: "", city: "", startMonth: "", startYear: "", endMonth: "", endYear: "", present: false, description: "" }]);
+  };
+
+  const updateEducation = (index, field, value) => {
+    const updated = [...educationEntries];
+    updated[index][field] = value;
+    setEducationEntries(updated);
+  };
+
+  const removeEducation = (index) => {
+    setEducationEntries(educationEntries.filter((_, i) => i !== index));
+  };
+
+  // Employment handlers
+  const addEmployment = () => {
+    setEmploymentEntries([...employmentEntries, { jobTitle: "", company: "", city: "", startMonth: "", startYear: "", endMonth: "", endYear: "", present: false, description: "" }]);
+  };
+
+  const updateEmployment = (index, field, value) => {
+    const updated = [...employmentEntries];
+    updated[index][field] = value;
+    setEmploymentEntries(updated);
+  };
+
+  const removeEmployment = (index) => {
+    setEmploymentEntries(employmentEntries.filter((_, i) => i !== index));
+  };
+
+  // Skills handlers
+  const addSkill = () => {
+    setSkillsEntries([...skillsEntries, { skill: "", level: "" }]);
+  };
+
+  const updateSkill = (index, field, value) => {
+    const updated = [...skillsEntries];
+    updated[index][field] = value;
+    setSkillsEntries(updated);
+  };
+
+  const removeSkill = (index) => {
+    setSkillsEntries(skillsEntries.filter((_, i) => i !== index));
+  };
+
+  // Languages handlers
+  const addLanguage = () => {
+    setLanguagesEntries([...languagesEntries, { language: "", level: "" }]);
+  };
+
+  const updateLanguage = (index, field, value) => {
+    const updated = [...languagesEntries];
+    updated[index][field] = value;
+    setLanguagesEntries(updated);
+  };
+
+  const removeLanguage = (index) => {
+    setLanguagesEntries(languagesEntries.filter((_, i) => i !== index));
+  };
+
+  // Additional sections handlers
+  const addToArray = (section, value) => {
+    setAdditionalSections(prev => ({
       ...prev,
-      experienceHighlights: expArray
+      [section]: [...prev[section], value]
     }));
   };
 
-  // Handle projects array
-  const handleProjectsChange = (e) => {
-    const projectsArray = e.target.value.split('\n').filter(line => line.trim());
-    setCvFormData(prev => ({
+  const updateArrayItem = (section, index, value) => {
+    setAdditionalSections(prev => ({
       ...prev,
-      projects: projectsArray
+      [section]: prev[section].map((item, i) => i === index ? value : item)
+    }));
+  };
+
+  const removeArrayItem = (section, index) => {
+    setAdditionalSections(prev => ({
+      ...prev,
+      [section]: prev[section].filter((_, i) => i !== index)
     }));
   };
 
@@ -380,6 +468,52 @@ const CVMaker = ({ onBack }) => {
     const headline = cvFormData.useAsHeadline && cvFormData.desiredJob ? cvFormData.desiredJob : "";
     const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase();
     
+    // Generate education HTML
+    const educationHTML = educationEntries.filter(e => e.school).map(edu => `
+      <div class="cv-education-item">
+        <div class="cv-education-title"><strong>${edu.school}</strong> ${edu.city ? `| ${edu.city}` : ''}</div>
+        <div class="cv-education-date">${edu.startMonth ? `${edu.startMonth} ` : ''}${edu.startYear} - ${edu.present ? 'Present' : `${edu.endMonth ? `${edu.endMonth} ` : ''}${edu.endYear}`}</div>
+        <div class="cv-education-description">${edu.description}</div>
+      </div>
+    `).join('');
+    
+    // Generate employment HTML
+    const employmentHTML = employmentEntries.filter(e => e.jobTitle).map(emp => `
+      <div class="cv-employment-item">
+        <div class="cv-employment-title"><strong>${emp.jobTitle}</strong> at ${emp.company} ${emp.city ? `| ${emp.city}` : ''}</div>
+        <div class="cv-employment-date">${emp.startMonth ? `${emp.startMonth} ` : ''}${emp.startYear} - ${emp.present ? 'Present' : `${emp.endMonth ? `${emp.endMonth} ` : ''}${emp.endYear}`}</div>
+        <div class="cv-employment-description">${emp.description}</div>
+      </div>
+    `).join('');
+    
+    // Generate skills HTML
+    const skillsHTML = skillsEntries.filter(s => s.skill).map(skill => `
+      <div class="cv-skill-item">
+        <span class="cv-skill-name">${skill.skill}</span>
+        ${skill.level ? `<span class="cv-skill-level">(${skill.level})</span>` : ''}
+      </div>
+    `).join('');
+    
+    // Generate languages HTML
+    const languagesHTML = languagesEntries.filter(l => l.language).map(lang => `
+      <div class="cv-language-item">
+        <span class="cv-language-name">${lang.language}</span>
+        ${lang.level ? `<span class="cv-language-level">(${lang.level})</span>` : ''}
+      </div>
+    `).join('');
+    
+    // Generate additional sections HTML
+    const profileHTML = additionalSections.profile ? `<div class="cv-section"><div class="cv-section-title">Profile</div><div class="cv-summary-text">${additionalSections.profile}</div></div>` : '';
+    const coursesHTML = additionalSections.courses.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Courses</div><ul>${additionalSections.courses.map(c => `<li>${c}</li>`).join('')}</ul></div>` : '';
+    const internshipsHTML = additionalSections.internships.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Internships</div><ul>${additionalSections.internships.map(i => `<li>${i}</li>`).join('')}</ul></div>` : '';
+    const extracurricularHTML = additionalSections.extracurricular.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Extracurricular Activities</div><ul>${additionalSections.extracurricular.map(e => `<li>${e}</li>`).join('')}</ul></div>` : '';
+    const referencesHTML = additionalSections.references.length > 0 ? `<div class="cv-section"><div class="cv-section-title">References</div><ul>${additionalSections.references.map(r => `<li>${r}</li>`).join('')}</ul></div>` : '';
+    const qualitiesHTML = additionalSections.qualities.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Qualities</div><ul>${additionalSections.qualities.map(q => `<li>${q}</li>`).join('')}</ul></div>` : '';
+    const certificatesHTML = additionalSections.certificates.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Certificates</div><ul>${additionalSections.certificates.map(c => `<li>${c}</li>`).join('')}</ul></div>` : '';
+    const achievementsHTML = additionalSections.achievements.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Achievements</div><ul>${additionalSections.achievements.map(a => `<li>${a}</li>`).join('')}</ul></div>` : '';
+    const signatureHTML = additionalSections.signature ? `<div class="cv-section"><div class="cv-section-title">Signature</div><div class="cv-summary-text">${additionalSections.signature}</div></div>` : '';
+    const footerHTML = additionalSections.footer ? `<div class="cv-footer">${additionalSections.footer}</div>` : '';
+    
     return `
       <!DOCTYPE html>
       <html>
@@ -387,165 +521,44 @@ const CVMaker = ({ onBack }) => {
         <meta charset="UTF-8">
         <title>${editingCvName} - CV</title>
         <style>
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
           body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8fafc;
             padding: 40px;
           }
-          .cv-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-          }
-          .cv-header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 40px;
-            color: white;
-            position: relative;
-          }
-          .cv-header-content {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-          }
-          .cv-avatar {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: 600;
-            color: white;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-          }
-          .cv-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-          }
-          .cv-name-section h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-          }
-          .cv-name-section .headline {
-            font-size: 1rem;
-            opacity: 0.8;
-            color: #cbd5e1;
-          }
-          .cv-contact-bar {
-            background: #f1f5f9;
-            padding: 16px 40px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            border-bottom: 1px solid #e2e8f0;
-          }
-          .cv-contact-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: #334155;
-          }
-          .cv-contact-item .icon {
-            font-size: 1rem;
-          }
-          .cv-body {
-            padding: 40px;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
-          }
-          .cv-left {
-            border-right: 2px solid #e2e8f0;
-            padding-right: 30px;
-          }
-          .cv-right {
-            padding-left: 10px;
-          }
-          .cv-section {
-            margin-bottom: 32px;
-          }
-          .cv-section-title {
-            font-size: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #4f46e5;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e2e8f0;
-          }
-          .cv-skills-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-          }
-          .cv-skill-badge {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-          }
-          .cv-info-item {
-            margin-bottom: 12px;
-          }
-          .cv-info-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 4px;
-          }
-          .cv-info-value {
-            font-size: 0.9rem;
-            color: #1e293b;
-            line-height: 1.4;
-          }
-          .cv-summary-text {
-            color: #334155;
-            line-height: 1.6;
-            font-size: 0.9rem;
-          }
-          .cv-experience-item, .cv-project-item {
-            margin-bottom: 20px;
-          }
-          .cv-experience-text, .cv-project-text {
-            color: #334155;
-            line-height: 1.5;
-            font-size: 0.9rem;
-            margin-left: 16px;
-            border-left: 2px solid #e2e8f0;
-            padding-left: 16px;
-          }
-          .cv-education-text {
-            color: #334155;
-            line-height: 1.5;
-            font-size: 0.9rem;
-          }
+          .cv-container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; }
+          .cv-header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 40px; color: white; }
+          .cv-header-content { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
+          .cv-avatar { width: 120px; height: 120px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 600; color: white; }
+          .cv-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+          .cv-name-section h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
+          .cv-name-section .headline { font-size: 1rem; opacity: 0.8; color: #cbd5e1; }
+          .cv-contact-bar { background: #f1f5f9; padding: 16px 40px; display: flex; flex-wrap: wrap; gap: 24px; border-bottom: 1px solid #e2e8f0; }
+          .cv-contact-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #334155; }
+          .cv-body { padding: 40px; display: grid; grid-template-columns: 1fr 2fr; gap: 40px; }
+          .cv-left { border-right: 2px solid #e2e8f0; padding-right: 30px; }
+          .cv-right { padding-left: 10px; }
+          .cv-section { margin-bottom: 32px; }
+          .cv-section-title { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #4f46e5; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+          .cv-skills-list { display: flex; flex-wrap: wrap; gap: 8px; }
+          .cv-skill-badge { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.8rem; }
+          .cv-skill-item, .cv-language-item { margin-bottom: 8px; }
+          .cv-skill-name, .cv-language-name { font-weight: 600; color: #1e293b; }
+          .cv-skill-level, .cv-language-level { color: #64748b; font-size: 0.8rem; margin-left: 8px; }
+          .cv-info-item { margin-bottom: 12px; }
+          .cv-info-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 4px; }
+          .cv-info-value { font-size: 0.9rem; color: #1e293b; }
+          .cv-summary-text { color: #334155; line-height: 1.6; font-size: 0.9rem; }
+          .cv-education-item, .cv-employment-item { margin-bottom: 20px; }
+          .cv-education-title, .cv-employment-title { font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+          .cv-education-date, .cv-employment-date { font-size: 0.8rem; color: #64748b; margin-bottom: 8px; }
+          .cv-education-description, .cv-employment-description { color: #334155; font-size: 0.85rem; line-height: 1.5; }
+          .cv-footer { text-align: center; padding: 20px; background: #f1f5f9; font-size: 0.8rem; color: #64748b; }
           @media print {
             body { padding: 0; background: white; }
             .cv-container { box-shadow: none; border-radius: 0; }
             .cv-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .cv-skill-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .cv-avatar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           }
           @media (max-width: 768px) {
             body { padding: 20px; }
@@ -562,244 +575,65 @@ const CVMaker = ({ onBack }) => {
         <div class="cv-container">
           <div class="cv-header">
             <div class="cv-header-content">
-              <div class="cv-avatar">
-                ${cvFormData.photo ? `<img src="${cvFormData.photo}" alt="Profile">` : initials}
-              </div>
-              <div class="cv-name-section">
-                <h1>${fullName}</h1>
-                ${headline ? `<div class="headline">${headline}</div>` : ''}
-              </div>
+              <div class="cv-avatar">${cvFormData.photo ? `<img src="${cvFormData.photo}" alt="Profile">` : initials}</div>
+              <div class="cv-name-section"><h1>${fullName}</h1>${headline ? `<div class="headline">${headline}</div>` : ''}</div>
             </div>
           </div>
-          
           <div class="cv-contact-bar">
-            ${cvFormData.email ? `<div class="cv-contact-item"><span class="icon">📧</span> ${cvFormData.email}</div>` : ''}
-            ${cvFormData.phone ? `<div class="cv-contact-item"><span class="icon">📱</span> ${cvFormData.phone}</div>` : ''}
-            ${cvFormData.address ? `<div class="cv-contact-item"><span class="icon">📍</span> ${cvFormData.address}${cvFormData.city ? `, ${cvFormData.city}` : ''}</div>` : ''}
-            ${cvFormData.website ? `<div class="cv-contact-item"><span class="icon">🌐</span> ${cvFormData.website}</div>` : ''}
-            ${cvFormData.linkedin ? `<div class="cv-contact-item"><span class="icon">🔗</span> ${cvFormData.linkedin}</div>` : ''}
+            ${cvFormData.email ? `<div class="cv-contact-item">📧 ${cvFormData.email}</div>` : ''}
+            ${cvFormData.phone ? `<div class="cv-contact-item">📱 ${cvFormData.phone}</div>` : ''}
+            ${cvFormData.address ? `<div class="cv-contact-item">📍 ${cvFormData.address}${cvFormData.city ? `, ${cvFormData.city}` : ''}</div>` : ''}
+            ${cvFormData.website ? `<div class="cv-contact-item">🌐 ${cvFormData.website}</div>` : ''}
+            ${cvFormData.linkedin ? `<div class="cv-contact-item">🔗 ${cvFormData.linkedin}</div>` : ''}
           </div>
-          
           <div class="cv-body">
             <div class="cv-left">
-              ${cvFormData.keySkills.length > 0 ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Technical Skills</div>
-                <div class="cv-skills-list">
-                  ${cvFormData.keySkills.map(skill => `<span class="cv-skill-badge">${skill}</span>`).join('')}
-                </div>
-              </div>
-              ` : ''}
-              
-              <div class="cv-section">
-                <div class="cv-section-title">Personal Details</div>
+              ${cvFormData.keySkills.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Technical Skills</div><div class="cv-skills-list">${cvFormData.keySkills.map(s => `<span class="cv-skill-badge">${s}</span>`).join('')}</div></div>` : ''}
+              ${skillsHTML ? `<div class="cv-section"><div class="cv-section-title">Skills</div>${skillsHTML}</div>` : ''}
+              ${languagesHTML ? `<div class="cv-section"><div class="cv-section-title">Languages</div>${languagesHTML}</div>` : ''}
+              <div class="cv-section"><div class="cv-section-title">Personal Details</div>
                 ${cvFormData.dateOfBirth ? `<div class="cv-info-item"><div class="cv-info-label">Date of Birth</div><div class="cv-info-value">${cvFormData.dateOfBirth}</div></div>` : ''}
-                ${cvFormData.placeOfBirth ? `<div class="cv-info-item"><div class="cv-info-label">Place of Birth</div><div class="cv-info-value">${cvFormData.placeOfBirth}</div></div>` : ''}
                 ${cvFormData.nationality ? `<div class="cv-info-item"><div class="cv-info-label">Nationality</div><div class="cv-info-value">${cvFormData.nationality}</div></div>` : ''}
-                ${cvFormData.gender ? `<div class="cv-info-item"><div class="cv-info-label">Gender</div><div class="cv-info-value">${cvFormData.gender}</div></div>` : ''}
                 ${cvFormData.drivingLicense ? `<div class="cv-info-item"><div class="cv-info-label">Driving License</div><div class="cv-info-value">${cvFormData.drivingLicense}</div></div>` : ''}
-                ${cvFormData.civilStatus ? `<div class="cv-info-item"><div class="cv-info-label">Civil Status</div><div class="cv-info-value">${cvFormData.civilStatus}</div></div>` : ''}
               </div>
-              
-              ${cvFormData.education ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Education</div>
-                <div class="cv-education-text">${cvFormData.education}</div>
-              </div>
-              ` : ''}
+              ${profileHTML}${coursesHTML}${internshipsHTML}${extracurricularHTML}${referencesHTML}${qualitiesHTML}${certificatesHTML}${achievementsHTML}
             </div>
-            
             <div class="cv-right">
-              ${cvFormData.professionalSummary ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Professional Summary</div>
-                <div class="cv-summary-text">${cvFormData.professionalSummary}</div>
-              </div>
-              ` : ''}
-              
-              ${cvFormData.experienceHighlights.length > 0 ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Experience Highlights</div>
-                ${cvFormData.experienceHighlights.map(exp => `
-                  <div class="cv-experience-item">
-                    <div class="cv-experience-text">${exp}</div>
-                  </div>
-                `).join('')}
-              </div>
-              ` : ''}
-              
-              ${cvFormData.projects.length > 0 ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Projects & Portfolio</div>
-                ${cvFormData.projects.map(project => `
-                  <div class="cv-project-item">
-                    <div class="cv-project-text">${project}</div>
-                  </div>
-                `).join('')}
-              </div>
-              ` : ''}
-              
-              ${cvFormData.customField ? `
-              <div class="cv-section">
-                <div class="cv-section-title">Additional Information</div>
-                <div class="cv-summary-text">${cvFormData.customField}</div>
-              </div>
-              ` : ''}
+              ${cvFormData.professionalSummary ? `<div class="cv-section"><div class="cv-section-title">Professional Summary</div><div class="cv-summary-text">${cvFormData.professionalSummary}</div></div>` : ''}
+              ${educationHTML ? `<div class="cv-section"><div class="cv-section-title">Education</div>${educationHTML}</div>` : ''}
+              ${employmentHTML ? `<div class="cv-section"><div class="cv-section-title">Employment</div>${employmentHTML}</div>` : ''}
+              ${cvFormData.experienceHighlights.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Experience Highlights</div>${cvFormData.experienceHighlights.map(exp => `<div class="cv-experience-text">${exp}</div>`).join('')}</div>` : ''}
+              ${cvFormData.projects.length > 0 ? `<div class="cv-section"><div class="cv-section-title">Projects</div>${cvFormData.projects.map(p => `<div class="cv-project-text">${p}</div>`).join('')}</div>` : ''}
+              ${signatureHTML}
             </div>
           </div>
+          ${footerHTML}
         </div>
       </body>
       </html>
     `;
   };
 
-  // Download as PDF using browser's print functionality
+  // Download as PDF
   const downloadAsPDF = () => {
     setIsDownloading(true);
     const cvHTML = generateCVHTML();
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${editingCvName} - CV</title>
-        <style>
-          @media print {
-            body { margin: 0; padding: 0; }
-            .no-print { display: none; }
-          }
-        </style>
-      </head>
-      <body>
-        ${cvHTML}
-        <div class="no-print" style="position: fixed; bottom: 20px; right: 20px; background: #4f46e5; color: white; padding: 10px 20px; border-radius: 8px; font-size: 12px;">
-          Use Ctrl+P (Cmd+P) to save as PDF
-        </div>
-        <script>
-          setTimeout(() => {
-            window.print();
-            setTimeout(() => window.close(), 1000);
-          }, 500);
-        <\/script>
-      </body>
-      </html>
+      <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
+      <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
+      <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
     `);
     printWindow.document.close();
-    setTimeout(() => {
-      setIsDownloading(false);
-    }, 2000);
+    setTimeout(() => setIsDownloading(false), 2000);
   };
 
-  // Download as DOCX using Blob
+  // Download as DOCX
   const downloadAsDOCX = () => {
     setIsDownloading(true);
     const cvHTML = generateCVHTML();
-    
-    // Create a Word-compatible HTML document
-    const docxContent = `<!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>${editingCvName} - CV</title>
-      <style>
-        body {
-          font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
-          margin: 40px;
-          line-height: 1.5;
-        }
-        .cv-container {
-          max-width: 1000px;
-          margin: 0 auto;
-        }
-        .cv-header {
-          background: #1e293b;
-          padding: 30px;
-          color: white;
-          border-radius: 12px;
-        }
-        .cv-header-content {
-          display: flex;
-          align-items: center;
-          gap: 30px;
-        }
-        .cv-avatar {
-          width: 100px;
-          height: 100px;
-          background: #4f46e5;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 40px;
-          font-weight: bold;
-        }
-        .cv-name-section h1 {
-          margin: 0 0 8px 0;
-          font-size: 28px;
-        }
-        .cv-contact-bar {
-          background: #f1f5f9;
-          padding: 15px 30px;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-          margin: 20px 0;
-          border-radius: 8px;
-        }
-        .cv-body {
-          display: flex;
-          gap: 40px;
-          margin-top: 20px;
-        }
-        .cv-left {
-          flex: 1;
-          border-right: 2px solid #e2e8f0;
-          padding-right: 30px;
-        }
-        .cv-right {
-          flex: 2;
-        }
-        .cv-section {
-          margin-bottom: 25px;
-        }
-        .cv-section-title {
-          font-size: 16px;
-          font-weight: bold;
-          color: #4f46e5;
-          border-bottom: 2px solid #e2e8f0;
-          padding-bottom: 5px;
-          margin-bottom: 15px;
-        }
-        .cv-skill-badge {
-          background: #4f46e5;
-          color: white;
-          padding: 4px 12px;
-          border-radius: 20px;
-          display: inline-block;
-          margin: 4px;
-          font-size: 12px;
-        }
-        .cv-skills-list {
-          display: flex;
-          flex-wrap: wrap;
-        }
-        .cv-info-item {
-          margin-bottom: 10px;
-        }
-        .cv-info-label {
-          font-weight: bold;
-          font-size: 11px;
-          text-transform: uppercase;
-          color: #64748b;
-        }
-      </style>
-    </head>
-    <body>
-      ${cvHTML.replace('<div class="cv-container">', '<div class="cv-container">').split('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">')[0]}
-    </body>
-    </html>`;
-    
-    const blob = new Blob([docxContent], { type: 'application/msword' });
+    const blob = new Blob([cvHTML], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -808,13 +642,10 @@ const CVMaker = ({ onBack }) => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    setTimeout(() => {
-      setIsDownloading(false);
-    }, 1000);
+    setTimeout(() => setIsDownloading(false), 1000);
   };
 
-  // Close dropdown when clicking outside
+  // Close dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (roleDropdownRef.current && !roleDropdownRef.current.contains(event.target)) {
@@ -826,14 +657,12 @@ const CVMaker = ({ onBack }) => {
   }, []);
 
   // File Upload Handler
-  const readFileAsText = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-  };
+  const readFileAsText = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
 
   const handleFileSelect = async (file) => {
     if (!file) return;
@@ -842,9 +671,7 @@ const CVMaker = ({ onBack }) => {
     try {
       const text = await readFileAsText(file);
       setCvContent(text);
-    } catch {
-      setCvContent("");
-    }
+    } catch { setCvContent(""); }
   };
 
   const handleDrop = (e) => {
@@ -861,18 +688,10 @@ const CVMaker = ({ onBack }) => {
       return;
     }
     setIsAnalyzing(true);
-
     setTimeout(() => {
       setCvHealth({
-        overall: 74,
-        completeness: 80,
-        formatting: 70,
-        readability: 85,
-        skillsScore: 68,
-        atsScore: 78,
-        keywordDensity: 62,
-        experienceImpact: 72,
-        personalization: 58,
+        overall: 74, completeness: 80, formatting: 70, readability: 85,
+        skillsScore: 68, atsScore: 78, keywordDensity: 62, experienceImpact: 72, personalization: 58,
         history: [58, 64, 70, 74],
         sectionHealth: [
           { section: "Contact Info", score: 90, status: "good" },
@@ -880,17 +699,14 @@ const CVMaker = ({ onBack }) => {
           { section: "Experience", score: 68, status: "warning" },
           { section: "Education", score: 88, status: "good" },
           { section: "Skills", score: 62, status: "warning" },
-          { section: "Projects", score: 52, status: "poor" },
         ],
         feedback: [
           { type: "success", message: "CV structure is clear and easy to read." },
           { type: "warning", message: "Add measurable achievements with numbers, %, and impact." },
-          { type: "warning", message: "Skills section could use more industry keywords." },
           { type: "info", message: "Consider adding a GitHub or portfolio link." },
-          { type: "info", message: "Tailor your summary to your target role." },
         ],
-        topStrengths: ["Clear structure", "Good education section", "Readable format"],
-        topImprovements: ["Add quantified achievements", "Expand skills keywords", "Strengthen project descriptions"],
+        topStrengths: ["Clear structure", "Good education section"],
+        topImprovements: ["Add quantified achievements", "Expand skills keywords"],
       });
       setIsAnalyzing(false);
     }, 1500);
@@ -911,392 +727,221 @@ const CVMaker = ({ onBack }) => {
   // Cover Letter Generation
   const generateCoverLetter = () => {
     const tones = {
-      formal: {
-        intro: "I am writing to express my strong interest in the Software Engineering position.",
-        body: "With a solid foundation in full-stack development and a proven track record of delivering scalable solutions, I am confident in my ability to contribute meaningfully to your engineering team.",
-        close: "I would welcome the opportunity to discuss how my skills align with your team's goals.",
-        sign: "Yours sincerely,",
-      },
-      modern: {
-        intro: "I'd love to bring my engineering skills to your team — here's why I think it's a great fit.",
-        body: "I've spent the past few years building and shipping full-stack products, from React frontends to Node.js backends. I thrive in collaborative environments and love solving hard problems with clean code.",
-        close: "I'd be thrilled to connect and talk about how I can contribute.",
-        sign: "Best,",
-      },
-      creative: {
-        intro: "Great products aren't built by algorithms — they're built by passionate engineers. I'm one of them.",
-        body: "I combine technical rigor with creative problem-solving to ship features users actually love. My projects have impacted thousands of users, and I'm hungry to do more.",
-        close: "Let's build something remarkable together.",
-        sign: "Creatively yours,",
-      },
-      academic: {
-        intro: "I am submitting my application with great enthusiasm for the Software Engineering position at your esteemed organization.",
-        body: "My academic background in Computer Science, complemented by hands-on research experience in distributed systems, positions me well for this role.",
-        close: "I look forward to the possibility of contributing to your research-driven environment.",
-        sign: "Respectfully,",
-      },
+      formal: { intro: "I am writing to express my strong interest...", body: "With a solid foundation...", close: "I would welcome the opportunity...", sign: "Yours sincerely," },
+      modern: { intro: "I'd love to bring my skills to your team...", body: "I've spent the past few years building...", close: "I'd be thrilled to connect...", sign: "Best," },
+      creative: { intro: "Great products aren't built by algorithms...", body: "I combine technical rigor...", close: "Let's build something remarkable...", sign: "Creatively yours," },
+      academic: { intro: "I am submitting my application...", body: "My academic background...", close: "I look forward to contributing...", sign: "Respectfully," },
     };
-
     const t = tones[coverLetterTone];
-    setCoverLetter(`Dear Hiring Manager,
-
-${t.intro}
-
-${t.body}
-
-I am enthusiastic about joining a team that values innovation and continuous learning. I am confident that my technical skills, collaborative mindset, and commitment to quality make me a strong candidate for this position.
-
-${t.close}
-
-${t.sign}
-[Your Name]`);
+    setCoverLetter(`Dear Hiring Manager,\n\n${t.intro}\n\n${t.body}\n\n${t.close}\n\n${t.sign}\n[Your Name]`);
   };
 
-  // Export & Sharing
-  const exportCV = (format) => {
-    alert(`Exporting CV as ${format.toUpperCase()}. In production this would trigger a real download.`);
-  };
-
-  const generateShareLink = () => {
-    setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
-  };
+  const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
+  const generateShareLink = () => setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
 
   // Render Template Card
-  const renderTemplateCard = (template) => {
-    return (
-      <div
-        key={template.id}
-        data-template-id={template.id}
-        className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`}
-        onClick={() => setSelectedTemplate(template.id)}
-      >
-        <div
-          className="cvmaker-template-preview"
-          style={{ background: `linear-gradient(135deg, ${template.color}22, ${template.color}44)` }}
-        >
-          <div style={{ fontSize: "44px" }}>{template.icon}</div>
-          <div className="cvmaker-ats-badge">ATS {template.atsScore}%</div>
-        </div>
-        <div className="cvmaker-template-details">
-          <div className="cvmaker-template-industry">{template.industry}</div>
-          <h4>{template.name}</h4>
-          <p>{template.description}</p>
-          <div className="cvmaker-template-tags">
-            {template.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="cvmaker-tag">{tag}</span>
-            ))}
-          </div>
-          <button 
-            className="cvmaker-explore-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleExploreTemplate(template);
-            }}
-          >
-            ✏️ Edit & Customize CV
-          </button>
-        </div>
-        {selectedTemplate === template.id && (
-          <div className="cvmaker-selected-check">✓ Selected</div>
-        )}
+  const renderTemplateCard = (template) => (
+    <div key={template.id} className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`} onClick={() => setSelectedTemplate(template.id)}>
+      <div className="cvmaker-template-preview" style={{ background: `linear-gradient(135deg, ${template.color}22, ${template.color}44)` }}>
+        <div style={{ fontSize: "44px" }}>{template.icon}</div>
+        <div className="cvmaker-ats-badge">ATS {template.atsScore}%</div>
       </div>
-    );
-  };
+      <div className="cvmaker-template-details">
+        <div className="cvmaker-template-industry">{template.industry}</div>
+        <h4>{template.name}</h4>
+        <p>{template.description}</p>
+        <div className="cvmaker-template-tags">{template.tags.slice(0, 3).map(tag => <span key={tag} className="cvmaker-tag">{tag}</span>)}</div>
+        <button className="cvmaker-explore-btn" onClick={(e) => { e.stopPropagation(); handleExploreTemplate(template); }}>✏️ Edit & Customize CV</button>
+      </div>
+      {selectedTemplate === template.id && <div className="cvmaker-selected-check">✓ Selected</div>}
+    </div>
+  );
 
   // Render CV Editor
   const renderCVEditor = () => {
+    const sections = [
+      { id: "personal", label: "Personal Details", icon: "👤" },
+      { id: "education", label: "Education", icon: "🎓" },
+      { id: "employment", label: "Employment", icon: "💼" },
+      { id: "skills", label: "Skills", icon: "⚡" },
+      { id: "languages", label: "Languages", icon: "🌐" },
+      { id: "additional", label: "Additional Sections", icon: "📎" },
+    ];
+
     return (
       <div className="cvmaker-editor-container">
         <div className="cvmaker-editor-header">
-          <button className="cvmaker-editor-back-btn" onClick={handleBackFromEditor}>
-            ← Back to Templates
-          </button>
+          <button className="cvmaker-editor-back-btn" onClick={handleBackFromEditor}>← Back to Templates</button>
           <div className="cvmaker-editor-title">
-            <input
-              type="text"
-              value={editingCvName}
-              onChange={(e) => setEditingCvName(e.target.value)}
-              className="cvmaker-editor-name-input"
-            />
-            <span 
-              className="cvmaker-editor-badge cvmaker-clickable-badge"
-              onClick={() => setShowPreviewModal(true)}
-              title="Click to preview CV"
-            >
-              Curriculum vitae
-            </span>
+            <input type="text" value={editingCvName} onChange={(e) => setEditingCvName(e.target.value)} className="cvmaker-editor-name-input" />
+            <span className="cvmaker-editor-badge cvmaker-clickable-badge" onClick={() => setShowPreviewModal(true)}>Curriculum vitae</span>
           </div>
           <div className="cvmaker-editor-actions">
-            <button className="cvmaker-editor-save-btn" onClick={handleSaveCV}>
-              💾 Save CV
-            </button>
+            <button className="cvmaker-editor-save-btn" onClick={handleSaveCV}>💾 Save CV</button>
           </div>
         </div>
 
         <div className="cvmaker-editor-toolbar">
           <div className="cvmaker-toolbar-tabs">
-            <button 
-              className={`cvmaker-toolbar-tab ${activeFormattingTab === "write" ? "active" : ""}`}
-              onClick={() => setActiveFormattingTab("write")}
-            >
-              Write
-            </button>
-            <button 
-              className={`cvmaker-toolbar-tab ${activeFormattingTab === "design" ? "active" : ""}`}
-              onClick={() => setActiveFormattingTab("design")}
-            >
-              Design
-            </button>
-            <button 
-              className={`cvmaker-toolbar-tab ${activeFormattingTab === "preview" ? "active" : ""}`}
-              onClick={() => setActiveFormattingTab("preview")}
-            >
-              Preview
-            </button>
+            <button className={`cvmaker-toolbar-tab ${activeFormattingTab === "write" ? "active" : ""}`} onClick={() => setActiveFormattingTab("write")}>Write</button>
+            <button className={`cvmaker-toolbar-tab ${activeFormattingTab === "design" ? "active" : ""}`} onClick={() => setActiveFormattingTab("design")}>Design</button>
+            <button className={`cvmaker-toolbar-tab ${activeFormattingTab === "preview" ? "active" : ""}`} onClick={() => setActiveFormattingTab("preview")}>Preview</button>
           </div>
-          
           {activeFormattingTab === "write" && (
             <div className="cvmaker-formatting-tools">
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('bold')} title="Bold">
-                <strong>B</strong>
-              </button>
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('italic')} title="Italic">
-                <em>I</em>
-              </button>
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('underline')} title="Underline">
-                <u>U</u>
-              </button>
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('bold')}><strong>B</strong></button>
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('italic')}><em>I</em></button>
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('underline')}><u>U</u></button>
             </div>
           )}
         </div>
 
+        <div className="cvmaker-section-tabs">
+          {sections.map(section => (
+            <button key={section.id} className={`cvmaker-section-tab ${activeSection === section.id ? "active" : ""}`} onClick={() => setActiveSection(section.id)}>
+              <span className="cvmaker-section-tab-icon">{section.icon}</span>
+              <span>{section.label}</span>
+            </button>
+          ))}
+        </div>
+
         <div className="cvmaker-editor-content">
-          <div className="cvmaker-editor-sidebar">
-            <div className="cvmaker-editor-sidebar-header">
-              <h3>Personal details</h3>
-              <button 
-                className="cvmaker-upload-existing-btn"
-                onClick={() => {
-                  alert("Upload existing CV feature will be available soon!");
-                }}
-              >
-                📁 Upload existing CV
-              </button>
-            </div>
-            
-            <div className="cvmaker-editor-form">
-              <div className="cvmaker-form-group cvmaker-photo-group">
-                <label>Photo</label>
-                <div className="cvmaker-photo-upload">
-                  {cvFormData.photo ? (
-                    <img src={cvFormData.photo} alt="Preview" className="cvmaker-photo-preview" />
-                  ) : (
-                    <div className="cvmaker-photo-placeholder">📷</div>
-                  )}
-                  <input type="file" accept="image/*" onChange={(e) => {
-                    if (e.target.files[0]) {
-                      const reader = new FileReader();
-                      reader.onload = (ev) => {
-                        setCvFormData(prev => ({ ...prev, photo: ev.target.result }));
-                      };
-                      reader.readAsDataURL(e.target.files[0]);
-                    }
-                  }} />
+          {/* Personal Details Section */}
+          {activeSection === "personal" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-editor-sidebar-full">
+                <div className="cvmaker-editor-sidebar-header"><h3>Personal details</h3></div>
+                <div className="cvmaker-editor-form">
+                  <div className="cvmaker-form-group cvmaker-photo-group">
+                    <label>Photo</label>
+                    <div className="cvmaker-photo-upload">
+                      {cvFormData.photo ? <img src={cvFormData.photo} alt="Preview" className="cvmaker-photo-preview" /> : <div className="cvmaker-photo-placeholder">📷</div>}
+                      <input type="file" accept="image/*" onChange={(e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (ev) => setCvFormData(prev => ({ ...prev, photo: ev.target.result })); reader.readAsDataURL(e.target.files[0]); } }} />
+                    </div>
+                  </div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group"><label>Given name *</label><input type="text" name="givenName" value={cvFormData.givenName} onChange={handleFormChange} placeholder="First name" /></div>
+                    <div className="cvmaker-form-group"><label>Family name *</label><input type="text" name="familyName" value={cvFormData.familyName} onChange={handleFormChange} placeholder="Last name" /></div>
+                  </div>
+                  <div className="cvmaker-form-group"><label>Desired job position</label><input type="text" name="desiredJob" value={cvFormData.desiredJob} onChange={handleFormChange} /><label className="cvmaker-checkbox-label"><input type="checkbox" name="useAsHeadline" checked={cvFormData.useAsHeadline} onChange={handleFormChange} /> Use as headline</label></div>
+                  <div className="cvmaker-form-group"><label>Email address *</label><input type="email" name="email" value={cvFormData.email} onChange={handleFormChange} /></div>
+                  <div className="cvmaker-form-group"><label>Phone number *</label><input type="tel" name="phone" value={cvFormData.phone} onChange={handleFormChange} /></div>
+                  <div className="cvmaker-form-group"><label>Address</label><input type="text" name="address" value={cvFormData.address} onChange={handleFormChange} /></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Post code</label><input type="text" name="postCode" value={cvFormData.postCode} onChange={handleFormChange} /></div><div className="cvmaker-form-group"><label>City</label><input type="text" name="city" value={cvFormData.city} onChange={handleFormChange} /></div></div>
+                  <details className="cvmaker-optional-details"><summary>+ Additional fields</summary><div className="cvmaker-optional-fields">
+                    <div className="cvmaker-form-group"><label>Date of birth</label><input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Place of birth</label><input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Driving licence</label><input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Gender</label><input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Nationality</label><input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Civil status</label><input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Website</label><input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>LinkedIn</label><input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} /></div>
+                    <div className="cvmaker-form-group"><label>Custom field</label><input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} /></div>
+                  </div></details>
                 </div>
               </div>
+            </div>
+          )}
 
-              <div className="cvmaker-form-row">
-                <div className="cvmaker-form-group">
-                  <label>Given name *</label>
-                  <input type="text" name="givenName" value={cvFormData.givenName} onChange={handleFormChange} placeholder="First name" />
+          {/* Education Section */}
+          {activeSection === "education" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-section-header"><h3>Education</h3><button className="cvmaker-add-btn" onClick={addEducation}>+ Add education</button></div>
+              {educationEntries.map((edu, idx) => (
+                <div key={idx} className="cvmaker-entry-card">
+                  <div className="cvmaker-entry-header"><span>Education #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeEducation(idx)}>✕</button></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>School / University</label><input type="text" value={edu.school} onChange={(e) => updateEducation(idx, 'school', e.target.value)} /></div><div className="cvmaker-form-group"><label>City</label><input type="text" value={edu.city} onChange={(e) => updateEducation(idx, 'city', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Start Month</label><input type="text" placeholder="Month" value={edu.startMonth} onChange={(e) => updateEducation(idx, 'startMonth', e.target.value)} /></div><div className="cvmaker-form-group"><label>Start Year</label><input type="text" placeholder="Year" value={edu.startYear} onChange={(e) => updateEducation(idx, 'startYear', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>End Month</label><input type="text" placeholder="Month" value={edu.endMonth} onChange={(e) => updateEducation(idx, 'endMonth', e.target.value)} disabled={edu.present} /></div><div className="cvmaker-form-group"><label>End Year</label><input type="text" placeholder="Year" value={edu.endYear} onChange={(e) => updateEducation(idx, 'endYear', e.target.value)} disabled={edu.present} /></div></div>
+                  <div className="cvmaker-form-group"><label><input type="checkbox" checked={edu.present} onChange={(e) => updateEducation(idx, 'present', e.target.checked)} /> Present</label></div>
+                  <div className="cvmaker-form-group"><label>Description</label><textarea rows="3" value={edu.description} onChange={(e) => updateEducation(idx, 'description', e.target.value)} placeholder="Start typing here..." /></div>
                 </div>
-                <div className="cvmaker-form-group">
-                  <label>Family name *</label>
-                  <input type="text" name="familyName" value={cvFormData.familyName} onChange={handleFormChange} placeholder="Last name" />
+              ))}
+            </div>
+          )}
+
+          {/* Employment Section */}
+          {activeSection === "employment" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-section-header"><h3>Employment</h3><button className="cvmaker-add-btn" onClick={addEmployment}>+ Add employment</button></div>
+              {employmentEntries.map((emp, idx) => (
+                <div key={idx} className="cvmaker-entry-card">
+                  <div className="cvmaker-entry-header"><span>Employment #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeEmployment(idx)}>✕</button></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Job Title</label><input type="text" value={emp.jobTitle} onChange={(e) => updateEmployment(idx, 'jobTitle', e.target.value)} /></div><div className="cvmaker-form-group"><label>Company</label><input type="text" value={emp.company} onChange={(e) => updateEmployment(idx, 'company', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>City</label><input type="text" value={emp.city} onChange={(e) => updateEmployment(idx, 'city', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Start Month</label><input type="text" placeholder="Month" value={emp.startMonth} onChange={(e) => updateEmployment(idx, 'startMonth', e.target.value)} /></div><div className="cvmaker-form-group"><label>Start Year</label><input type="text" placeholder="Year" value={emp.startYear} onChange={(e) => updateEmployment(idx, 'startYear', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>End Month</label><input type="text" placeholder="Month" value={emp.endMonth} onChange={(e) => updateEmployment(idx, 'endMonth', e.target.value)} disabled={emp.present} /></div><div className="cvmaker-form-group"><label>End Year</label><input type="text" placeholder="Year" value={emp.endYear} onChange={(e) => updateEmployment(idx, 'endYear', e.target.value)} disabled={emp.present} /></div></div>
+                  <div className="cvmaker-form-group"><label><input type="checkbox" checked={emp.present} onChange={(e) => updateEmployment(idx, 'present', e.target.checked)} /> Present</label></div>
+                  <div className="cvmaker-form-group"><label>Description</label><textarea rows="3" value={emp.description} onChange={(e) => updateEmployment(idx, 'description', e.target.value)} /></div>
                 </div>
-              </div>
+              ))}
+            </div>
+          )}
 
-              <div className="cvmaker-form-group">
-                <label>Desired job position</label>
-                <input type="text" name="desiredJob" value={cvFormData.desiredJob} onChange={handleFormChange} placeholder="e.g., Software Engineer Intern" />
-                <label className="cvmaker-checkbox-label">
-                  <input type="checkbox" name="useAsHeadline" checked={cvFormData.useAsHeadline} onChange={handleFormChange} />
-                  Use as headline
-                </label>
-              </div>
-
-              <div className="cvmaker-form-group">
-                <label>Email address *</label>
-                <input type="email" name="email" value={cvFormData.email} onChange={handleFormChange} placeholder="your.email@example.com" />
-              </div>
-
-              <div className="cvmaker-form-group">
-                <label>Phone number *</label>
-                <input type="tel" name="phone" value={cvFormData.phone} onChange={handleFormChange} placeholder="+1 234 567 8900" />
-              </div>
-
-              <div className="cvmaker-form-group">
-                <label>Address</label>
-                <input type="text" name="address" value={cvFormData.address} onChange={handleFormChange} placeholder="Street address" />
-              </div>
-
-              <div className="cvmaker-form-row">
-                <div className="cvmaker-form-group">
-                  <label>Post code</label>
-                  <input type="text" name="postCode" value={cvFormData.postCode} onChange={handleFormChange} placeholder="Postal code" />
+          {/* Skills Section */}
+          {activeSection === "skills" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-section-header"><h3>Skills</h3><button className="cvmaker-add-btn" onClick={addSkill}>+ Add skill</button></div>
+              {skillsEntries.map((skill, idx) => (
+                <div key={idx} className="cvmaker-entry-card-small">
+                  <div className="cvmaker-entry-header"><span>Skill #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeSkill(idx)}>✕</button></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Skill</label><input type="text" value={skill.skill} onChange={(e) => updateSkill(idx, 'skill', e.target.value)} placeholder="e.g., Communication" /></div><div className="cvmaker-form-group"><label>Level</label><select value={skill.level} onChange={(e) => updateSkill(idx, 'level', e.target.value)}><option value="">Make a choice</option><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option><option value="Expert">Expert</option></select></div></div>
                 </div>
-                <div className="cvmaker-form-group">
-                  <label>City</label>
-                  <input type="text" name="city" value={cvFormData.city} onChange={handleFormChange} placeholder="City" />
-                </div>
-              </div>
-
-              <details className="cvmaker-optional-details">
-                <summary>+ Additional fields</summary>
-                <div className="cvmaker-optional-fields">
-                  <div className="cvmaker-form-group">
-                    <label>Date of birth</label>
-                    <input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Place of birth</label>
-                    <input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Driving licence</label>
-                    <input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} placeholder="e.g., Full, Provisional" />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Gender</label>
-                    <input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Nationality</label>
-                    <input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Civil status</label>
-                    <input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Website</label>
-                    <input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} placeholder="https://..." />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>LinkedIn</label>
-                    <input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} placeholder="https://linkedin.com/in/..." />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Custom field</label>
-                    <input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} placeholder="Any additional info" />
-                  </div>
-                </div>
-              </details>
+              ))}
+              <div className="cvmaker-ai-suggestions"><span>🤖 AI Suggestions:</span> Communication • Teamwork • Problem-solving • Time management • Adaptability</div>
             </div>
-          </div>
+          )}
 
-          <div className="cvmaker-editor-main">
-            <div className="cvmaker-editor-section">
-              <h3>Professional Summary</h3>
-              <textarea
-                className="cvmaker-editor-textarea cvmaker-preview-content-textarea"
-                rows="4"
-                value={cvFormData.professionalSummary}
-                onChange={(e) => setCvFormData(prev => ({ ...prev, professionalSummary: e.target.value }))}
-                placeholder="Write a compelling summary of your professional background and goals..."
-              />
+          {/* Languages Section */}
+          {activeSection === "languages" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-section-header"><h3>Languages</h3><button className="cvmaker-add-btn" onClick={addLanguage}>+ Add language</button></div>
+              {languagesEntries.map((lang, idx) => (
+                <div key={idx} className="cvmaker-entry-card-small">
+                  <div className="cvmaker-entry-header"><span>Language #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeLanguage(idx)}>✕</button></div>
+                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Language</label><input type="text" value={lang.language} onChange={(e) => updateLanguage(idx, 'language', e.target.value)} placeholder="e.g., English" /></div><div className="cvmaker-form-group"><label>Level</label><select value={lang.level} onChange={(e) => updateLanguage(idx, 'level', e.target.value)}><option value="">Make a choice</option><option value="Basic">Basic</option><option value="Conversational">Conversational</option><option value="Professional">Professional</option><option value="Native">Native</option></select></div></div>
+                </div>
+              ))}
+              <div className="cvmaker-ai-suggestions"><span>🤖 AI Suggestions:</span> English • Spanish • Mandarin Chinese • French • German</div>
             </div>
+          )}
 
-            <div className="cvmaker-editor-section">
-              <h3>Key Skills</h3>
-              <textarea
-                className="cvmaker-editor-textarea"
-                rows="3"
-                value={cvFormData.keySkills.join(', ')}
-                onChange={handleSkillsChange}
-                placeholder="Enter skills separated by commas (e.g., React, Python, Project Management)"
-              />
-              <div className="cvmaker-skills-tags">
-                {cvFormData.keySkills.map((skill, idx) => (
-                  <span key={idx} className="cvmaker-skill-tag">{skill}</span>
-                ))}
+          {/* Additional Sections */}
+          {activeSection === "additional" && (
+            <div className="cvmaker-editor-main-full">
+              <div className="cvmaker-additional-sections">
+                <div className="cvmaker-section-group"><h4>Profile</h4><textarea rows="3" value={additionalSections.profile} onChange={(e) => setAdditionalSections(prev => ({ ...prev, profile: e.target.value }))} placeholder="Write a short profile about yourself..." /></div>
+                
+                <div className="cvmaker-section-group"><h4>Courses</h4>{additionalSections.courses.map((course, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={course} onChange={(e) => updateArrayItem('courses', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('courses', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('courses', '')}>+ Add course</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Internships</h4>{additionalSections.internships.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('internships', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('internships', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('internships', '')}>+ Add internship</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Extracurricular Activities</h4>{additionalSections.extracurricular.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('extracurricular', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('extracurricular', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('extracurricular', '')}>+ Add activity</button></div>
+                
+                <div className="cvmaker-section-group"><h4>References</h4>{additionalSections.references.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('references', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('references', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('references', '')}>+ Add reference</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Qualities</h4>{additionalSections.qualities.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('qualities', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('qualities', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('qualities', '')}>+ Add quality</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Certificates</h4>{additionalSections.certificates.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('certificates', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('certificates', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('certificates', '')}>+ Add certificate</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Achievements</h4>{additionalSections.achievements.map((item, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={item} onChange={(e) => updateArrayItem('achievements', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('achievements', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('achievements', '')}>+ Add achievement</button></div>
+                
+                <div className="cvmaker-section-group"><h4>Signature</h4><textarea rows="2" value={additionalSections.signature} onChange={(e) => setAdditionalSections(prev => ({ ...prev, signature: e.target.value }))} placeholder="Your signature or closing statement..." /></div>
+                
+                <div className="cvmaker-section-group"><h4>Footer</h4><textarea rows="2" value={additionalSections.footer} onChange={(e) => setAdditionalSections(prev => ({ ...prev, footer: e.target.value }))} placeholder="Footer text..." /></div>
               </div>
             </div>
-
-            <div className="cvmaker-editor-section">
-              <h3>Experience Highlights</h3>
-              <textarea
-                className="cvmaker-editor-textarea"
-                rows="5"
-                value={cvFormData.experienceHighlights.join('\n')}
-                onChange={handleExperienceChange}
-                placeholder="Enter each achievement on a new line..."
-              />
-            </div>
-
-            <div className="cvmaker-editor-section">
-              <h3>Education</h3>
-              <textarea
-                className="cvmaker-editor-textarea"
-                rows="3"
-                value={cvFormData.education}
-                onChange={(e) => setCvFormData(prev => ({ ...prev, education: e.target.value }))}
-                placeholder="Your educational background..."
-              />
-            </div>
-
-            <div className="cvmaker-editor-section">
-              <h3>Projects / Portfolio</h3>
-              <textarea
-                className="cvmaker-editor-textarea"
-                rows="4"
-                value={cvFormData.projects.join('\n')}
-                onChange={handleProjectsChange}
-                placeholder="Enter each project on a new line..."
-              />
-            </div>
-
-            <div className="cvmaker-editor-preview-tip">
-              💡 Tip: Your CV will be ATS-optimized with the information above. Add measurable achievements for better results!
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Preview Modal */}
         {showPreviewModal && (
           <div className="cvmaker-modal-overlay" onClick={() => setShowPreviewModal(false)}>
             <div className="cvmaker-modal" onClick={(e) => e.stopPropagation()}>
-              <div className="cvmaker-modal-header">
-                <h3>CV Preview: {editingCvName}</h3>
-                <button className="cvmaker-modal-close" onClick={() => setShowPreviewModal(false)}>✕</button>
-              </div>
-              <div className="cvmaker-modal-body">
-                <iframe
-                  srcDoc={generateCVHTML()}
-                  title="CV Preview"
-                  className="cvmaker-preview-iframe"
-                  sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                />
-              </div>
-              <div className="cvmaker-modal-footer">
-                <button 
-                  className="cvmaker-download-btn" 
-                  onClick={downloadAsPDF}
-                  disabled={isDownloading}
-                >
-                  {isDownloading ? '⏳ Processing...' : '📄 Download PDF'}
-                </button>
-                <button 
-                  className="cvmaker-download-btn cvmaker-docx-btn" 
-                  onClick={downloadAsDOCX}
-                  disabled={isDownloading}
-                >
-                  {isDownloading ? '⏳ Processing...' : '📝 Download DOCX'}
-                </button>
-                <button className="cvmaker-modal-close-btn" onClick={() => setShowPreviewModal(false)}>
-                  Close
-                </button>
-              </div>
+              <div className="cvmaker-modal-header"><h3>CV Preview: {editingCvName}</h3><button className="cvmaker-modal-close" onClick={() => setShowPreviewModal(false)}>✕</button></div>
+              <div className="cvmaker-modal-body"><iframe srcDoc={generateCVHTML()} title="CV Preview" className="cvmaker-preview-iframe" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" /></div>
+              <div className="cvmaker-modal-footer"><button className="cvmaker-download-btn" onClick={downloadAsPDF} disabled={isDownloading}>{isDownloading ? '⏳ Processing...' : '📄 Download PDF'}</button><button className="cvmaker-download-btn cvmaker-docx-btn" onClick={downloadAsDOCX} disabled={isDownloading}>{isDownloading ? '⏳ Processing...' : '📝 Download DOCX'}</button><button className="cvmaker-modal-close-btn" onClick={() => setShowPreviewModal(false)}>Close</button></div>
             </div>
           </div>
         )}
@@ -1306,430 +951,62 @@ ${t.sign}
 
   // Render Feature Panels
   const renderActiveFeature = () => {
-    if (showEditor) {
-      return renderCVEditor();
-    }
+    if (showEditor) return renderCVEditor();
 
     switch (activeFeature) {
       case "templates":
         return (
           <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header">
-              <h3>CV Templates</h3>
-              <span className="cvmaker-panel-subtitle">Industry-specific, ATS-optimized designs</span>
-            </div>
-
+            <div className="cvmaker-panel-header"><h3>CV Templates</h3><span className="cvmaker-panel-subtitle">Industry-specific, ATS-optimized designs</span></div>
             <div className="cvmaker-role-filter-container" ref={roleDropdownRef}>
-              <div className="cvmaker-role-filter-header">
-                <span className="cvmaker-filter-label-role">🎯 Filter by Intern Role:</span>
+              <div className="cvmaker-role-filter-header"><span className="cvmaker-filter-label-role">🎯 Filter by Intern Role:</span>
                 <div className="cvmaker-search-dropdown">
-                  <div className="cvmaker-search-input-wrapper">
-                    <input
-                      type="text"
-                      className="cvmaker-role-search-input"
-                      placeholder="Select an intern role..."
-                      value={roleSearchTerm}
-                      onChange={(e) => {
-                        setRoleSearchTerm(e.target.value);
-                        setShowRoleDropdown(true);
-                        if (e.target.value === "") {
-                          setSelectedRoleId(null);
-                        }
-                      }}
-                      onFocus={() => setShowRoleDropdown(true)}
-                    />
-                    {roleSearchTerm && (
-                      <button 
-                        className="cvmaker-clear-filter-btn"
-                        onClick={clearRoleFilter}
-                      >
-                        ✕
-                      </button>
-                    )}
-                    <button 
-                      className="cvmaker-dropdown-toggle"
-                      onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                    >
-                      ⌵
-                    </button>
-                  </div>
-                  {showRoleDropdown && filteredRoles.length > 0 && (
-                    <div className="cvmaker-role-dropdown">
-                      {filteredRoles.map((role) => (
-                        <div
-                          key={role.id}
-                          className={`cvmaker-role-option ${selectedRoleId === role.id ? "cvmaker-role-option-selected" : ""}`}
-                          onClick={() => handleRoleSelect(role.id)}
-                        >
-                          <span>{role.label}</span>
-                          {selectedRoleId === role.id && <span className="cvmaker-option-check">✓</span>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <div className="cvmaker-search-input-wrapper"><input type="text" className="cvmaker-role-search-input" placeholder="Select an intern role..." value={roleSearchTerm} onChange={(e) => { setRoleSearchTerm(e.target.value); setShowRoleDropdown(true); if (e.target.value === "") setSelectedRoleId(null); }} onFocus={() => setShowRoleDropdown(true)} />{roleSearchTerm && <button className="cvmaker-clear-filter-btn" onClick={clearRoleFilter}>✕</button>}<button className="cvmaker-dropdown-toggle" onClick={() => setShowRoleDropdown(!showRoleDropdown)}>⌵</button></div>
+                  {showRoleDropdown && filteredRoles.length > 0 && (<div className="cvmaker-role-dropdown">{filteredRoles.map((role) => (<div key={role.id} className={`cvmaker-role-option ${selectedRoleId === role.id ? "cvmaker-role-option-selected" : ""}`} onClick={() => handleRoleSelect(role.id)}><span>{role.label}</span>{selectedRoleId === role.id && <span className="cvmaker-option-check">✓</span>}</div>))}</div>)}
                 </div>
               </div>
-              {selectedRoleId && (
-                <div className="cvmaker-active-filter">
-                  <span className="cvmaker-filter-badge">
-                    Showing templates for: {internRoles.find(r => r.id === selectedRoleId)?.label}
-                    <button className="cvmaker-remove-filter" onClick={clearRoleFilter}>×</button>
-                  </span>
-                </div>
-              )}
+              {selectedRoleId && (<div className="cvmaker-active-filter"><span className="cvmaker-filter-badge">Showing templates for: {internRoles.find(r => r.id === selectedRoleId)?.label}<button className="cvmaker-remove-filter" onClick={clearRoleFilter}>×</button></span></div>)}
             </div>
-
-            <div className="cvmaker-template-filter">
-              <span className="cvmaker-filter-label">🎯 Smart Recommendation:</span>
-              <span className="cvmaker-filter-tag">{getCurrentRecommendation()}</span>
-            </div>
-
-            <div className="cvmaker-ai-info">
-              <span className="cvmaker-ai-info-icon">🤖</span>
-              <span>Click "Edit & Customize CV" on any card to create a personalized CV</span>
-            </div>
-
-            <div className="cvmaker-templates-grid">
-              {filteredTemplates.map(template => renderTemplateCard(template))}
-            </div>
-
-            <div className="cvmaker-ats-info-box">
-              <h4>🤖 ATS-Optimized Templates Include:</h4>
-              <div className="cvmaker-ats-features">
-                <span>✅ Single-column layout</span>
-                <span>✅ Standard headings</span>
-                <span>✅ Machine-readable dates</span>
-                <span>✅ Keyword-rich summary</span>
-                <span>✅ Bullet point consistency</span>
-              </div>
-            </div>
+            <div className="cvmaker-template-filter"><span className="cvmaker-filter-label">🎯 Smart Recommendation:</span><span className="cvmaker-filter-tag">{getCurrentRecommendation()}</span></div>
+            <div className="cvmaker-ai-info"><span className="cvmaker-ai-info-icon">🤖</span><span>Click "Edit & Customize CV" on any card to create a personalized CV</span></div>
+            <div className="cvmaker-templates-grid">{filteredTemplates.map(template => renderTemplateCard(template))}</div>
+            <div className="cvmaker-ats-info-box"><h4>🤖 ATS-Optimized Templates Include:</h4><div className="cvmaker-ats-features"><span>✅ Single-column layout</span><span>✅ Standard headings</span><span>✅ Machine-readable dates</span><span>✅ Keyword-rich summary</span><span>✅ Bullet point consistency</span></div></div>
           </div>
         );
-
       case "scoring":
         return (
           <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header">
-              <h3>Smart CV Scoring</h3>
-              <span className="cvmaker-panel-subtitle">AI-powered analysis with real-time feedback</span>
-            </div>
-
-            <div className="cvmaker-input-mode-toggle">
-              <button
-                className={`cvmaker-mode-btn ${inputMode === "upload" ? "cvmaker-mode-active" : ""}`}
-                onClick={() => setInputMode("upload")}
-              >
-                📁 Upload CV File
-              </button>
-              <button
-                className={`cvmaker-mode-btn ${inputMode === "paste" ? "cvmaker-mode-active" : ""}`}
-                onClick={() => setInputMode("paste")}
-              >
-                📝 Paste CV Text
-              </button>
-            </div>
-
-            {inputMode === "upload" && (
-              <div
-                className={`cvmaker-upload-dropzone ${dragOver ? "cvmaker-drag-over" : ""}`}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".pdf,.docx,.txt"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleFileSelect(e.target.files[0])}
-                />
-                <div className="cvmaker-upload-icon-large">
-                  {uploadedFileName ? "✅" : "📂"}
-                </div>
-                {uploadedFileName ? (
-                  <>
-                    <p className="cvmaker-upload-success-text">File loaded: <strong>{uploadedFileName}</strong></p>
-                    <p className="cvmaker-upload-hint">Click to change file</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="cvmaker-upload-main-text">Drag & drop your CV here</p>
-                    <p className="cvmaker-upload-hint">or click to browse files</p>
-                    <div className="cvmaker-upload-formats">
-                      <span className="cvmaker-format-badge">PDF</span>
-                      <span className="cvmaker-format-badge">DOCX</span>
-                      <span className="cvmaker-format-badge">TXT</span>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-
-            {inputMode === "paste" && (
-              <textarea
-                className="cvmaker-cv-input"
-                placeholder="Paste your CV text here to get a detailed AI analysis..."
-                value={cvContent}
-                onChange={(e) => setCvContent(e.target.value)}
-                rows={10}
-              />
-            )}
-
-            <button
-              className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`}
-              onClick={analyzeCV}
-              disabled={isAnalyzing}
-            >
-              {isAnalyzing ? (
-                <span className="cvmaker-loading-text">
-                  <span className="cvmaker-spinner">⚙️</span> Analyzing with AI...
-                </span>
-              ) : (
-                "⚡ Analyze CV with AI"
-              )}
-            </button>
-
-            {cvHealth && (
-              <>
-                <div className="cvmaker-score-tabs">
-                  {["overview", "sections", "feedback"].map((tab) => (
-                    <button
-                      key={tab}
-                      className={`cvmaker-score-tab ${activeScoreTab === tab ? "cvmaker-score-tab-active" : ""}`}
-                      onClick={() => setActiveScoreTab(tab)}
-                    >
-                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                    </button>
-                  ))}
-                </div>
-
-                {activeScoreTab === "overview" && (
-                  <>
-                    <div className="cvmaker-overall-score">
-                      <div
-                        className="cvmaker-score-ring"
-                        style={{ "--score-color": getScoreColor(cvHealth.overall) }}
-                      >
-                        <span className="cvmaker-score-number">{cvHealth.overall}</span>
-                        <span className="cvmaker-score-label">Overall</span>
-                      </div>
-                      <div className="cvmaker-score-summary">
-                        <div className="cvmaker-strengths-box">
-                          <h5>💪 Top Strengths</h5>
-                          {cvHealth.topStrengths.map((s, i) => (
-                            <div key={i} className="cvmaker-strength-item">✅ {s}</div>
-                          ))}
-                        </div>
-                        <div className="cvmaker-improvements-box">
-                          <h5>🎯 Top Improvements</h5>
-                          {cvHealth.topImprovements.map((s, i) => (
-                            <div key={i} className="cvmaker-improvement-item">⚡ {s}</div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="cvmaker-score-cards">
-                      {[
-                        { label: "Completeness", value: cvHealth.completeness },
-                        { label: "Formatting", value: cvHealth.formatting },
-                        { label: "Readability", value: cvHealth.readability },
-                        { label: "Skills Match", value: cvHealth.skillsScore },
-                        { label: "ATS Score", value: cvHealth.atsScore },
-                        { label: "Keyword Density", value: cvHealth.keywordDensity },
-                        { label: "Exp. Impact", value: cvHealth.experienceImpact },
-                        { label: "Personalization", value: cvHealth.personalization },
-                      ].map(({ label, value }) => (
-                        <div className="cvmaker-score-card" key={label}>
-                          <div className="cvmaker-score-bar-outer">
-                            <div
-                              className="cvmaker-score-bar-inner"
-                              style={{ width: `${value}%`, background: getScoreColor(value) }}
-                            />
-                          </div>
-                          <div className="cvmaker-score-card-footer">
-                            <span className="cvmaker-score-card-label">{label}</span>
-                            <span
-                              className="cvmaker-score-card-value"
-                              style={{ color: getScoreColor(value) }}
-                            >
-                              {value}%
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                {activeScoreTab === "sections" && (
-                  <div className="cvmaker-section-health">
-                    <h4>Section-wise Health Meter</h4>
-                    {cvHealth.sectionHealth.map(({ section, score, status }) => {
-                      const badge = getStatusBadge(status);
-                      return (
-                        <div className="cvmaker-section-row" key={section}>
-                          <span className="cvmaker-section-name">{section}</span>
-                          <div className="cvmaker-section-bar-outer">
-                            <div
-                              className="cvmaker-section-bar-inner"
-                              style={{ width: `${score}%`, background: badge.color }}
-                            />
-                          </div>
-                          <span className="cvmaker-section-score">{score}%</span>
-                          <span
-                            className="cvmaker-section-badge"
-                            style={{ color: badge.color, borderColor: badge.color }}
-                          >
-                            {badge.label}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {activeScoreTab === "feedback" && (
-                  <div className="cvmaker-feedback-list">
-                    {cvHealth.feedback.map((item, i) => (
-                      <div key={i} className={`cvmaker-feedback-item cvmaker-feedback-${item.type}`}>
-                        <span className="cvmaker-feedback-icon">
-                          {item.type === "success" ? "✅" : item.type === "warning" ? "⚠️" : "💡"}
-                        </span>
-                        <span>{item.message}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
+            <div className="cvmaker-panel-header"><h3>Smart CV Scoring</h3><span className="cvmaker-panel-subtitle">AI-powered analysis with real-time feedback</span></div>
+            <div className="cvmaker-input-mode-toggle"><button className={`cvmaker-mode-btn ${inputMode === "upload" ? "cvmaker-mode-active" : ""}`} onClick={() => setInputMode("upload")}>📁 Upload CV File</button><button className={`cvmaker-mode-btn ${inputMode === "paste" ? "cvmaker-mode-active" : ""}`} onClick={() => setInputMode("paste")}>📝 Paste CV Text</button></div>
+            {inputMode === "upload" && (<div className={`cvmaker-upload-dropzone ${dragOver ? "cvmaker-drag-over" : ""}`} onDragOver={(e) => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()}><input ref={fileInputRef} type="file" accept=".pdf,.docx,.txt" style={{ display: "none" }} onChange={(e) => handleFileSelect(e.target.files[0])} /><div className="cvmaker-upload-icon-large">{uploadedFileName ? "✅" : "📂"}</div>{uploadedFileName ? (<><p className="cvmaker-upload-success-text">File loaded: <strong>{uploadedFileName}</strong></p><p className="cvmaker-upload-hint">Click to change file</p></>) : (<><p className="cvmaker-upload-main-text">Drag & drop your CV here</p><p className="cvmaker-upload-hint">or click to browse files</p><div className="cvmaker-upload-formats"><span className="cvmaker-format-badge">PDF</span><span className="cvmaker-format-badge">DOCX</span><span className="cvmaker-format-badge">TXT</span></div></>)}</div>)}
+            {inputMode === "paste" && (<textarea className="cvmaker-cv-input" placeholder="Paste your CV text here to get a detailed AI analysis..." value={cvContent} onChange={(e) => setCvContent(e.target.value)} rows={10} />)}
+            <button className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`} onClick={analyzeCV} disabled={isAnalyzing}>{isAnalyzing ? (<span className="cvmaker-loading-text"><span className="cvmaker-spinner">⚙️</span> Analyzing with AI...</span>) : "⚡ Analyze CV with AI"}</button>
+            {cvHealth && (<><div className="cvmaker-score-tabs">{["overview", "sections", "feedback"].map((tab) => (<button key={tab} className={`cvmaker-score-tab ${activeScoreTab === tab ? "cvmaker-score-tab-active" : ""}`} onClick={() => setActiveScoreTab(tab)}>{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>))}</div>
+            {activeScoreTab === "overview" && (<><div className="cvmaker-overall-score"><div className="cvmaker-score-ring" style={{ "--score-color": getScoreColor(cvHealth.overall) }}><span className="cvmaker-score-number">{cvHealth.overall}</span><span className="cvmaker-score-label">Overall</span></div><div className="cvmaker-score-summary"><div className="cvmaker-strengths-box"><h5>💪 Top Strengths</h5>{cvHealth.topStrengths.map((s, i) => (<div key={i} className="cvmaker-strength-item">✅ {s}</div>))}</div><div className="cvmaker-improvements-box"><h5>🎯 Top Improvements</h5>{cvHealth.topImprovements.map((s, i) => (<div key={i} className="cvmaker-improvement-item">⚡ {s}</div>))}</div></div></div><div className="cvmaker-score-cards">{[
+              { label: "Completeness", value: cvHealth.completeness }, { label: "Formatting", value: cvHealth.formatting }, { label: "Readability", value: cvHealth.readability }, { label: "Skills Match", value: cvHealth.skillsScore }, { label: "ATS Score", value: cvHealth.atsScore }, { label: "Keyword Density", value: cvHealth.keywordDensity }, { label: "Exp. Impact", value: cvHealth.experienceImpact }, { label: "Personalization", value: cvHealth.personalization }
+            ].map(({ label, value }) => (<div className="cvmaker-score-card" key={label}><div className="cvmaker-score-bar-outer"><div className="cvmaker-score-bar-inner" style={{ width: `${value}%`, background: getScoreColor(value) }} /></div><div className="cvmaker-score-card-footer"><span className="cvmaker-score-card-label">{label}</span><span className="cvmaker-score-card-value" style={{ color: getScoreColor(value) }}>{value}%</span></div></div>))}</div></>)}
+            {activeScoreTab === "sections" && (<div className="cvmaker-section-health"><h4>Section-wise Health Meter</h4>{cvHealth.sectionHealth.map(({ section, score, status }) => { const badge = getStatusBadge(status); return (<div className="cvmaker-section-row" key={section}><span className="cvmaker-section-name">{section}</span><div className="cvmaker-section-bar-outer"><div className="cvmaker-section-bar-inner" style={{ width: `${score}%`, background: badge.color }} /></div><span className="cvmaker-section-score">{score}%</span><span className="cvmaker-section-badge" style={{ color: badge.color, borderColor: badge.color }}>{badge.label}</span></div>); })}</div>)}
+            {activeScoreTab === "feedback" && (<div className="cvmaker-feedback-list">{cvHealth.feedback.map((item, i) => (<div key={i} className={`cvmaker-feedback-item cvmaker-feedback-${item.type}`}><span className="cvmaker-feedback-icon">{item.type === "success" ? "✅" : item.type === "warning" ? "⚠️" : "💡"}</span><span>{item.message}</span></div>))}</div>)}</>)}
           </div>
         );
-
       case "coverletter":
         return (
           <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header">
-              <h3>Cover Letter Generator</h3>
-              <span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span>
-            </div>
-
-            <div className="cvmaker-tone-selector">
-              <label>Select Tone:</label>
-              <div className="cvmaker-tone-options">
-                {[
-                  { id: "formal", label: "Formal", icon: "🏢" },
-                  { id: "modern", label: "Modern", icon: "🚀" },
-                  { id: "creative", label: "Creative", icon: "🎨" },
-                  { id: "academic", label: "Academic", icon: "🎓" },
-                ].map((tone) => (
-                  <button
-                    key={tone.id}
-                    className={`cvmaker-tone-btn ${coverLetterTone === tone.id ? "cvmaker-tone-active" : ""}`}
-                    onClick={() => setCoverLetterTone(tone.id)}
-                  >
-                    {tone.icon} {tone.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>
-              ✉️ Generate Cover Letter
-            </button>
-
-            {coverLetter && (
-              <>
-                <textarea
-                  className="cvmaker-cover-letter-textarea"
-                  rows="18"
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                />
-                <div className="cvmaker-cl-actions">
-                  <button
-                    className="cvmaker-cl-action-btn"
-                    onClick={() => navigator.clipboard.writeText(coverLetter)}
-                  >
-                    📋 Copy
-                  </button>
-                  <button
-                    className="cvmaker-cl-action-btn"
-                    onClick={() => exportCV("cover-letter-pdf")}
-                  >
-                    📄 Export PDF
-                  </button>
-                </div>
-              </>
-            )}
+            <div className="cvmaker-panel-header"><h3>Cover Letter Generator</h3><span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span></div>
+            <div className="cvmaker-tone-selector"><label>Select Tone:</label><div className="cvmaker-tone-options">{[{ id: "formal", label: "Formal", icon: "🏢" }, { id: "modern", label: "Modern", icon: "🚀" }, { id: "creative", label: "Creative", icon: "🎨" }, { id: "academic", label: "Academic", icon: "🎓" }].map((tone) => (<button key={tone.id} className={`cvmaker-tone-btn ${coverLetterTone === tone.id ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone(tone.id)}>{tone.icon} {tone.label}</button>))}</div></div>
+            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>✉️ Generate Cover Letter</button>
+            {coverLetter && (<><textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} /><div className="cvmaker-cl-actions"><button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>📋 Copy</button><button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>📄 Export PDF</button></div></>)}
           </div>
         );
-
       case "export":
         return (
           <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header">
-              <h3>Export & Sharing</h3>
-              <span className="cvmaker-panel-subtitle">Multi-format export · Shareable links</span>
-            </div>
-
-            <div className="cvmaker-export-section">
-              <h4>📤 Multi-Format Export</h4>
-              <div className="cvmaker-export-options">
-                <button className="cvmaker-export-btn" onClick={() => exportCV("ats-pdf")}>
-                  <span className="cvmaker-export-icon">📄</span>
-                  <span className="cvmaker-export-name">ATS-Optimized PDF</span>
-                  <span className="cvmaker-export-desc">Best for job applications</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={() => exportCV("styled-pdf")}>
-                  <span className="cvmaker-export-icon">🎨</span>
-                  <span className="cvmaker-export-name">Styled PDF</span>
-                  <span className="cvmaker-export-desc">Custom visual design</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={() => exportCV("docx")}>
-                  <span className="cvmaker-export-icon">📝</span>
-                  <span className="cvmaker-export-name">Word DOCX</span>
-                  <span className="cvmaker-export-desc">Editable document</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={() => exportCV("txt")}>
-                  <span className="cvmaker-export-icon">📃</span>
-                  <span className="cvmaker-export-name">Plain Text</span>
-                  <span className="cvmaker-export-desc">ATS-safe, no formatting</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="cvmaker-share-section">
-              <h4>🔗 Sharing System</h4>
-              <div className="cvmaker-share-options">
-                <button className="cvmaker-share-btn" onClick={generateShareLink}>
-                  🔗 Generate Shareable Link
-                </button>
-                <button className="cvmaker-share-btn" onClick={() => alert("QR Code generated!")}>
-                  📱 Generate QR Code
-                </button>
-                <button className="cvmaker-share-btn" onClick={() => alert("Email sharing opened!")}>
-                  📧 Share via Email
-                </button>
-              </div>
-              {shareLink && (
-                <div className="cvmaker-share-link-box">
-                  <input className="cvmaker-share-link-input" readOnly value={shareLink} />
-                  <button
-                    className="cvmaker-copy-btn"
-                    onClick={() => navigator.clipboard.writeText(shareLink)}
-                  >
-                    Copy
-                  </button>
-                </div>
-              )}
-            </div>
+            <div className="cvmaker-panel-header"><h3>Export & Sharing</h3><span className="cvmaker-panel-subtitle">Multi-format export · Shareable links</span></div>
+            <div className="cvmaker-export-section"><h4>📤 Multi-Format Export</h4><div className="cvmaker-export-options"><button className="cvmaker-export-btn" onClick={() => exportCV("ats-pdf")}><span className="cvmaker-export-icon">📄</span><span className="cvmaker-export-name">ATS-Optimized PDF</span><span className="cvmaker-export-desc">Best for job applications</span></button><button className="cvmaker-export-btn" onClick={() => exportCV("styled-pdf")}><span className="cvmaker-export-icon">🎨</span><span className="cvmaker-export-name">Styled PDF</span><span className="cvmaker-export-desc">Custom visual design</span></button><button className="cvmaker-export-btn" onClick={() => exportCV("docx")}><span className="cvmaker-export-icon">📝</span><span className="cvmaker-export-name">Word DOCX</span><span className="cvmaker-export-desc">Editable document</span></button><button className="cvmaker-export-btn" onClick={() => exportCV("txt")}><span className="cvmaker-export-icon">📃</span><span className="cvmaker-export-name">Plain Text</span><span className="cvmaker-export-desc">ATS-safe, no formatting</span></button></div></div>
+            <div className="cvmaker-share-section"><h4>🔗 Sharing System</h4><div className="cvmaker-share-options"><button className="cvmaker-share-btn" onClick={generateShareLink}>🔗 Generate Shareable Link</button><button className="cvmaker-share-btn" onClick={() => alert("QR Code generated!")}>📱 Generate QR Code</button><button className="cvmaker-share-btn" onClick={() => alert("Email sharing opened!")}>📧 Share via Email</button></div>{shareLink && (<div className="cvmaker-share-link-box"><input className="cvmaker-share-link-input" readOnly value={shareLink} /><button className="cvmaker-copy-btn" onClick={() => navigator.clipboard.writeText(shareLink)}>Copy</button></div>)}</div>
           </div>
         );
-
-      default:
-        return <div>Select a feature</div>;
+      default: return <div>Select a feature</div>;
     }
   };
 
@@ -1743,34 +1020,11 @@ ${t.sign}
   return (
     <div className="cvmaker-dashboard">
       <div className="cvmaker-sidebar">
-        <div className="cvmaker-sidebar-brand">
-          <span className="cvmaker-sidebar-logo">📄</span>
-          <h2>CV Maker</h2>
-        </div>
-
-        <nav className="cvmaker-nav">
-          {features.map((feature) => (
-            <button
-              key={feature.id}
-              className={`cvmaker-sidebar-feature ${activeFeature === feature.id ? "cvmaker-active" : ""}`}
-              onClick={() => setActiveFeature(feature.id)}
-            >
-              <span className="cvmaker-nav-icon">{feature.icon}</span>
-              <span>{feature.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        <button className="cvmaker-back-btn" onClick={onBack}>
-          ← Back
-        </button>
+        <div className="cvmaker-sidebar-brand"><span className="cvmaker-sidebar-logo">📄</span><h2>CV Maker</h2></div>
+        <nav className="cvmaker-nav">{features.map((feature) => (<button key={feature.id} className={`cvmaker-sidebar-feature ${activeFeature === feature.id ? "cvmaker-active" : ""}`} onClick={() => setActiveFeature(feature.id)}><span className="cvmaker-nav-icon">{feature.icon}</span><span>{feature.label}</span></button>))}</nav>
+        <button className="cvmaker-back-btn" onClick={onBack}>← Back</button>
       </div>
-
-      <div className="cvmaker-content">
-        <div className="cvmaker-feature-container">
-          {renderActiveFeature()}
-        </div>
-      </div>
+      <div className="cvmaker-content"><div className="cvmaker-feature-container">{renderActiveFeature()}</div></div>
     </div>
   );
 };
