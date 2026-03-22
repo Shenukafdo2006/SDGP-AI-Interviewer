@@ -444,45 +444,7 @@ const CVMaker = ({ onBack }) => {
     setShowEditor(false);
   };
 
-  // Rich text formatting functions
-  const applyFormatting = (type) => {
-    const textarea = document.querySelector('.cvmaker-preview-content-textarea');
-    if (!textarea) return;
-    
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = cvFormData.professionalSummary.substring(start, end);
-    
-    if (selected) {
-      let formatted = selected;
-      if (type === 'bold') formatted = `<strong>${selected}</strong>`;
-      if (type === 'italic') formatted = `<em>${selected}</em>`;
-      if (type === 'underline') formatted = `<u>${selected}</u>`;
-      
-      const newText = cvFormData.professionalSummary.substring(0, start) + formatted + cvFormData.professionalSummary.substring(end);
-      setCvFormData(prev => ({ ...prev, professionalSummary: newText }));
-    }
-  };
-
-  // Apply font size class
-  const getFontSizeClass = () => {
-    switch(designSettings.fontSize) {
-      case "small": return "cvmaker-font-small";
-      case "large": return "cvmaker-font-large";
-      default: return "cvmaker-font-medium";
-    }
-  };
-
-  // Apply spacing class
-  const getSpacingClass = () => {
-    switch(designSettings.spacing) {
-      case "compact": return "cvmaker-spacing-compact";
-      case "loose": return "cvmaker-spacing-loose";
-      default: return "cvmaker-spacing-normal";
-    }
-  };
-
-  // Generate formatted CV HTML for preview and download with design settings
+  // Generate formatted CV HTML for preview and download
   const generateCVHTML = () => {
     const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim() || "Your Name";
     const headline = cvFormData.useAsHeadline && cvFormData.desiredJob ? cvFormData.desiredJob : "";
@@ -965,13 +927,6 @@ const CVMaker = ({ onBack }) => {
             <button className={`cvmaker-toolbar-tab ${activeFormattingTab === "design" ? "active" : ""}`} onClick={() => setActiveFormattingTab("design")}>Design</button>
             <button className={`cvmaker-toolbar-tab ${activeFormattingTab === "preview" ? "active" : ""}`} onClick={() => setActiveFormattingTab("preview")}>Preview</button>
           </div>
-          {activeFormattingTab === "write" && (
-            <div className="cvmaker-formatting-tools">
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('bold')}><strong>B</strong></button>
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('italic')}><em>I</em></button>
-              <button className="cvmaker-format-btn" onClick={() => applyFormatting('underline')}><u>U</u></button>
-            </div>
-          )}
           {activeFormattingTab === "design" && renderDesignPanel()}
         </div>
 
@@ -999,25 +954,101 @@ const CVMaker = ({ onBack }) => {
                     </div>
                   </div>
                   <div className="cvmaker-form-row">
-                    <div className="cvmaker-form-group"><label>Given name *</label><input type="text" name="givenName" value={cvFormData.givenName} onChange={handleFormChange} placeholder="First name" /></div>
-                    <div className="cvmaker-form-group"><label>Family name *</label><input type="text" name="familyName" value={cvFormData.familyName} onChange={handleFormChange} placeholder="Last name" /></div>
+                    <div className="cvmaker-form-group">
+                      <label>Given name *</label>
+                      <input 
+                        type="text" 
+                        name="givenName" 
+                        value={cvFormData.givenName} 
+                        onChange={handleFormChange}
+                        placeholder="First name" 
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>Family name *</label>
+                      <input 
+                        type="text" 
+                        name="familyName" 
+                        value={cvFormData.familyName} 
+                        onChange={handleFormChange}
+                        placeholder="Last name" 
+                      />
+                    </div>
                   </div>
-                  <div className="cvmaker-form-group"><label>Desired job position</label><input type="text" name="desiredJob" value={cvFormData.desiredJob} onChange={handleFormChange} /><label className="cvmaker-checkbox-label"><input type="checkbox" name="useAsHeadline" checked={cvFormData.useAsHeadline} onChange={handleFormChange} /> Use as headline</label></div>
-                  <div className="cvmaker-form-group"><label>Email address *</label><input type="email" name="email" value={cvFormData.email} onChange={handleFormChange} /></div>
-                  <div className="cvmaker-form-group"><label>Phone number *</label><input type="tel" name="phone" value={cvFormData.phone} onChange={handleFormChange} /></div>
-                  <div className="cvmaker-form-group"><label>Address</label><input type="text" name="address" value={cvFormData.address} onChange={handleFormChange} /></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Post code</label><input type="text" name="postCode" value={cvFormData.postCode} onChange={handleFormChange} /></div><div className="cvmaker-form-group"><label>City</label><input type="text" name="city" value={cvFormData.city} onChange={handleFormChange} /></div></div>
-                  <details className="cvmaker-optional-details"><summary>+ Additional fields</summary><div className="cvmaker-optional-fields">
-                    <div className="cvmaker-form-group"><label>Date of birth</label><input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Place of birth</label><input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Driving licence</label><input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Gender</label><input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Nationality</label><input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Civil status</label><input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Website</label><input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>LinkedIn</label><input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} /></div>
-                    <div className="cvmaker-form-group"><label>Custom field</label><input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} /></div>
-                  </div></details>
+                  <div className="cvmaker-form-group">
+                    <label>Desired job position</label>
+                    <input 
+                      type="text" 
+                      name="desiredJob" 
+                      value={cvFormData.desiredJob} 
+                      onChange={handleFormChange}
+                    />
+                    <label className="cvmaker-checkbox-label">
+                      <input type="checkbox" name="useAsHeadline" checked={cvFormData.useAsHeadline} onChange={handleFormChange} />
+                      Use as headline
+                    </label>
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Email address *</label>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      value={cvFormData.email} 
+                      onChange={handleFormChange}
+                    />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Phone number *</label>
+                    <input 
+                      type="tel" 
+                      name="phone" 
+                      value={cvFormData.phone} 
+                      onChange={handleFormChange}
+                    />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Address</label>
+                    <input 
+                      type="text" 
+                      name="address" 
+                      value={cvFormData.address} 
+                      onChange={handleFormChange}
+                    />
+                  </div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Post code</label>
+                      <input 
+                        type="text" 
+                        name="postCode" 
+                        value={cvFormData.postCode} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>City</label>
+                      <input 
+                        type="text" 
+                        name="city" 
+                        value={cvFormData.city} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
+                  </div>
+                  <details className="cvmaker-optional-details">
+                    <summary>+ Additional fields</summary>
+                    <div className="cvmaker-optional-fields">
+                      <div className="cvmaker-form-group"><label>Date of birth</label><input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Place of birth</label><input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Driving licence</label><input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Gender</label><input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Nationality</label><input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Civil status</label><input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Website</label><input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>LinkedIn</label><input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-group"><label>Custom field</label><input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} /></div>
+                    </div>
+                  </details>
                 </div>
               </div>
             </div>
@@ -1030,11 +1061,42 @@ const CVMaker = ({ onBack }) => {
               {educationEntries.map((edu, idx) => (
                 <div key={idx} className="cvmaker-entry-card">
                   <div className="cvmaker-entry-header"><span>Education #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeEducation(idx)}>✕</button></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>School / University</label><input type="text" value={edu.school} onChange={(e) => updateEducation(idx, 'school', e.target.value)} /></div><div className="cvmaker-form-group"><label>City</label><input type="text" value={edu.city} onChange={(e) => updateEducation(idx, 'city', e.target.value)} /></div></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Start Month</label><input type="text" placeholder="Month" value={edu.startMonth} onChange={(e) => updateEducation(idx, 'startMonth', e.target.value)} /></div><div className="cvmaker-form-group"><label>Start Year</label><input type="text" placeholder="Year" value={edu.startYear} onChange={(e) => updateEducation(idx, 'startYear', e.target.value)} /></div></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>End Month</label><input type="text" placeholder="Month" value={edu.endMonth} onChange={(e) => updateEducation(idx, 'endMonth', e.target.value)} disabled={edu.present} /></div><div className="cvmaker-form-group"><label>End Year</label><input type="text" placeholder="Year" value={edu.endYear} onChange={(e) => updateEducation(idx, 'endYear', e.target.value)} disabled={edu.present} /></div></div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>School / University</label>
+                      <input 
+                        type="text" 
+                        value={edu.school} 
+                        onChange={(e) => updateEducation(idx, 'school', e.target.value)}
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>City</label>
+                      <input 
+                        type="text" 
+                        value={edu.city} 
+                        onChange={(e) => updateEducation(idx, 'city', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group"><label>Start Month</label><input type="text" placeholder="Month" value={edu.startMonth} onChange={(e) => updateEducation(idx, 'startMonth', e.target.value)} /></div>
+                    <div className="cvmaker-form-group"><label>Start Year</label><input type="text" placeholder="Year" value={edu.startYear} onChange={(e) => updateEducation(idx, 'startYear', e.target.value)} /></div>
+                  </div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group"><label>End Month</label><input type="text" placeholder="Month" value={edu.endMonth} onChange={(e) => updateEducation(idx, 'endMonth', e.target.value)} disabled={edu.present} /></div>
+                    <div className="cvmaker-form-group"><label>End Year</label><input type="text" placeholder="Year" value={edu.endYear} onChange={(e) => updateEducation(idx, 'endYear', e.target.value)} disabled={edu.present} /></div>
+                  </div>
                   <div className="cvmaker-form-group"><label><input type="checkbox" checked={edu.present} onChange={(e) => updateEducation(idx, 'present', e.target.checked)} /> Present</label></div>
-                  <div className="cvmaker-form-group"><label>Description</label><textarea rows="3" value={edu.description} onChange={(e) => updateEducation(idx, 'description', e.target.value)} placeholder="Start typing here..." /></div>
+                  <div className="cvmaker-form-group">
+                    <label>Description</label>
+                    <textarea 
+                      rows="3" 
+                      value={edu.description} 
+                      onChange={(e) => updateEducation(idx, 'description', e.target.value)}
+                      placeholder="Start typing here..." 
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -1047,12 +1109,36 @@ const CVMaker = ({ onBack }) => {
               {employmentEntries.map((emp, idx) => (
                 <div key={idx} className="cvmaker-entry-card">
                   <div className="cvmaker-entry-header"><span>Employment #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeEmployment(idx)}>✕</button></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Job Title</label><input type="text" value={emp.jobTitle} onChange={(e) => updateEmployment(idx, 'jobTitle', e.target.value)} /></div><div className="cvmaker-form-group"><label>Company</label><input type="text" value={emp.company} onChange={(e) => updateEmployment(idx, 'company', e.target.value)} /></div></div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Job Title</label>
+                      <input 
+                        type="text" 
+                        value={emp.jobTitle} 
+                        onChange={(e) => updateEmployment(idx, 'jobTitle', e.target.value)}
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>Company</label>
+                      <input 
+                        type="text" 
+                        value={emp.company} 
+                        onChange={(e) => updateEmployment(idx, 'company', e.target.value)}
+                      />
+                    </div>
+                  </div>
                   <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>City</label><input type="text" value={emp.city} onChange={(e) => updateEmployment(idx, 'city', e.target.value)} /></div></div>
                   <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Start Month</label><input type="text" placeholder="Month" value={emp.startMonth} onChange={(e) => updateEmployment(idx, 'startMonth', e.target.value)} /></div><div className="cvmaker-form-group"><label>Start Year</label><input type="text" placeholder="Year" value={emp.startYear} onChange={(e) => updateEmployment(idx, 'startYear', e.target.value)} /></div></div>
                   <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>End Month</label><input type="text" placeholder="Month" value={emp.endMonth} onChange={(e) => updateEmployment(idx, 'endMonth', e.target.value)} disabled={emp.present} /></div><div className="cvmaker-form-group"><label>End Year</label><input type="text" placeholder="Year" value={emp.endYear} onChange={(e) => updateEmployment(idx, 'endYear', e.target.value)} disabled={emp.present} /></div></div>
                   <div className="cvmaker-form-group"><label><input type="checkbox" checked={emp.present} onChange={(e) => updateEmployment(idx, 'present', e.target.checked)} /> Present</label></div>
-                  <div className="cvmaker-form-group"><label>Description</label><textarea rows="3" value={emp.description} onChange={(e) => updateEmployment(idx, 'description', e.target.value)} /></div>
+                  <div className="cvmaker-form-group">
+                    <label>Description</label>
+                    <textarea 
+                      rows="3" 
+                      value={emp.description} 
+                      onChange={(e) => updateEmployment(idx, 'description', e.target.value)}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -1065,7 +1151,27 @@ const CVMaker = ({ onBack }) => {
               {skillsEntries.map((skill, idx) => (
                 <div key={idx} className="cvmaker-entry-card-small">
                   <div className="cvmaker-entry-header"><span>Skill #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeSkill(idx)}>✕</button></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Skill</label><input type="text" value={skill.skill} onChange={(e) => updateSkill(idx, 'skill', e.target.value)} placeholder="e.g., Communication" /></div><div className="cvmaker-form-group"><label>Level</label><select value={skill.level} onChange={(e) => updateSkill(idx, 'level', e.target.value)}><option value="">Make a choice</option><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option><option value="Expert">Expert</option></select></div></div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Skill</label>
+                      <input 
+                        type="text" 
+                        value={skill.skill} 
+                        onChange={(e) => updateSkill(idx, 'skill', e.target.value)}
+                        placeholder="e.g., Communication"
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>Level</label>
+                      <select value={skill.level} onChange={(e) => updateSkill(idx, 'level', e.target.value)}>
+                        <option value="">Make a choice</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Expert">Expert</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               ))}
               <div className="cvmaker-ai-suggestions"><span>🤖 AI Suggestions:</span> Communication • Teamwork • Problem-solving • Time management • Adaptability</div>
@@ -1079,7 +1185,27 @@ const CVMaker = ({ onBack }) => {
               {languagesEntries.map((lang, idx) => (
                 <div key={idx} className="cvmaker-entry-card-small">
                   <div className="cvmaker-entry-header"><span>Language #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeLanguage(idx)}>✕</button></div>
-                  <div className="cvmaker-form-row"><div className="cvmaker-form-group"><label>Language</label><input type="text" value={lang.language} onChange={(e) => updateLanguage(idx, 'language', e.target.value)} placeholder="e.g., English" /></div><div className="cvmaker-form-group"><label>Level</label><select value={lang.level} onChange={(e) => updateLanguage(idx, 'level', e.target.value)}><option value="">Make a choice</option><option value="Basic">Basic</option><option value="Conversational">Conversational</option><option value="Professional">Professional</option><option value="Native">Native</option></select></div></div>
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Language</label>
+                      <input 
+                        type="text" 
+                        value={lang.language} 
+                        onChange={(e) => updateLanguage(idx, 'language', e.target.value)}
+                        placeholder="e.g., English"
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>Level</label>
+                      <select value={lang.level} onChange={(e) => updateLanguage(idx, 'level', e.target.value)}>
+                        <option value="">Make a choice</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Conversational">Conversational</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Native">Native</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               ))}
               <div className="cvmaker-ai-suggestions"><span>🤖 AI Suggestions:</span> English • Spanish • Mandarin Chinese • French • German</div>
@@ -1090,7 +1216,15 @@ const CVMaker = ({ onBack }) => {
           {activeSection === "additional" && (
             <div className="cvmaker-editor-main-full">
               <div className="cvmaker-additional-sections">
-                <div className="cvmaker-section-group"><h4>Profile</h4><textarea rows="3" value={additionalSections.profile} onChange={(e) => setAdditionalSections(prev => ({ ...prev, profile: e.target.value }))} placeholder="Write a short profile about yourself..." /></div>
+                <div className="cvmaker-section-group">
+                  <h4>Profile</h4>
+                  <textarea 
+                    rows="3" 
+                    value={additionalSections.profile} 
+                    onChange={(e) => setAdditionalSections(prev => ({ ...prev, profile: e.target.value }))}
+                    placeholder="Write a short profile about yourself..."
+                  />
+                </div>
                 
                 <div className="cvmaker-section-group"><h4>Courses</h4>{additionalSections.courses.map((course, idx) => (<div key={idx} className="cvmaker-list-item"><input type="text" value={course} onChange={(e) => updateArrayItem('courses', idx, e.target.value)} /><button className="cvmaker-remove-small" onClick={() => removeArrayItem('courses', idx)}>✕</button></div>))}<button className="cvmaker-add-small" onClick={() => addToArray('courses', '')}>+ Add course</button></div>
                 
