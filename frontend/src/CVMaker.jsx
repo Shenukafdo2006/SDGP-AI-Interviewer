@@ -79,10 +79,9 @@ const CVMaker = ({ onBack }) => {
   const generateFallbackContent = (roleId) => {
     const contents = {
       "intern-software-engineer": {
-        summary: "Passionate  Intern software engineer with strong problem-solving skills . Eager to contribute to innovative projects and grow within a dynamic team environment.",
+        summary: "Passionate Intern software engineer with strong problem-solving skills. Eager to contribute to innovative projects and grow within a dynamic team environment.",
         skills: ["JavaScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
-    
-        education: "Undergraduate of Bachelaor of Software Engneering| Expected Graduation: May 2028",
+        education: "Undergraduate of Bachelor of Software Engineering | Expected Graduation: May 2028",
         projects: [
           "E-Commerce Platform: Built a full-stack e-commerce site with React, Node.js, and MongoDB",
           "Task Management App: Developed a task management tool with real-time updates using WebSockets and React"
@@ -91,8 +90,7 @@ const CVMaker = ({ onBack }) => {
       "intern-web-developer": {
         summary: "Creative web developer specializing in responsive design and modern frontend frameworks. Passionate about creating seamless user experiences and optimizing web performance.",
         skills: ["HTML5/CSS3", "JavaScript/ES6", "React.js", "Vue.js", "Tailwind CSS", "WordPress", "Web Performance", "SEO"],
-      
-        education: "Undergraduate of Bachelaor | University of Technology | 2023-2027",
+        education: "Undergraduate of Bachelor | University of Technology | 2023-2027",
         projects: [
           "Portfolio Website: Designed and developed a responsive portfolio with 99% accessibility score",
           "E-Learning Platform: Created an interactive learning platform with video integration and progress tracking"
@@ -101,8 +99,7 @@ const CVMaker = ({ onBack }) => {
       "intern-ui-ux-designer": {
         summary: "User-centered designer focused on creating intuitive and beautiful digital experiences. Skilled in translating user research into actionable design solutions that drive engagement.",
         skills: ["Figma", "Adobe XD", "User Research", "Wireframing", "Prototyping", "Usability Testing", "Design Systems", "Interaction Design"],
-        
-        education: "Undergraduate of Bachelaor of computer science  | 2024-2028",
+        education: "Undergraduate of Bachelor of Computer Science | 2024-2028",
         projects: [
           "Mobile Banking App: Designed end-to-end user flows for a banking app, increasing user retention by 35%",
           "Healthcare Dashboard: Created an accessible dashboard for medical professionals, reducing task completion time by 40%"
@@ -111,18 +108,15 @@ const CVMaker = ({ onBack }) => {
       "intern-project-manager": {
         summary: "Results-driven project manager skilled in leading cross-functional teams and delivering projects on time and within budget. Adept at stakeholder management and agile methodologies.",
         skills: ["Agile/Scrum", "JIRA", "Stakeholder Management", "Risk Assessment", "Budget Planning", "Team Leadership", "Communication", "Strategic Planning"],
-       
-        education: "Undergraduate of  Business Administration  | Business School | 2023-2027",
+        education: "Undergraduate of Business Administration | Business School | 2023-2027",
         projects: [
           "Digital Transformation: Led a 6-month project to migrate legacy systems, completed 2 weeks ahead of schedule",
-          
         ]
       },
       "intern-data-scientist": {
         summary: "Data scientist with strong analytical skills and experience in machine learning and statistical analysis. Passionate about extracting actionable insights from complex datasets.",
         skills: ["Python", "SQL", "Machine Learning", "TensorFlow", "Data Visualization", "Statistical Analysis", "Pandas", "Tableau"],
-       
-        education: "Undergraduate of   Data Science | University of Technology | 2022-2026",
+        education: "Undergraduate of Data Science | University of Technology | 2022-2026",
         projects: [
           "Customer Segmentation: Implemented K-means clustering to segment 500K customers, enabling targeted marketing",
           "Stock Price Prediction: Developed LSTM model achieving 88% accuracy in predicting stock trends"
@@ -529,7 +523,17 @@ ${t.sign}
               onChange={(e) => setEditingCvName(e.target.value)}
               className="cvmaker-editor-name-input"
             />
-            <span className="cvmaker-editor-badge">Curriculum vitae</span>
+            {/* Make the Curriculum vitae badge CLICKABLE */}
+            <span 
+              className="cvmaker-editor-badge cvmaker-clickable-badge"
+              onClick={() => {
+                // This button shows a preview or navigates - you can customize this action
+                alert(`Current CV: "${editingCvName}"\n\nYou can preview your CV here. This feature will be enhanced in future updates.`);
+              }}
+              title="Click to preview CV"
+            >
+              Curriculum vitae
+            </span>
           </div>
           <div className="cvmaker-editor-actions">
             <button className="cvmaker-editor-save-btn" onClick={handleSaveCV}>
@@ -542,7 +546,14 @@ ${t.sign}
           <div className="cvmaker-editor-sidebar">
             <div className="cvmaker-editor-sidebar-header">
               <h3>Personal details</h3>
-              <button className="cvmaker-upload-existing-btn">📁 Upload existing CV</button>
+              <button 
+                className="cvmaker-upload-existing-btn"
+                onClick={() => {
+                  alert("Upload existing CV feature will be available soon!");
+                }}
+              >
+                📁 Upload existing CV
+              </button>
             </div>
             
             <div className="cvmaker-editor-form">
@@ -625,7 +636,7 @@ ${t.sign}
                   </div>
                   <div className="cvmaker-form-group">
                     <label>Driving licence</label>
-                    <input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} />
+                    <input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} placeholder="e.g., Full, Provisional" />
                   </div>
                   <div className="cvmaker-form-group">
                     <label>Gender</label>
