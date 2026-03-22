@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./skillimprovement.css";
+import "./SkillImprovement.css";
 import { getUserProgress, updateGoalProgress } from "./api/skillApi";
 
 const weeklyGoalsData = [
