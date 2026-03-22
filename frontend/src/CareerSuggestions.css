@@ -31,8 +31,8 @@
   --radius-lg: 20px;
   --radius-xl: 28px;
 
-  --font-display: 'Syne', sans-serif;
-  --font-mono:    'Space Mono', monospace;
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
   --font-body:    'DM Sans', sans-serif;
 
   --transition-smooth: cubic-bezier(0.23, 1, 0.32, 1);
