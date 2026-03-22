@@ -50,7 +50,7 @@ const careersData = [
 },
   {
   id: 3,
-  logo: '/logos/ifs.png', // keep your existing
+  logo: '/logos/ifs.jpg', 
   title: 'Full Stack Developer',
   company: 'IFS',
   salary: 'LKR 140,000 - 320,000',
@@ -106,8 +106,20 @@ const careersData = [
       'hSenid is a respected local software provider',
       'Good for understanding enterprise systems',
       'Balanced work responsibilities'
-    ]
+    ],
+     internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic understanding of programming concepts and OOP principles',
+    'Knowledge of at least one programming language (Java, Python, C++, or JavaScript)',
+    'Familiarity with databases and basic SQL queries',
+    'Understanding of software development lifecycle (SDLC)',
+    'Basic knowledge of data structures and algorithms',
+    'Familiar with version control systems like Git',
+    'Problem-solving skills and attention to detail',
+    'Good communication and teamwork skills'
+  ]
   },
+  
   {
     id: 6,
     logo: '/logos/ifs.jpg',
@@ -122,7 +134,18 @@ const careersData = [
       'Strong demand for frontend skills in the local market',
       'International exposure while working at IFS',
       'Good entry point to enterprise web dev'
-    ]
+    ],
+    internshipRequirements: [
+  'Degree in IT/SE/CS (ongoing or completed)',
+  'Basic knowledge of frontend development',
+  'Familiar with HTML, CSS, and JavaScript',
+  'Understanding of responsive web design principles',
+  'Basic knowledge of frameworks or libraries like React, Angular, or Vue',
+  'Understanding of UI/UX fundamentals',
+  'Familiar with Git and version control',
+  'Problem-solving skills and willingness to learn',
+  'Good communication and teamwork skills'
+]
   },
   {
     id: 7,
@@ -138,7 +161,18 @@ const careersData = [
       'Works on diverse tech projects',
       'Exposure to enterprise-level systems',
       'Great cross-team collaboration'
-    ]
+    ],
+    internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Strong understanding of programming fundamentals and OOP',
+    'Ability to analyze problems and design software solutions',
+    'Basic knowledge of backend and frontend technologies',
+    'Understanding of APIs and system integration concepts',
+    'Familiarity with databases and data handling',
+    'Basic knowledge of cloud platforms or distributed systems is a plus',
+    'Good problem-solving and analytical thinking skills',
+    'Excellent communication and teamwork skills'
+  ]
   },
   {
     id: 8,
@@ -154,8 +188,17 @@ const careersData = [
       'DevOps is one of the most in-demand roles in Sri Lanka',
       'Work on scalable systems',
       'Great salary growth potential'
-    ]
-  },
+    ],
+    internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic understanding of DevOps concepts and practices',
+    'Familiarity with Linux/Unix systems and command line',
+    'Basic knowledge of CI/CD pipelines (GitHub Actions, Jenkins, etc.)',
+    'Understanding of containerization tools like Docker',
+    'Basic knowledge of cloud platforms (AWS, Azure, or GCP)',
+    'Familiarity with version control systems like Git',
+    'Understanding of networking fundamentals is a plus'
+]},
   {
     id: 9,
     logo: '/logos/syscolabs.png',
