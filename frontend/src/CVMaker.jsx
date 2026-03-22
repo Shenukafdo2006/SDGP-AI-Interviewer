@@ -11,6 +11,13 @@ const CVMaker = ({ onBack }) => {
   const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [activeFormattingTab, setActiveFormattingTab] = useState("write");
+  
+  // Rich text formatting states
+  const [selectedText, setSelectedText] = useState("");
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
+  const [isUnderline, setIsUnderline] = useState(false);
 
   // State for the CV Editor (Edit Mode)
   const [showEditor, setShowEditor] = useState(false);
@@ -82,45 +89,71 @@ const CVMaker = ({ onBack }) => {
       "intern-software-engineer": {
         summary: "Passionate Intern software engineer with strong problem-solving skills. Eager to contribute to innovative projects and grow within a dynamic team environment.",
         skills: ["JavaScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
-        education: "Undergraduate of Bachelor of Software Engineering | Expected Graduation: May 2028",
+        education: "Bachelor of Software Engineering | University of Technology | 2024 - Present | GPA: 3.8/4.0",
+        experience: [
+          "• Developed and deployed 5+ full-stack applications using React and Node.js",
+          "• Improved application performance by 35% through code optimization",
+          "• Collaborated with cross-functional teams to deliver features on schedule"
+        ],
         projects: [
           "E-Commerce Platform: Built a full-stack e-commerce site with React, Node.js, and MongoDB",
-          "Task Management App: Developed a task management tool with real-time updates using WebSockets and React"
+          "Task Management App: Developed a task management tool with real-time updates using WebSockets"
         ]
       },
       "intern-web-developer": {
         summary: "Creative web developer specializing in responsive design and modern frontend frameworks. Passionate about creating seamless user experiences and optimizing web performance.",
         skills: ["HTML5/CSS3", "JavaScript/ES6", "React.js", "Vue.js", "Tailwind CSS", "WordPress", "Web Performance", "SEO"],
-        education: "Undergraduate of Bachelor | University of Technology | 2023-2027",
+        education: "Bachelor of Computer Science | University of Technology | 2023-2027",
+        experience: [
+          "• Built 10+ responsive websites with 98% Lighthouse scores",
+          "• Implemented SEO strategies increasing organic traffic by 45%",
+          "• Created reusable component libraries reducing development time by 30%"
+        ],
         projects: [
           "Portfolio Website: Designed and developed a responsive portfolio with 99% accessibility score",
-          "E-Learning Platform: Created an interactive learning platform with video integration and progress tracking"
+          "E-Learning Platform: Created an interactive learning platform with video integration"
         ]
       },
       "intern-ui-ux-designer": {
         summary: "User-centered designer focused on creating intuitive and beautiful digital experiences. Skilled in translating user research into actionable design solutions that drive engagement.",
         skills: ["Figma", "Adobe XD", "User Research", "Wireframing", "Prototyping", "Usability Testing", "Design Systems", "Interaction Design"],
-        education: "Undergraduate of Bachelor of Computer Science | 2024-2028",
+        education: "Bachelor of Design in Interaction Design | Design Institute | 2021-2025",
+        experience: [
+          "• Redesigned mobile app resulting in 40% increase in user engagement",
+          "• Conducted 25+ user interviews to inform design decisions",
+          "• Created comprehensive design system used by 3 product teams"
+        ],
         projects: [
-          "Mobile Banking App: Designed end-to-end user flows for a banking app, increasing user retention by 35%",
-          "Healthcare Dashboard: Created an accessible dashboard for medical professionals, reducing task completion time by 40%"
+          "Mobile Banking App: Designed end-to-end user flows for a banking app",
+          "Healthcare Dashboard: Created an accessible dashboard for medical professionals"
         ]
       },
       "intern-project-manager": {
         summary: "Results-driven project manager skilled in leading cross-functional teams and delivering projects on time and within budget. Adept at stakeholder management and agile methodologies.",
         skills: ["Agile/Scrum", "JIRA", "Stakeholder Management", "Risk Assessment", "Budget Planning", "Team Leadership", "Communication", "Strategic Planning"],
-        education: "Undergraduate of Business Administration | Business School | 2023-2027",
+        education: "Bachelor of Business Administration | Business School | 2023-2027",
+        experience: [
+          "• Managed 5 projects simultaneously with 95% on-time delivery rate",
+          "• Reduced project costs by 20% through efficient resource allocation",
+          "• Implemented agile practices increasing team velocity by 40%"
+        ],
         projects: [
-          "Digital Transformation: Led a 6-month project to migrate legacy systems, completed 2 weeks ahead of schedule",
+          "Digital Transformation: Led a 6-month project to migrate legacy systems",
+          "Product Launch: Coordinated cross-functional launch of 3 new features"
         ]
       },
       "intern-data-scientist": {
         summary: "Data scientist with strong analytical skills and experience in machine learning and statistical analysis. Passionate about extracting actionable insights from complex datasets.",
         skills: ["Python", "SQL", "Machine Learning", "TensorFlow", "Data Visualization", "Statistical Analysis", "Pandas", "Tableau"],
-        education: "Undergraduate of Data Science | University of Technology | 2022-2026",
+        education: "Bachelor of Data Science | University of Technology | 2022-2026",
+        experience: [
+          "• Built predictive models achieving 92% accuracy",
+          "• Analyzed 1M+ records to identify key business insights",
+          "• Created interactive dashboards reducing reporting time by 60%"
+        ],
         projects: [
-          "Customer Segmentation: Implemented K-means clustering to segment 500K customers, enabling targeted marketing",
-          "Stock Price Prediction: Developed LSTM model achieving 88% accuracy in predicting stock trends"
+          "Customer Segmentation: Implemented K-means clustering to segment 500K customers",
+          "Stock Price Prediction: Developed LSTM model achieving 88% accuracy"
         ]
       }
     };
@@ -320,6 +353,26 @@ const CVMaker = ({ onBack }) => {
     setShowEditor(false);
   };
 
+  // Rich text formatting functions
+  const applyFormatting = (type) => {
+    const textarea = document.querySelector('.cvmaker-preview-content-textarea');
+    if (!textarea) return;
+    
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = cvFormData.professionalSummary.substring(start, end);
+    
+    if (selected) {
+      let formatted = selected;
+      if (type === 'bold') formatted = `<strong>${selected}</strong>`;
+      if (type === 'italic') formatted = `<em>${selected}</em>`;
+      if (type === 'underline') formatted = `<u>${selected}</u>`;
+      
+      const newText = cvFormData.professionalSummary.substring(0, start) + formatted + cvFormData.professionalSummary.substring(end);
+      setCvFormData(prev => ({ ...prev, professionalSummary: newText }));
+    }
+  };
+
   // Generate PDF for download
   const handleDownloadCV = () => {
     const cvHTML = generateCVHTML();
@@ -332,13 +385,13 @@ const CVMaker = ({ onBack }) => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    alert('CV downloaded as HTML file!');
   };
 
   // Generate formatted CV HTML for preview and download
   const generateCVHTML = () => {
-    const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim();
-    const headline = cvFormData.useAsHeadline ? cvFormData.desiredJob : "";
+    const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim() || "Your Name";
+    const headline = cvFormData.useAsHeadline && cvFormData.desiredJob ? cvFormData.desiredJob : "";
+    const initials = fullName.split(' ').map(n => n[0]).join('').toUpperCase();
     
     return `
       <!DOCTYPE html>
@@ -353,188 +406,255 @@ const CVMaker = ({ onBack }) => {
             box-sizing: border-box;
           }
           body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f5f5f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f8fafc;
             padding: 40px;
           }
-          .cv-preview-card {
-            max-width: 900px;
+          .cv-container {
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
           }
           .cv-header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            padding: 30px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 40px;
             color: white;
-            text-align: center;
+            position: relative;
           }
-          .cv-header h1 {
-            font-size: 2rem;
+          .cv-header-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+          }
+          .cv-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+          }
+          .cv-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          .cv-name-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 8px;
+            letter-spacing: -0.02em;
           }
-          .cv-header .headline {
+          .cv-name-section .headline {
             font-size: 1rem;
-            opacity: 0.9;
+            opacity: 0.8;
+            color: #cbd5e1;
           }
-          .cv-body {
-            padding: 30px;
+          .cv-contact-bar {
+            background: #f1f5f9;
+            padding: 16px 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            border-bottom: 1px solid #e2e8f0;
           }
-          .cv-section {
-            margin-bottom: 25px;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 20px;
-          }
-          .cv-section h3 {
-            color: #4f46e5;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+          .cv-contact-item {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.85rem;
+            color: #334155;
           }
-          .cv-section h3::before {
-            content: "•";
-            font-size: 1.5rem;
+          .cv-contact-item .icon {
+            font-size: 1rem;
           }
-          .cv-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
+          .cv-body {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
           }
-          .cv-col {
-            flex: 1;
-            min-width: 200px;
+          .cv-left {
+            border-right: 2px solid #e2e8f0;
+            padding-right: 30px;
           }
-          .cv-label {
-            font-weight: 600;
-            color: #374151;
-            font-size: 0.8rem;
+          .cv-right {
+            padding-left: 10px;
+          }
+          .cv-section {
+            margin-bottom: 32px;
+          }
+          .cv-section-title {
+            font-size: 1rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 1px;
+            color: #4f46e5;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
           }
-          .cv-value {
-            color: #1f2937;
-            font-size: 0.95rem;
-          }
-          .cv-skills {
+          .cv-skills-list {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
           }
-          .cv-skill-tag {
+          .cv-skill-badge {
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: white;
-            padding: 5px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 0.8rem;
+            font-weight: 500;
+          }
+          .cv-info-item {
+            margin-bottom: 12px;
+          }
+          .cv-info-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 4px;
+          }
+          .cv-info-value {
+            font-size: 0.9rem;
+            color: #1e293b;
+            line-height: 1.4;
+          }
+          .cv-summary-text {
+            color: #334155;
+            line-height: 1.6;
+            font-size: 0.9rem;
           }
           .cv-experience-item, .cv-project-item {
-            margin-bottom: 12px;
-            padding-left: 20px;
-            border-left: 3px solid #4f46e5;
+            margin-bottom: 20px;
           }
-          .cv-experience-item p, .cv-project-item p {
-            color: #4b5563;
+          .cv-experience-text, .cv-project-text {
+            color: #334155;
             line-height: 1.5;
+            font-size: 0.9rem;
+            margin-left: 16px;
+            border-left: 2px solid #e2e8f0;
+            padding-left: 16px;
           }
-          .cv-photo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
+          .cv-education-text {
+            color: #334155;
+            line-height: 1.5;
+            font-size: 0.9rem;
+          }
+          @media (max-width: 768px) {
+            body { padding: 20px; }
+            .cv-body { grid-template-columns: 1fr; gap: 20px; }
+            .cv-left { border-right: none; padding-right: 0; }
+            .cv-right { padding-left: 0; }
+            .cv-header-content { flex-direction: column; text-align: center; }
+            .cv-contact-bar { flex-direction: column; gap: 10px; }
           }
           @media print {
-            body {
-              padding: 0;
-              background: white;
-            }
-            .cv-preview-card {
-              box-shadow: none;
-            }
+            body { padding: 0; background: white; }
+            .cv-container { box-shadow: none; }
           }
         </style>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
       </head>
       <body>
-        <div class="cv-preview-card">
+        <div class="cv-container">
           <div class="cv-header">
-            ${cvFormData.photo ? `<img src="${cvFormData.photo}" alt="Profile" class="cv-photo" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:15px;">` : ''}
-            <h1>${fullName || "Your Name"}</h1>
-            ${headline ? `<div class="headline">${headline}</div>` : ''}
+            <div class="cv-header-content">
+              <div class="cv-avatar">
+                ${cvFormData.photo ? `<img src="${cvFormData.photo}" alt="Profile">` : initials}
+              </div>
+              <div class="cv-name-section">
+                <h1>${fullName}</h1>
+                ${headline ? `<div class="headline">${headline}</div>` : ''}
+              </div>
+            </div>
           </div>
+          
+          <div class="cv-contact-bar">
+            ${cvFormData.email ? `<div class="cv-contact-item"><span class="icon">📧</span> ${cvFormData.email}</div>` : ''}
+            ${cvFormData.phone ? `<div class="cv-contact-item"><span class="icon">📱</span> ${cvFormData.phone}</div>` : ''}
+            ${cvFormData.address ? `<div class="cv-contact-item"><span class="icon">📍</span> ${cvFormData.address}${cvFormData.city ? `, ${cvFormData.city}` : ''}</div>` : ''}
+            ${cvFormData.website ? `<div class="cv-contact-item"><span class="icon">🌐</span> ${cvFormData.website}</div>` : ''}
+            ${cvFormData.linkedin ? `<div class="cv-contact-item"><span class="icon">🔗</span> ${cvFormData.linkedin}</div>` : ''}
+          </div>
+          
           <div class="cv-body">
-            ${cvFormData.professionalSummary ? `
-            <div class="cv-section">
-              <h3>Professional Summary</h3>
-              <p style="color:#4b5563; line-height:1.6;">${cvFormData.professionalSummary}</p>
-            </div>
-            ` : ''}
-            
-            <div class="cv-section">
-              <h3>Contact Information</h3>
-              <div class="cv-row">
-                ${cvFormData.email ? `<div class="cv-col"><div class="cv-label">Email</div><div class="cv-value">${cvFormData.email}</div></div>` : ''}
-                ${cvFormData.phone ? `<div class="cv-col"><div class="cv-label">Phone</div><div class="cv-value">${cvFormData.phone}</div></div>` : ''}
-              </div>
-              <div class="cv-row">
-                ${cvFormData.address ? `<div class="cv-col"><div class="cv-label">Address</div><div class="cv-value">${cvFormData.address}${cvFormData.city ? `, ${cvFormData.city}` : ''}${cvFormData.postCode ? `, ${cvFormData.postCode}` : ''}</div></div>` : ''}
-              </div>
-            </div>
-            
-            ${cvFormData.keySkills.length > 0 ? `
-            <div class="cv-section">
-              <h3>Key Skills</h3>
-              <div class="cv-skills">
-                ${cvFormData.keySkills.map(skill => `<span class="cv-skill-tag">${skill}</span>`).join('')}
-              </div>
-            </div>
-            ` : ''}
-            
-            ${cvFormData.experienceHighlights.length > 0 ? `
-            <div class="cv-section">
-              <h3>Experience Highlights</h3>
-              ${cvFormData.experienceHighlights.map(exp => `
-                <div class="cv-experience-item">
-                  <p>• ${exp}</p>
+            <div class="cv-left">
+              ${cvFormData.keySkills.length > 0 ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Technical Skills</div>
+                <div class="cv-skills-list">
+                  ${cvFormData.keySkills.map(skill => `<span class="cv-skill-badge">${skill}</span>`).join('')}
                 </div>
-              `).join('')}
-            </div>
-            ` : ''}
-            
-            ${cvFormData.education ? `
-            <div class="cv-section">
-              <h3>Education</h3>
-              <p style="color:#4b5563;">${cvFormData.education}</p>
-            </div>
-            ` : ''}
-            
-            ${cvFormData.projects.length > 0 ? `
-            <div class="cv-section">
-              <h3>Projects</h3>
-              ${cvFormData.projects.map(project => `
-                <div class="cv-project-item">
-                  <p>• ${project}</p>
-                </div>
-              `).join('')}
-            </div>
-            ` : ''}
-            
-            <div class="cv-section">
-              <h3>Additional Information</h3>
-              <div class="cv-row">
-                ${cvFormData.dateOfBirth ? `<div class="cv-col"><div class="cv-label">Date of Birth</div><div class="cv-value">${cvFormData.dateOfBirth}</div></div>` : ''}
-                ${cvFormData.nationality ? `<div class="cv-col"><div class="cv-label">Nationality</div><div class="cv-value">${cvFormData.nationality}</div></div>` : ''}
               </div>
-              <div class="cv-row">
-                ${cvFormData.website ? `<div class="cv-col"><div class="cv-label">Website</div><div class="cv-value"><a href="${cvFormData.website}" style="color:#4f46e5;">${cvFormData.website}</a></div></div>` : ''}
-                ${cvFormData.linkedin ? `<div class="cv-col"><div class="cv-label">LinkedIn</div><div class="cv-value"><a href="${cvFormData.linkedin}" style="color:#4f46e5;">${cvFormData.linkedin}</a></div></div>` : ''}
+              ` : ''}
+              
+              <div class="cv-section">
+                <div class="cv-section-title">Personal Details</div>
+                ${cvFormData.dateOfBirth ? `<div class="cv-info-item"><div class="cv-info-label">Date of Birth</div><div class="cv-info-value">${cvFormData.dateOfBirth}</div></div>` : ''}
+                ${cvFormData.placeOfBirth ? `<div class="cv-info-item"><div class="cv-info-label">Place of Birth</div><div class="cv-info-value">${cvFormData.placeOfBirth}</div></div>` : ''}
+                ${cvFormData.nationality ? `<div class="cv-info-item"><div class="cv-info-label">Nationality</div><div class="cv-info-value">${cvFormData.nationality}</div></div>` : ''}
+                ${cvFormData.gender ? `<div class="cv-info-item"><div class="cv-info-label">Gender</div><div class="cv-info-value">${cvFormData.gender}</div></div>` : ''}
+                ${cvFormData.drivingLicense ? `<div class="cv-info-item"><div class="cv-info-label">Driving License</div><div class="cv-info-value">${cvFormData.drivingLicense}</div></div>` : ''}
+                ${cvFormData.civilStatus ? `<div class="cv-info-item"><div class="cv-info-label">Civil Status</div><div class="cv-info-value">${cvFormData.civilStatus}</div></div>` : ''}
               </div>
-              ${cvFormData.customField ? `<div class="cv-row"><div class="cv-col"><div class="cv-label">Additional</div><div class="cv-value">${cvFormData.customField}</div></div></div>` : ''}
+              
+              ${cvFormData.education ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Education</div>
+                <div class="cv-education-text">${cvFormData.education}</div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="cv-right">
+              ${cvFormData.professionalSummary ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Professional Summary</div>
+                <div class="cv-summary-text" dangerouslySetInnerHTML={{ __html: cvFormData.professionalSummary }}></div>
+              </div>
+              ` : ''}
+              
+              ${cvFormData.experienceHighlights.length > 0 ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Experience Highlights</div>
+                ${cvFormData.experienceHighlights.map(exp => `
+                  <div class="cv-experience-item">
+                    <div class="cv-experience-text">${exp}</div>
+                  </div>
+                `).join('')}
+              </div>
+              ` : ''}
+              
+              ${cvFormData.projects.length > 0 ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Projects & Portfolio</div>
+                ${cvFormData.projects.map(project => `
+                  <div class="cv-project-item">
+                    <div class="cv-project-text">${project}</div>
+                  </div>
+                `).join('')}
+              </div>
+              ` : ''}
+              
+              ${cvFormData.customField ? `
+              <div class="cv-section">
+                <div class="cv-section-title">Additional Information</div>
+                <div class="cv-summary-text">${cvFormData.customField}</div>
+              </div>
+              ` : ''}
             </div>
           </div>
         </div>
@@ -762,6 +882,43 @@ ${t.sign}
           </div>
         </div>
 
+        <div className="cvmaker-editor-toolbar">
+          <div className="cvmaker-toolbar-tabs">
+            <button 
+              className={`cvmaker-toolbar-tab ${activeFormattingTab === "write" ? "active" : ""}`}
+              onClick={() => setActiveFormattingTab("write")}
+            >
+              Write
+            </button>
+            <button 
+              className={`cvmaker-toolbar-tab ${activeFormattingTab === "design" ? "active" : ""}`}
+              onClick={() => setActiveFormattingTab("design")}
+            >
+              Design
+            </button>
+            <button 
+              className={`cvmaker-toolbar-tab ${activeFormattingTab === "preview" ? "active" : ""}`}
+              onClick={() => setActiveFormattingTab("preview")}
+            >
+              Preview
+            </button>
+          </div>
+          
+          {activeFormattingTab === "write" && (
+            <div className="cvmaker-formatting-tools">
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('bold')} title="Bold">
+                <strong>B</strong>
+              </button>
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('italic')} title="Italic">
+                <em>I</em>
+              </button>
+              <button className="cvmaker-format-btn" onClick={() => applyFormatting('underline')} title="Underline">
+                <u>U</u>
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="cvmaker-editor-content">
           <div className="cvmaker-editor-sidebar">
             <div className="cvmaker-editor-sidebar-header">
@@ -891,7 +1048,7 @@ ${t.sign}
             <div className="cvmaker-editor-section">
               <h3>Professional Summary</h3>
               <textarea
-                className="cvmaker-editor-textarea"
+                className="cvmaker-editor-textarea cvmaker-preview-content-textarea"
                 rows="4"
                 value={cvFormData.professionalSummary}
                 onChange={(e) => setCvFormData(prev => ({ ...prev, professionalSummary: e.target.value }))}
