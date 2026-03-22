@@ -10,6 +10,7 @@ const CVMaker = ({ onBack }) => {
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
   const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // State for the CV Editor (Edit Mode)
   const [showEditor, setShowEditor] = useState(false);
@@ -319,6 +320,229 @@ const CVMaker = ({ onBack }) => {
     setShowEditor(false);
   };
 
+  // Generate PDF for download
+  const handleDownloadCV = () => {
+    const cvHTML = generateCVHTML();
+    const blob = new Blob([cvHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${editingCvName.replace(/\s+/g, '_')}_CV.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('CV downloaded as HTML file!');
+  };
+
+  // Generate formatted CV HTML for preview and download
+  const generateCVHTML = () => {
+    const fullName = `${cvFormData.givenName} ${cvFormData.familyName}`.trim();
+    const headline = cvFormData.useAsHeadline ? cvFormData.desiredJob : "";
+    
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>${editingCvName} - CV</title>
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            padding: 40px;
+          }
+          .cv-preview-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+          }
+          .cv-header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            padding: 30px;
+            color: white;
+            text-align: center;
+          }
+          .cv-header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+          }
+          .cv-header .headline {
+            font-size: 1rem;
+            opacity: 0.9;
+          }
+          .cv-body {
+            padding: 30px;
+          }
+          .cv-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 20px;
+          }
+          .cv-section h3 {
+            color: #4f46e5;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .cv-section h3::before {
+            content: "•";
+            font-size: 1.5rem;
+          }
+          .cv-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+          }
+          .cv-col {
+            flex: 1;
+            min-width: 200px;
+          }
+          .cv-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+          }
+          .cv-value {
+            color: #1f2937;
+            font-size: 0.95rem;
+          }
+          .cv-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+          .cv-skill-tag {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+          }
+          .cv-experience-item, .cv-project-item {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            border-left: 3px solid #4f46e5;
+          }
+          .cv-experience-item p, .cv-project-item p {
+            color: #4b5563;
+            line-height: 1.5;
+          }
+          .cv-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+          }
+          @media print {
+            body {
+              padding: 0;
+              background: white;
+            }
+            .cv-preview-card {
+              box-shadow: none;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="cv-preview-card">
+          <div class="cv-header">
+            ${cvFormData.photo ? `<img src="${cvFormData.photo}" alt="Profile" class="cv-photo" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:15px;">` : ''}
+            <h1>${fullName || "Your Name"}</h1>
+            ${headline ? `<div class="headline">${headline}</div>` : ''}
+          </div>
+          <div class="cv-body">
+            ${cvFormData.professionalSummary ? `
+            <div class="cv-section">
+              <h3>Professional Summary</h3>
+              <p style="color:#4b5563; line-height:1.6;">${cvFormData.professionalSummary}</p>
+            </div>
+            ` : ''}
+            
+            <div class="cv-section">
+              <h3>Contact Information</h3>
+              <div class="cv-row">
+                ${cvFormData.email ? `<div class="cv-col"><div class="cv-label">Email</div><div class="cv-value">${cvFormData.email}</div></div>` : ''}
+                ${cvFormData.phone ? `<div class="cv-col"><div class="cv-label">Phone</div><div class="cv-value">${cvFormData.phone}</div></div>` : ''}
+              </div>
+              <div class="cv-row">
+                ${cvFormData.address ? `<div class="cv-col"><div class="cv-label">Address</div><div class="cv-value">${cvFormData.address}${cvFormData.city ? `, ${cvFormData.city}` : ''}${cvFormData.postCode ? `, ${cvFormData.postCode}` : ''}</div></div>` : ''}
+              </div>
+            </div>
+            
+            ${cvFormData.keySkills.length > 0 ? `
+            <div class="cv-section">
+              <h3>Key Skills</h3>
+              <div class="cv-skills">
+                ${cvFormData.keySkills.map(skill => `<span class="cv-skill-tag">${skill}</span>`).join('')}
+              </div>
+            </div>
+            ` : ''}
+            
+            ${cvFormData.experienceHighlights.length > 0 ? `
+            <div class="cv-section">
+              <h3>Experience Highlights</h3>
+              ${cvFormData.experienceHighlights.map(exp => `
+                <div class="cv-experience-item">
+                  <p>• ${exp}</p>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+            
+            ${cvFormData.education ? `
+            <div class="cv-section">
+              <h3>Education</h3>
+              <p style="color:#4b5563;">${cvFormData.education}</p>
+            </div>
+            ` : ''}
+            
+            ${cvFormData.projects.length > 0 ? `
+            <div class="cv-section">
+              <h3>Projects</h3>
+              ${cvFormData.projects.map(project => `
+                <div class="cv-project-item">
+                  <p>• ${project}</p>
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+            
+            <div class="cv-section">
+              <h3>Additional Information</h3>
+              <div class="cv-row">
+                ${cvFormData.dateOfBirth ? `<div class="cv-col"><div class="cv-label">Date of Birth</div><div class="cv-value">${cvFormData.dateOfBirth}</div></div>` : ''}
+                ${cvFormData.nationality ? `<div class="cv-col"><div class="cv-label">Nationality</div><div class="cv-value">${cvFormData.nationality}</div></div>` : ''}
+              </div>
+              <div class="cv-row">
+                ${cvFormData.website ? `<div class="cv-col"><div class="cv-label">Website</div><div class="cv-value"><a href="${cvFormData.website}" style="color:#4f46e5;">${cvFormData.website}</a></div></div>` : ''}
+                ${cvFormData.linkedin ? `<div class="cv-col"><div class="cv-label">LinkedIn</div><div class="cv-value"><a href="${cvFormData.linkedin}" style="color:#4f46e5;">${cvFormData.linkedin}</a></div></div>` : ''}
+              </div>
+              ${cvFormData.customField ? `<div class="cv-row"><div class="cv-col"><div class="cv-label">Additional</div><div class="cv-value">${cvFormData.customField}</div></div></div>` : ''}
+            </div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -523,13 +747,9 @@ ${t.sign}
               onChange={(e) => setEditingCvName(e.target.value)}
               className="cvmaker-editor-name-input"
             />
-            {/* Make the Curriculum vitae badge CLICKABLE */}
             <span 
               className="cvmaker-editor-badge cvmaker-clickable-badge"
-              onClick={() => {
-                // This button shows a preview or navigates - you can customize this action
-                alert(`Current CV: "${editingCvName}"\n\nYou can preview your CV here. This feature will be enhanced in future updates.`);
-              }}
+              onClick={() => setShowPreviewModal(true)}
               title="Click to preview CV"
             >
               Curriculum vitae
@@ -733,6 +953,34 @@ ${t.sign}
             </div>
           </div>
         </div>
+
+        {/* Preview Modal */}
+        {showPreviewModal && (
+          <div className="cvmaker-modal-overlay" onClick={() => setShowPreviewModal(false)}>
+            <div className="cvmaker-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="cvmaker-modal-header">
+                <h3>CV Preview: {editingCvName}</h3>
+                <button className="cvmaker-modal-close" onClick={() => setShowPreviewModal(false)}>✕</button>
+              </div>
+              <div className="cvmaker-modal-body">
+                <iframe
+                  srcDoc={generateCVHTML()}
+                  title="CV Preview"
+                  className="cvmaker-preview-iframe"
+                  sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                />
+              </div>
+              <div className="cvmaker-modal-footer">
+                <button className="cvmaker-download-btn" onClick={handleDownloadCV}>
+                  📥 Download CV
+                </button>
+                <button className="cvmaker-modal-close-btn" onClick={() => setShowPreviewModal(false)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
