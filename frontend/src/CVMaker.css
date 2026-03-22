@@ -1774,3 +1774,19 @@
   background: rgba(79, 70, 229, 0.4);
   transform: translateY(-2px);
 }
+/* ============================================
+   Editor Badge Container Enhancement
+   ============================================ */
+
+.cvmaker-editor-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.cvmaker-editor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
