@@ -123,17 +123,18 @@ const careersData = [
       'Good for understanding enterprise systems',
       'Balanced work responsibilities'
     ],
-     internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic understanding of programming concepts and OOP principles',
-    'Knowledge of at least one programming language (Java, Python, C++, or JavaScript)',
-    'Familiarity with databases and basic SQL queries',
-    'Understanding of software development lifecycle (SDLC)',
-    'Basic knowledge of data structures and algorithms',
-    'Familiar with version control systems like Git',
-    'Problem-solving skills and attention to detail',
-    'Good communication and teamwork skills'
-  ]
+    internshipRequirements: [
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic understanding of programming concepts and OOP principles',
+      'Knowledge of at least one programming language (Java, Python, C++, or JavaScript)',
+      'Familiarity with databases and basic SQL queries',
+      'Understanding of software development lifecycle (SDLC)',
+      'Basic knowledge of data structures and algorithms',
+      'Familiar with version control systems like Git',
+      'Problem-solving skills and attention to detail',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Web Development', 'System Design']
   },
   
   {
