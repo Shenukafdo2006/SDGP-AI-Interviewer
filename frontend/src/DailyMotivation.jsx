@@ -85,7 +85,7 @@ const DailyMotivation = ({ onBack }) => {
         <button className="go-back-button" onClick={onBack}>← Back</button>
         <div className="rise-text">RISE AND SHINE ✨</div>
         <h1>Your Daily Motivation</h1>
-        <p>Monday, February 23, 2026</p>
+        <p>{today}</p>
       </div>
 
       {/* ================= GLOWING QUOTE CARD ================= */}
@@ -201,5 +201,10 @@ const DailyMotivation = ({ onBack }) => {
     </div>
   );
 };
+const today = new Date().toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric'
+});
 
 export default DailyMotivation;
