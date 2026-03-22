@@ -5,7 +5,6 @@ const CVMaker = ({ onBack }) => {
   const [activeFeature, setActiveFeature] = useState("templates");
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [cvContent, setCvContent] = useState("");
-  
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
   const [shareLink, setShareLink] = useState("");
@@ -683,7 +682,6 @@ const CVMaker = ({ onBack }) => {
     }
     setIsAnalyzing(true);
     setTimeout(() => {
-      // Empty result - no data displayed
       setIsAnalyzing(false);
     }, 1500);
   };
@@ -700,16 +698,24 @@ const CVMaker = ({ onBack }) => {
     return { color: "#f44336", label: "Poor" };
   };
 
-  // Cover Letter Generation
+  // Cover Letter Generation - Only Formal and Academic tones
   const generateCoverLetter = () => {
     const tones = {
-      formal: { intro: "I am writing to express my strong interest...", body: "With a solid foundation...", close: "I would welcome the opportunity...", sign: "Yours sincerely," },
-      modern: { intro: "I'd love to bring my skills to your team...", body: "I've spent the past few years building...", close: "I'd be thrilled to connect...", sign: "Best," },
-      creative: { intro: "Great products aren't built by algorithms...", body: "I combine technical rigor...", close: "Let's build something remarkable...", sign: "Creatively yours," },
-      academic: { intro: "I am submitting my application...", body: "My academic background...", close: "I look forward to contributing...", sign: "Respectfully," },
+      formal: { 
+        intro: "I am writing to express my strong interest in the Software Engineering position.", 
+        body: "With a solid foundation in full-stack development and a proven track record of delivering scalable solutions, I am confident in my ability to contribute meaningfully to your engineering team.", 
+        close: "I would welcome the opportunity to discuss how my skills align with your team's goals.", 
+        sign: "Yours sincerely," 
+      },
+      academic: { 
+        intro: "I am submitting my application with great enthusiasm for the Software Engineering position at your esteemed organization.", 
+        body: "My academic background in Computer Science, complemented by hands-on research experience in distributed systems, positions me well for this role. I have contributed to open-source projects and published research in performance optimization.", 
+        close: "I look forward to the possibility of contributing to your research-driven environment.", 
+        sign: "Respectfully," 
+      },
     };
     const t = tones[coverLetterTone];
-    setCoverLetter(`Dear Hiring Manager,\n\n${t.intro}\n\n${t.body}\n\n${t.close}\n\n${t.sign}\n[Your Name]`);
+    setCoverLetter(`Dear Hiring Manager,\n\n${t.intro}\n\n${t.body}\n\nI am enthusiastic about joining a team that values innovation and continuous learning. I am confident that my technical skills, collaborative mindset, and commitment to quality make me a strong candidate for this position.\n\n${t.close}\n\n${t.sign}\n[Your Name]`);
   };
 
   const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
@@ -959,7 +965,6 @@ const CVMaker = ({ onBack }) => {
             {inputMode === "paste" && (<textarea className="cvmaker-cv-input" placeholder="Paste your CV text here to get a detailed AI analysis..." value={cvContent} onChange={(e) => setCvContent(e.target.value)} rows={10} />)}
             <button className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`} onClick={analyzeCV} disabled={isAnalyzing}>{isAnalyzing ? (<span className="cvmaker-loading-text"><span className="cvmaker-spinner">⚙️</span> Analyzing with AI...</span>) : "⚡ Analyze CV with AI"}</button>
             
-            {/* Empty tabs with no content */}
             <div className="cvmaker-score-tabs">
               {["overview", "sections", "feedback"].map((tab) => (
                 <button key={tab} className={`cvmaker-score-tab ${activeScoreTab === tab ? "cvmaker-score-tab-active" : ""}`} onClick={() => setActiveScoreTab(tab)}>
@@ -968,7 +973,6 @@ const CVMaker = ({ onBack }) => {
               ))}
             </div>
             
-            {/* Empty content areas - no data displayed */}
             {activeScoreTab === "overview" && (
               <div className="cvmaker-empty-state">
                 <div className="cvmaker-empty-icon">📊</div>
@@ -999,9 +1003,22 @@ const CVMaker = ({ onBack }) => {
         return (
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header"><h3>Cover Letter Generator</h3><span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span></div>
-            <div className="cvmaker-tone-selector"><label>Select Tone:</label><div className="cvmaker-tone-options">{[{ id: "formal", label: "Formal", icon: "🏢" }, { id: "modern", label: "Modern", icon: "🚀" }, { id: "creative", label: "Creative", icon: "🎨" }, { id: "academic", label: "Academic", icon: "🎓" }].map((tone) => (<button key={tone.id} className={`cvmaker-tone-btn ${coverLetterTone === tone.id ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone(tone.id)}>{tone.icon} {tone.label}</button>))}</div></div>
+            <div className="cvmaker-tone-selector"><label>Select Tone:</label>
+              <div className="cvmaker-tone-options">
+                <button className={`cvmaker-tone-btn ${coverLetterTone === "formal" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("formal")}>🏢 Formal</button>
+                <button className={`cvmaker-tone-btn ${coverLetterTone === "academic" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("academic")}>🎓 Academic</button>
+              </div>
+            </div>
             <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>✉️ Generate Cover Letter</button>
-            {coverLetter && (<><textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} /><div className="cvmaker-cl-actions"><button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>📋 Copy</button><button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>📄 Export PDF</button></div></>)}
+            {coverLetter && (
+              <>
+                <textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
+                <div className="cvmaker-cl-actions">
+                  <button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>📋 Copy</button>
+                  <button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>📄 Export PDF</button>
+                </div>
+              </>
+            )}
           </div>
         );
 
