@@ -208,15 +208,19 @@ const careersData = [
       'Great salary growth potential'
     ],
     internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic understanding of DevOps concepts and practices',
-    'Familiarity with Linux/Unix systems and command line',
-    'Basic knowledge of CI/CD pipelines (GitHub Actions, Jenkins, etc.)',
-    'Understanding of containerization tools like Docker',
-    'Basic knowledge of cloud platforms (AWS, Azure, or GCP)',
-    'Familiarity with version control systems like Git',
-    'Understanding of networking fundamentals is a plus'
-]},
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic understanding of DevOps concepts and practices',
+      'Familiarity with Linux/Unix systems and command line',
+      'Basic knowledge of CI/CD pipelines (GitHub Actions, Jenkins, etc.)',
+      'Understanding of containerization tools like Docker',
+      'Basic knowledge of cloud platforms (AWS, Azure, or GCP)',
+      'Familiarity with version control systems like Git',
+      'Understanding of networking fundamentals is a plus',
+      'Problem-solving mindset and willingness to learn',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['DevOps', 'Cloud Computing']
+  },
   {
     id: 9,
     logo: '/logos/syscolabs.png',
