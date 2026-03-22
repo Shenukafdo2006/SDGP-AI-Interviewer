@@ -6,21 +6,29 @@ import './CareerSuggestions.css';
 // ============================================
 const careersData = [
   {
-    id: 1,
-    logo: '/logos/99x.png',
-    title: 'Software Engineer',
-    company: '99X Technology',
-    salary: 'LKR 150,000 - 350,000',
-    skills: ['JavaScript', 'React', 'Node.js', 'Agile', 'Git'],
-    growth: 'High Demand',
-    details:
-      'Work on high-quality software products for global clients using modern tech stacks and agile practices.',
-    reasons: [
-      '99X is known for excellent software engineering culture',
-      'Many opportunities to work on cloud and product development',
-      'Strong training and career progression paths'
-    ]
-  },
+  id: 1,
+  logo: '/logos/99x.png',
+  title: 'Software Engineer',
+  company: '99X Technology',
+  salary: 'LKR 150,000 - 350,000',
+  skills: ['JavaScript', 'React', 'Node.js', 'Agile', 'Git'],
+  growth: 'High Demand',
+  details:
+    'Work on high-quality software products for global clients using modern tech stacks and agile practices.',
+  reasons: [
+    '99X is known for excellent software engineering culture',
+    'Many opportunities to work on cloud and product development',
+    'Strong training and career progression paths'
+  ],
+  internshipRequirements: [
+    'Pursuing or completed a degree in Computer Science, Software Engineering, IT, or related.',
+    'Basic knowledge of programming and software fundamentals (e.g., OOP, data structures).',
+    'Understanding of software development lifecycle (SDLC).',
+    'Ability to write clean code in languages like Java, Python, JavaScript or similar.',
+    'Problem-solving skills and eagerness to learn new technologies.',
+    'Good communication and teamwork skills.'
+  ]
+},
   {
     id: 2,
     logo: '/logos/codegen.png',
@@ -298,6 +306,13 @@ const InterestSelector = ({ selectedInterests, onToggleInterest }) => {
 // CAREER CARD COMPONENT
 // ============================================
 const CareerCard = ({ career, matchScore, onExplore }) => {
+  const [showRequirements, setShowRequirements] = useState(false);
+
+  const hasInternshipRequirements =
+    career.title === 'Software Engineer' &&
+    career.internshipRequirements &&
+    career.internshipRequirements.length > 0;
+
   return (
     <div className="career-card">
       <img
@@ -307,9 +322,11 @@ const CareerCard = ({ career, matchScore, onExplore }) => {
       />
       <h3 className="career-card-title">{career.title}</h3>
       <p className="career-card-salary">{career.salary}</p>
+
       {matchScore > 0 && (
         <span className="career-card-match">{matchScore}% Match</span>
       )}
+
       <div className="career-card-skills">
         {career.skills.slice(0, 3).map((skill, index) => (
           <span key={index} className="career-card-skill">
@@ -317,9 +334,43 @@ const CareerCard = ({ career, matchScore, onExplore }) => {
           </span>
         ))}
       </div>
-      <button className="career-card-btn" onClick={() => onExplore(career)}>
-        Explore
-      </button>
+
+      <div className="career-card-actions">
+        <button
+          className="career-card-btn"
+          onClick={() => onExplore(career)}
+        >
+          Explore
+        </button>
+
+        {hasInternshipRequirements && (
+          <button
+            className="career-card-btn career-card-btn-secondary"
+            onClick={() => setShowRequirements(!showRequirements)}
+          >
+            {showRequirements
+              ? 'Hide Internship Requirements'
+              : 'Internship Requirements'}
+          </button>
+        )}
+      </div>
+
+      {hasInternshipRequirements && showRequirements && (
+        <div className="internship-requirements-panel">
+          <h4 className="internship-requirements-title">
+            Internship Requirements
+          </h4>
+
+          <ul className="internship-requirements-list">
+            {career.internshipRequirements.map((requirement, index) => (
+              <li key={index} className="internship-requirement-item">
+                <span className="requirement-check">✔</span>
+                <span>{requirement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
