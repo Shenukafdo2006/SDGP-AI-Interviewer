@@ -20,10 +20,16 @@ vi.mock("firebase/firestore", () => ({
   updateDoc: (...args) => updateDocMock(...args),
 }));
 
+async function renderLoadedAchievements(props = {}) {
+  render(<Achievements {...props} />);
+  await screen.findByText(/your achievements/i);
+}
+
 describe("Achievements", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
+    localStorage.clear();
+    localStorage.setItem("uid", "user-123");
 
     getDocMock.mockResolvedValue({
       exists: () => false,
@@ -33,14 +39,14 @@ describe("Achievements", () => {
   });
 
   afterEach(() => {
-    vi.runOnlyPendingTimers();
     vi.useRealTimers();
+    localStorage.clear();
   });
 
   test("calls onBack when the back button is clicked", async () => {
     const onBack = vi.fn();
 
-    render(<Achievements onBack={onBack} />);
+    await renderLoadedAchievements({ onBack });
 
     fireEvent.click(screen.getByRole("button", { name: /back to dashboard/i }));
 
@@ -48,7 +54,7 @@ describe("Achievements", () => {
   });
 
   test("unlocks an achievement and saves it to firestore", async () => {
-    render(<Achievements />);
+    await renderLoadedAchievements();
 
     fireEvent.click(screen.getAllByRole("button", { name: /locked/i })[0]);
 
@@ -66,7 +72,8 @@ describe("Achievements", () => {
   });
 
   test("updates the level after the level-up timeout completes", async () => {
-    render(<Achievements />);
+    await renderLoadedAchievements();
+    vi.useFakeTimers();
 
     fireEvent.click(screen.getAllByRole("button", { name: /locked/i })[0]);
 
@@ -75,6 +82,6 @@ describe("Achievements", () => {
     });
 
     expect(screen.getAllByText(/level 1/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/0 xp to next level/i)).toBeInTheDocument();
+    expect(screen.getByText(/5 remaining/i)).toBeInTheDocument();
   });
 });

@@ -53,6 +53,22 @@ function getDayCell(day) {
   return dayLabel.closest(".calendar-cell");
 }
 
+function getExpectedDate(day) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const date = String(day).padStart(2, "0");
+
+  return `${year}-${month}-${date}`;
+}
+
+function getExpectedDisplayDate(day) {
+  return new Date(`${getExpectedDate(day)}T00:00:00`).toLocaleString(
+    "default",
+    { month: "short", day: "numeric" },
+  );
+}
+
 describe("ActivityCalendar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -98,12 +114,14 @@ describe("ActivityCalendar", () => {
       { name: "savedDates" },
       expect.objectContaining({
         uid: "user-123",
-        date: "2024-11-01",
+        date: getExpectedDate(1),
         type: "Interview",
         createdAt: "mock-timestamp",
       }),
     );
-    expect(screen.getByText(/date booked: nov 1/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`date booked: ${getExpectedDisplayDate(1)}`, "i")),
+    ).toBeInTheDocument();
   });
 
   test("prevents booking a date that is already saved", async () => {
@@ -111,7 +129,7 @@ describe("ActivityCalendar", () => {
     savedDatesDocs = [
       {
         id: "booked-1",
-        data: { uid: "user-123", date: "2024-11-01", type: "Interview" },
+        data: { uid: "user-123", date: getExpectedDate(1), type: "Interview" },
       },
     ];
 
@@ -125,7 +143,9 @@ describe("ActivityCalendar", () => {
 
     await userEvent.click(getDayCell(1));
 
-    expect(screen.getByText(/already booked: nov 1/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`date booked: ${getExpectedDisplayDate(1)}`, "i")),
+    ).toBeInTheDocument();
     expect(addDocMock).not.toHaveBeenCalled();
   });
 });

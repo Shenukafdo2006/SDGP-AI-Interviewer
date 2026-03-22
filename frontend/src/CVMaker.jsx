@@ -14,11 +14,6 @@ const CVMaker = ({ onBack }) => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [activeSection, setActiveSection] = useState("personal");
   
-  // Uploaded CV state for Export section
-  const [uploadedCVFile, setUploadedCVFile] = useState(null);
-  const [uploadedCVFileName, setUploadedCVFileName] = useState("");
-  const [uploadedCVContent, setUploadedCVContent] = useState("");
-  
   // Design customization states
   const [designSettings, setDesignSettings] = useState({
     fontFamily: "Inter",
@@ -101,7 +96,6 @@ const CVMaker = ({ onBack }) => {
   const [inputMode, setInputMode] = useState("upload");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
-  const exportFileInputRef = useRef(null);
 
   // ── Role Filter State for Templates ─────────────────────────────────────────
   const [roleSearchTerm, setRoleSearchTerm] = useState("");
@@ -690,150 +684,7 @@ const CVMaker = ({ onBack }) => {
     `;
   };
 
-  // Generate formatted CV HTML from uploaded file content
-  const generateUploadedCVHTML = () => {
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>${uploadedCVFileName} - CV</title>
-        <style>
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8fafc;
-            padding: 40px;
-          }
-          .cv-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-          }
-          .cv-header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            padding: 30px;
-            color: white;
-            text-align: center;
-          }
-          .cv-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-          }
-          .cv-content {
-            padding: 30px;
-            white-space: pre-wrap;
-            font-family: inherit;
-            line-height: 1.6;
-            color: #1e293b;
-          }
-          .file-name {
-            background: #f1f5f9;
-            padding: 12px 20px;
-            border-bottom: 1px solid #e2e8f0;
-            color: #475569;
-            font-size: 0.85rem;
-          }
-          @media print {
-            body { padding: 0; background: white; }
-            .cv-container { box-shadow: none; }
-            .cv-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="cv-container">
-          <div class="cv-header">
-            <h2>${uploadedCVFileName}</h2>
-            <p>Uploaded CV Document</p>
-          </div>
-          <div class="file-name">
-            📄 File: ${uploadedCVFileName}
-          </div>
-          <div class="cv-content">
-            ${uploadedCVContent.replace(/</g, '&lt;').replace(/>/g, '&gt;').split('\n').map(line => `<p>${line || '&nbsp;'}</p>`).join('')}
-          </div>
-        </div>
-      </body>
-      </html>
-    `;
-  };
-
-  // Handle CV upload for Export section
-  const handleUploadCVForExport = async (file) => {
-    if (!file) return;
-    setUploadedCVFile(file);
-    setUploadedCVFileName(file.name);
-    try {
-      const text = await readFileAsText(file);
-      setUploadedCVContent(text);
-      alert(`CV "${file.name}" uploaded successfully! You can now export it.`);
-    } catch (error) {
-      alert("Error reading file. Please try again.");
-      setUploadedCVContent("");
-    }
-  };
-
-  // Download uploaded CV as PDF
-  const downloadUploadedCVAsPDF = () => {
-    if (!uploadedCVContent) {
-      alert("Please upload a CV file first.");
-      return;
-    }
-    setIsDownloading(true);
-    const cvHTML = generateUploadedCVHTML();
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(`
-      <!DOCTYPE html><html><head><title>${uploadedCVFileName} - CV</title>
-      <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
-      <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
-    `);
-    printWindow.document.close();
-    setTimeout(() => setIsDownloading(false), 2000);
-  };
-
-  // Download uploaded CV as DOCX
-  const downloadUploadedCVAsDOCX = () => {
-    if (!uploadedCVContent) {
-      alert("Please upload a CV file first.");
-      return;
-    }
-    setIsDownloading(true);
-    const cvHTML = generateUploadedCVHTML();
-    const blob = new Blob([cvHTML], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${uploadedCVFileName.replace(/\.[^/.]+$/, "")}_CV.doc`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    setTimeout(() => setIsDownloading(false), 1000);
-  };
-
-  // Download uploaded CV as TXT
-  const downloadUploadedCVAsTXT = () => {
-    if (!uploadedCVContent) {
-      alert("Please upload a CV file first.");
-      return;
-    }
-    const blob = new Blob([uploadedCVContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${uploadedCVFileName.replace(/\.[^/.]+$/, "")}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  // Download as PDF for created CV
+  // Download as PDF
   const downloadAsPDF = () => {
     setIsDownloading(true);
     const cvHTML = generateCVHTML();
@@ -848,7 +699,7 @@ const CVMaker = ({ onBack }) => {
     setTimeout(() => setIsDownloading(false), 2000);
   };
 
-  // Download as DOCX for created CV
+  // Download as DOCX
   const downloadAsDOCX = () => {
     setIsDownloading(true);
     const cvHTML = generateCVHTML();
@@ -862,20 +713,6 @@ const CVMaker = ({ onBack }) => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     setTimeout(() => setIsDownloading(false), 1000);
-  };
-
-  // Download as TXT for created CV
-  const downloadAsTXT = () => {
-    const plainText = generateCVHTML().replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-    const blob = new Blob([plainText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${editingCvName.replace(/\s+/g, '_')}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   // Close dropdown
@@ -926,7 +763,17 @@ const CVMaker = ({ onBack }) => {
     }, 1500);
   };
 
+  const getScoreColor = (score) => {
+    if (score >= 80) return "#4caf50";
+    if (score >= 60) return "#ff9800";
+    return "#f44336";
+  };
 
+  const getStatusBadge = (status) => {
+    if (status === "good") return { color: "#4caf50", label: "Good" };
+    if (status === "warning") return { color: "#ff9800", label: "Needs Work" };
+    return { color: "#f44336", label: "Poor" };
+  };
 
   // Cover Letter Generation
   const generateCoverLetter = () => {
@@ -1543,94 +1390,8 @@ const CVMaker = ({ onBack }) => {
           </div>
         );
 
-      case "export":
-        return (
-          <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header"><h3>Export & Sharing</h3><span className="cvmaker-panel-subtitle">Multi-format export · Shareable links</span></div>
-            
-            {/* Upload CV Section */}
-            <div className="cvmaker-upload-cv-section">
-              <h4>📁 Upload Your CV</h4>
-              <p className="cvmaker-upload-cv-desc">Upload an existing CV to export in multiple formats</p>
-              <div className="cvmaker-upload-cv-area">
-                <input
-                  type="file"
-                  ref={exportFileInputRef}
-                  accept=".pdf,.docx,.txt"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleUploadCVForExport(e.target.files[0])}
-                />
-                <button 
-                  className="cvmaker-upload-cv-btn"
-                  onClick={() => exportFileInputRef.current?.click()}
-                >
-                  📂 Upload Your CV
-                </button>
-                {uploadedCVFileName && (
-                  <div className="cvmaker-uploaded-info">
-                    <span className="cvmaker-uploaded-badge">✅ Uploaded: {uploadedCVFileName}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            {/* Multi-Format Export Section */}
-            <div className="cvmaker-export-section">
-              <h4>📤 Multi-Format Export</h4>
-              <div className="cvmaker-export-options">
-                <button className="cvmaker-export-btn" onClick={uploadedCVContent ? downloadUploadedCVAsPDF : downloadAsPDF}>
-                  <span className="cvmaker-export-icon">📄</span>
-                  <span className="cvmaker-export-name">ATS-Optimized PDF</span>
-                  <span className="cvmaker-export-desc">Best for job applications</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={uploadedCVContent ? downloadUploadedCVAsPDF : downloadAsPDF}>
-                  <span className="cvmaker-export-icon">🎨</span>
-                  <span className="cvmaker-export-name">Styled PDF</span>
-                  <span className="cvmaker-export-desc">Custom visual design</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={uploadedCVContent ? downloadUploadedCVAsDOCX : downloadAsDOCX}>
-                  <span className="cvmaker-export-icon">📝</span>
-                  <span className="cvmaker-export-name">Word DOCX</span>
-                  <span className="cvmaker-export-desc">Editable document</span>
-                </button>
-                <button className="cvmaker-export-btn" onClick={uploadedCVContent ? downloadUploadedCVAsTXT : downloadAsTXT}>
-                  <span className="cvmaker-export-icon">📃</span>
-                  <span className="cvmaker-export-name">Plain Text</span>
-                  <span className="cvmaker-export-desc">ATS-safe, no formatting</span>
-                </button>
-              </div>
-            </div>
-            
-            {/* Sharing System Section */}
-            <div className="cvmaker-share-section">
-              <h4>🔗 Sharing System</h4>
-              <div className="cvmaker-share-options">
-                <button className="cvmaker-share-btn" onClick={generateShareLink}>
-                  🔗 Generate Shareable Link
-                </button>
-                <button className="cvmaker-share-btn" onClick={() => alert("QR Code generated!")}>
-                  📱 Generate QR Code
-                </button>
-                <button className="cvmaker-share-btn" onClick={() => alert("Email sharing opened!")}>
-                  📧 Share via Email
-                </button>
-              </div>
-              {shareLink && (
-                <div className="cvmaker-share-link-box">
-                  <input className="cvmaker-share-link-input" readOnly value={shareLink} />
-                  <button
-                    className="cvmaker-copy-btn"
-                    onClick={() => navigator.clipboard.writeText(shareLink)}
-                  >
-                    Copy
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-
-      default: return <div>Select a feature</div>;
+      default:
+        return <div>Select a feature</div>;
     }
   };
 
@@ -1638,14 +1399,20 @@ const CVMaker = ({ onBack }) => {
     { id: "templates", icon: "📋", label: "Templates" },
     { id: "scoring", icon: "⭐", label: "Smart Scoring" },
     { id: "coverletter", icon: "✉️", label: "Cover Letter" },
-    { id: "export", icon: "📤", label: "Export & Share" },
   ];
 
   return (
     <div className="cvmaker-dashboard">
       <div className="cvmaker-sidebar">
         <div className="cvmaker-sidebar-brand"><span className="cvmaker-sidebar-logo">📄</span><h2>CV Maker</h2></div>
-        <nav className="cvmaker-nav">{features.map((feature) => (<button key={feature.id} className={`cvmaker-sidebar-feature ${activeFeature === feature.id ? "cvmaker-active" : ""}`} onClick={() => setActiveFeature(feature.id)}><span className="cvmaker-nav-icon">{feature.icon}</span><span>{feature.label}</span></button>))}</nav>
+        <nav className="cvmaker-nav">
+          {features.map((feature) => (
+            <button key={feature.id} className={`cvmaker-sidebar-feature ${activeFeature === feature.id ? "cvmaker-active" : ""}`} onClick={() => setActiveFeature(feature.id)}>
+              <span className="cvmaker-nav-icon">{feature.icon}</span>
+              <span>{feature.label}</span>
+            </button>
+          ))}
+        </nav>
         <button className="cvmaker-back-btn" onClick={onBack}>← Back</button>
       </div>
       <div className="cvmaker-content"><div className="cvmaker-feature-container">{renderActiveFeature()}</div></div>
