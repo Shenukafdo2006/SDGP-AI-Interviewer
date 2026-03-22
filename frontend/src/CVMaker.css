@@ -119,6 +119,7 @@
   transform: translateX(-5px);
   border-color: #4f46e5;
 }
+
 /* ============================================
    Main Content Styles
    ============================================ */
@@ -361,6 +362,7 @@
   background: rgba(248, 113, 113, 0.2);
   transform: scale(1.1);
 }
+
 /* ============================================
    Templates Grid
    ============================================ */
@@ -515,6 +517,7 @@
   font-size: 0.9rem;
   font-weight: 500;
 }
+
 /* ============================================
    AI Info Banner
    ============================================ */
@@ -591,6 +594,7 @@
 .cvmaker-explore-btn:active {
   transform: translateY(0);
 }
+
 /* ============================================
    CV EDITOR STYLES - Complete CV Form
    ============================================ */
@@ -659,6 +663,9 @@
   font-size: 0.8rem;
   font-weight: 600;
   color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .cvmaker-editor-actions {
@@ -731,11 +738,30 @@
   width: 100%;
   transition: all 0.3s ease;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.cvmaker-upload-existing-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.cvmaker-upload-existing-btn:hover::before {
+  left: 100%;
 }
 
 .cvmaker-upload-existing-btn:hover {
   background: rgba(79, 70, 229, 0.4);
+  transform: translateY(-2px);
 }
+
 /* Form Styles */
 .cvmaker-editor-form {
   padding: 20px;
@@ -850,12 +876,43 @@
   font-weight: 600;
   padding: 8px 0;
   font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-optional-details summary:hover {
+  color: #a5b4fc;
+  padding-left: 5px;
 }
 
 .cvmaker-optional-fields {
   margin-top: 15px;
   padding-left: 15px;
   border-left: 2px solid #4f46e5;
+  transition: all 0.3s ease;
+}
+
+.cvmaker-optional-fields .cvmaker-form-group {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cvmaker-optional-fields .cvmaker-form-group input {
+  border-color: #2d3460;
+}
+
+.cvmaker-optional-fields .cvmaker-form-group input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
 }
 
 /* Editor Main Content Styles */
@@ -942,6 +999,256 @@
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
   }
 }
+
+/* ============================================
+   Editor Toolbar Styles
+   ============================================ */
+
+.cvmaker-editor-toolbar {
+  background: #1e2440;
+  border: 1px solid #2d3460;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.cvmaker-toolbar-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  background: #0f1420;
+  border-bottom: 1px solid #2d3460;
+}
+
+.cvmaker-toolbar-tab {
+  padding: 8px 20px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.cvmaker-toolbar-tab:hover {
+  color: #a5b4fc;
+  background: rgba(129, 140, 248, 0.1);
+}
+
+.cvmaker-toolbar-tab.active {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+}
+
+.cvmaker-formatting-tools {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #1e2440;
+}
+
+.cvmaker-format-btn {
+  width: 36px;
+  height: 36px;
+  background: #0f1420;
+  border: 1px solid #2d3460;
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cvmaker-format-btn:hover {
+  background: #2d3460;
+  border-color: #4f46e5;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   Clickable Curriculum Vitae Badge
+   ============================================ */
+
+.cvmaker-clickable-badge {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cvmaker-clickable-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
+  background: linear-gradient(135deg, #5b52e5, #8b4aed);
+}
+
+.cvmaker-clickable-badge:active {
+  transform: translateY(0);
+}
+
+.cvmaker-clickable-badge::after {
+  content: '🔍';
+  margin-left: 6px;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cvmaker-clickable-badge:hover::after {
+  opacity: 1;
+}
+
+/* ============================================
+   Preview Modal Styles
+   ============================================ */
+
+.cvmaker-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cvmaker-modal {
+  background: #1a1f35;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 1100px;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2d3460;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cvmaker-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #2d3460;
+  background: linear-gradient(135deg, #1e2440, #1a1f35);
+}
+
+.cvmaker-modal-header h3 {
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.cvmaker-modal-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.cvmaker-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.cvmaker-modal-body {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+  background: #f8fafc;
+}
+
+.cvmaker-preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+.cvmaker-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid #2d3460;
+  background: #1e2440;
+}
+
+.cvmaker-download-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cvmaker-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.cvmaker-modal-close-btn {
+  background: rgba(129, 140, 248, 0.15);
+  border: 1px solid #4f46e5;
+  color: #a5b4fc;
+  padding: 10px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.cvmaker-modal-close-btn:hover {
+  background: rgba(129, 140, 248, 0.3);
+}
+
 /* ============================================
    Smart Scoring Section Styles
    ============================================ */
@@ -1646,6 +1953,33 @@
   .cvmaker-section-bar-outer {
     width: 100%;
   }
+  .cvmaker-editor-badge {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+  }
+  .cvmaker-clickable-badge::after {
+    display: none;
+  }
+  .cvmaker-modal {
+    width: 95%;
+    height: 90vh;
+  }
+  .cvmaker-modal-header h3 {
+    font-size: 1rem;
+  }
+  .cvmaker-download-btn,
+  .cvmaker-modal-close-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+  .cvmaker-toolbar-tab {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  .cvmaker-format-btn {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1674,6 +2008,21 @@
   }
   .cvmaker-score-number {
     font-size: 1.8rem;
+  }
+  .cvmaker-editor-badge {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+  }
+  .cvmaker-modal-footer {
+    flex-direction: column-reverse;
+  }
+  .cvmaker-download-btn,
+  .cvmaker-modal-close-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .cvmaker-toolbar-tabs {
+    flex-wrap: wrap;
   }
 }
 
@@ -1709,473 +2058,3 @@
 .cvmaker-editor-main::-webkit-scrollbar-thumb:hover {
   background: #4f46e5;
 }
-
-/* ============================================
-   Clickable Curriculum Vitae Badge
-   ============================================ */
-
-.cvmaker-clickable-badge {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cvmaker-clickable-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
-  background: linear-gradient(135deg, #5b52e5, #8b4aed);
-}
-
-.cvmaker-clickable-badge:active {
-  transform: translateY(0);
-}
-
-.cvmaker-clickable-badge::after {
-  content: '🔍';
-  margin-left: 6px;
-  font-size: 0.75rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.cvmaker-clickable-badge:hover::after {
-  opacity: 1;
-}
-/* ============================================
-   Upload Existing CV Button Enhancement
-   ============================================ */
-
-.cvmaker-upload-existing-btn {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.cvmaker-upload-existing-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.cvmaker-upload-existing-btn:hover::before {
-  left: 100%;
-}
-
-.cvmaker-upload-existing-btn:hover {
-  background: rgba(79, 70, 229, 0.4);
-  transform: translateY(-2px);
-}
-/* ============================================
-   Editor Badge Container Enhancement
-   ============================================ */
-
-.cvmaker-editor-title {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.cvmaker-editor-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-/* ============================================
-   Additional Fields Section Enhancement
-   ============================================ */
-
-.cvmaker-optional-details summary {
-  transition: all 0.3s ease;
-}
-
-.cvmaker-optional-details summary:hover {
-  color: #a5b4fc;
-  padding-left: 5px;
-}
-
-.cvmaker-optional-fields {
-  transition: all 0.3s ease;
-}
-
-.cvmaker-optional-fields .cvmaker-form-group {
-  animation: fadeInUp 0.3s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* ============================================
-   Form Input Enhancement for Additional Fields
-   ============================================ */
-
-.cvmaker-optional-fields .cvmaker-form-group input {
-  border-color: #2d3460;
-}
-
-.cvmaker-optional-fields .cvmaker-form-group input:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-/* ============================================
-   Responsive Adjustments for Badge
-   ============================================ */
-
-@media (max-width: 768px) {
-  .cvmaker-editor-badge {
-    font-size: 0.7rem;
-    padding: 4px 12px;
-  }
-  
-  .cvmaker-clickable-badge::after {
-    display: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .cvmaker-editor-badge {
-    font-size: 0.65rem;
-    padding: 3px 10px;
-  }
-}
-
-/* ============================================
-   Clickable Curriculum Vitae Badge
-   ============================================ */
-
-.cvmaker-clickable-badge {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cvmaker-clickable-badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
-  background: linear-gradient(135deg, #5b52e5, #8b4aed);
-}
-
-.cvmaker-clickable-badge:active {
-  transform: translateY(0);
-}
-
-.cvmaker-clickable-badge::after {
-  content: '🔍';
-  margin-left: 6px;
-  font-size: 0.75rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.cvmaker-clickable-badge:hover::after {
-  opacity: 1;
-}
-
-/* ============================================
-   Preview Modal Styles
-   ============================================ */
-
-.cvmaker-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.cvmaker-modal {
-  background: #1a1f35;
-  border-radius: 24px;
-  width: 90%;
-  max-width: 1000px;
-  height: 85vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  border: 1px solid #2d3460;
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.cvmaker-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 24px;
-  border-bottom: 1px solid #2d3460;
-  background: linear-gradient(135deg, #1e2440, #1a1f35);
-}
-
-.cvmaker-modal-header h3 {
-  color: #f1f5f9;
-  font-size: 1.2rem;
-  margin: 0;
-}
-
-.cvmaker-modal-close {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-}
-
-.cvmaker-modal-close:hover {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
-}
-
-.cvmaker-modal-body {
-  flex: 1;
-  overflow: hidden;
-  padding: 0;
-  background: #0f1420;
-}
-
-.cvmaker-preview-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: white;
-}
-
-.cvmaker-modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px 24px;
-  border-top: 1px solid #2d3460;
-  background: #1e2440;
-}
-
-.cvmaker-download-btn {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cvmaker-download-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-}
-
-.cvmaker-modal-close-btn {
-  background: rgba(129, 140, 248, 0.15);
-  border: 1px solid #4f46e5;
-  color: #a5b4fc;
-  padding: 10px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.cvmaker-modal-close-btn:hover {
-  background: rgba(129, 140, 248, 0.3);
-}
-
-/* ============================================
-   Upload Existing CV Button Enhancement
-   ============================================ */
-
-.cvmaker-upload-existing-btn {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.cvmaker-upload-existing-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.cvmaker-upload-existing-btn:hover::before {
-  left: 100%;
-}
-
-.cvmaker-upload-existing-btn:hover {
-  background: rgba(79, 70, 229, 0.4);
-  transform: translateY(-2px);
-}
-
-/* ============================================
-   Editor Badge Container Enhancement
-   ============================================ */
-
-.cvmaker-editor-title {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.cvmaker-editor-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ============================================
-   Additional Fields Section Enhancement
-   ============================================ */
-
-.cvmaker-optional-details summary {
-  transition: all 0.3s ease;
-}
-
-.cvmaker-optional-details summary:hover {
-  color: #a5b4fc;
-  padding-left: 5px;
-}
-
-.cvmaker-optional-fields {
-  transition: all 0.3s ease;
-}
-
-.cvmaker-optional-fields .cvmaker-form-group {
-  animation: fadeInUp 0.3s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ============================================
-   Form Input Enhancement for Additional Fields
-   ============================================ */
-
-.cvmaker-optional-fields .cvmaker-form-group input {
-  border-color: #2d3460;
-}
-
-.cvmaker-optional-fields .cvmaker-form-group input:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-/* ============================================
-   Responsive Adjustments for Badge and Modal
-   ============================================ */
-
-@media (max-width: 768px) {
-  .cvmaker-editor-badge {
-    font-size: 0.7rem;
-    padding: 4px 12px;
-  }
-  
-  .cvmaker-clickable-badge::after {
-    display: none;
-  }
-  
-  .cvmaker-modal {
-    width: 95%;
-    height: 90vh;
-  }
-  
-  .cvmaker-modal-header h3 {
-    font-size: 1rem;
-  }
-  
-  .cvmaker-download-btn,
-  .cvmaker-modal-close-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .cvmaker-editor-badge {
-    font-size: 0.65rem;
-    padding: 3px 10px;
-  }
-  
-  .cvmaker-modal-footer {
-    flex-direction: column-reverse;
-  }
-  
-  .cvmaker-download-btn,
-  .cvmaker-modal-close-btn {
-    width: 100%;
-    justify-content: center;
-  }
-}
-
