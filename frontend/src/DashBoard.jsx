@@ -4,8 +4,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 import InterviewTraining from "./InterviewTraining";
-// Placeholder imports for new pages
-// import Quiz from './Quiz';
+
+
 
 function NavItem({ children, onClick }) {
   return (
