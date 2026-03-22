@@ -161,7 +161,18 @@ const careersData = [
       'Works on diverse tech projects',
       'Exposure to enterprise-level systems',
       'Great cross-team collaboration'
-    ]
+    ],
+    internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Strong understanding of programming fundamentals and OOP',
+    'Ability to analyze problems and design software solutions',
+    'Basic knowledge of backend and frontend technologies',
+    'Understanding of APIs and system integration concepts',
+    'Familiarity with databases and data handling',
+    'Basic knowledge of cloud platforms or distributed systems is a plus',
+    'Good problem-solving and analytical thinking skills',
+    'Excellent communication and teamwork skills'
+  ]
   },
   {
     id: 8,
