@@ -28,7 +28,7 @@ const CVMaker = ({ onBack }) => {
     recipient: {
       name: "Kaveesha Fernando",
       title: "intern software engineer",
-      
+      company: "",
       city: "Neogombo,Sri Lanka"
     },
     salutation: "Dear Mrs.Poorna,",
@@ -681,7 +681,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
@@ -1512,30 +1512,37 @@ ${coverLetterDetails.signature}
         }
         return (
           <div className="cvmaker-feature-panel">
-            <div className="cvmaker-panel-header"><h3>Cover Letter Generator</h3><span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span></div>
+            <div className="cvmaker-panel-header">
+              <h3>Cover Letter Generator</h3>
+              <span className="cvmaker-panel-subtitle">Create and customize your professional cover letter</span>
+            </div>
             
             {/* Edit Details Button - Above Generate Button */}
             <div className="cvmaker-cl-button-group">
               <button className="cvmaker-edit-details-btn" onClick={() => setShowCoverLetterEditor(true)}>
-                ✏️ Edit Details
+                ✏️ Edit Cover Letter Details
               </button>
             </div>
             
-            <div className="cvmaker-tone-selector">
-              <label>Select Tone:</label>
-              <div className="cvmaker-tone-options">
-                <button className={`cvmaker-tone-btn ${coverLetterTone === "formal" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("formal")}>🏢 Formal</button>
-                <button className={`cvmaker-tone-btn ${coverLetterTone === "academic" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("academic")}>🎓 Academic</button>
-              </div>
-            </div>
-            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>📝 Generate Cover Letter</button>
+            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>
+              📝 Generate Cover Letter
+            </button>
             
             {coverLetter && (
               <>
-                <textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
+                <textarea 
+                  className="cvmaker-cover-letter-textarea" 
+                  rows="18" 
+                  value={coverLetter} 
+                  onChange={(e) => setCoverLetter(e.target.value)} 
+                />
                 <div className="cvmaker-cl-actions">
-                  <button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>📋 Copy</button>
-                  <button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>📄 Export PDF</button>
+                  <button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>
+                    📋 Copy
+                  </button>
+                  <button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>
+                    📄 Export PDF
+                  </button>
                 </div>
               </>
             )}
