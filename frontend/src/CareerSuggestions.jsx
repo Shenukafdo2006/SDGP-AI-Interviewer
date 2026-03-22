@@ -50,7 +50,7 @@ const careersData = [
 },
   {
   id: 3,
-  logo: '/logos/ifs.png', // keep your existing
+  logo: '/logos/ifs.jpg', 
   title: 'Full Stack Developer',
   company: 'IFS',
   salary: 'LKR 140,000 - 320,000',
