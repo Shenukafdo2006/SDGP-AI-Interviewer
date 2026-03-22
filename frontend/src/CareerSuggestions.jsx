@@ -587,28 +587,42 @@ const CareerSuggestions = ({ onBack }) => {
 
   // Calculate match score for each career
   const calculateMatchScore = (career) => {
-    if (userSkills.length === 0) return 0;
+    const normalizedUserSkills = [
+      ...new Set(userSkills.map((skill) => normalizeSkill(skill)))
+    ];
 
-    const userSkillsLower = userSkills.map((s) => s.toLowerCase());
-    const careerSkillsLower = career.skills.map((s) => s.toLowerCase());
-
-    let matchCount = 0;
-    userSkillsLower.forEach((userSkill) => {
-      careerSkillsLower.forEach((careerSkill) => {
-        if (
-          careerSkill.includes(userSkill) ||
-          userSkill.includes(careerSkill)
-        ) {
-          matchCount++;
-        }
-      });
-    });
-
-    const score = Math.min(
-      Math.round((matchCount / career.skills.length) * 100),
-      100
+    const normalizedCareerSkills = career.skills.map((skill) =>
+      normalizeSkill(skill)
     );
-    return score;
+
+    const matchedSkills = normalizedCareerSkills.filter((careerSkill) =>
+      normalizedUserSkills.some(
+        (userSkill) =>
+          careerSkill.includes(userSkill) || userSkill.includes(careerSkill)
+      )
+    );
+
+    const skillScore =
+      normalizedCareerSkills.length > 0
+        ? (matchedSkills.length / normalizedCareerSkills.length) * 70
+        : 0;
+
+    const matchedInterests = (career.categories || []).filter((category) =>
+      userInterests.includes(category)
+    );
+
+    const interestScore =
+      career.categories && career.categories.length > 0
+        ? (matchedInterests.length / career.categories.length) * 30
+        : 0;
+
+    const totalScore = Math.round(skillScore + interestScore);
+
+    return {
+      score: Math.min(totalScore, 100),
+      matchedSkills,
+      matchedInterests
+    };
   };
 
   // Get ranked careers based on user profile
