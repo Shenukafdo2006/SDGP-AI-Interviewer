@@ -238,7 +238,15 @@ const careersData = [
       'QA roles are abundant in Sri Lankan IT firms',
       'Good starting point for new grads',
       'Opportunity to grow into leadership'
-    ]
+    ],
+     internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic understanding of software testing concepts (manual & automated testing)',
+    'Knowledge of testing types (unit testing, integration testing, system testing)',
+    'Familiarity with testing tools like Selenium, Cypress, or similar',
+    'Basic understanding of SDLC and STLC',
+    'Ability to identify, document, and track bugs',
+    'Basic programming knowledge is a plus (Java, Python, or JavaScript)',]
   },
   {
     id: 11,
