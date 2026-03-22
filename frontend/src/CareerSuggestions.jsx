@@ -153,16 +153,17 @@ const careersData = [
       'Good entry point to enterprise web dev'
     ],
     internshipRequirements: [
-  'Degree in IT/SE/CS (ongoing or completed)',
-  'Basic knowledge of frontend development',
-  'Familiar with HTML, CSS, and JavaScript',
-  'Understanding of responsive web design principles',
-  'Basic knowledge of frameworks or libraries like React, Angular, or Vue',
-  'Understanding of UI/UX fundamentals',
-  'Familiar with Git and version control',
-  'Problem-solving skills and willingness to learn',
-  'Good communication and teamwork skills'
-]
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic knowledge of frontend development',
+      'Familiar with HTML, CSS, and JavaScript',
+      'Understanding of responsive web design principles',
+      'Basic knowledge of frameworks or libraries like React, Angular, or Vue',
+      'Understanding of UI/UX fundamentals',
+      'Familiar with Git and version control',
+      'Problem-solving skills and willingness to learn',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Frontend Development', 'UI/UX Design', 'Web Development']
   },
   {
     id: 7,
