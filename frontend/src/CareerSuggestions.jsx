@@ -82,27 +82,32 @@ const careersData = [
     categories: ['Frontend Development', 'Backend Development', 'Web Development']
   },
   {
-  id: 4,
-  logo: '/logos/wso2.png', // keep your existing logo
-  title: 'Mobile App Developer',
-  company: 'WSO2',
-  salary: 'LKR 130,000 - 300,000',
-  skills: ['Flutter', 'React Native', 'Android', 'iOS'],
-  growth: 'High Demand',
-  details: 'Develop mobile applications for Android and iOS platforms.',
-
-  internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic knowledge of mobile app development (Android, iOS, or cross-platform)',
-    'Familiar with frameworks like Flutter or React Native',
-    'Understanding of programming languages like Java, Kotlin, Swift, or JavaScript',
-    'Knowledge of REST APIs and mobile app integration',
-    'Basic understanding of UI/UX principles for mobile apps',
-    'Familiar with Git and version control',
-    'Problem-solving mindset and willingness to learn',
-    'Good communication and teamwork skills'
-  ]
-},
+    id: 4,
+    logo: '/logos/wso2.png',
+    title: 'Mobile App Developer',
+    company: 'WSO2',
+    salary: 'LKR 130,000 - 300,000',
+    skills: ['Flutter', 'React Native', 'Android', 'iOS'],
+    growth: 'High Demand',
+    details: 'Develop mobile applications for Android and iOS platforms.',
+    reasons: [
+      'Mobile apps remain highly relevant in the software industry',
+      'Great path for cross-platform and native app experience',
+      'Strong opportunity to work on UI and product-focused solutions'
+    ],
+    internshipRequirements: [
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic knowledge of mobile app development (Android, iOS, or cross-platform)',
+      'Familiar with frameworks like Flutter or React Native',
+      'Understanding of programming languages like Java, Kotlin, Swift, or JavaScript',
+      'Knowledge of REST APIs and mobile app integration',
+      'Basic understanding of UI/UX principles for mobile apps',
+      'Familiar with Git and version control',
+      'Problem-solving mindset and willingness to learn',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Mobile Development', 'UI/UX Design']
+  },
   {
     id: 5,
     logo: '/logos/hsenid.jpg',
