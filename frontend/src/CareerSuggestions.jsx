@@ -71,21 +71,27 @@ const careersData = [
   ]
 },
   {
-    id: 4,
-    logo:'/logos/dialog.png',
-    title: 'Mobile App Developer',
-    company: 'Dialog Axiata',
-    salary: 'LKR 130,000 - 300,000',
-    skills: ['Flutter', 'React Native', 'Dart', 'Android', 'iOS'],
-    growth: 'Strong',
-    details:
-      'Develop mobile applications and digital services for one of Sri Lanka’s largest telco providers.',
-    reasons: [
-      'Dialog leads in digital transformation in Sri Lanka',
-      'Mobile skills are highly marketable',
-      'Work on consumer-facing products'
-    ]
-  },
+  id: 4,
+  logo: '/logos/wso2.png', // keep your existing logo
+  title: 'Mobile App Developer',
+  company: 'WSO2',
+  salary: 'LKR 130,000 - 300,000',
+  skills: ['Flutter', 'React Native', 'Android', 'iOS'],
+  growth: 'High Demand',
+  details: 'Develop mobile applications for Android and iOS platforms.',
+
+  internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic knowledge of mobile app development (Android, iOS, or cross-platform)',
+    'Familiar with frameworks like Flutter or React Native',
+    'Understanding of programming languages like Java, Kotlin, Swift, or JavaScript',
+    'Knowledge of REST APIs and mobile app integration',
+    'Basic understanding of UI/UX principles for mobile apps',
+    'Familiar with Git and version control',
+    'Problem-solving mindset and willingness to learn',
+    'Good communication and teamwork skills'
+  ]
+},
   {
     id: 5,
     logo: '/logos/hsenid.jpg',
