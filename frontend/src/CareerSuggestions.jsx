@@ -262,7 +262,15 @@ const careersData = [
       'WSO2 is a leader in integration software',
       'Great for backend & middleware experience',
       'Exposure to enterprise architecture'
-    ]
+    ],
+    internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic understanding of APIs and system integration concepts',
+    'Knowledge of RESTful services and client-server communication',
+    'Familiarity with programming languages like Java, Python, or JavaScript',
+    'Understanding of microservices architecture is a plus',
+    'Basic knowledge of databases and data formats (JSON, XML)',
+    'Familiarity with integration tools or platforms is an advantage',]
   },
   {
     id: 12,
