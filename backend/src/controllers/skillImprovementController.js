@@ -101,7 +101,12 @@ const updateGoalProgress = async (req, res) => {
 
     res.json({
       message: "Goal progress updated successfully",
-      goals: userProgressStore[uid].goals
+      goals: {
+        coding: userProgressStore[uid].goals.coding || { current: 0, total: 5 },
+        learning: userProgressStore[uid].goals.learning || { current: 0, total: 2 },
+        interview: userProgressStore[uid].goals.interview || { current: 0, total: 1 },
+        project: userProgressStore[uid].goals.project || { current: 0, total: 1 }
+      }
     });
 
   } catch (err) {
