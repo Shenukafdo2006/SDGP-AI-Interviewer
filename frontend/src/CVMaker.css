@@ -1821,3 +1821,37 @@
     transform: translateY(0);
   }
 }
+/* ============================================
+   Form Input Enhancement for Additional Fields
+   ============================================ */
+
+.cvmaker-optional-fields .cvmaker-form-group input {
+  border-color: #2d3460;
+}
+
+.cvmaker-optional-fields .cvmaker-form-group input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* ============================================
+   Responsive Adjustments for Badge
+   ============================================ */
+
+@media (max-width: 768px) {
+  .cvmaker-editor-badge {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+  }
+  
+  .cvmaker-clickable-badge::after {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .cvmaker-editor-badge {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+  }
+}
