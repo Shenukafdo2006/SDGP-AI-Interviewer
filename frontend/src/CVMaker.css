@@ -2376,3 +2376,35 @@
     align-items: stretch;
   }
 }
+
+/* ============================================
+   Empty State Styles
+   ============================================ */
+
+.cvmaker-empty-state {
+  text-align: center;
+  padding: 60px 40px;
+  background: #1e2440;
+  border-radius: 16px;
+  border: 1px solid #2d3460;
+  margin-top: 20px;
+}
+
+.cvmaker-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.cvmaker-empty-state h4 {
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.cvmaker-empty-state p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  max-width: 300px;
+  margin: 0 auto;
+}
