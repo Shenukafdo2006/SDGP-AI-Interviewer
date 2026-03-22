@@ -30,21 +30,24 @@ const careersData = [
   ]
 },
   {
-    id: 2,
-    logo: '/logos/codegen.png',
-    title: 'Backend Developer',
-    company: 'CodeGen International',
-    salary: 'LKR 160,000 - 380,000',
-    skills: ['Java', 'Spring Boot', 'REST APIs', 'SQL', 'Microservices'],
-    growth: 'High Demand',
-    details:
-      'Develop backend services and APIs for travel and reservation systems used globally.',
-    reasons: [
-      'CodeGen is a leader in travel tech solutions',
-      'Backend skills are highly valued and in demand',
-      'Work with international products and large datasets'
-    ]
-  },
+  id: 2,
+  logo: '/logos/codegen.png', // or your logo
+  title: 'Backend Developer',
+  company: 'CodeGen',
+  salary: 'LKR 160,000 - 380,000',
+  skills: ['Java', 'Spring Boot', 'REST APIs'],
+  growth: 'High Demand',
+  details: 'Develop scalable backend systems and APIs.',
+  
+  internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic backend knowledge (Node.js / Java / Python)',
+    'Understanding of APIs and databases',
+    'Familiar with Git and version control',
+    'Basic data structures & problem solving',
+    'Good teamwork and communication skills'
+  ]
+},
   {
     id: 3,
     logo: '/logos/creativesoftware.png',
@@ -309,10 +312,8 @@ const CareerCard = ({ career, matchScore, onExplore }) => {
   const [showRequirements, setShowRequirements] = useState(false);
 
   const hasInternshipRequirements =
-    career.title === 'Software Engineer' &&
-    career.internshipRequirements &&
-    career.internshipRequirements.length > 0;
-
+  career.internshipRequirements &&
+  career.internshipRequirements.length > 0;
   return (
     <div className="career-card">
       <img
