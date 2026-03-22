@@ -184,10 +184,16 @@
 }
 
 .career-header-description {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-secondary);
-  line-height: 1.6;
-  max-width: 560px;
+  line-height: 1.7;
+
+  max-width: none;   /* 🔥 THIS is the key fix */
+  width: 100%;
+
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+
   position: relative;
   z-index: 1;
 }
