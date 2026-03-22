@@ -940,7 +940,7 @@ const CVMaker = ({ onBack }) => {
         </div>
 
         <div className="cvmaker-editor-content">
-          {/* Personal Details Section */}
+          {/* Personal Details Section - EXPANDED TO FULL WIDTH */}
           {activeSection === "personal" && (
             <div className="cvmaker-editor-main-full">
               <div className="cvmaker-editor-sidebar-full">
@@ -988,34 +988,36 @@ const CVMaker = ({ onBack }) => {
                       Use as headline
                     </label>
                   </div>
-                  <div className="cvmaker-form-group">
-                    <label>Email address *</label>
-                    <input 
-                      type="email" 
-                      name="email" 
-                      value={cvFormData.email} 
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Phone number *</label>
-                    <input 
-                      type="tel" 
-                      name="phone" 
-                      value={cvFormData.phone} 
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                  <div className="cvmaker-form-group">
-                    <label>Address</label>
-                    <input 
-                      type="text" 
-                      name="address" 
-                      value={cvFormData.address} 
-                      onChange={handleFormChange}
-                    />
+                  <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Email address *</label>
+                      <input 
+                        type="email" 
+                        name="email" 
+                        value={cvFormData.email} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
+                    <div className="cvmaker-form-group">
+                      <label>Phone number *</label>
+                      <input 
+                        type="tel" 
+                        name="phone" 
+                        value={cvFormData.phone} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
                   </div>
                   <div className="cvmaker-form-row">
+                    <div className="cvmaker-form-group">
+                      <label>Address</label>
+                      <input 
+                        type="text" 
+                        name="address" 
+                        value={cvFormData.address} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
                     <div className="cvmaker-form-group">
                       <label>Post code</label>
                       <input 
@@ -1025,6 +1027,8 @@ const CVMaker = ({ onBack }) => {
                         onChange={handleFormChange}
                       />
                     </div>
+                  </div>
+                  <div className="cvmaker-form-row">
                     <div className="cvmaker-form-group">
                       <label>City</label>
                       <input 
@@ -1034,19 +1038,35 @@ const CVMaker = ({ onBack }) => {
                         onChange={handleFormChange}
                       />
                     </div>
+                    <div className="cvmaker-form-group">
+                      <label>Date of birth</label>
+                      <input 
+                        type="date" 
+                        name="dateOfBirth" 
+                        value={cvFormData.dateOfBirth} 
+                        onChange={handleFormChange}
+                      />
+                    </div>
                   </div>
                   <details className="cvmaker-optional-details">
                     <summary>+ Additional fields</summary>
                     <div className="cvmaker-optional-fields">
-                      <div className="cvmaker-form-group"><label>Date of birth</label><input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Place of birth</label><input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Driving licence</label><input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Gender</label><input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Nationality</label><input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Civil status</label><input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Website</label><input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>LinkedIn</label><input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} /></div>
-                      <div className="cvmaker-form-group"><label>Custom field</label><input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} /></div>
+                      <div className="cvmaker-form-row">
+                        <div className="cvmaker-form-group"><label>Place of birth</label><input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} /></div>
+                        <div className="cvmaker-form-group"><label>Driving licence</label><input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} /></div>
+                      </div>
+                      <div className="cvmaker-form-row">
+                        <div className="cvmaker-form-group"><label>Gender</label><input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} /></div>
+                        <div className="cvmaker-form-group"><label>Nationality</label><input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} /></div>
+                      </div>
+                      <div className="cvmaker-form-row">
+                        <div className="cvmaker-form-group"><label>Civil status</label><input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} /></div>
+                        <div className="cvmaker-form-group"><label>Website</label><input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} /></div>
+                      </div>
+                      <div className="cvmaker-form-row">
+                        <div className="cvmaker-form-group"><label>LinkedIn</label><input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} /></div>
+                        <div className="cvmaker-form-group"><label>Custom field</label><input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} /></div>
+                      </div>
                     </div>
                   </details>
                 </div>
