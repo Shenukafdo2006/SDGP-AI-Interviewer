@@ -286,7 +286,15 @@ const careersData = [
       'Strong local reputation in analytics space',
       'Good mix of dev + data skills',
       'Work on products used by enterprises'
-    ]
+    ],
+    internshipRequirements: [
+  'Degree in IT/SE/CS/Information Systems (ongoing or completed)',
+  'Basic understanding of software development and business system concepts',
+  'Knowledge of programming languages like Java, Python, C#, or JavaScript',
+  'Understanding of databases, SQL, and data management',
+  'Basic knowledge of business processes and system analysis',
+  'Familiarity with APIs, system integration, or enterprise applications is a plus',
+  'Problem-solving and analytical thinking skills',]
   }
 ];
 
