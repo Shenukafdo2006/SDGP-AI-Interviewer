@@ -181,16 +181,17 @@ const careersData = [
       'Great cross-team collaboration'
     ],
     internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Strong understanding of programming fundamentals and OOP',
-    'Ability to analyze problems and design software solutions',
-    'Basic knowledge of backend and frontend technologies',
-    'Understanding of APIs and system integration concepts',
-    'Familiarity with databases and data handling',
-    'Basic knowledge of cloud platforms or distributed systems is a plus',
-    'Good problem-solving and analytical thinking skills',
-    'Excellent communication and teamwork skills'
-  ]
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Strong understanding of programming fundamentals and OOP',
+      'Ability to analyze problems and design software solutions',
+      'Basic knowledge of backend and frontend technologies',
+      'Understanding of APIs and system integration concepts',
+      'Familiarity with databases and data handling',
+      'Basic knowledge of cloud platforms or distributed systems is a plus',
+      'Good problem-solving and analytical thinking skills',
+      'Excellent communication and teamwork skills'
+    ],
+    categories: ['System Design', 'Cloud Computing', 'Project Management']
   },
   {
     id: 8,
