@@ -237,15 +237,18 @@ const careersData = [
       'AI & ML skills are trending globally',
       'Cross-domain experience'
     ],
-     internshipRequirements: [
-    'Degree in IT/SE/CS/Data Science (ongoing or completed)',
-    'Strong knowledge of Python programming',
-    'Basic understanding of machine learning concepts (supervised/unsupervised learning)',
-    'Familiarity with libraries like Scikit-learn, TensorFlow, or PyTorch',
-    'Understanding of data preprocessing and data analysis techniques',
-    'Basic knowledge of statistics and linear algebra',
-    'Experience with datasets and model training is a plus',]
-    
+    internshipRequirements: [
+      'Degree in IT/SE/CS/Data Science (ongoing or completed)',
+      'Strong knowledge of Python programming',
+      'Basic understanding of machine learning concepts (supervised/unsupervised learning)',
+      'Familiarity with libraries like Scikit-learn, TensorFlow, or PyTorch',
+      'Understanding of data preprocessing and data analysis techniques',
+      'Basic knowledge of statistics and linear algebra',
+      'Experience with datasets and model training is a plus',
+      'Problem-solving mindset and analytical thinking',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Machine Learning', 'Data Science']
   },
   {
     id: 10,
