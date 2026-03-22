@@ -19,6 +19,7 @@ import CareerSuggestions from "./CareerSuggestions";
 import SkillImprovement from "./SkillImprovement";
 import DailyMotivation from "./DailyMotivation";
 
+// eslint-disable-next-line react-refresh/only-export-components
 function App() {
 
   const [view, setView] = useState(null); 
@@ -33,6 +34,7 @@ function App() {
 
     if (uid && lastView) {
      
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setView(lastView);
     } else {
       

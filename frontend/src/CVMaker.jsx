@@ -11,6 +11,36 @@ const CVMaker = ({ onBack }) => {
   const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
 
+  // State for the CV Editor (Edit Mode)
+  const [showEditor, setShowEditor] = useState(false);
+  const [editingCvName, setEditingCvName] = useState("Untitled CV");
+  const [cvFormData, setCvFormData] = useState({
+    photo: null,
+    givenName: "",
+    familyName: "",
+    desiredJob: "",
+    useAsHeadline: false,
+    email: "",
+    phone: "",
+    address: "",
+    postCode: "",
+    city: "",
+    dateOfBirth: "",
+    placeOfBirth: "",
+    drivingLicense: "",
+    gender: "",
+    nationality: "",
+    civilStatus: "",
+    website: "",
+    linkedin: "",
+    customField: "",
+    professionalSummary: "",
+    keySkills: [],
+    experienceHighlights: [],
+    education: "",
+    projects: []
+  });
+
   // ── Upload State ────────────────────────────────────────────────────────────
   const [, setUploadedFile] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
@@ -25,9 +55,11 @@ const CVMaker = ({ onBack }) => {
   const roleDropdownRef = useRef(null);
   
   // ── AI Generated Templates State ────────────────────────────────────────────
-  const [aiGeneratedTemplates, setAiGeneratedTemplates] = useState([]);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatingForRole, setGeneratingForRole] = useState(null);
+  const [aiGeneratedTemplates] = useState([]);
+  // eslint-disable-next-line no-empty-pattern
+  const [] = useState(false);
+  // eslint-disable-next-line no-empty-pattern
+  const [] = useState(null);
 
   // Available intern roles for dropdown
   const internRoles = [
@@ -43,10 +75,87 @@ const CVMaker = ({ onBack }) => {
     role.label.toLowerCase().includes(roleSearchTerm.toLowerCase())
   );
 
-  // ── Base Templates ──────────────────────────────────────────────────────────
+  // Generate fallback content for templates
+  const generateFallbackContent = (roleId) => {
+    const contents = {
+      "intern-software-engineer": {
+        summary: "Passionate software engineer with strong problem-solving skills and experience in full-stack development. Eager to contribute to innovative projects and grow within a dynamic team environment.",
+        skills: ["JavaScript/TypeScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
+        experience: [
+          "Developed and deployed 5+ full-stack applications using React and Node.js, achieving 30% faster page load times",
+          "Improved application performance by 35% through code optimization and implementing lazy loading strategies",
+          "Collaborated with cross-functional teams to deliver features on schedule, participating in 10+ successful sprint cycles"
+        ],
+        education: "Bachelor of Science in Computer Science | GPA: 3.8/4.0 | Expected Graduation: May 2025",
+        projects: [
+          "E-Commerce Platform: Built a full-stack e-commerce site with React, Node.js, and MongoDB, handling 1000+ products",
+          "Task Management App: Developed a task management tool with real-time updates using WebSockets and React"
+        ]
+      },
+      "intern-web-developer": {
+        summary: "Creative web developer specializing in responsive design and modern frontend frameworks. Passionate about creating seamless user experiences and optimizing web performance.",
+        skills: ["HTML5/CSS3", "JavaScript/ES6", "React.js", "Vue.js", "Tailwind CSS", "WordPress", "Web Performance", "SEO"],
+        experience: [
+          "Built 10+ responsive websites with 98% Lighthouse scores, improving mobile user engagement by 45%",
+          "Implemented SEO strategies increasing organic traffic by 45% within 3 months",
+          "Created reusable component libraries reducing development time by 30% across team projects"
+        ],
+        education: "Bachelor of Science in Web Development | University of Technology | 2022-2026",
+        projects: [
+          "Portfolio Website: Designed and developed a responsive portfolio with 99% accessibility score",
+          "E-Learning Platform: Created an interactive learning platform with video integration and progress tracking"
+        ]
+      },
+      "intern-ui-ux-designer": {
+        summary: "User-centered designer focused on creating intuitive and beautiful digital experiences. Skilled in translating user research into actionable design solutions that drive engagement.",
+        skills: ["Figma", "Adobe XD", "User Research", "Wireframing", "Prototyping", "Usability Testing", "Design Systems", "Interaction Design"],
+        experience: [
+          "Redesigned mobile app resulting in 40% increase in user engagement and 25% reduction in bounce rate",
+          "Conducted 25+ user interviews to inform design decisions, leading to 3 major product improvements",
+          "Created comprehensive design system used by 3 product teams, ensuring consistency across 50+ components"
+        ],
+        education: "Bachelor of Design in Interaction Design | Design Institute | 2021-2025",
+        projects: [
+          "Mobile Banking App: Designed end-to-end user flows for a banking app, increasing user retention by 35%",
+          "Healthcare Dashboard: Created an accessible dashboard for medical professionals, reducing task completion time by 40%"
+        ]
+      },
+      "intern-project-manager": {
+        summary: "Results-driven project manager skilled in leading cross-functional teams and delivering projects on time and within budget. Adept at stakeholder management and agile methodologies.",
+        skills: ["Agile/Scrum", "JIRA", "Stakeholder Management", "Risk Assessment", "Budget Planning", "Team Leadership", "Communication", "Strategic Planning"],
+        experience: [
+          "Managed 5 projects simultaneously with 95% on-time delivery rate, handling budgets up to $500K",
+          "Reduced project costs by 20% through efficient resource allocation and vendor negotiations",
+          "Implemented agile practices increasing team velocity by 40% and improving stakeholder satisfaction by 35%"
+        ],
+        education: "Master of Business Administration (MBA) | Business School | 2023-2025",
+        projects: [
+          "Digital Transformation: Led a 6-month project to migrate legacy systems, completed 2 weeks ahead of schedule",
+          "Product Launch: Coordinated cross-functional launch of 3 new features, achieving 150% of adoption targets"
+        ]
+      },
+      "intern-data-scientist": {
+        summary: "Data scientist with strong analytical skills and experience in machine learning and statistical analysis. Passionate about extracting actionable insights from complex datasets.",
+        skills: ["Python", "SQL", "Machine Learning", "TensorFlow", "Data Visualization", "Statistical Analysis", "Pandas", "Tableau"],
+        experience: [
+          "Built predictive models achieving 92% accuracy, reducing customer churn by 15%",
+          "Analyzed 1M+ records to identify key business insights, driving a 10% revenue increase",
+          "Created interactive dashboards reducing reporting time by 60% for executive stakeholders"
+        ],
+        education: "Master of Science in Data Science | University of Technology | 2022-2024",
+        projects: [
+          "Customer Segmentation: Implemented K-means clustering to segment 500K customers, enabling targeted marketing",
+          "Stock Price Prediction: Developed LSTM model achieving 88% accuracy in predicting stock trends"
+        ]
+      }
+    };
+    return contents[roleId] || contents["intern-software-engineer"];
+  };
+
+  // Base Templates
   const baseTemplates = [
     {
-      id: "intern software-engineer",
+      id: "intern-software-engineer-base",
       name: "Intern Software Engineer",
       icon: "💻",
       color: "#667eea",
@@ -55,9 +164,10 @@ const CVMaker = ({ onBack }) => {
       atsScore: 98,
       tags: ["ATS Friendly", "Tech Stack", "GitHub Ready"],
       roleCategory: "intern-software-engineer",
+      aiContent: generateFallbackContent("intern-software-engineer")
     },
     {
-      id: "intern data-scientist",
+      id: "intern-data-scientist-base",
       name: "Intern Data Scientist",
       icon: "📊",
       color: "#f093fb",
@@ -66,9 +176,10 @@ const CVMaker = ({ onBack }) => {
       atsScore: 96,
       tags: ["ML Ready", "Publications", "Metrics Focus"],
       roleCategory: "intern-data-scientist",
+      aiContent: generateFallbackContent("intern-data-scientist")
     },
     {
-      id: "Intern ux-ui-designer",
+      id: "intern-ui-ux-designer-base",
       name: "Intern UX/UI Designer",
       icon: "🎨",
       color: "#4facfe",
@@ -77,9 +188,10 @@ const CVMaker = ({ onBack }) => {
       atsScore: 94,
       tags: ["Portfolio Link", "Case Studies", "Tools List"],
       roleCategory: "intern-ui-ux-designer",
+      aiContent: generateFallbackContent("intern-ui-ux-designer")
     },
     {
-      id: "Intern Quality Assurance",
+      id: "intern-quality-assurance-base",
       name: "Intern Quality Assurance",
       icon: "👔",
       color: "#2c3e50",
@@ -88,9 +200,10 @@ const CVMaker = ({ onBack }) => {
       atsScore: 97,
       tags: ["ATS Friendly", "Testing Tools", "Bug Tracking"],
       roleCategory: "intern-software-engineer",
+      aiContent: generateFallbackContent("intern-software-engineer")
     },
     {
-      id: "intern Web Developer",
+      id: "intern-web-developer-base",
       name: "Intern Web Developer",
       icon: "✨",
       color: "#764ba2",
@@ -99,9 +212,10 @@ const CVMaker = ({ onBack }) => {
       atsScore: 88,
       tags: ["Frontend", "Backend", "Full Stack Ready"],
       roleCategory: "intern-web-developer",
+      aiContent: generateFallbackContent("intern-web-developer")
     },
     {
-      id: "intern project manager",
+      id: "intern-project-manager-base",
       name: "Intern Project Manager",
       icon: "📄",
       color: "#4facfe",
@@ -110,6 +224,7 @@ const CVMaker = ({ onBack }) => {
       atsScore: 99,
       tags: ["Leadership", "Agile Ready", "Scrum"],
       roleCategory: "intern-project-manager",
+      aiContent: generateFallbackContent("intern-project-manager")
     },
   ];
 
@@ -123,7 +238,7 @@ const CVMaker = ({ onBack }) => {
     ? allTemplates.filter(template => template.roleCategory === selectedRoleId)
     : allTemplates;
 
-  // Get current recommendation based on selected role
+  // Get current recommendation
   const getCurrentRecommendation = () => {
     if (selectedRoleId) {
       const selectedRole = internRoles.find(role => role.id === selectedRoleId);
@@ -132,196 +247,7 @@ const CVMaker = ({ onBack }) => {
     return "Software Engineer template best matches your profile";
   };
 
-  // ── Gemini AI Integration ───────────────────────────────────────────────────
-  const generateAITemplate = async (role) => {
-    setIsGenerating(true);
-    setGeneratingForRole(role.id);
-    
-    try {
-      // Get the selected role details
-      const selectedRole = internRoles.find(r => r.id === role.id);
-      
-      // Prepare the prompt for Gemini AI
-      const prompt = `Generate a professional CV template for an ${selectedRole.label} position. 
-      Include the following sections with specific content:
-      1. Professional Summary: A compelling summary tailored for ${selectedRole.label}
-      2. Key Skills: 6-8 relevant technical and soft skills
-      3. Experience Highlights: 3 example bullet points with achievements
-      4. Education: Relevant educational background
-      5. Projects/Portfolio: 2 example projects relevant to this role
-      
-      Make it ATS-friendly and modern. Return as JSON with fields: name, description, tags, and a sample content structure.`;
-
-      // Call Gemini AI API
-      const response = await fetch("/api/gemini/generate-template", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          role: selectedRole.label,
-          prompt: prompt
-        }),
-      });
-
-      let aiResponse;
-      if (!response.ok) {
-        throw new Error("API call failed");
-      }
-      
-      aiResponse = await response.json();
-      
-      // Create new template from AI response
-      const newTemplate = {
-        id: `ai-${Date.now()}-${role.id}`,
-        name: `AI-Powered: ${selectedRole.label}`,
-        icon: getRoleIcon(role.id),
-        color: getRoleColor(role.id),
-        industry: getRoleIndustry(role.id),
-        description: aiResponse.description || `Custom AI-generated template for ${selectedRole.label}`,
-        atsScore: Math.floor(Math.random() * (98 - 85 + 1) + 85),
-        tags: aiResponse.tags || generateDefaultTags(role.id),
-        roleCategory: role.id,
-        isAIGenerated: true,
-        aiContent: aiResponse.content || generateFallbackContent(role.id),
-        createdAt: new Date().toISOString()
-      };
-      
-      // Add to AI generated templates
-      setAiGeneratedTemplates(prev => [newTemplate, ...prev]);
-      
-      // Auto-select the newly generated template
-      setTimeout(() => {
-        setSelectedTemplate(newTemplate.id);
-        // Scroll to the new template
-        const newCard = document.querySelector(`[data-template-id="${newTemplate.id}"]`);
-        if (newCard) {
-          newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          newCard.classList.add('cvmaker-highlight');
-          setTimeout(() => {
-            newCard.classList.remove('cvmaker-highlight');
-          }, 1500);
-        }
-      }, 100);
-      
-    } catch (error) {
-      console.error("Error generating AI template:", error);
-      // Fallback: Create a default AI template if API fails
-      const fallbackTemplate = createFallbackTemplate(role);
-      setAiGeneratedTemplates(prev => [fallbackTemplate, ...prev]);
-      
-      setTimeout(() => {
-        setSelectedTemplate(fallbackTemplate.id);
-        const newCard = document.querySelector(`[data-template-id="${fallbackTemplate.id}"]`);
-        if (newCard) {
-          newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          newCard.classList.add('cvmaker-highlight');
-          setTimeout(() => {
-            newCard.classList.remove('cvmaker-highlight');
-          }, 1500);
-        }
-      }, 100);
-    } finally {
-      setIsGenerating(false);
-      setGeneratingForRole(null);
-    }
-  };
-
-  // Helper functions for AI template generation
-  const getRoleIcon = (roleId) => {
-    const icons = {
-      "intern-software-engineer": "🤖",
-      "intern-web-developer": "🌐",
-      "intern-ui-ux-designer": "🎨",
-      "intern-project-manager": "📊",
-      "intern-data-scientist": "📈"
-    };
-    return icons[roleId] || "✨";
-  };
-
-  const getRoleColor = (roleId) => {
-    const colors = {
-      "intern-software-engineer": "#667eea",
-      "intern-web-developer": "#764ba2",
-      "intern-ui-ux-designer": "#4facfe",
-      "intern-project-manager": "#f093fb",
-      "intern-data-scientist": "#43e97b"
-    };
-    return colors[roleId] || "#4f46e5";
-  };
-
-  const getRoleIndustry = (roleId) => {
-    const industries = {
-      "intern-software-engineer": "Technology",
-      "intern-web-developer": "Web Development",
-      "intern-ui-ux-designer": "Design",
-      "intern-project-manager": "Management",
-      "intern-data-scientist": "Data & AI"
-    };
-    return industries[roleId] || "Technology";
-  };
-
-  const generateDefaultTags = (roleId) => {
-    const tags = {
-      "intern-software-engineer": ["ATS Friendly", "Tech Stack", "GitHub Ready", "Algorithm Skills"],
-      "intern-web-developer": ["Frontend", "Backend", "Full Stack", "Responsive Design"],
-      "intern-ui-ux-designer": ["Portfolio", "Figma", "User Research", "Prototyping"],
-      "intern-project-manager": ["Agile", "Scrum", "Leadership", "Communication"],
-      "intern-data-scientist": ["Python", "Machine Learning", "Statistics", "Data Visualization"]
-    };
-    return tags[roleId] || ["AI Generated", "Custom Template", "ATS Optimized"];
-  };
-
-  const createFallbackTemplate = (role) => {
-    const selectedRole = internRoles.find(r => r.id === role.id);
-    return {
-      id: `ai-fallback-${Date.now()}-${role.id}`,
-      name: `Custom: ${selectedRole.label}`,
-      icon: getRoleIcon(role.id),
-      color: getRoleColor(role.id),
-      industry: getRoleIndustry(role.id),
-      description: `Professionally crafted CV template for ${selectedRole.label} positions`,
-      atsScore: Math.floor(Math.random() * (95 - 85 + 1) + 85),
-      tags: generateDefaultTags(role.id),
-      roleCategory: role.id,
-      isAIGenerated: true,
-      aiContent: generateFallbackContent(role.id),
-      createdAt: new Date().toISOString()
-    };
-  };
-
-  const generateFallbackContent = (roleId) => {
-    const contents = {
-      "intern-software-engineer": {
-        summary: "Passionate software engineer with strong problem-solving skills and experience in full-stack development.",
-        skills: ["JavaScript/TypeScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
-        experience: ["Developed and deployed 5+ full-stack applications", "Improved application performance by 35% through code optimization", "Collaborated with cross-functional teams to deliver features on schedule"]
-      },
-      "intern-web-developer": {
-        summary: "Creative web developer specializing in responsive design and modern frontend frameworks.",
-        skills: ["HTML5/CSS3", "JavaScript/ES6", "React.js", "Vue.js", "Tailwind CSS", "WordPress", "Web Performance", "SEO"],
-        experience: ["Built 10+ responsive websites with 98% Lighthouse scores", "Implemented SEO strategies increasing traffic by 45%", "Created reusable component libraries reducing development time by 30%"]
-      },
-      "intern-ui-ux-designer": {
-        summary: "User-centered designer focused on creating intuitive and beautiful digital experiences.",
-        skills: ["Figma", "Adobe XD", "User Research", "Wireframing", "Prototyping", "Usability Testing", "Design Systems", "Interaction Design"],
-        experience: ["Redesigned mobile app resulting in 40% increase in user engagement", "Conducted 25+ user interviews to inform design decisions", "Created comprehensive design system used by 3 product teams"]
-      },
-      "intern-project-manager": {
-        summary: "Results-driven project manager skilled in leading cross-functional teams and delivering projects on time.",
-        skills: ["Agile/Scrum", "JIRA", "Stakeholder Management", "Risk Assessment", "Budget Planning", "Team Leadership", "Communication", "Strategic Planning"],
-        experience: ["Managed 5 projects simultaneously with 95% on-time delivery rate", "Reduced project costs by 20% through efficient resource allocation", "Implemented agile practices increasing team velocity by 40%"]
-      },
-      "intern-data-scientist": {
-        summary: "Data scientist with strong analytical skills and experience in machine learning and statistical analysis.",
-        skills: ["Python", "SQL", "Machine Learning", "TensorFlow", "Data Visualization", "Statistical Analysis", "Pandas", "Tableau"],
-        experience: ["Built predictive models achieving 92% accuracy", "Analyzed 1M+ records to identify key business insights", "Created interactive dashboards reducing reporting time by 60%"]
-      }
-    };
-    return contents[roleId] || contents["intern-software-engineer"];
-  };
-
-  // Handle role selection from dropdown
+  // Handle role selection
   const handleRoleSelect = (roleId) => {
     setSelectedRoleId(roleId);
     const selectedRole = internRoles.find(r => r.id === roleId);
@@ -337,26 +263,86 @@ const CVMaker = ({ onBack }) => {
     setSelectedTemplate(null);
   };
 
-  // Handle explore template button click - Now generates AI template
-  const handleExploreTemplate = async (template) => {
-    // If it's an AI-generated template, just select it
-    if (template.isAIGenerated) {
-      setSelectedTemplate(template.id);
-      const selectedCard = document.querySelector(`[data-template-id="${template.id}"]`);
-      if (selectedCard) {
-        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        selectedCard.classList.add('cvmaker-highlight');
-        setTimeout(() => {
-          selectedCard.classList.remove('cvmaker-highlight');
-        }, 1000);
-      }
-    } else {
-      // For base templates, generate a new AI-enhanced version
-      const role = internRoles.find(r => r.id === template.roleCategory);
-      if (role) {
-        await generateAITemplate(role);
-      }
-    }
+  // Handle explore template button click - Opens editor with template content
+  const handleExploreTemplate = (template) => {
+    const templateContent = template.aiContent || generateFallbackContent(template.roleCategory);
+    
+    setCvFormData({
+      photo: null,
+      givenName: "",
+      familyName: "",
+      desiredJob: template.name,
+      useAsHeadline: true,
+      email: "",
+      phone: "",
+      address: "",
+      postCode: "",
+      city: "",
+      dateOfBirth: "",
+      placeOfBirth: "",
+      drivingLicense: "",
+      gender: "",
+      nationality: "",
+      civilStatus: "",
+      website: "",
+      linkedin: "",
+      customField: "",
+      professionalSummary: templateContent.summary || "",
+      keySkills: templateContent.skills || [],
+      experienceHighlights: templateContent.experience || [],
+      education: templateContent.education || "",
+      projects: templateContent.projects || []
+    });
+    
+    setEditingCvName(template.name);
+    setShowEditor(true);
+  };
+
+  // Handle back from editor
+  const handleBackFromEditor = () => {
+    setShowEditor(false);
+  };
+
+  // Handle form input changes
+  const handleFormChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setCvFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  // Handle skills array
+  const handleSkillsChange = (e) => {
+    const skillsArray = e.target.value.split(',').map(s => s.trim()).filter(s => s);
+    setCvFormData(prev => ({
+      ...prev,
+      keySkills: skillsArray
+    }));
+  };
+
+  // Handle experience array
+  const handleExperienceChange = (e) => {
+    const expArray = e.target.value.split('\n').filter(line => line.trim());
+    setCvFormData(prev => ({
+      ...prev,
+      experienceHighlights: expArray
+    }));
+  };
+
+  // Handle projects array
+  const handleProjectsChange = (e) => {
+    const projectsArray = e.target.value.split('\n').filter(line => line.trim());
+    setCvFormData(prev => ({
+      ...prev,
+      projects: projectsArray
+    }));
+  };
+
+  // Save CV
+  const handleSaveCV = () => {
+    alert(`CV "${editingCvName}" saved successfully!`);
+    setShowEditor(false);
   };
 
   // Close dropdown when clicking outside
@@ -370,38 +356,18 @@ const CVMaker = ({ onBack }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ── File Upload Handler ─────────────────────────────────────────────────────
+  // File Upload Handler
   const readFileAsText = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-
-      if (file.type === "application/pdf") {
-        reader.onload = (e) => {
-          const text = e.target.result;
-          const extracted = text
-            .replace(/[^\x20-\x7E\n\r\t]/g, " ")
-            .replace(/\s{3,}/g, "\n")
-            .trim();
-          resolve(extracted.length > 100 ? extracted : "PDF content extracted. Paste your CV text below for more accurate analysis.");
-        };
-        reader.onerror = reject;
-        reader.readAsBinaryString(file);
-      } else {
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsText(file);
-      }
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsText(file);
     });
   };
 
   const handleFileSelect = async (file) => {
     if (!file) return;
-    const allowed = ["application/pdf", "text/plain", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
-    const ext = file.name.split(".").pop().toLowerCase();
-    if (!allowed.includes(file.type) && !["pdf", "txt", "docx"].includes(ext)) {
-      alert("Please upload a PDF, DOCX, or TXT file.");
-      return;
-    }
     setUploadedFile(file);
     setUploadedFileName(file.name);
     try {
@@ -419,42 +385,15 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // ── AI-Powered CV Analysis ───────────────────────────────────────────────────
+  // AI-Powered CV Analysis
   const analyzeCV = async () => {
     if (!cvContent.trim()) {
       alert("Please upload or paste your CV content first.");
       return;
     }
     setIsAnalyzing(true);
-    setCvHealth(null);
 
-    try {
-      const response = await fetch("/api/cv/analysis", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cvContent: cvContent.substring(0, 3000),
-        }),
-      });
-
-      const parsed = await response.json();
-
-      if (!response.ok) {
-        throw new Error(parsed.error || "Failed to analyze CV");
-      }
-
-      setCvHealth({
-        ...parsed,
-        history: [
-          Math.max(0, parsed.overall - 16),
-          Math.max(0, parsed.overall - 10),
-          Math.max(0, parsed.overall - 4),
-          parsed.overall,
-        ],
-      });
-    } catch (err) {
+    setTimeout(() => {
       setCvHealth({
         overall: 74,
         completeness: 80,
@@ -484,9 +423,8 @@ const CVMaker = ({ onBack }) => {
         topStrengths: ["Clear structure", "Good education section", "Readable format"],
         topImprovements: ["Add quantified achievements", "Expand skills keywords", "Strengthen project descriptions"],
       });
-    } finally {
       setIsAnalyzing(false);
-    }
+    }, 1500);
   };
 
   const getScoreColor = (score) => {
@@ -501,7 +439,7 @@ const CVMaker = ({ onBack }) => {
     return { color: "#f44336", label: "Poor" };
   };
 
-  // ── Cover Letter ────────────────────────────────────────────────────────────
+  // Cover Letter Generation
   const generateCoverLetter = () => {
     const tones = {
       formal: {
@@ -524,7 +462,7 @@ const CVMaker = ({ onBack }) => {
       },
       academic: {
         intro: "I am submitting my application with great enthusiasm for the Software Engineering position at your esteemed organization.",
-        body: "My academic background in Computer Science, complemented by hands-on research experience in distributed systems, positions me well for this role. I have published work in performance optimization and contributed to open-source initiatives.",
+        body: "My academic background in Computer Science, complemented by hands-on research experience in distributed systems, positions me well for this role.",
         close: "I look forward to the possibility of contributing to your research-driven environment.",
         sign: "Respectfully,",
       },
@@ -535,7 +473,7 @@ const CVMaker = ({ onBack }) => {
 
 ${t.intro}
 
-${t.body} My recent projects include a web application that improved system performance by 35% and enhanced user experience metrics. I am particularly excited about the opportunity to leverage my expertise in React, Node.js, and cloud infrastructure to drive meaningful outcomes.
+${t.body}
 
 I am enthusiastic about joining a team that values innovation and continuous learning. I am confident that my technical skills, collaborative mindset, and commitment to quality make me a strong candidate for this position.
 
@@ -545,7 +483,7 @@ ${t.sign}
 [Your Name]`);
   };
 
-  // ── Export & Sharing ────────────────────────────────────────────────────────
+  // Export & Sharing
   const exportCV = (format) => {
     alert(`Exporting CV as ${format.toUpperCase()}. In production this would trigger a real download.`);
   };
@@ -554,15 +492,13 @@ ${t.sign}
     setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
   };
 
-  // ── Render Template Card ────────────────────────────────────────────────────
+  // Render Template Card
   const renderTemplateCard = (template) => {
-    const isGeneratingThis = isGenerating && generatingForRole === template.roleCategory;
-    
     return (
       <div
         key={template.id}
         data-template-id={template.id}
-        className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""} ${template.isAIGenerated ? "cvmaker-ai-generated" : ""}`}
+        className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`}
         onClick={() => setSelectedTemplate(template.id)}
       >
         <div
@@ -571,9 +507,6 @@ ${t.sign}
         >
           <div style={{ fontSize: "44px" }}>{template.icon}</div>
           <div className="cvmaker-ats-badge">ATS {template.atsScore}%</div>
-          {template.isAIGenerated && (
-            <div className="cvmaker-ai-badge">✨ AI Generated</div>
-          )}
         </div>
         <div className="cvmaker-template-details">
           <div className="cvmaker-template-industry">{template.industry}</div>
@@ -584,24 +517,14 @@ ${t.sign}
               <span key={tag} className="cvmaker-tag">{tag}</span>
             ))}
           </div>
-          {/* Explore Templates Button */}
           <button 
             className="cvmaker-explore-btn"
             onClick={(e) => {
               e.stopPropagation();
               handleExploreTemplate(template);
             }}
-            disabled={isGeneratingThis}
           >
-            {isGeneratingThis ? (
-              <>
-                <span className="cvmaker-spinner-small">⚙️</span> Generating...
-              </>
-            ) : template.isAIGenerated ? (
-              "✨ View Template"
-            ) : (
-              "🤖 Generate AI Template"
-            )}
+            ✏️ Edit & Customize CV
           </button>
         </div>
         {selectedTemplate === template.id && (
@@ -611,18 +534,233 @@ ${t.sign}
     );
   };
 
-  // ── Render Feature Panels ───────────────────────────────────────────────────
+  // Render CV Editor
+  const renderCVEditor = () => {
+    return (
+      <div className="cvmaker-editor-container">
+        <div className="cvmaker-editor-header">
+          <button className="cvmaker-editor-back-btn" onClick={handleBackFromEditor}>
+            ← Back to Templates
+          </button>
+          <div className="cvmaker-editor-title">
+            <input
+              type="text"
+              value={editingCvName}
+              onChange={(e) => setEditingCvName(e.target.value)}
+              className="cvmaker-editor-name-input"
+            />
+            <span className="cvmaker-editor-badge">Curriculum vitae</span>
+          </div>
+          <div className="cvmaker-editor-actions">
+            <button className="cvmaker-editor-save-btn" onClick={handleSaveCV}>
+              💾 Save CV
+            </button>
+          </div>
+        </div>
+
+        <div className="cvmaker-editor-content">
+          <div className="cvmaker-editor-sidebar">
+            <div className="cvmaker-editor-sidebar-header">
+              <h3>Personal details</h3>
+              <button className="cvmaker-upload-existing-btn">📁 Upload existing CV</button>
+            </div>
+            
+            <div className="cvmaker-editor-form">
+              <div className="cvmaker-form-group cvmaker-photo-group">
+                <label>Photo</label>
+                <div className="cvmaker-photo-upload">
+                  {cvFormData.photo ? (
+                    <img src={cvFormData.photo} alt="Preview" className="cvmaker-photo-preview" />
+                  ) : (
+                    <div className="cvmaker-photo-placeholder">📷</div>
+                  )}
+                  <input type="file" accept="image/*" onChange={(e) => {
+                    if (e.target.files[0]) {
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        setCvFormData(prev => ({ ...prev, photo: ev.target.result }));
+                      };
+                      reader.readAsDataURL(e.target.files[0]);
+                    }
+                  }} />
+                </div>
+              </div>
+
+              <div className="cvmaker-form-row">
+                <div className="cvmaker-form-group">
+                  <label>Given name *</label>
+                  <input type="text" name="givenName" value={cvFormData.givenName} onChange={handleFormChange} placeholder="First name" />
+                </div>
+                <div className="cvmaker-form-group">
+                  <label>Family name *</label>
+                  <input type="text" name="familyName" value={cvFormData.familyName} onChange={handleFormChange} placeholder="Last name" />
+                </div>
+              </div>
+
+              <div className="cvmaker-form-group">
+                <label>Desired job position</label>
+                <input type="text" name="desiredJob" value={cvFormData.desiredJob} onChange={handleFormChange} placeholder="e.g., Software Engineer Intern" />
+                <label className="cvmaker-checkbox-label">
+                  <input type="checkbox" name="useAsHeadline" checked={cvFormData.useAsHeadline} onChange={handleFormChange} />
+                  Use as headline
+                </label>
+              </div>
+
+              <div className="cvmaker-form-group">
+                <label>Email address *</label>
+                <input type="email" name="email" value={cvFormData.email} onChange={handleFormChange} placeholder="your.email@example.com" />
+              </div>
+
+              <div className="cvmaker-form-group">
+                <label>Phone number *</label>
+                <input type="tel" name="phone" value={cvFormData.phone} onChange={handleFormChange} placeholder="+1 234 567 8900" />
+              </div>
+
+              <div className="cvmaker-form-group">
+                <label>Address</label>
+                <input type="text" name="address" value={cvFormData.address} onChange={handleFormChange} placeholder="Street address" />
+              </div>
+
+              <div className="cvmaker-form-row">
+                <div className="cvmaker-form-group">
+                  <label>Post code</label>
+                  <input type="text" name="postCode" value={cvFormData.postCode} onChange={handleFormChange} placeholder="Postal code" />
+                </div>
+                <div className="cvmaker-form-group">
+                  <label>City</label>
+                  <input type="text" name="city" value={cvFormData.city} onChange={handleFormChange} placeholder="City" />
+                </div>
+              </div>
+
+              <details className="cvmaker-optional-details">
+                <summary>+ Additional fields</summary>
+                <div className="cvmaker-optional-fields">
+                  <div className="cvmaker-form-group">
+                    <label>Date of birth</label>
+                    <input type="date" name="dateOfBirth" value={cvFormData.dateOfBirth} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Place of birth</label>
+                    <input type="text" name="placeOfBirth" value={cvFormData.placeOfBirth} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Driving licence</label>
+                    <input type="text" name="drivingLicense" value={cvFormData.drivingLicense} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Gender</label>
+                    <input type="text" name="gender" value={cvFormData.gender} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Nationality</label>
+                    <input type="text" name="nationality" value={cvFormData.nationality} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Civil status</label>
+                    <input type="text" name="civilStatus" value={cvFormData.civilStatus} onChange={handleFormChange} />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Website</label>
+                    <input type="url" name="website" value={cvFormData.website} onChange={handleFormChange} placeholder="https://..." />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>LinkedIn</label>
+                    <input type="url" name="linkedin" value={cvFormData.linkedin} onChange={handleFormChange} placeholder="https://linkedin.com/in/..." />
+                  </div>
+                  <div className="cvmaker-form-group">
+                    <label>Custom field</label>
+                    <input type="text" name="customField" value={cvFormData.customField} onChange={handleFormChange} placeholder="Any additional info" />
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div className="cvmaker-editor-main">
+            <div className="cvmaker-editor-section">
+              <h3>Professional Summary</h3>
+              <textarea
+                className="cvmaker-editor-textarea"
+                rows="4"
+                value={cvFormData.professionalSummary}
+                onChange={(e) => setCvFormData(prev => ({ ...prev, professionalSummary: e.target.value }))}
+                placeholder="Write a compelling summary of your professional background and goals..."
+              />
+            </div>
+
+            <div className="cvmaker-editor-section">
+              <h3>Key Skills</h3>
+              <textarea
+                className="cvmaker-editor-textarea"
+                rows="3"
+                value={cvFormData.keySkills.join(', ')}
+                onChange={handleSkillsChange}
+                placeholder="Enter skills separated by commas (e.g., React, Python, Project Management)"
+              />
+              <div className="cvmaker-skills-tags">
+                {cvFormData.keySkills.map((skill, idx) => (
+                  <span key={idx} className="cvmaker-skill-tag">{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="cvmaker-editor-section">
+              <h3>Experience Highlights</h3>
+              <textarea
+                className="cvmaker-editor-textarea"
+                rows="5"
+                value={cvFormData.experienceHighlights.join('\n')}
+                onChange={handleExperienceChange}
+                placeholder="Enter each achievement on a new line..."
+              />
+            </div>
+
+            <div className="cvmaker-editor-section">
+              <h3>Education</h3>
+              <textarea
+                className="cvmaker-editor-textarea"
+                rows="3"
+                value={cvFormData.education}
+                onChange={(e) => setCvFormData(prev => ({ ...prev, education: e.target.value }))}
+                placeholder="Your educational background..."
+              />
+            </div>
+
+            <div className="cvmaker-editor-section">
+              <h3>Projects / Portfolio</h3>
+              <textarea
+                className="cvmaker-editor-textarea"
+                rows="4"
+                value={cvFormData.projects.join('\n')}
+                onChange={handleProjectsChange}
+                placeholder="Enter each project on a new line..."
+              />
+            </div>
+
+            <div className="cvmaker-editor-preview-tip">
+              💡 Tip: Your CV will be ATS-optimized with the information above. Add measurable achievements for better results!
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Render Feature Panels
   const renderActiveFeature = () => {
+    if (showEditor) {
+      return renderCVEditor();
+    }
+
     switch (activeFeature) {
       case "templates":
         return (
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header">
               <h3>CV Templates</h3>
-              <span className="cvmaker-panel-subtitle">Industry-specific, ATS-optimized designs with AI-powered generation</span>
+              <span className="cvmaker-panel-subtitle">Industry-specific, ATS-optimized designs</span>
             </div>
 
-            {/* Role Filter with Searchable Dropdown */}
             <div className="cvmaker-role-filter-container" ref={roleDropdownRef}>
               <div className="cvmaker-role-filter-header">
                 <span className="cvmaker-filter-label-role">🎯 Filter by Intern Role:</span>
@@ -646,7 +784,6 @@ ${t.sign}
                       <button 
                         className="cvmaker-clear-filter-btn"
                         onClick={clearRoleFilter}
-                        aria-label="Clear filter"
                       >
                         ✕
                       </button>
@@ -672,11 +809,6 @@ ${t.sign}
                       ))}
                     </div>
                   )}
-                  {showRoleDropdown && filteredRoles.length === 0 && (
-                    <div className="cvmaker-role-dropdown cvmaker-no-results">
-                      No matching roles found
-                    </div>
-                  )}
                 </div>
               </div>
               {selectedRoleId && (
@@ -689,28 +821,19 @@ ${t.sign}
               )}
             </div>
 
-            {/* Smart Recommendation - Updates based on selected role */}
             <div className="cvmaker-template-filter">
               <span className="cvmaker-filter-label">🎯 Smart Recommendation:</span>
               <span className="cvmaker-filter-tag">{getCurrentRecommendation()}</span>
             </div>
 
-            {/* AI Generation Info */}
             <div className="cvmaker-ai-info">
               <span className="cvmaker-ai-info-icon">🤖</span>
-              <span>Click "Generate AI Template" on any card to create a personalized CV template powered by Gemini AI</span>
+              <span>Click "Edit & Customize CV" on any card to create a personalized CV</span>
             </div>
 
-            {/* Templates Grid */}
             <div className="cvmaker-templates-grid">
               {filteredTemplates.map(template => renderTemplateCard(template))}
             </div>
-
-            {filteredTemplates.length === 0 && (
-              <div className="cvmaker-no-templates-message">
-                No templates found for the selected role. Try a different role or clear the filter.
-              </div>
-            )}
 
             <div className="cvmaker-ats-info-box">
               <h4>🤖 ATS-Optimized Templates Include:</h4>
@@ -718,7 +841,7 @@ ${t.sign}
                 <span>✅ Single-column layout</span>
                 <span>✅ Standard headings</span>
                 <span>✅ Machine-readable dates</span>
-                <span>✅ Keyword-rich summary at top</span>
+                <span>✅ Keyword-rich summary</span>
                 <span>✅ Bullet point consistency</span>
               </div>
             </div>
@@ -730,7 +853,7 @@ ${t.sign}
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header">
               <h3>Smart CV Scoring</h3>
-              <span className="cvmaker-panel-subtitle">AI-powered 8-dimension analysis with real-time feedback</span>
+              <span className="cvmaker-panel-subtitle">AI-powered analysis with real-time feedback</span>
             </div>
 
             <div className="cvmaker-input-mode-toggle">
@@ -795,18 +918,6 @@ ${t.sign}
               />
             )}
 
-            {inputMode === "upload" && uploadedFileName && cvContent && (
-              <div className="cvmaker-extracted-preview">
-                <div className="cvmaker-extracted-header">
-                  <span>📄 Extracted Text Preview</span>
-                  <span className="cvmaker-extracted-chars">{cvContent.length} characters</span>
-                </div>
-                <div className="cvmaker-extracted-text">
-                  {cvContent.substring(0, 400)}{cvContent.length > 400 ? "..." : ""}
-                </div>
-              </div>
-            )}
-
             <button
               className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`}
               onClick={analyzeCV}
@@ -846,22 +957,18 @@ ${t.sign}
                         <span className="cvmaker-score-label">Overall</span>
                       </div>
                       <div className="cvmaker-score-summary">
-                        {cvHealth.topStrengths && (
-                          <div className="cvmaker-strengths-box">
-                            <h5>💪 Top Strengths</h5>
-                            {cvHealth.topStrengths.map((s, i) => (
-                              <div key={i} className="cvmaker-strength-item">✅ {s}</div>
-                            ))}
-                          </div>
-                        )}
-                        {cvHealth.topImprovements && (
-                          <div className="cvmaker-improvements-box">
-                            <h5>🎯 Top Improvements</h5>
-                            {cvHealth.topImprovements.map((s, i) => (
-                              <div key={i} className="cvmaker-improvement-item">⚡ {s}</div>
-                            ))}
-                          </div>
-                        )}
+                        <div className="cvmaker-strengths-box">
+                          <h5>💪 Top Strengths</h5>
+                          {cvHealth.topStrengths.map((s, i) => (
+                            <div key={i} className="cvmaker-strength-item">✅ {s}</div>
+                          ))}
+                        </div>
+                        <div className="cvmaker-improvements-box">
+                          <h5>🎯 Top Improvements</h5>
+                          {cvHealth.topImprovements.map((s, i) => (
+                            <div key={i} className="cvmaker-improvement-item">⚡ {s}</div>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
@@ -894,21 +1001,6 @@ ${t.sign}
                           </div>
                         </div>
                       ))}
-                    </div>
-
-                    <div className="cvmaker-trend">
-                      <h4>📈 Score Trend</h4>
-                      <div className="cvmaker-trend-bars">
-                        {cvHealth.history.map((val, i) => (
-                          <div className="cvmaker-trend-bar-wrap" key={i}>
-                            <div
-                              className="cvmaker-trend-bar"
-                              style={{ height: `${val}%`, background: getScoreColor(val) }}
-                            />
-                            <span>v{i + 1}</span>
-                          </div>
-                        ))}
-                      </div>
                     </div>
                   </>
                 )}
@@ -962,7 +1054,7 @@ ${t.sign}
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header">
               <h3>Cover Letter Generator</h3>
-              <span className="cvmaker-panel-subtitle">Dynamic 3-part structure with tone selection</span>
+              <span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span>
             </div>
 
             <div className="cvmaker-tone-selector">
@@ -982,17 +1074,6 @@ ${t.sign}
                     {tone.icon} {tone.label}
                   </button>
                 ))}
-              </div>
-            </div>
-
-            <div className="cvmaker-structure-info">
-              <h4>📐 3-Part Structure:</h4>
-              <div className="cvmaker-structure-parts">
-                <span>① Introduction</span>
-                <span>→</span>
-                <span>② Body</span>
-                <span>→</span>
-                <span>③ Conclusion</span>
               </div>
             </div>
 
@@ -1032,7 +1113,7 @@ ${t.sign}
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header">
               <h3>Export & Sharing</h3>
-              <span className="cvmaker-panel-subtitle">Multi-format export · Shareable links · QR code</span>
+              <span className="cvmaker-panel-subtitle">Multi-format export · Shareable links</span>
             </div>
 
             <div className="cvmaker-export-section">
