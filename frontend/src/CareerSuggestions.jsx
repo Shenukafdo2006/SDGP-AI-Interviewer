@@ -150,7 +150,7 @@ const careersData = [
     reasons: [
       'Strong demand for frontend skills in the local market',
       'International exposure while working at IFS',
-      'Good entry point to enterprise web dev'
+      'Good entry point to enterprise web development'
     ],
     internshipRequirements: [
       'Degree in IT/SE/CS (ongoing or completed)',
@@ -262,7 +262,7 @@ const careersData = [
       'Ensure the quality of software through test automation and manual testing practices.',
     reasons: [
       'QA roles are abundant in Sri Lankan IT firms',
-      'Good starting point for new grads',
+      'Good starting point for new graduates',
       'Opportunity to grow into leadership'
     ],
     internshipRequirements: [
@@ -290,17 +290,21 @@ const careersData = [
       'Develop integration platforms and API ecosystems for distributed enterprise systems.',
     reasons: [
       'WSO2 is a leader in integration software',
-      'Great for backend & middleware experience',
+      'Great for backend and middleware experience',
       'Exposure to enterprise architecture'
     ],
     internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic understanding of APIs and system integration concepts',
-    'Knowledge of RESTful services and client-server communication',
-    'Familiarity with programming languages like Java, Python, or JavaScript',
-    'Understanding of microservices architecture is a plus',
-    'Basic knowledge of databases and data formats (JSON, XML)',
-    'Familiarity with integration tools or platforms is an advantage',]
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic understanding of APIs and system integration concepts',
+      'Knowledge of RESTful services and client-server communication',
+      'Familiarity with programming languages like Java, Python, or JavaScript',
+      'Understanding of microservices architecture is a plus',
+      'Basic knowledge of databases and data formats (JSON, XML)',
+      'Familiarity with integration tools or platforms is an advantage',
+      'Problem-solving mindset and analytical thinking',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['APIs & Integration', 'Backend Development', 'Cloud Computing']
   },
   {
     id: 12,
