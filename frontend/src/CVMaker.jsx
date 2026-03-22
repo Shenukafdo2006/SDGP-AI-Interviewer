@@ -7,7 +7,6 @@ const CVMaker = ({ onBack }) => {
   const [cvContent, setCvContent] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
-  const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
@@ -693,7 +692,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);</script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
@@ -763,17 +762,7 @@ const CVMaker = ({ onBack }) => {
     }, 1500);
   };
 
-  const getScoreColor = (score) => {
-    if (score >= 80) return "#4caf50";
-    if (score >= 60) return "#ff9800";
-    return "#f44336";
-  };
 
-  const getStatusBadge = (status) => {
-    if (status === "good") return { color: "#4caf50", label: "Good" };
-    if (status === "warning") return { color: "#ff9800", label: "Needs Work" };
-    return { color: "#f44336", label: "Poor" };
-  };
 
   // Cover Letter Generation
   const generateCoverLetter = () => {
@@ -796,7 +785,6 @@ const CVMaker = ({ onBack }) => {
   };
 
   const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
-  const generateShareLink = () => setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
 
   // Render Template Card
   const renderTemplateCard = (template) => (
