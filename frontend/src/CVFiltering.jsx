@@ -493,9 +493,9 @@ const FilterTab = ({
   );
 };
 
-// ─── Advanced Search Tab ──────────────────────────────────────────────────────
+// ─── Search Tab (Replaces Advanced Tab) ──────────────────────────────────────
 
-const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, onSearch, cvData }) => {
+const SearchTab = ({ searchQuery, setSearchQuery, onSearch, cvData }) => {
   const [suggestions, setSuggestions] = useState([]);
 
   const handleChange = (e) => {
@@ -511,8 +511,6 @@ const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, o
     }
   };
 
-  const SEARCH_TYPES = ['Basic', 'Boolean', 'Fuzzy', 'Phrase'];
-
   const TIPS = [
     { icon: '🔤', title: 'Boolean Search', code: 'React AND Python NOT Java' },
     { icon: '"', title: 'Phrase Search', code: '"machine learning"' },
@@ -523,23 +521,11 @@ const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, o
   return (
     <div className="cvf-tab-content cvf-advanced">
       <div className="cvf-section-title cvf-section-title--center">
-        <h2>Advanced Search</h2>
+        <h2>Search Candidates</h2>
         <p>Use powerful search operators to find exactly what you need</p>
       </div>
 
       <div className="cvf-advanced__card">
-        <div className="cvf-type-row">
-          {SEARCH_TYPES.map(t => (
-            <button
-              key={t}
-              className={`cvf-type-btn ${searchType === t.toLowerCase() ? 'cvf-type-btn--active' : ''}`}
-              onClick={() => setSearchType(t.toLowerCase())}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-
         <div className="cvf-search-box">
           <span className="cvf-search-box__icon">🔍</span>
           <input
@@ -547,12 +533,7 @@ const AdvancedTab = ({ searchQuery, setSearchQuery, searchType, setSearchType, o
             className="cvf-search-input"
             value={searchQuery}
             onChange={handleChange}
-            placeholder={
-              searchType === 'boolean' ? 'Example: React AND Python NOT Java' :
-              searchType === 'fuzzy'   ? 'Search with misspellings...' :
-              searchType === 'phrase'  ? 'Enter exact phrase in quotes...' :
-              'Search skills, experience, location...'
-            }
+            placeholder="Search skills, experience, location..."
           />
           {searchQuery && (
             <button className="cvf-search-box__clear" onClick={() => setSearchQuery('')}>✕</button>
@@ -691,7 +672,6 @@ const CVFiltering = ({ onBack }) => {
   });
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchType, setSearchType] = useState('basic');
 
   const [viewMode, setViewMode] = useState('grid');
   const [sortBy, setSortBy] = useState('latest');
@@ -712,7 +692,6 @@ const CVFiltering = ({ onBack }) => {
   const handleUpload = (e) => {
     const files = Array.from(e.target.files);
     files.forEach(file => {
-      // No file size check - allow any size
       const id = Date.now() + file.name;
       setUploadedFiles(prev => [...prev, { 
         id, 
@@ -730,7 +709,6 @@ const CVFiltering = ({ onBack }) => {
           clearInterval(iv);
           setUploadedFiles(prev => prev.map(f => f.id === id ? { ...f, status: 'completed' } : f));
           
-          // Create a new CV entry from uploaded file
           const newCV = {
             id: Date.now() + Math.random(),
             name: file.name.replace(/\.[^/.]+$/, ""),
@@ -818,13 +796,18 @@ const CVFiltering = ({ onBack }) => {
     }
   };
 
-  // ── Tabs Config ───────────────────────────────────────────────────────────
+  // ── Tabs Config (Removed Advanced) ───────────────────────────────────────
 
   const TABS = [
     { id: 'upload', icon: '📤', label: 'Upload' },
     { id: 'filter', icon: '🔍', label: 'Filter' },
-    { id: 'advanced', icon: '🎯', label: 'Advanced' },
+    { id: 'search', icon: '🎯', label: 'Search' },
   ];
+
+  // Calculate stats for header
+  const totalCVs = allCVs.length;
+  const parsedCount = Math.floor(totalCVs * 0.92);
+  const newTodayCount = uploadedCVs.length;
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -863,10 +846,20 @@ const CVFiltering = ({ onBack }) => {
             <div className="cvf-header__brand">
               <h1>CV Filtering <span className="cvf-badge">v2.0</span></h1>
             </div>
-            <div className="cvf-header__stats">
-              <div className="cvf-hstat"><strong>{allCVs.length}</strong><span>Total CVs</span></div>
-              <div className="cvf-hstat"><strong>92%</strong><span>Parsed</span></div>
-              <div className="cvf-hstat"><strong>{uploadedCVs.length}</strong><span>New Today</span></div>
+          </div>
+
+          <div className="cvf-header__stats">
+            <div className="cvf-hstat">
+              <strong>{totalCVs}</strong>
+              <span>Total CVs</span>
+            </div>
+            <div className="cvf-hstat">
+              <strong>92%</strong>
+              <span>Parsed</span>
+            </div>
+            <div className="cvf-hstat">
+              <strong>{newTodayCount}</strong>
+              <span>New Today</span>
             </div>
           </div>
 
@@ -878,7 +871,7 @@ const CVFiltering = ({ onBack }) => {
               🔔 <span className="cvf-notif-dot">3</span>
             </button>
             <div className="cvf-user">
-              <div className="cvf-user__avatar">JD</div>
+              <div className="cvf-user__avatar">PD</div>
               <div className="cvf-user__info">
                 <span>Pavithri Pabasara</span>
                 <span className="cvf-text-muted cvf-text-sm">Recruiter</span>
@@ -887,7 +880,7 @@ const CVFiltering = ({ onBack }) => {
           </div>
         </header>
 
-        {/* Nav Tabs */}
+        {/* Nav Tabs - Removed Advanced */}
         <nav className="cvf-nav">
           {TABS.map(tab => (
             <button
@@ -935,12 +928,10 @@ const CVFiltering = ({ onBack }) => {
             />
           )}
 
-          {activeTab === 'advanced' && (
-            <AdvancedTab
+          {activeTab === 'search' && (
+            <SearchTab
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
-              searchType={searchType}
-              setSearchType={setSearchType}
               onSearch={applyFilters}
               cvData={allCVs}
             />
