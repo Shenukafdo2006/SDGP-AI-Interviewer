@@ -261,14 +261,18 @@ const careersData = [
       'Good starting point for new grads',
       'Opportunity to grow into leadership'
     ],
-     internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic understanding of software testing concepts (manual & automated testing)',
-    'Knowledge of testing types (unit testing, integration testing, system testing)',
-    'Familiarity with testing tools like Selenium, Cypress, or similar',
-    'Basic understanding of SDLC and STLC',
-    'Ability to identify, document, and track bugs',
-    'Basic programming knowledge is a plus (Java, Python, or JavaScript)',]
+    internshipRequirements: [
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic understanding of software testing concepts (manual & automated testing)',
+      'Knowledge of testing types (unit testing, integration testing, system testing)',
+      'Familiarity with testing tools like Selenium, Cypress, or similar',
+      'Basic understanding of SDLC and STLC',
+      'Ability to identify, document, and track bugs',
+      'Basic programming knowledge is a plus (Java, Python, or JavaScript)',
+      'Attention to detail and analytical thinking',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Quality Assurance']
   },
   {
     id: 11,
