@@ -136,7 +136,6 @@ const careersData = [
     ],
     categories: ['Web Development', 'System Design']
   },
-  
   {
     id: 6,
     logo: '/logos/ifs.jpg',
@@ -318,7 +317,7 @@ const careersData = [
       'Develop business intelligence and workforce optimization software solutions.',
     reasons: [
       'Strong local reputation in analytics space',
-      'Good mix of dev + data skills',
+      'Good mix of development and data skills',
       'Work on products used by enterprises'
     ],
     internshipRequirements: [
@@ -340,6 +339,8 @@ const careersData = [
 // AVAILABLE INTERESTS
 // ============================================
 const availableInterests = [
+  'Frontend Development',
+  'Backend Development',
   'Web Development',
   'Mobile Development',
   'Data Science',
@@ -350,9 +351,27 @@ const availableInterests = [
   'Project Management',
   'Cybersecurity',
   'UI/UX Design',
-  'Game Development',
-  'Blockchain'
+  'System Design',
+  'APIs & Integration'
 ];
+
+// ============================================
+// HELPERS
+// ============================================
+const normalizeText = (text) => text.toLowerCase().trim();
+
+const skillAliases = {
+  js: 'javascript',
+  reactjs: 'react',
+  node: 'node.js',
+  ml: 'machine learning',
+  ai: 'machine learning'
+};
+
+const normalizeSkill = (skill) => {
+  const cleaned = normalizeText(skill);
+  return skillAliases[cleaned] || cleaned;
+};
 
 // ============================================
 // SKILL INPUT COMPONENT
@@ -362,10 +381,9 @@ const SkillInput = ({ skills, onAddSkill, onRemoveSkill }) => {
 
   const handleAddSkill = () => {
     const skill = inputValue.trim();
-    if (skill && !skills.includes(skill)) {
-      onAddSkill(skill);
-      setInputValue('');
-    }
+    if (!skill) return;
+    onAddSkill(skill);
+    setInputValue('');
   };
 
   const handleKeyPress = (e) => {
@@ -390,6 +408,7 @@ const SkillInput = ({ skills, onAddSkill, onRemoveSkill }) => {
           Add
         </button>
       </div>
+
       <div className="skill-tags-container">
         {skills.map((skill, index) => (
           <span key={index} className="skill-tag">
@@ -418,6 +437,7 @@ const InterestSelector = ({ selectedInterests, onToggleInterest }) => {
         {availableInterests.map((interest) => (
           <button
             key={interest}
+            type="button"
             className={`interest-option ${
               selectedInterests.includes(interest) ? 'selected' : ''
             }`}
@@ -438,8 +458,9 @@ const CareerCard = ({ career, matchScore, onExplore }) => {
   const [showRequirements, setShowRequirements] = useState(false);
 
   const hasInternshipRequirements =
-  career.internshipRequirements &&
-  career.internshipRequirements.length > 0;
+    career.internshipRequirements &&
+    career.internshipRequirements.length > 0;
+
   return (
     <div className="career-card">
       <img
@@ -447,6 +468,7 @@ const CareerCard = ({ career, matchScore, onExplore }) => {
         alt={`${career.company} logo`}
         className="career-card-logo"
       />
+
       <h3 className="career-card-title">{career.title}</h3>
       <p className="career-card-salary">{career.salary}</p>
 
@@ -511,7 +533,7 @@ const CareerDetailView = ({ career, onBack }) => {
       <button className="career-detail-back-btn" onClick={onBack}>
         ← Back to Suggestions
       </button>
-      
+
       <div className="career-detail-header">
         <img
           src={career.logo}
@@ -565,25 +587,35 @@ const CareerDetailView = ({ career, onBack }) => {
 // MAIN CAREER SUGGESTIONS COMPONENT
 // ============================================
 const CareerSuggestions = ({ onBack }) => {
-  // User profile state
   const [userSkills, setUserSkills] = useState([]);
   const [userInterests, setUserInterests] = useState([]);
   const [selectedCareer, setSelectedCareer] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
 
-  // Handlers for skills
+  // Add skill safely
   const handleAddSkill = (skill) => {
-    setUserSkills([...userSkills, skill]);
+    const cleanedSkill = skill.trim();
+    if (!cleanedSkill) return;
+
+    const alreadyExists = userSkills.some(
+      (existingSkill) =>
+        normalizeSkill(existingSkill) === normalizeSkill(cleanedSkill)
+    );
+
+    if (alreadyExists) return;
+
+    setUserSkills([...userSkills, cleanedSkill]);
     setHasAnalyzed(false);
   };
 
+  // Remove skill
   const handleRemoveSkill = (skillToRemove) => {
     setUserSkills(userSkills.filter((skill) => skill !== skillToRemove));
     setHasAnalyzed(false);
   };
 
-  // Handler for interests
+  // Toggle interest
   const handleToggleInterest = (interest) => {
     if (userInterests.includes(interest)) {
       setUserInterests(userInterests.filter((i) => i !== interest));
@@ -593,7 +625,7 @@ const CareerSuggestions = ({ onBack }) => {
     setHasAnalyzed(false);
   };
 
-  // Calculate match score for each career
+  // Calculate career score
   const calculateMatchScore = (career) => {
     const normalizedUserSkills = [
       ...new Set(userSkills.map((skill) => normalizeSkill(skill)))
@@ -633,29 +665,33 @@ const CareerSuggestions = ({ onBack }) => {
     };
   };
 
-  // Get ranked careers based on user profile
+  // Ranked careers
   const rankedCareers = useMemo(() => {
     if (!hasAnalyzed) return careersData;
 
     return [...careersData]
-      .map((career) => ({
-        ...career,
-        matchScore: calculateMatchScore(career)
-      }))
+      .map((career) => {
+        const result = calculateMatchScore(career);
+        return {
+          ...career,
+          matchScore: result.score,
+          matchedSkills: result.matchedSkills,
+          matchedInterests: result.matchedInterests
+        };
+      })
       .sort((a, b) => b.matchScore - a.matchScore);
-  }, [hasAnalyzed, userSkills]);
+  }, [hasAnalyzed, userSkills, userInterests]);
 
-  // Handle analyze button click
+  // Analyze
   const handleAnalyze = () => {
     setIsAnalyzing(true);
-    // Simulate API call delay
+
     setTimeout(() => {
       setIsAnalyzing(false);
       setHasAnalyzed(true);
-    }, 1500);
+    }, 800);
   };
 
-  // Loading state
   if (isAnalyzing) {
     return (
       <div className="career-suggestions-page">
@@ -667,7 +703,6 @@ const CareerSuggestions = ({ onBack }) => {
     );
   }
 
-  // Detail view
   if (selectedCareer) {
     return (
       <div className="career-suggestions-page">
@@ -681,12 +716,15 @@ const CareerSuggestions = ({ onBack }) => {
 
   return (
     <div className="career-suggestions-page">
-      {/* Header Banner */}
       <div className="career-header-banner">
-        <button className="go-back-button" onClick={onBack}>← Back</button>
+        <button className="go-back-button" onClick={onBack}>
+          ← Back
+        </button>
+
         <h2 className="career-header-title">
           🚀 Why Explore These Careers?
         </h2>
+
         <p className="career-header-description">
           Each role is carefully selected to align with current industry demand
           and future growth opportunities, helping you prepare for real-world
@@ -695,20 +733,22 @@ const CareerSuggestions = ({ onBack }) => {
         </p>
       </div>
 
-      {/* User Profile Section */}
       <div className="career-profile-section">
         <h3 className="career-profile-title">👤 Your Profile</h3>
+
         <div className="career-profile-grid">
           <SkillInput
             skills={userSkills}
             onAddSkill={handleAddSkill}
             onRemoveSkill={handleRemoveSkill}
           />
+
           <InterestSelector
             selectedInterests={userInterests}
             onToggleInterest={handleToggleInterest}
           />
         </div>
+
         <button
           className="career-analyze-btn"
           onClick={handleAnalyze}
@@ -718,12 +758,11 @@ const CareerSuggestions = ({ onBack }) => {
         </button>
       </div>
 
-      {/* Career Cards Section */}
       <div className="career-cards-section">
         <h3 className="career-cards-title">
           💼 {hasAnalyzed ? 'Recommended Careers' : 'Available Careers'}
         </h3>
-        
+
         {rankedCareers.length > 0 ? (
           <div className="career-cards-grid">
             {rankedCareers.map((career) => (
