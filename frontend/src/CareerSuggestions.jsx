@@ -134,7 +134,18 @@ const careersData = [
       'Strong demand for frontend skills in the local market',
       'International exposure while working at IFS',
       'Good entry point to enterprise web dev'
-    ]
+    ],
+    internshipRequirements: [
+  'Degree in IT/SE/CS (ongoing or completed)',
+  'Basic knowledge of frontend development',
+  'Familiar with HTML, CSS, and JavaScript',
+  'Understanding of responsive web design principles',
+  'Basic knowledge of frameworks or libraries like React, Angular, or Vue',
+  'Understanding of UI/UX fundamentals',
+  'Familiar with Git and version control',
+  'Problem-solving skills and willingness to learn',
+  'Good communication and teamwork skills'
+]
   },
   {
     id: 7,
