@@ -1120,3 +1120,14 @@
   flex-shrink: 0;
   margin-top: 1px;
 }
+
+/* ===== FORCE CLEAR FONT FOR READABILITY ===== */
+.career-header-title,
+.career-profile-title,
+.career-cards-title,
+.career-card-title,
+.career-detail-title {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
