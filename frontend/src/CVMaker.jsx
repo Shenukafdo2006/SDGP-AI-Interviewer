@@ -5,7 +5,7 @@ const CVMaker = ({ onBack }) => {
   const [activeFeature, setActiveFeature] = useState("templates");
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [cvContent, setCvContent] = useState("");
-  const [cvHealth, setCvHealth] = useState(null);
+  
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
   const [shareLink, setShareLink] = useState("");
@@ -348,12 +348,6 @@ const CVMaker = ({ onBack }) => {
     }));
   };
 
-  // Handle skills array
-
-  // Handle experience array
-
-  // Handle projects array
-
   // Education handlers
   const addEducation = () => {
     setEducationEntries([...educationEntries, { school: "", city: "", startMonth: "", startYear: "", endMonth: "", endYear: "", present: false, description: "" }]);
@@ -681,7 +675,7 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // AI-Powered CV Analysis
+  // AI-Powered CV Analysis - Empty function (no content displayed)
   const analyzeCV = async () => {
     if (!cvContent.trim()) {
       alert("Please upload or paste your CV content first.");
@@ -689,25 +683,7 @@ const CVMaker = ({ onBack }) => {
     }
     setIsAnalyzing(true);
     setTimeout(() => {
-      setCvHealth({
-        overall: 74, completeness: 80, formatting: 70, readability: 85,
-        skillsScore: 68, atsScore: 78, keywordDensity: 62, experienceImpact: 72, personalization: 58,
-        history: [58, 64, 70, 74],
-        sectionHealth: [
-          { section: "Contact Info", score: 90, status: "good" },
-          { section: "Summary", score: 75, status: "good" },
-          { section: "Experience", score: 68, status: "warning" },
-          { section: "Education", score: 88, status: "good" },
-          { section: "Skills", score: 62, status: "warning" },
-        ],
-        feedback: [
-          { type: "success", message: "CV structure is clear and easy to read." },
-          { type: "warning", message: "Add measurable achievements with numbers, %, and impact." },
-          { type: "info", message: "Consider adding a GitHub or portfolio link." },
-        ],
-        topStrengths: ["Clear structure", "Good education section"],
-        topImprovements: ["Add quantified achievements", "Expand skills keywords"],
-      });
+      // Empty result - no data displayed
       setIsAnalyzing(false);
     }, 1500);
   };
@@ -757,7 +733,7 @@ const CVMaker = ({ onBack }) => {
     </div>
   );
 
-  // Render CV Editor
+  // Render CV Editor (Full editor with all sections)
   const renderCVEditor = () => {
     const sections = [
       { id: "personal", label: "Personal Details", icon: "👤" },
@@ -973,6 +949,7 @@ const CVMaker = ({ onBack }) => {
             <div className="cvmaker-ats-info-box"><h4>🤖 ATS-Optimized Templates Include:</h4><div className="cvmaker-ats-features"><span>✅ Single-column layout</span><span>✅ Standard headings</span><span>✅ Machine-readable dates</span><span>✅ Keyword-rich summary</span><span>✅ Bullet point consistency</span></div></div>
           </div>
         );
+
       case "scoring":
         return (
           <div className="cvmaker-feature-panel">
@@ -981,14 +958,43 @@ const CVMaker = ({ onBack }) => {
             {inputMode === "upload" && (<div className={`cvmaker-upload-dropzone ${dragOver ? "cvmaker-drag-over" : ""}`} onDragOver={(e) => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)} onDrop={handleDrop} onClick={() => fileInputRef.current?.click()}><input ref={fileInputRef} type="file" accept=".pdf,.docx,.txt" style={{ display: "none" }} onChange={(e) => handleFileSelect(e.target.files[0])} /><div className="cvmaker-upload-icon-large">{uploadedFileName ? "✅" : "📂"}</div>{uploadedFileName ? (<><p className="cvmaker-upload-success-text">File loaded: <strong>{uploadedFileName}</strong></p><p className="cvmaker-upload-hint">Click to change file</p></>) : (<><p className="cvmaker-upload-main-text">Drag & drop your CV here</p><p className="cvmaker-upload-hint">or click to browse files</p><div className="cvmaker-upload-formats"><span className="cvmaker-format-badge">PDF</span><span className="cvmaker-format-badge">DOCX</span><span className="cvmaker-format-badge">TXT</span></div></>)}</div>)}
             {inputMode === "paste" && (<textarea className="cvmaker-cv-input" placeholder="Paste your CV text here to get a detailed AI analysis..." value={cvContent} onChange={(e) => setCvContent(e.target.value)} rows={10} />)}
             <button className={`cvmaker-analyze-btn ${isAnalyzing ? "cvmaker-analyzing" : ""}`} onClick={analyzeCV} disabled={isAnalyzing}>{isAnalyzing ? (<span className="cvmaker-loading-text"><span className="cvmaker-spinner">⚙️</span> Analyzing with AI...</span>) : "⚡ Analyze CV with AI"}</button>
-            {cvHealth && (<><div className="cvmaker-score-tabs">{["overview", "sections", "feedback"].map((tab) => (<button key={tab} className={`cvmaker-score-tab ${activeScoreTab === tab ? "cvmaker-score-tab-active" : ""}`} onClick={() => setActiveScoreTab(tab)}>{tab.charAt(0).toUpperCase() + tab.slice(1)}</button>))}</div>
-            {activeScoreTab === "overview" && (<><div className="cvmaker-overall-score"><div className="cvmaker-score-ring" style={{ "--score-color": getScoreColor(cvHealth.overall) }}><span className="cvmaker-score-number">{cvHealth.overall}</span><span className="cvmaker-score-label">Overall</span></div><div className="cvmaker-score-summary"><div className="cvmaker-strengths-box"><h5>💪 Top Strengths</h5>{cvHealth.topStrengths.map((s, i) => (<div key={i} className="cvmaker-strength-item">✅ {s}</div>))}</div><div className="cvmaker-improvements-box"><h5>🎯 Top Improvements</h5>{cvHealth.topImprovements.map((s, i) => (<div key={i} className="cvmaker-improvement-item">⚡ {s}</div>))}</div></div></div><div className="cvmaker-score-cards">{[
-              { label: "Completeness", value: cvHealth.completeness }, { label: "Formatting", value: cvHealth.formatting }, { label: "Readability", value: cvHealth.readability }, { label: "Skills Match", value: cvHealth.skillsScore }, { label: "ATS Score", value: cvHealth.atsScore }, { label: "Keyword Density", value: cvHealth.keywordDensity }, { label: "Exp. Impact", value: cvHealth.experienceImpact }, { label: "Personalization", value: cvHealth.personalization }
-            ].map(({ label, value }) => (<div className="cvmaker-score-card" key={label}><div className="cvmaker-score-bar-outer"><div className="cvmaker-score-bar-inner" style={{ width: `${value}%`, background: getScoreColor(value) }} /></div><div className="cvmaker-score-card-footer"><span className="cvmaker-score-card-label">{label}</span><span className="cvmaker-score-card-value" style={{ color: getScoreColor(value) }}>{value}%</span></div></div>))}</div></>)}
-            {activeScoreTab === "sections" && (<div className="cvmaker-section-health"><h4>Section-wise Health Meter</h4>{cvHealth.sectionHealth.map(({ section, score, status }) => { const badge = getStatusBadge(status); return (<div className="cvmaker-section-row" key={section}><span className="cvmaker-section-name">{section}</span><div className="cvmaker-section-bar-outer"><div className="cvmaker-section-bar-inner" style={{ width: `${score}%`, background: badge.color }} /></div><span className="cvmaker-section-score">{score}%</span><span className="cvmaker-section-badge" style={{ color: badge.color, borderColor: badge.color }}>{badge.label}</span></div>); })}</div>)}
-            {activeScoreTab === "feedback" && (<div className="cvmaker-feedback-list">{cvHealth.feedback.map((item, i) => (<div key={i} className={`cvmaker-feedback-item cvmaker-feedback-${item.type}`}><span className="cvmaker-feedback-icon">{item.type === "success" ? "✅" : item.type === "warning" ? "⚠️" : "💡"}</span><span>{item.message}</span></div>))}</div>)}</>)}
+            
+            {/* Empty tabs with no content */}
+            <div className="cvmaker-score-tabs">
+              {["overview", "sections", "feedback"].map((tab) => (
+                <button key={tab} className={`cvmaker-score-tab ${activeScoreTab === tab ? "cvmaker-score-tab-active" : ""}`} onClick={() => setActiveScoreTab(tab)}>
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+            
+            {/* Empty content areas - no data displayed */}
+            {activeScoreTab === "overview" && (
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">📊</div>
+                <h4>No Analysis Data</h4>
+                <p>Click "Analyze CV with AI" to see your CV analysis results.</p>
+              </div>
+            )}
+            
+            {activeScoreTab === "sections" && (
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">📋</div>
+                <h4>No Section Data</h4>
+                <p>Click "Analyze CV with AI" to see section-wise analysis.</p>
+              </div>
+            )}
+            
+            {activeScoreTab === "feedback" && (
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">💡</div>
+                <h4>No Feedback Available</h4>
+                <p>Click "Analyze CV with AI" to get AI-powered feedback.</p>
+              </div>
+            )}
           </div>
         );
+
       case "coverletter":
         return (
           <div className="cvmaker-feature-panel">
@@ -998,6 +1004,7 @@ const CVMaker = ({ onBack }) => {
             {coverLetter && (<><textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} /><div className="cvmaker-cl-actions"><button className="cvmaker-cl-action-btn" onClick={() => navigator.clipboard.writeText(coverLetter)}>📋 Copy</button><button className="cvmaker-cl-action-btn" onClick={() => exportCV("cover-letter-pdf")}>📄 Export PDF</button></div></>)}
           </div>
         );
+
       case "export":
         return (
           <div className="cvmaker-feature-panel">
@@ -1006,6 +1013,7 @@ const CVMaker = ({ onBack }) => {
             <div className="cvmaker-share-section"><h4>🔗 Sharing System</h4><div className="cvmaker-share-options"><button className="cvmaker-share-btn" onClick={generateShareLink}>🔗 Generate Shareable Link</button><button className="cvmaker-share-btn" onClick={() => alert("QR Code generated!")}>📱 Generate QR Code</button><button className="cvmaker-share-btn" onClick={() => alert("Email sharing opened!")}>📧 Share via Email</button></div>{shareLink && (<div className="cvmaker-share-link-box"><input className="cvmaker-share-link-input" readOnly value={shareLink} /><button className="cvmaker-copy-btn" onClick={() => navigator.clipboard.writeText(shareLink)}>Copy</button></div>)}</div>
           </div>
         );
+
       default: return <div>Select a feature</div>;
     }
   };
