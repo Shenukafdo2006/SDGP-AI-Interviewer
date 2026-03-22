@@ -55,27 +55,32 @@ const careersData = [
     categories: ['Backend Development', 'APIs & Integration', 'Cloud Computing']
   },
   {
-  id: 3,
-  logo: '/logos/ifs.jpg', 
-  title: 'Full Stack Developer',
-  company: 'IFS',
-  salary: 'LKR 140,000 - 320,000',
-  skills: ['React', 'Node.js', 'MongoDB'],
-  growth: 'Very High Demand',
-  details: 'Build end-to-end web applications using modern frameworks.',
-
-  internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic knowledge of frontend and backend development',
-    'Familiar with HTML, CSS, JavaScript and at least one framework (React/Angular)',
-    'Understanding of backend technologies (Node.js / Java / Python)',
-    'Knowledge of databases (SQL or MongoDB)',
-    'Understanding of REST APIs and full-stack architecture',
-    'Basic Git and version control usage',
-    'Problem-solving mindset and willingness to learn',
-    'Good communication and teamwork skills'
-  ]
-},
+    id: 3,
+    logo: '/logos/ifs.jpg',
+    title: 'Full Stack Developer',
+    company: 'IFS',
+    salary: 'LKR 140,000 - 320,000',
+    skills: ['React', 'Node.js', 'MongoDB'],
+    growth: 'Very High Demand',
+    details: 'Build end-to-end web applications using modern frameworks.',
+    reasons: [
+      'Full stack roles offer broad technical exposure',
+      'Very valuable for startups and product companies',
+      'Strong career growth into senior engineering roles'
+    ],
+    internshipRequirements: [
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic knowledge of frontend and backend development',
+      'Familiar with HTML, CSS, JavaScript and at least one framework (React/Angular)',
+      'Understanding of backend technologies (Node.js / Java / Python)',
+      'Knowledge of databases (SQL or MongoDB)',
+      'Understanding of REST APIs and full-stack architecture',
+      'Basic Git and version control usage',
+      'Problem-solving mindset and willingness to learn',
+      'Good communication and teamwork skills'
+    ],
+    categories: ['Frontend Development', 'Backend Development', 'Web Development']
+  },
   {
   id: 4,
   logo: '/logos/wso2.png', // keep your existing logo
