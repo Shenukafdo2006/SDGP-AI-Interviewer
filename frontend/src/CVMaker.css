@@ -1709,3 +1709,38 @@
 .cvmaker-editor-main::-webkit-scrollbar-thumb:hover {
   background: #4f46e5;
 }
+
+/* ============================================
+   Clickable Curriculum Vitae Badge
+   ============================================ */
+
+.cvmaker-clickable-badge {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cvmaker-clickable-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5);
+  background: linear-gradient(135deg, #5b52e5, #8b4aed);
+}
+
+.cvmaker-clickable-badge:active {
+  transform: translateY(0);
+}
+
+.cvmaker-clickable-badge::after {
+  content: '🔍';
+  margin-left: 6px;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cvmaker-clickable-badge:hover::after {
+  opacity: 1;
+}
