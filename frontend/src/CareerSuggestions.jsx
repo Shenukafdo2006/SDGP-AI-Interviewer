@@ -31,24 +31,29 @@ const careersData = [
     categories: ['Web Development', 'System Design', 'Project Management']
   },
   {
-  id: 2,
-  logo: '/logos/codegen.png', // or your logo
-  title: 'Backend Developer',
-  company: 'CodeGen',
-  salary: 'LKR 160,000 - 380,000',
-  skills: ['Java', 'Spring Boot', 'REST APIs'],
-  growth: 'High Demand',
-  details: 'Develop scalable backend systems and APIs.',
-  
-  internshipRequirements: [
-    'Degree in IT/SE/CS (ongoing or completed)',
-    'Basic backend knowledge (Node.js / Java / Python)',
-    'Understanding of APIs and databases',
-    'Familiar with Git and version control',
-    'Basic data structures & problem solving',
-    'Good teamwork and communication skills'
-  ]
-},
+    id: 2,
+    logo: '/logos/codegen.png',
+    title: 'Backend Developer',
+    company: 'CodeGen',
+    salary: 'LKR 160,000 - 380,000',
+    skills: ['Java', 'Spring Boot', 'REST APIs'],
+    growth: 'High Demand',
+    details: 'Develop scalable backend systems and APIs.',
+    reasons: [
+      'Great role for building strong server-side development skills',
+      'High demand for backend engineers in enterprise software',
+      'Excellent path into cloud and integration engineering'
+    ],
+    internshipRequirements: [
+      'Degree in IT/SE/CS (ongoing or completed)',
+      'Basic backend knowledge (Node.js / Java / Python)',
+      'Understanding of APIs and databases',
+      'Familiar with Git and version control',
+      'Basic data structures & problem solving',
+      'Good teamwork and communication skills'
+    ],
+    categories: ['Backend Development', 'APIs & Integration', 'Cloud Computing']
+  },
   {
   id: 3,
   logo: '/logos/ifs.jpg', 
