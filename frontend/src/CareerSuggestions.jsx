@@ -49,21 +49,27 @@ const careersData = [
   ]
 },
   {
-    id: 3,
-    logo: '/logos/creativesoftware.png',
-    title: 'Full Stack Developer',
-    company: 'Creative Software',
-    salary: 'LKR 140,000 - 320,000',
-    skills: ['Angular', 'React', 'Node.js', 'SQL', 'REST'],
-    growth: 'Growing',
-    details:
-      'Build full stack applications for cloud and enterprise solutions with a focus on scalability and performance.',
-    reasons: [
-      'Creative Software works with global clients',
-      'Great environment for learning diverse technologies',
-      'Strong mentoring and project variety'
-    ]
-  },
+  id: 3,
+  logo: '/logos/ifs.png', // keep your existing
+  title: 'Full Stack Developer',
+  company: 'IFS',
+  salary: 'LKR 140,000 - 320,000',
+  skills: ['React', 'Node.js', 'MongoDB'],
+  growth: 'Very High Demand',
+  details: 'Build end-to-end web applications using modern frameworks.',
+
+  internshipRequirements: [
+    'Degree in IT/SE/CS (ongoing or completed)',
+    'Basic knowledge of frontend and backend development',
+    'Familiar with HTML, CSS, JavaScript and at least one framework (React/Angular)',
+    'Understanding of backend technologies (Node.js / Java / Python)',
+    'Knowledge of databases (SQL or MongoDB)',
+    'Understanding of REST APIs and full-stack architecture',
+    'Basic Git and version control usage',
+    'Problem-solving mindset and willingness to learn',
+    'Good communication and teamwork skills'
+  ]
+},
   {
     id: 4,
     logo:'/logos/dialog.png',
