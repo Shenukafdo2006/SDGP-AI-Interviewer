@@ -51,7 +51,7 @@ describe("Signup", () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
-        "http://localhost:5001/api/auth/signup",
+        "/api/auth/signup",
         {
           method: "POST",
           headers: {

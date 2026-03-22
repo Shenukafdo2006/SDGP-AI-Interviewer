@@ -53,7 +53,7 @@ describe("Login", () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
-        "http://localhost:5001/api/auth/login",
+        "/api/auth/login",
         expect.objectContaining({
           method: "POST",
           headers: { "Content-Type": "application/json" },

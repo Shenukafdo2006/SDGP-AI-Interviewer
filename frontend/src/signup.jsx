@@ -14,7 +14,7 @@ export default function Signup({ onGoToLogin = () => {}, onSignupSuccess = () =>
   // 🔹 API CALL
   const handleSignup = async (data) => {
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signup", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
