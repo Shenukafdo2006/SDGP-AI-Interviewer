@@ -2034,3 +2034,170 @@
 .cvmaker-editor-main::-webkit-scrollbar-thumb:hover {
   background: #4f46e5;
 }
+
+/* ============================================
+   Cover Letter Editor Styles
+   ============================================ */
+
+.cvmaker-coverletter-editor {
+  width: 100%;
+  animation: fadeIn 0.3s ease;
+}
+
+.cvmaker-editor-header-small {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #2d3460;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cvmaker-editor-back-btn-small {
+  background: rgba(129, 140, 248, 0.15);
+  border: 1px solid #4f46e5;
+  color: #a5b4fc;
+  padding: 8px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.cvmaker-editor-back-btn-small:hover {
+  background: rgba(129, 140, 248, 0.3);
+  transform: translateX(-5px);
+}
+
+.cvmaker-editor-header-small h3 {
+  color: #f1f5f9;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.cvmaker-save-cl-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.cvmaker-save-cl-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.cvmaker-cl-editor-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.cvmaker-cl-editor-sections::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cvmaker-cl-editor-sections::-webkit-scrollbar-track {
+  background: #2d3460;
+  border-radius: 3px;
+}
+
+.cvmaker-cl-editor-sections::-webkit-scrollbar-thumb {
+  background: #4f46e5;
+  border-radius: 3px;
+}
+
+.cvmaker-cl-section {
+  background: #1e2440;
+  border: 1px solid #2d3460;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.cvmaker-cl-section h4 {
+  color: #f1f5f9;
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2d3460;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cvmaker-cl-button-group {
+  margin-bottom: 20px;
+}
+
+.cvmaker-edit-details-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cvmaker-edit-details-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.cvmaker-edit-details-btn:active {
+  transform: translateY(0);
+}
+
+/* Form Group enhancements for cover letter editor */
+.cvmaker-cl-section .cvmaker-form-group textarea {
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.cvmaker-cl-section .cvmaker-form-group input,
+.cvmaker-cl-section .cvmaker-form-group textarea {
+  background: #0f1420;
+  border: 1px solid #2d3460;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #f1f5f9;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.cvmaker-cl-section .cvmaker-form-group input:focus,
+.cvmaker-cl-section .cvmaker-form-group textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}
+
+.cvmaker-cl-section .cvmaker-form-group label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

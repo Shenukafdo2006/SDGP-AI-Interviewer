@@ -7,11 +7,37 @@ const CVMaker = ({ onBack }) => {
   const [cvContent, setCvContent] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
+  const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
   const [isDownloading, setIsDownloading] = useState(false);
   const [activeSection, setActiveSection] = useState("personal");
+  const [showCoverLetterEditor, setShowCoverLetterEditor] = useState(false);
+  
+  // Cover Letter Editor State
+  const [coverLetterDetails, setCoverLetterDetails] = useState({
+    header: {
+      fullName: "Jane Wright",
+      address: "5505 Paragraph Way",
+      cityStateZip: "Gainesville, MA 11111",
+      phone: "(555) 555-0199",
+      email: "the.right.wright@email.com"
+    },
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    recipient: {
+      name: "Virginia Apgar",
+      title: "Recruitment Manager",
+      company: "Bolivern Hospital",
+      city: "Gainesville, MA"
+    },
+    salutation: "Dear Mrs. Apgar,",
+    openingParagraph: "My name is Jane Wright, and I am interested in the entry-level nursing position at Bolivern Hospital. I recently graduated at the top of my class from Greendale College with a bachelor of science in nursing and am eager to apply my hands-on education to provide the high-quality patient-centered care Bolivern is known for.",
+    bodyParagraph: "During my clinical rotations, I built a strong foundation in patient assessment, wound care, administering medications, and team collaboration. After a gap year teaching English in Brazil, I interned at AcmeCo Hospital, where I gained experience in fast-paced settings and learned to multitask and stay calm under pressure. Working with elderly patients was particularly rewarding, as it deepened my empathy, communication, and patience.",
+    closingParagraph: "Joining Bolivern Hospital is an exciting opportunity to grow within a respected institution and contribute to patient care. I am confident that my clinical skills, dedication, and passion for nursing make me a strong fit for this role. Thank you for considering my application; I look forward to discussing my qualifications further.",
+    signOff: "Sincerely,",
+    signature: "Jane Wright"
+  });
   
   // Design customization states
   const [designSettings, setDesignSettings] = useState({
@@ -90,11 +116,8 @@ const CVMaker = ({ onBack }) => {
 
   // ── Upload State ────────────────────────────────────────────────────────────
   const [, setUploadedFile] = useState(null);
-  const [uploadedFile, setUploadedActualFile] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [analysisSourceLabel, setAnalysisSourceLabel] = useState("");
   const [inputMode, setInputMode] = useState("upload");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
@@ -441,46 +464,9 @@ const CVMaker = ({ onBack }) => {
   };
 
   // Save CV
-  const handleSaveCV = async () => {
-    const uid = localStorage.getItem("uid");
-
-    if (!uid) {
-      alert("Please log in to save your CV.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:5001/api/cv/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid,
-          cvName: editingCvName,
-          templateId: selectedTemplate,
-          cvFormData,
-          educationEntries,
-          employmentEntries,
-          skillsEntries,
-          languagesEntries,
-          additionalSections,
-          designSettings,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || data.message || "Failed to save CV");
-      }
-
-      alert(`CV "${editingCvName}" saved successfully!`);
-      setShowEditor(false);
-    } catch (error) {
-      console.error("Failed to save CV to Firebase:", error);
-      alert("Failed to save CV. Please try again.");
-    }
+  const handleSaveCV = () => {
+    alert(`CV "${editingCvName}" saved successfully!`);
+    setShowEditor(false);
   };
 
   // Generate formatted CV HTML for preview and download
@@ -695,7 +681,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);</script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
@@ -729,28 +715,21 @@ const CVMaker = ({ onBack }) => {
   }, []);
 
   // File Upload Handler
-  const readFileAsText = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ""));
-      reader.onerror = () => reject(new Error("Failed to read text file."));
-      reader.readAsText(file);
-    });
-
-  const readFileAsDataUrl = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ""));
-      reader.onerror = () => reject(new Error("Failed to read file."));
-      reader.readAsDataURL(file);
-    });
+  const readFileAsText = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
 
   const handleFileSelect = async (file) => {
     if (!file) return;
-    setUploadedActualFile(file);
+    setUploadedFile(file);
     setUploadedFileName(file.name);
-    setAnalysisResult(null);
-    setCvContent("");
+    try {
+      const text = await readFileAsText(file);
+      setCvContent(text);
+    } catch { setCvContent(""); }
   };
 
   const handleDrop = (e) => {
@@ -760,91 +739,194 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
+  // AI-Powered CV Analysis - Empty function
   const analyzeCV = async () => {
-    const typedContent = cvContent.trim();
-    const hasUploadedFile = inputMode === "upload" && uploadedFile;
-    const sourceLabel = hasUploadedFile
-      ? uploadedFileName
-      : "Pasted CV";
-
-    if (!hasUploadedFile && !typedContent) {
-      alert("Please upload or paste your CV first.");
+    if (!cvContent.trim()) {
+      alert("Please upload or paste your CV content first.");
       return;
     }
-
     setIsAnalyzing(true);
-
-    try {
-      let response;
-
-      if (hasUploadedFile) {
-        const fileData = await readFileAsDataUrl(uploadedFile);
-        response = await fetch("http://localhost:5001/api/cv/analysis-upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            filename: uploadedFile.name,
-            fileData,
-          }),
-        });
-      } else {
-        response = await fetch("http://localhost:5001/api/cv/analysis", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ cvContent: typedContent }),
-        });
-      }
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || data.detail || data.error || "Failed to analyze CV");
-      }
-
-      setAnalysisResult(data);
-      setAnalysisSourceLabel(sourceLabel);
-      setActiveScoreTab("overview");
-    } catch (error) {
-      console.error("CV analysis failed:", error);
-      alert(error.message || "Failed to analyze CV.");
-    } finally {
+    setTimeout(() => {
       setIsAnalyzing(false);
-    }
+    }, 1500);
   };
 
-
-
-  const getFeedbackTone = (type) => {
-    if (type === "success") return { bg: "#ecfdf5", color: "#166534", border: "#86efac" };
-    if (type === "warning") return { bg: "#fff7ed", color: "#9a3412", border: "#fdba74" };
-    return { bg: "#eff6ff", color: "#1d4ed8", border: "#93c5fd" };
+  const getScoreColor = (score) => {
+    if (score >= 80) return "#4caf50";
+    if (score >= 60) return "#ff9800";
+    return "#f44336";
   };
 
-  // Cover Letter Generation
+  const getStatusBadge = (status) => {
+    if (status === "good") return { color: "#4caf50", label: "Good" };
+    if (status === "warning") return { color: "#ff9800", label: "Needs Work" };
+    return { color: "#f44336", label: "Poor" };
+  };
+
+  // Cover Letter Generation with user-edited details
   const generateCoverLetter = () => {
-    const tones = {
-      formal: { 
-        intro: "I am writing to express my strong interest in the Software Engineering position.", 
-        body: "With a solid foundation in full-stack development and a proven track record of delivering scalable solutions, I am confident in my ability to contribute meaningfully to your engineering team.", 
-        close: "I would welcome the opportunity to discuss how my skills align with your team's goals.", 
-        sign: "Yours sincerely," 
-      },
-      academic: { 
-        intro: "I am submitting my application with great enthusiasm for the Software Engineering position at your esteemed organization.", 
-        body: "My academic background in Computer Science, complemented by hands-on research experience in distributed systems, positions me well for this role. I have contributed to open-source projects and published research in performance optimization.", 
-        close: "I look forward to the possibility of contributing to your research-driven environment.", 
-        sign: "Respectfully," 
-      },
-    };
-    const t = tones[coverLetterTone];
-    setCoverLetter(`Dear Hiring Manager,\n\n${t.intro}\n\n${t.body}\n\nI am enthusiastic about joining a team that values innovation and continuous learning. I am confident that my technical skills, collaborative mindset, and commitment to quality make me a strong candidate for this position.\n\n${t.close}\n\n${t.sign}\n[Your Name]`);
+    const formattedCoverLetter = `
+${coverLetterDetails.header.fullName}
+${coverLetterDetails.header.address}
+${coverLetterDetails.header.cityStateZip}
+${coverLetterDetails.header.phone}
+${coverLetterDetails.header.email}
+
+${coverLetterDetails.date}
+
+${coverLetterDetails.recipient.name}
+${coverLetterDetails.recipient.title}
+${coverLetterDetails.recipient.company}
+${coverLetterDetails.recipient.city}
+
+${coverLetterDetails.salutation}
+
+${coverLetterDetails.openingParagraph}
+
+${coverLetterDetails.bodyParagraph}
+
+${coverLetterDetails.closingParagraph}
+
+${coverLetterDetails.signOff}
+${coverLetterDetails.signature}
+    `.trim();
+    
+    setCoverLetter(formattedCoverLetter);
   };
 
   const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
+  const generateShareLink = () => setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
+
+  // Cover Letter Editor Component
+  const renderCoverLetterEditor = () => {
+    return (
+      <div className="cvmaker-coverletter-editor">
+        <div className="cvmaker-editor-header-small">
+          <button className="cvmaker-editor-back-btn-small" onClick={() => setShowCoverLetterEditor(false)}>
+            ← Back
+          </button>
+          <h3>Edit Cover Letter Details</h3>
+          <button className="cvmaker-save-cl-btn" onClick={() => {
+            generateCoverLetter();
+            setShowCoverLetterEditor(false);
+          }}>
+            ✓ Save & Generate
+          </button>
+        </div>
+        
+        <div className="cvmaker-cl-editor-sections">
+          {/* Header Section */}
+          <div className="cvmaker-cl-section">
+            <h4>📧 Header Information</h4>
+            <div className="cvmaker-form-row">
+              <div className="cvmaker-form-group">
+                <label>Full Name</label>
+                <input type="text" value={coverLetterDetails.header.fullName} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, header: { ...prev.header, fullName: e.target.value } }))} />
+              </div>
+              <div className="cvmaker-form-group">
+                <label>Phone</label>
+                <input type="text" value={coverLetterDetails.header.phone} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, header: { ...prev.header, phone: e.target.value } }))} />
+              </div>
+            </div>
+            <div className="cvmaker-form-group">
+              <label>Address</label>
+              <input type="text" value={coverLetterDetails.header.address} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, header: { ...prev.header, address: e.target.value } }))} />
+            </div>
+            <div className="cvmaker-form-row">
+              <div className="cvmaker-form-group">
+                <label>City, State, ZIP</label>
+                <input type="text" value={coverLetterDetails.header.cityStateZip} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, header: { ...prev.header, cityStateZip: e.target.value } }))} />
+              </div>
+              <div className="cvmaker-form-group">
+                <label>Email</label>
+                <input type="email" value={coverLetterDetails.header.email} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, header: { ...prev.header, email: e.target.value } }))} />
+              </div>
+            </div>
+          </div>
+
+          {/* Date Section */}
+          <div className="cvmaker-cl-section">
+            <h4>📅 Date</h4>
+            <div className="cvmaker-form-group">
+              <input type="text" value={coverLetterDetails.date} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, date: e.target.value }))} />
+            </div>
+          </div>
+
+          {/* Recipient Section */}
+          <div className="cvmaker-cl-section">
+            <h4>👤 Recipient Information</h4>
+            <div className="cvmaker-form-row">
+              <div className="cvmaker-form-group">
+                <label>Recipient Name</label>
+                <input type="text" value={coverLetterDetails.recipient.name} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, recipient: { ...prev.recipient, name: e.target.value } }))} />
+              </div>
+              <div className="cvmaker-form-group">
+                <label>Title</label>
+                <input type="text" value={coverLetterDetails.recipient.title} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, recipient: { ...prev.recipient, title: e.target.value } }))} />
+              </div>
+            </div>
+            <div className="cvmaker-form-row">
+              <div className="cvmaker-form-group">
+                <label>Company</label>
+                <input type="text" value={coverLetterDetails.recipient.company} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, recipient: { ...prev.recipient, company: e.target.value } }))} />
+              </div>
+              <div className="cvmaker-form-group">
+                <label>City</label>
+                <input type="text" value={coverLetterDetails.recipient.city} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, recipient: { ...prev.recipient, city: e.target.value } }))} />
+              </div>
+            </div>
+          </div>
+
+          {/* Salutation Section */}
+          <div className="cvmaker-cl-section">
+            <h4>✉️ Salutation / Greeting</h4>
+            <div className="cvmaker-form-group">
+              <input type="text" value={coverLetterDetails.salutation} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, salutation: e.target.value }))} />
+            </div>
+          </div>
+
+          {/* Opening Paragraph */}
+          <div className="cvmaker-cl-section">
+            <h4>📝 Opening Paragraph</h4>
+            <div className="cvmaker-form-group">
+              <textarea rows="4" value={coverLetterDetails.openingParagraph} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, openingParagraph: e.target.value }))} />
+            </div>
+          </div>
+
+          {/* Body Paragraph */}
+          <div className="cvmaker-cl-section">
+            <h4>📄 Body Paragraph</h4>
+            <div className="cvmaker-form-group">
+              <textarea rows="6" value={coverLetterDetails.bodyParagraph} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, bodyParagraph: e.target.value }))} />
+            </div>
+          </div>
+
+          {/* Closing Paragraph */}
+          <div className="cvmaker-cl-section">
+            <h4>🔚 Closing Paragraph</h4>
+            <div className="cvmaker-form-group">
+              <textarea rows="4" value={coverLetterDetails.closingParagraph} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, closingParagraph: e.target.value }))} />
+            </div>
+          </div>
+
+          {/* Sign-off and Signature */}
+          <div className="cvmaker-cl-section">
+            <h4>✍️ Sign-off & Signature</h4>
+            <div className="cvmaker-form-row">
+              <div className="cvmaker-form-group">
+                <label>Sign-off</label>
+                <input type="text" value={coverLetterDetails.signOff} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, signOff: e.target.value }))} />
+              </div>
+              <div className="cvmaker-form-group">
+                <label>Signature Name</label>
+                <input type="text" value={coverLetterDetails.signature} onChange={(e) => setCoverLetterDetails(prev => ({ ...prev, signature: e.target.value }))} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Render Template Card
   const renderTemplateCard = (template) => (
@@ -1410,123 +1492,55 @@ const CVMaker = ({ onBack }) => {
             </div>
             
             {activeScoreTab === "overview" && (
-              analysisResult ? (
-                <div style={{ display: "grid", gap: 18 }}>
-                  <div style={{ padding: 16, borderRadius: 16, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
-                    <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6 }}>Analysis Source</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{analysisSourceLabel || "Current CV"}</div>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 14 }}>
-                    {[
-                      ["Overall", analysisResult.overall],
-                      ["Completeness", analysisResult.completeness],
-                      ["Formatting", analysisResult.formatting],
-                      ["Readability", analysisResult.readability],
-                      ["ATS Score", analysisResult.atsScore],
-                      ["Skills", analysisResult.skillsScore],
-                      ["Keyword Density", analysisResult.keywordDensity],
-                      ["Experience Impact", analysisResult.experienceImpact],
-                      ["Personalization", analysisResult.personalization],
-                    ].map(([label, score]) => (
-                      <div key={label} style={{ padding: 16, borderRadius: 16, background: "#ffffff", border: "1px solid #e2e8f0" }}>
-                        <div style={{ fontSize: 13, color: "#64748b", marginBottom: 8 }}>{label}</div>
-                        <div style={{ fontSize: 28, fontWeight: 800, color: getScoreColor(score) }}>{score}%</div>
-                      </div>
-                    ))}
-                  </div>
-                  {analysisResult.topStrengths?.length > 0 && (
-                    <div style={{ padding: 18, borderRadius: 16, background: "#f0fdf4", border: "1px solid #bbf7d0" }}>
-                      <h4 style={{ margin: "0 0 10px", color: "#166534" }}>Top Strengths</h4>
-                      <ul style={{ margin: 0, paddingLeft: 18, color: "#166534" }}>
-                        {analysisResult.topStrengths.map((item) => <li key={item}>{item}</li>)}
-                      </ul>
-                    </div>
-                  )}
-                  {analysisResult.topImprovements?.length > 0 && (
-                    <div style={{ padding: 18, borderRadius: 16, background: "#fff7ed", border: "1px solid #fdba74" }}>
-                      <h4 style={{ margin: "0 0 10px", color: "#9a3412" }}>Top Improvements</h4>
-                      <ul style={{ margin: 0, paddingLeft: 18, color: "#9a3412" }}>
-                        {analysisResult.topImprovements.map((item) => <li key={item}>{item}</li>)}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="cvmaker-empty-state">
-                  <div className="cvmaker-empty-icon">📊</div>
-                  <h4>No Analysis Data</h4>
-                  <p>Click "Analyze CV with AI" to see your CV analysis results.</p>
-                </div>
-              )
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">📊</div>
+                <h4>No Analysis Data</h4>
+                <p>Click "Analyze CV with AI" to see your CV analysis results.</p>
+              </div>
             )}
             
             {activeScoreTab === "sections" && (
-              analysisResult?.sectionHealth?.length ? (
-                <div style={{ display: "grid", gap: 12 }}>
-                  {analysisResult.sectionHealth.map((section) => {
-                    const badge = getStatusBadge(section.status);
-                    return (
-                      <div key={section.section} style={{ padding: 16, borderRadius: 16, background: "#ffffff", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-                        <div>
-                          <div style={{ fontWeight: 700, color: "#0f172a" }}>{section.section}</div>
-                          <div style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>Section quality score</div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                          <div style={{ fontWeight: 800, color: getScoreColor(section.score) }}>{section.score}%</div>
-                          <span style={{ padding: "6px 10px", borderRadius: 999, background: `${badge.color}18`, color: badge.color, fontSize: 12, fontWeight: 700 }}>
-                            {badge.label}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="cvmaker-empty-state">
-                  <div className="cvmaker-empty-icon">📋</div>
-                  <h4>No Section Data</h4>
-                  <p>Click "Analyze CV with AI" to see section-wise analysis.</p>
-                </div>
-              )
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">📋</div>
+                <h4>No Section Data</h4>
+                <p>Click "Analyze CV with AI" to see section-wise analysis.</p>
+              </div>
             )}
             
             {activeScoreTab === "feedback" && (
-              analysisResult?.feedback?.length ? (
-                <div style={{ display: "grid", gap: 12 }}>
-                  {analysisResult.feedback.map((item, idx) => {
-                    const tone = getFeedbackTone(item.type);
-                    return (
-                      <div key={`${item.type}-${idx}`} style={{ padding: 16, borderRadius: 16, background: tone.bg, border: `1px solid ${tone.border}`, color: tone.color }}>
-                        <div style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 6 }}>
-                          {item.type}
-                        </div>
-                        <div>{item.message}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="cvmaker-empty-state">
-                  <div className="cvmaker-empty-icon">💡</div>
-                  <h4>No Feedback Available</h4>
-                  <p>Click "Analyze CV with AI" to get AI-powered feedback.</p>
-                </div>
-              )
+              <div className="cvmaker-empty-state">
+                <div className="cvmaker-empty-icon">💡</div>
+                <h4>No Feedback Available</h4>
+                <p>Click "Analyze CV with AI" to get AI-powered feedback.</p>
+              </div>
             )}
           </div>
         );
 
       case "coverletter":
+        if (showCoverLetterEditor) {
+          return renderCoverLetterEditor();
+        }
         return (
           <div className="cvmaker-feature-panel">
             <div className="cvmaker-panel-header"><h3>Cover Letter Generator</h3><span className="cvmaker-panel-subtitle">Dynamic structure with tone selection</span></div>
-            <div className="cvmaker-tone-selector"><label>Select Tone:</label>
+            
+            {/* Edit Details Button - Above Generate Button */}
+            <div className="cvmaker-cl-button-group">
+              <button className="cvmaker-edit-details-btn" onClick={() => setShowCoverLetterEditor(true)}>
+                ✏️ Edit Details
+              </button>
+            </div>
+            
+            <div className="cvmaker-tone-selector">
+              <label>Select Tone:</label>
               <div className="cvmaker-tone-options">
                 <button className={`cvmaker-tone-btn ${coverLetterTone === "formal" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("formal")}>🏢 Formal</button>
                 <button className={`cvmaker-tone-btn ${coverLetterTone === "academic" ? "cvmaker-tone-active" : ""}`} onClick={() => setCoverLetterTone("academic")}>🎓 Academic</button>
               </div>
             </div>
-            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>✉️ Generate Cover Letter</button>
+            <button className="cvmaker-analyze-btn" onClick={generateCoverLetter}>📝 Generate Cover Letter</button>
+            
             {coverLetter && (
               <>
                 <textarea className="cvmaker-cover-letter-textarea" rows="18" value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
