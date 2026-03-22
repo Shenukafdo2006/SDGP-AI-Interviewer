@@ -24,7 +24,7 @@ body {
   background: var(--page-bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Custom Scrollbar */
@@ -61,11 +61,12 @@ body {
 
 .topbar {
   background: linear-gradient(90deg, var(--purple-dark), #2563eb);
-  height: 72px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
+  gap: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
@@ -80,7 +81,8 @@ body {
 .brand {
   flex: 1;
   display: flex;
-  justify-content: center
+  justify-content: center;
+  min-width: 0;
 }
 
 .logo-circle {
@@ -93,7 +95,8 @@ body {
 .profile {
   display: flex;
   align-items: center;
-  gap: 10px
+  gap: 10px;
+  min-width: 0;
 }
 
 .avatar {
@@ -109,7 +112,9 @@ body {
 }
 
 .username {
-  font-weight: 600
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* LAYOUT  */
@@ -124,6 +129,7 @@ body {
   flex: 1;
   overflow: hidden;
   height: calc(100vh - 72px);
+  position: relative;
 }
 
 .layout:not(.sidebar-open) {
@@ -133,6 +139,7 @@ body {
 .container {
   flex: 1;
   width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -154,7 +161,8 @@ body {
   overflow-x: hidden;
   height: fit-content;
   max-height: 100%;
-  transition: max-width 0.25s ease, min-width 0.25s ease, padding 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
+  transition: max-width 0.25s ease, min-width 0.25s ease, padding 0.25s ease, opacity 0.2s ease, margin 0.25s ease, transform 0.25s ease;
+  overflow-wrap: anywhere;
 }
 
 .layout:not(.sidebar-open) .sidebar {
@@ -239,6 +247,7 @@ body {
   margin: 0;
   font-size: 30px;
   color: #ddd6fe;
+  overflow-wrap: anywhere;
 }
 
 .hero-left .next {
@@ -254,6 +263,7 @@ body {
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
+  max-width: 100%;
 }
 
 /*  PROGRESS  */
@@ -290,6 +300,7 @@ body {
   display: flex;
   gap: 16px;
   align-items: center;
+  min-width: 0;
 }
 
 .icon {
@@ -301,6 +312,15 @@ body {
   gap: 8px;
   margin-top: 6px;
   flex-wrap: wrap;
+}
+
+.meta {
+  min-width: 0;
+}
+
+.meta h3,
+.meta .sub {
+  overflow-wrap: anywhere;
 }
 
 .badge {
@@ -355,6 +375,7 @@ body {
   align-items: center;
   padding: 14px;
   margin-bottom: 20px;
+  gap: 12px;
 }
 
 .footer .small {
@@ -364,19 +385,125 @@ body {
 
 /*  RESPONSIVE  */
 
-@media (max-width:900px) {
-  .sidebar {
-    display: none
+@media (max-width: 900px) {
+  .topbar {
+    padding: 0 16px;
   }
 
   .layout {
-    padding: 16px
+    padding: 16px;
+    height: auto;
+    min-height: calc(100vh - 72px);
+  }
+
+  .sidebar {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 20;
+    width: min(280px, calc(100vw - 32px));
+    min-width: min(280px, calc(100vw - 32px));
+    max-width: min(280px, calc(100vw - 32px));
+    max-height: calc(100vh - 104px);
+  }
+
+  .layout:not(.sidebar-open) .sidebar {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+
+  .layout.sidebar-open .container {
+    pointer-events: none;
+    user-select: none;
   }
 }
 
-@media (max-width:700px) {
+@media (max-width: 700px) {
+  .topbar {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+
+  .brand {
+    order: 3;
+    flex: 0 0 100%;
+    justify-content: flex-start;
+  }
+
+  .profile {
+    margin-left: auto;
+    max-width: calc(100% - 56px);
+  }
+
   .hero {
     flex-direction: column;
-    align-items: flex-start
+    align-items: flex-start;
+  }
+
+  .hero-right,
+  .cta,
+  .progress-wrap,
+  .progress-bar {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .action {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-page {
+    min-height: 100vh;
+    height: auto;
+  }
+
+  .layout {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .sidebar {
+    top: 12px;
+    left: 12px;
+    width: calc(100vw - 24px);
+    min-width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 96px);
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .hero-left h1 {
+    font-size: 24px;
+  }
+
+  .logo-circle {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .username {
+    font-size: 14px;
+  }
+
+  .info {
+    align-items: flex-start;
+  }
+
+  .icon {
+    font-size: 26px;
   }
 }
