@@ -79,28 +79,20 @@ const CVMaker = ({ onBack }) => {
   const generateFallbackContent = (roleId) => {
     const contents = {
       "intern-software-engineer": {
-        summary: "Passionate software engineer with strong problem-solving skills and experience in full-stack development. Eager to contribute to innovative projects and grow within a dynamic team environment.",
-        skills: ["JavaScript/TypeScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
-        experience: [
-          "Developed and deployed 5+ full-stack applications using React and Node.js, achieving 30% faster page load times",
-          "Improved application performance by 35% through code optimization and implementing lazy loading strategies",
-          "Collaborated with cross-functional teams to deliver features on schedule, participating in 10+ successful sprint cycles"
-        ],
-        education: "Bachelor of Science in Computer Science | GPA: 3.8/4.0 | Expected Graduation: May 2025",
+        summary: "Passionate  Intern software engineer with strong problem-solving skills . Eager to contribute to innovative projects and grow within a dynamic team environment.",
+        skills: ["JavaScript", "React.js", "Node.js", "Python", "SQL", "Git", "REST APIs", "Agile Methodology"],
+    
+        education: "Undergraduate of Bachelaor of Software Engneering| Expected Graduation: May 2028",
         projects: [
-          "E-Commerce Platform: Built a full-stack e-commerce site with React, Node.js, and MongoDB, handling 1000+ products",
+          "E-Commerce Platform: Built a full-stack e-commerce site with React, Node.js, and MongoDB",
           "Task Management App: Developed a task management tool with real-time updates using WebSockets and React"
         ]
       },
       "intern-web-developer": {
         summary: "Creative web developer specializing in responsive design and modern frontend frameworks. Passionate about creating seamless user experiences and optimizing web performance.",
         skills: ["HTML5/CSS3", "JavaScript/ES6", "React.js", "Vue.js", "Tailwind CSS", "WordPress", "Web Performance", "SEO"],
-        experience: [
-          "Built 10+ responsive websites with 98% Lighthouse scores, improving mobile user engagement by 45%",
-          "Implemented SEO strategies increasing organic traffic by 45% within 3 months",
-          "Created reusable component libraries reducing development time by 30% across team projects"
-        ],
-        education: "Bachelor of Science in Web Development | University of Technology | 2022-2026",
+      
+        education: "Undergraduate of Bachelaor | University of Technology | 2023-2027",
         projects: [
           "Portfolio Website: Designed and developed a responsive portfolio with 99% accessibility score",
           "E-Learning Platform: Created an interactive learning platform with video integration and progress tracking"
@@ -109,12 +101,8 @@ const CVMaker = ({ onBack }) => {
       "intern-ui-ux-designer": {
         summary: "User-centered designer focused on creating intuitive and beautiful digital experiences. Skilled in translating user research into actionable design solutions that drive engagement.",
         skills: ["Figma", "Adobe XD", "User Research", "Wireframing", "Prototyping", "Usability Testing", "Design Systems", "Interaction Design"],
-        experience: [
-          "Redesigned mobile app resulting in 40% increase in user engagement and 25% reduction in bounce rate",
-          "Conducted 25+ user interviews to inform design decisions, leading to 3 major product improvements",
-          "Created comprehensive design system used by 3 product teams, ensuring consistency across 50+ components"
-        ],
-        education: "Bachelor of Design in Interaction Design | Design Institute | 2021-2025",
+        
+        education: "Undergraduate of Bachelaor of computer science  | 2024-2028",
         projects: [
           "Mobile Banking App: Designed end-to-end user flows for a banking app, increasing user retention by 35%",
           "Healthcare Dashboard: Created an accessible dashboard for medical professionals, reducing task completion time by 40%"
@@ -123,26 +111,18 @@ const CVMaker = ({ onBack }) => {
       "intern-project-manager": {
         summary: "Results-driven project manager skilled in leading cross-functional teams and delivering projects on time and within budget. Adept at stakeholder management and agile methodologies.",
         skills: ["Agile/Scrum", "JIRA", "Stakeholder Management", "Risk Assessment", "Budget Planning", "Team Leadership", "Communication", "Strategic Planning"],
-        experience: [
-          "Managed 5 projects simultaneously with 95% on-time delivery rate, handling budgets up to $500K",
-          "Reduced project costs by 20% through efficient resource allocation and vendor negotiations",
-          "Implemented agile practices increasing team velocity by 40% and improving stakeholder satisfaction by 35%"
-        ],
-        education: "Master of Business Administration (MBA) | Business School | 2023-2025",
+       
+        education: "Undergraduate of  Business Administration  | Business School | 2023-2027",
         projects: [
           "Digital Transformation: Led a 6-month project to migrate legacy systems, completed 2 weeks ahead of schedule",
-          "Product Launch: Coordinated cross-functional launch of 3 new features, achieving 150% of adoption targets"
+          
         ]
       },
       "intern-data-scientist": {
         summary: "Data scientist with strong analytical skills and experience in machine learning and statistical analysis. Passionate about extracting actionable insights from complex datasets.",
         skills: ["Python", "SQL", "Machine Learning", "TensorFlow", "Data Visualization", "Statistical Analysis", "Pandas", "Tableau"],
-        experience: [
-          "Built predictive models achieving 92% accuracy, reducing customer churn by 15%",
-          "Analyzed 1M+ records to identify key business insights, driving a 10% revenue increase",
-          "Created interactive dashboards reducing reporting time by 60% for executive stakeholders"
-        ],
-        education: "Master of Science in Data Science | University of Technology | 2022-2024",
+       
+        education: "Undergraduate of   Data Science | University of Technology | 2022-2026",
         projects: [
           "Customer Segmentation: Implemented K-means clustering to segment 500K customers, enabling targeted marketing",
           "Stock Price Prediction: Developed LSTM model achieving 88% accuracy in predicting stock trends"
