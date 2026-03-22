@@ -131,8 +131,18 @@ const Achievements = ({ onBack = () => {} }) => {
   };
 
   const stats = [
-    { icon: "🏆", label: "Achievements", value: `${unlockedCount}/${TOTAL_ACHIEVEMENTS}` },
-    { icon: "⚡", label: "Level", value: level },
+    {
+      icon: "🏆",
+      label: "Achievements",
+      value: `${unlockedCount}/${TOTAL_ACHIEVEMENTS}`,
+      className: "achievements-card",
+    },
+    {
+      icon: "⚡",
+      label: "Level",
+      value: level,
+      className: "level-card",
+    },
   ];
 
   if (loading) {
@@ -182,7 +192,7 @@ const Achievements = ({ onBack = () => {} }) => {
 
       <div className="ach-stats-row">
         {stats.map((stat, idx) => (
-          <div key={idx} className="ach-stat-card">
+          <div key={idx} className={`ach-stat-card ${stat.className}`}>
             <span className="ach-stat-icon">{stat.icon}</span>
             <span className={`ach-stat-value${stat.label === "Achievements" && bumpAch ? " bump" : ""}${stat.label === "Level" && levelUpAnim ? " bump" : ""}`}>
               {stat.value}
