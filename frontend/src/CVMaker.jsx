@@ -7,7 +7,7 @@ const CVMaker = ({ onBack }) => {
   const [cvContent, setCvContent] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
-  const [shareLink, setShareLink] = useState("");
+  
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
@@ -18,25 +18,25 @@ const CVMaker = ({ onBack }) => {
   // Cover Letter Editor State
   const [coverLetterDetails, setCoverLetterDetails] = useState({
     header: {
-      fullName: "Jane Wright",
-      address: "5505 Paragraph Way",
-      cityStateZip: "Gainesville, MA 11111",
-      phone: "(555) 555-0199",
-      email: "the.right.wright@email.com"
+      fullName: "Mihiri Pabasara",
+      address: "Khahatapitya,Ambalangoda,Sri Lanaka",
+      cityStateZip: "Ambalangoda,Galle",
+      phone: "+94766010346",
+      email: "mihirinambi@gmail.com"
     },
     date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
     recipient: {
-      name: "Virginia Apgar",
-      title: "Recruitment Manager",
-      company: "Bolivern Hospital",
-      city: "Gainesville, MA"
+      name: "Kaveesha Fernando",
+      title: "intern software engineer",
+      
+      city: "Neogombo,Sri Lanka"
     },
-    salutation: "Dear Mrs. Apgar,",
-    openingParagraph: "My name is Jane Wright, and I am interested in the entry-level nursing position at Bolivern Hospital. I recently graduated at the top of my class from Greendale College with a bachelor of science in nursing and am eager to apply my hands-on education to provide the high-quality patient-centered care Bolivern is known for.",
-    bodyParagraph: "During my clinical rotations, I built a strong foundation in patient assessment, wound care, administering medications, and team collaboration. After a gap year teaching English in Brazil, I interned at AcmeCo Hospital, where I gained experience in fast-paced settings and learned to multitask and stay calm under pressure. Working with elderly patients was particularly rewarding, as it deepened my empathy, communication, and patience.",
-    closingParagraph: "Joining Bolivern Hospital is an exciting opportunity to grow within a respected institution and contribute to patient care. I am confident that my clinical skills, dedication, and passion for nursing make me a strong fit for this role. Thank you for considering my application; I look forward to discussing my qualifications further.",
+    salutation: "Dear Mrs.Poorna,",
+    openingParagraph: "My name is Kaveesha Fernando , and I am interested as intern software engineer at IFS. I am currently undergraduate at IIT in Sri Lanka.   and am eager to apply my hands-on education to provide the high-quality client-centered care ",
+    bodyParagraph: "During my internship, I  would like to build a strong foundation in technical skillsand team collaboration.  ",
+    closingParagraph: "Joining IFS is an exciting opportunity to grow within a respected institution and contribute to client-service. I am confident that my technical and soft  skills, dedication, and passion for internship make me a strong fit for this role. Thank you for considering my application; I look forward to discussing my qualifications further.",
     signOff: "Sincerely,",
-    signature: "Jane Wright"
+    signature: "Kaveesha Fernando"
   });
   
   // Design customization states
@@ -681,7 +681,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
@@ -751,17 +751,7 @@ const CVMaker = ({ onBack }) => {
     }, 1500);
   };
 
-  const getScoreColor = (score) => {
-    if (score >= 80) return "#4caf50";
-    if (score >= 60) return "#ff9800";
-    return "#f44336";
-  };
 
-  const getStatusBadge = (status) => {
-    if (status === "good") return { color: "#4caf50", label: "Good" };
-    if (status === "warning") return { color: "#ff9800", label: "Needs Work" };
-    return { color: "#f44336", label: "Poor" };
-  };
 
   // Cover Letter Generation with user-edited details
   const generateCoverLetter = () => {
@@ -795,7 +785,6 @@ ${coverLetterDetails.signature}
   };
 
   const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
-  const generateShareLink = () => setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
 
   // Cover Letter Editor Component
   const renderCoverLetterEditor = () => {
