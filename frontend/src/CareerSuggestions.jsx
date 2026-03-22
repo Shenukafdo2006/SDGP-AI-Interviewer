@@ -1,34 +1,35 @@
 import React, { useState, useMemo } from 'react';
 import './CareerSuggestions.css';
-;
+
 // ============================================
-// CAREER DATA - Extended with skills, growth, and reasons
+// CAREER DATA
 // ============================================
 const careersData = [
   {
-  id: 1,
-  logo: '/logos/99x.png',
-  title: 'Software Engineer',
-  company: '99X Technology',
-  salary: 'LKR 150,000 - 350,000',
-  skills: ['JavaScript', 'React', 'Node.js', 'Agile', 'Git'],
-  growth: 'High Demand',
-  details:
-    'Work on high-quality software products for global clients using modern tech stacks and agile practices.',
-  reasons: [
-    '99X is known for excellent software engineering culture',
-    'Many opportunities to work on cloud and product development',
-    'Strong training and career progression paths'
-  ],
-  internshipRequirements: [
-    'Pursuing or completed a degree in Computer Science, Software Engineering, IT, or related.',
-    'Basic knowledge of programming and software fundamentals (e.g., OOP, data structures).',
-    'Understanding of software development lifecycle (SDLC).',
-    'Ability to write clean code in languages like Java, Python, JavaScript or similar.',
-    'Problem-solving skills and eagerness to learn new technologies.',
-    'Good communication and teamwork skills.'
-  ]
-},
+    id: 1,
+    logo: '/logos/99x.png',
+    title: 'Software Engineer',
+    company: '99X Technology',
+    salary: 'LKR 150,000 - 350,000',
+    skills: ['JavaScript', 'React', 'Node.js', 'Agile', 'Git'],
+    growth: 'High Demand',
+    details:
+      'Work on high-quality software products for global clients using modern tech stacks and agile practices.',
+    reasons: [
+      '99X is known for excellent software engineering culture',
+      'Many opportunities to work on cloud and product development',
+      'Strong training and career progression paths'
+    ],
+    internshipRequirements: [
+      'Pursuing or completed a degree in Computer Science, Software Engineering, IT, or related.',
+      'Basic knowledge of programming and software fundamentals (e.g., OOP, data structures).',
+      'Understanding of software development lifecycle (SDLC).',
+      'Ability to write clean code in languages like Java, Python, JavaScript or similar.',
+      'Problem-solving skills and eagerness to learn new technologies.',
+      'Good communication and teamwork skills.'
+    ],
+    categories: ['Web Development', 'System Design', 'Project Management']
+  },
   {
   id: 2,
   logo: '/logos/codegen.png', // or your logo
