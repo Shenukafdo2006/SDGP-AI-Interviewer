@@ -445,9 +445,46 @@ const CVMaker = ({ onBack }) => {
   };
 
   // Save CV
-  const handleSaveCV = () => {
-    alert(`CV "${editingCvName}" saved successfully!`);
-    setShowEditor(false);
+  const handleSaveCV = async () => {
+    const uid = localStorage.getItem("uid");
+
+    if (!uid) {
+      alert("Please log in to save your CV.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5001/api/cv/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid,
+          cvName: editingCvName,
+          templateId: selectedTemplate,
+          cvFormData,
+          educationEntries,
+          employmentEntries,
+          skillsEntries,
+          languagesEntries,
+          additionalSections,
+          designSettings,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || "Failed to save CV");
+      }
+
+      alert(`CV "${editingCvName}" saved successfully!`);
+      setShowEditor(false);
+    } catch (error) {
+      console.error("Failed to save CV to Firebase:", error);
+      alert("Failed to save CV. Please try again.");
+    }
   };
 
   // Generate formatted CV HTML for preview and download
