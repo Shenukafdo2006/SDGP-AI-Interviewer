@@ -7,7 +7,6 @@ const CVMaker = ({ onBack }) => {
   const [cvContent, setCvContent] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [coverLetterTone, setCoverLetterTone] = useState("formal");
-  const [shareLink, setShareLink] = useState("");
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [activeFormattingTab, setActiveFormattingTab] = useState("write");
@@ -91,8 +90,11 @@ const CVMaker = ({ onBack }) => {
 
   // ── Upload State ────────────────────────────────────────────────────────────
   const [, setUploadedFile] = useState(null);
+  const [uploadedFile, setUploadedActualFile] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState(null);
+  const [analysisSourceLabel, setAnalysisSourceLabel] = useState("");
   const [inputMode, setInputMode] = useState("upload");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
@@ -693,7 +695,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);</script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
@@ -727,21 +729,28 @@ const CVMaker = ({ onBack }) => {
   }, []);
 
   // File Upload Handler
-  const readFileAsText = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => resolve(e.target.result);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
+  const readFileAsText = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("Failed to read text file."));
+      reader.readAsText(file);
+    });
+
+  const readFileAsDataUrl = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("Failed to read file."));
+      reader.readAsDataURL(file);
+    });
 
   const handleFileSelect = async (file) => {
     if (!file) return;
-    setUploadedFile(file);
+    setUploadedActualFile(file);
     setUploadedFileName(file.name);
-    try {
-      const text = await readFileAsText(file);
-      setCvContent(text);
-    } catch { setCvContent(""); }
+    setAnalysisResult(null);
+    setCvContent("");
   };
 
   const handleDrop = (e) => {
@@ -751,28 +760,68 @@ const CVMaker = ({ onBack }) => {
     if (file) handleFileSelect(file);
   };
 
-  // AI-Powered CV Analysis - Empty function
   const analyzeCV = async () => {
-    if (!cvContent.trim()) {
-      alert("Please upload or paste your CV content first.");
+    const typedContent = cvContent.trim();
+    const hasUploadedFile = inputMode === "upload" && uploadedFile;
+    const sourceLabel = hasUploadedFile
+      ? uploadedFileName
+      : "Pasted CV";
+
+    if (!hasUploadedFile && !typedContent) {
+      alert("Please upload or paste your CV first.");
       return;
     }
+
     setIsAnalyzing(true);
-    setTimeout(() => {
+
+    try {
+      let response;
+
+      if (hasUploadedFile) {
+        const fileData = await readFileAsDataUrl(uploadedFile);
+        response = await fetch("http://localhost:5001/api/cv/analysis-upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            filename: uploadedFile.name,
+            fileData,
+          }),
+        });
+      } else {
+        response = await fetch("http://localhost:5001/api/cv/analysis", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ cvContent: typedContent }),
+        });
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || data.detail || data.error || "Failed to analyze CV");
+      }
+
+      setAnalysisResult(data);
+      setAnalysisSourceLabel(sourceLabel);
+      setActiveScoreTab("overview");
+    } catch (error) {
+      console.error("CV analysis failed:", error);
+      alert(error.message || "Failed to analyze CV.");
+    } finally {
       setIsAnalyzing(false);
-    }, 1500);
+    }
   };
 
-  const getScoreColor = (score) => {
-    if (score >= 80) return "#4caf50";
-    if (score >= 60) return "#ff9800";
-    return "#f44336";
-  };
 
-  const getStatusBadge = (status) => {
-    if (status === "good") return { color: "#4caf50", label: "Good" };
-    if (status === "warning") return { color: "#ff9800", label: "Needs Work" };
-    return { color: "#f44336", label: "Poor" };
+
+  const getFeedbackTone = (type) => {
+    if (type === "success") return { bg: "#ecfdf5", color: "#166534", border: "#86efac" };
+    if (type === "warning") return { bg: "#fff7ed", color: "#9a3412", border: "#fdba74" };
+    return { bg: "#eff6ff", color: "#1d4ed8", border: "#93c5fd" };
   };
 
   // Cover Letter Generation
@@ -796,7 +845,6 @@ const CVMaker = ({ onBack }) => {
   };
 
   const exportCV = (format) => alert(`Exporting CV as ${format.toUpperCase()}`);
-  const generateShareLink = () => setShareLink(`https://cvmaker.app/shared/${Math.random().toString(36).substr(2, 10)}`);
 
   // Render Template Card
   const renderTemplateCard = (template) => (
@@ -1362,27 +1410,108 @@ const CVMaker = ({ onBack }) => {
             </div>
             
             {activeScoreTab === "overview" && (
-              <div className="cvmaker-empty-state">
-                <div className="cvmaker-empty-icon">📊</div>
-                <h4>No Analysis Data</h4>
-                <p>Click "Analyze CV with AI" to see your CV analysis results.</p>
-              </div>
+              analysisResult ? (
+                <div style={{ display: "grid", gap: 18 }}>
+                  <div style={{ padding: 16, borderRadius: 16, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                    <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6 }}>Analysis Source</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{analysisSourceLabel || "Current CV"}</div>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 14 }}>
+                    {[
+                      ["Overall", analysisResult.overall],
+                      ["Completeness", analysisResult.completeness],
+                      ["Formatting", analysisResult.formatting],
+                      ["Readability", analysisResult.readability],
+                      ["ATS Score", analysisResult.atsScore],
+                      ["Skills", analysisResult.skillsScore],
+                      ["Keyword Density", analysisResult.keywordDensity],
+                      ["Experience Impact", analysisResult.experienceImpact],
+                      ["Personalization", analysisResult.personalization],
+                    ].map(([label, score]) => (
+                      <div key={label} style={{ padding: 16, borderRadius: 16, background: "#ffffff", border: "1px solid #e2e8f0" }}>
+                        <div style={{ fontSize: 13, color: "#64748b", marginBottom: 8 }}>{label}</div>
+                        <div style={{ fontSize: 28, fontWeight: 800, color: getScoreColor(score) }}>{score}%</div>
+                      </div>
+                    ))}
+                  </div>
+                  {analysisResult.topStrengths?.length > 0 && (
+                    <div style={{ padding: 18, borderRadius: 16, background: "#f0fdf4", border: "1px solid #bbf7d0" }}>
+                      <h4 style={{ margin: "0 0 10px", color: "#166534" }}>Top Strengths</h4>
+                      <ul style={{ margin: 0, paddingLeft: 18, color: "#166534" }}>
+                        {analysisResult.topStrengths.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                  {analysisResult.topImprovements?.length > 0 && (
+                    <div style={{ padding: 18, borderRadius: 16, background: "#fff7ed", border: "1px solid #fdba74" }}>
+                      <h4 style={{ margin: "0 0 10px", color: "#9a3412" }}>Top Improvements</h4>
+                      <ul style={{ margin: 0, paddingLeft: 18, color: "#9a3412" }}>
+                        {analysisResult.topImprovements.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="cvmaker-empty-state">
+                  <div className="cvmaker-empty-icon">📊</div>
+                  <h4>No Analysis Data</h4>
+                  <p>Click "Analyze CV with AI" to see your CV analysis results.</p>
+                </div>
+              )
             )}
             
             {activeScoreTab === "sections" && (
-              <div className="cvmaker-empty-state">
-                <div className="cvmaker-empty-icon">📋</div>
-                <h4>No Section Data</h4>
-                <p>Click "Analyze CV with AI" to see section-wise analysis.</p>
-              </div>
+              analysisResult?.sectionHealth?.length ? (
+                <div style={{ display: "grid", gap: 12 }}>
+                  {analysisResult.sectionHealth.map((section) => {
+                    const badge = getStatusBadge(section.status);
+                    return (
+                      <div key={section.section} style={{ padding: 16, borderRadius: 16, background: "#ffffff", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+                        <div>
+                          <div style={{ fontWeight: 700, color: "#0f172a" }}>{section.section}</div>
+                          <div style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>Section quality score</div>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                          <div style={{ fontWeight: 800, color: getScoreColor(section.score) }}>{section.score}%</div>
+                          <span style={{ padding: "6px 10px", borderRadius: 999, background: `${badge.color}18`, color: badge.color, fontSize: 12, fontWeight: 700 }}>
+                            {badge.label}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="cvmaker-empty-state">
+                  <div className="cvmaker-empty-icon">📋</div>
+                  <h4>No Section Data</h4>
+                  <p>Click "Analyze CV with AI" to see section-wise analysis.</p>
+                </div>
+              )
             )}
             
             {activeScoreTab === "feedback" && (
-              <div className="cvmaker-empty-state">
-                <div className="cvmaker-empty-icon">💡</div>
-                <h4>No Feedback Available</h4>
-                <p>Click "Analyze CV with AI" to get AI-powered feedback.</p>
-              </div>
+              analysisResult?.feedback?.length ? (
+                <div style={{ display: "grid", gap: 12 }}>
+                  {analysisResult.feedback.map((item, idx) => {
+                    const tone = getFeedbackTone(item.type);
+                    return (
+                      <div key={`${item.type}-${idx}`} style={{ padding: 16, borderRadius: 16, background: tone.bg, border: `1px solid ${tone.border}`, color: tone.color }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 6 }}>
+                          {item.type}
+                        </div>
+                        <div>{item.message}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="cvmaker-empty-state">
+                  <div className="cvmaker-empty-icon">💡</div>
+                  <h4>No Feedback Available</h4>
+                  <p>Click "Analyze CV with AI" to get AI-powered feedback.</p>
+                </div>
+              )
             )}
           </div>
         );
