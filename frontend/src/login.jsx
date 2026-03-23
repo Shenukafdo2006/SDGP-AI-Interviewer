@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./auth.css";
-import { signInWithPopup } from "firebase/auth";
+import { getRedirectResult, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "./firebase";
 
 function getFirstName(user, fallbackFirstName = "") {
@@ -31,40 +31,79 @@ export default function Login({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
+  const storeUser = (user) => {
+    localStorage.setItem("uid", user.uid);
+    localStorage.setItem("email", user.email ?? "");
+    localStorage.setItem("firstName", getFirstName(user));
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const restoreRedirectLogin = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!isMounted || !result?.user) {
+          return;
+        }
+
+        storeUser(result.user);
+        onLoginSuccess();
+      } catch (err) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error(err);
+        setError(err.message || "Social login failed.");
+      }
+    };
+
+    restoreRedirectLogin();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [onLoginSuccess]);
+
+  const handleSocialLogin = async (provider, providerName) => {
     setError("");
     setLoading(true);
+
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      localStorage.setItem("uid", user.uid);
-      localStorage.setItem("email", user.email);
-      localStorage.setItem("firstName", getFirstName(user));
+      const result = await signInWithPopup(auth, provider);
+      storeUser(result.user);
       setLoading(false);
       onLoginSuccess();
     } catch (err) {
+      if (
+        err?.code === "auth/popup-blocked" ||
+        err?.code === "auth/cancelled-popup-request" ||
+        err?.code === "auth/operation-not-supported-in-this-environment"
+      ) {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch (redirectErr) {
+          console.error(redirectErr);
+          setError(redirectErr.message || `${providerName} login failed.`);
+          setLoading(false);
+          return;
+        }
+      }
+
       console.error(err);
-      setError(err.message || "Google login failed.");
+      setError(err.message || `${providerName} login failed.`);
       setLoading(false);
     }
   };
 
+  const handleGoogleLogin = async () => {
+    await handleSocialLogin(googleProvider, "Google");
+  };
+
   const handleGithubLogin = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const result = await signInWithPopup(auth, githubProvider);
-      const user = result.user;
-      localStorage.setItem("uid", user.uid);
-      localStorage.setItem("email", user.email);
-      localStorage.setItem("firstName", getFirstName(user));
-      setLoading(false);
-      onLoginSuccess();
-    } catch (err) {
-      console.error(err);
-      setError(err.message || "GitHub login failed.");
-      setLoading(false);
-    }
+    await handleSocialLogin(githubProvider, "GitHub");
   };
 
   const handleSubmit = async (e) => {

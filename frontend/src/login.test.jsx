@@ -4,6 +4,8 @@ import { vi } from "vitest";
 import Login from "./login";
 
 const signInWithPopupMock = vi.fn();
+const signInWithRedirectMock = vi.fn();
+const getRedirectResultMock = vi.fn();
 
 vi.mock("./firebase", () => ({
   auth: {},
@@ -13,6 +15,8 @@ vi.mock("./firebase", () => ({
 
 vi.mock("firebase/auth", () => ({
   signInWithPopup: (...args) => signInWithPopupMock(...args),
+  signInWithRedirect: (...args) => signInWithRedirectMock(...args),
+  getRedirectResult: (...args) => getRedirectResultMock(...args),
 }));
 
 describe("Login", () => {
@@ -20,6 +24,7 @@ describe("Login", () => {
     vi.clearAllMocks();
     localStorage.clear();
     global.fetch = vi.fn();
+    getRedirectResultMock.mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -92,6 +97,46 @@ describe("Login", () => {
     expect(localStorage.getItem("uid")).toBe("google-1");
     expect(localStorage.getItem("email")).toBe("alex@example.com");
     expect(localStorage.getItem("firstName")).toBe("Alex");
+    expect(onLoginSuccess).toHaveBeenCalledTimes(1);
+  });
+
+  test("falls back to redirect when the social login popup is blocked", async () => {
+    signInWithPopupMock.mockRejectedValue({
+      code: "auth/popup-blocked",
+      message: "Popup blocked by the browser",
+    });
+    signInWithRedirectMock.mockResolvedValue(undefined);
+
+    render(<Login />);
+
+    await userEvent.click(screen.getByRole("button", { name: /^google$/i }));
+
+    await waitFor(() => {
+      expect(signInWithPopupMock).toHaveBeenCalledTimes(1);
+      expect(signInWithRedirectMock).toHaveBeenCalledTimes(1);
+    });
+
+    expect(screen.queryByText(/popup blocked by the browser/i)).not.toBeInTheDocument();
+  });
+
+  test("restores the user after redirect login completes", async () => {
+    const onLoginSuccess = vi.fn();
+    getRedirectResultMock.mockResolvedValue({
+      user: {
+        uid: "redirect-1",
+        email: "sam@example.com",
+        displayName: "Sam Perera",
+      },
+    });
+
+    render(<Login onLoginSuccess={onLoginSuccess} />);
+
+    await waitFor(() => {
+      expect(localStorage.getItem("uid")).toBe("redirect-1");
+    });
+
+    expect(localStorage.getItem("email")).toBe("sam@example.com");
+    expect(localStorage.getItem("firstName")).toBe("Sam");
     expect(onLoginSuccess).toHaveBeenCalledTimes(1);
   });
 
