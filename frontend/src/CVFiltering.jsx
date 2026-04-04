@@ -806,7 +806,6 @@ const CVFiltering = ({ onBack }) => {
 
   // Calculate stats for header
   const totalCVs = allCVs.length;
-  const parsedCount = Math.floor(totalCVs * 0.92);
   const newTodayCount = uploadedCVs.length;
 
   // ── Render ────────────────────────────────────────────────────────────────

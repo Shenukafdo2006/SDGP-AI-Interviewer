@@ -6,7 +6,7 @@ const CVMaker = ({ onBack }) => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [cvContent, setCvContent] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
-  const [coverLetterTone, setCoverLetterTone] = useState("formal");
+  
   
   const [activeScoreTab, setActiveScoreTab] = useState("overview");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -681,7 +681,7 @@ const CVMaker = ({ onBack }) => {
       <!DOCTYPE html><html><head><title>${editingCvName} - CV</title>
       <style>@media print{body{margin:0;padding:0;}.no-print{display:none;}}</style></head>
       <body>${cvHTML}<div class="no-print" style="position:fixed;bottom:20px;right:20px;background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;">Press Ctrl+P to save as PDF</div>
-      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<\/script></body></html>
+      <script>setTimeout(()=>{window.print();setTimeout(()=>window.close(),1000);},500);<script></body></html>
     `);
     printWindow.document.close();
     setTimeout(() => setIsDownloading(false), 2000);
