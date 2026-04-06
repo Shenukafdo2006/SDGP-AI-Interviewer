@@ -26,7 +26,7 @@ const LearningResources = ({ onBack }) => {
     }
     return total;
   }, 0);
-
+//dsdfgfgfgf
   const completedHoursDisplay = Math.round(totalCompletedHours);
   return (
     <div className="learning-desktop-container">
