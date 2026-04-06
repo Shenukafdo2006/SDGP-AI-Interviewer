@@ -2,7 +2,7 @@ import "./Quiz.css";
 import React, { useState, useMemo, useEffect } from "react";
 
 const quizzes = [
-    {
+    { 
     id: 1,
     title: "JavaScript ",
     description: "Core JavaScript Concepts",
@@ -1042,7 +1042,7 @@ const quizzes = [
     ],
   },
 ];
-
+//main state management part
 const Quiz = ({onBack}) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [currentQ, setCurrentQ] = useState(0);
@@ -1053,6 +1053,7 @@ const Quiz = ({onBack}) => {
   const [timer, setTimer] = useState(60);
   const [activeTab, setActiveTab] = useState("Beginner");
 
+//Start New question and clean enviroment 
   const startQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setCurrentQ(0);
@@ -1063,6 +1064,7 @@ const Quiz = ({onBack}) => {
     setTimer(600);
   };
 
+//Timer control logic 
   useEffect(() => {
     if (!selectedQuiz || showResult) return;
     if (timer <= 0) {
@@ -1071,8 +1073,9 @@ const Quiz = ({onBack}) => {
     }
     const interval = setInterval(() => setTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);
-  }, [timer, selectedQuiz, showResult]);
+  }, [timer, selectedQuiz, showResult]);``
 
+// user's Question logic handle 
   const answerQuestion = (idx) => {
     if (isAnswered) return;
     setSelectedAnswer(idx);
@@ -1089,6 +1092,7 @@ const Quiz = ({onBack}) => {
     }, 800);
   };
 
+// final score calculation logic
   const score = useMemo(() => {
     if (!selectedQuiz) return 0;
     return answers.filter(
@@ -1096,12 +1100,14 @@ const Quiz = ({onBack}) => {
     ).length;
   }, [answers, selectedQuiz]);
 
+  // progress calculation logic
   const totalQuestions = selectedQuiz?.questions.length || 0;
   const progress =
     selectedQuiz && totalQuestions > 0
       ? Math.round(((currentQ + 1) / totalQuestions) * 100)
       : 0;
 
+  // reset quiz to initial state
   const resetQuiz = () => {
     setSelectedQuiz(null);
     setCurrentQ(0);
@@ -1113,6 +1119,7 @@ const Quiz = ({onBack}) => {
     
   };
 
+  // restart quiz with same questions
   const restartQuiz = () => {
     setCurrentQ(0);
     setAnswers([]);
@@ -1122,10 +1129,12 @@ const Quiz = ({onBack}) => {
     setTimer(60);
   };
 
+
   const filteredQuizzes = quizzes.filter(q => q.difficulty === activeTab);
 
   return (
     <div className="quiz-page">
+      // Quiz Header
       <header className="header">
         {!selectedQuiz && (
           <button className="main-back-btn" onClick={onBack}>
@@ -1140,6 +1149,7 @@ const Quiz = ({onBack}) => {
       </header>
 
       <div className="quiz-container">
+        // Quiz Selection Tabs and Cards
         {!selectedQuiz && (
           <>
             <div className="dashboard-tabs">
@@ -1154,7 +1164,6 @@ const Quiz = ({onBack}) => {
               ))}
             </div>
         
-
             <div className="quiz-grid">
               {filteredQuizzes.map((quiz) => (
                 <div key={quiz.id} className="quiz-card">
@@ -1167,7 +1176,7 @@ const Quiz = ({onBack}) => {
             </div>
           </>
         )}
-
+        // Quiz Player and Result Display
         {selectedQuiz && showResult && (
           <div className="result-box">
             <h2>{selectedQuiz.title}</h2>
@@ -1180,6 +1189,7 @@ const Quiz = ({onBack}) => {
           </div>
         )}
 
+        // Quiz Player Interface
         {selectedQuiz && !showResult && (
           <div className="quiz-player">
             <div
