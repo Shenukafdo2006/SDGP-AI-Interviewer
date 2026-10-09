@@ -29,9 +29,11 @@
   font-size: 2rem;
 }
 
-.app-sidebar-brand h2 {
+.app-sidebar-title {
+  display: block;
   margin: 0;
   font-size: 1.6rem;
+  font-weight: 700;
   background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -108,7 +110,7 @@
     padding: 0 6px 20px;
   }
 
-  .app-sidebar-brand h2,
+  .app-sidebar-title,
   .app-sidebar-label,
   .app-sidebar-back-label {
     position: absolute;

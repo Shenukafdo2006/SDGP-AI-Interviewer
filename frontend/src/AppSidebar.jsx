@@ -6,7 +6,7 @@ function AppSidebar({ title, icon = "📄", items, activeId, onSelect, onBack })
     <aside className="app-sidebar">
       <div className="app-sidebar-brand">
         <span className="app-sidebar-logo" aria-hidden="true">{icon}</span>
-        <h2>{title}</h2>
+        <span className="app-sidebar-title">{title}</span>
       </div>
 
       <nav className="app-sidebar-nav" aria-label={`${title} navigation`}>
