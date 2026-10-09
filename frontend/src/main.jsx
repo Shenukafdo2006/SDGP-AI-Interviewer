@@ -1,9 +1,6 @@
-import { StrictMode, useState, useEffect } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-
-import Signup from "./signup.jsx";
-import Login from "./login.jsx";
 
 import DashBoard from "./DashBoard";
 import InterviewTraining from "./InterviewTraining";
@@ -21,26 +18,16 @@ import DailyMotivation from "./DailyMotivation";
 
 // eslint-disable-next-line react-refresh/only-export-components
 function App() {
-
-  const [view, setView] = useState(null); 
+  const [view, setView] = useState(() => {
+    const lastView = sessionStorage.getItem("view");
+    return lastView && lastView !== "login" && lastView !== "signup"
+      ? lastView
+      : "dashboard";
+  });
 
   
   const [interviewSessionData, setInterviewSessionData] = useState(null);
   const [currentSessionId, setCurrentSessionId] = useState(null);
-
-  useEffect(() => {
-    const uid = localStorage.getItem("uid");         
-    const lastView = sessionStorage.getItem("view"); 
-
-    if (uid && lastView) {
-     
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setView(lastView);
-    } else {
-      
-      setView("login");
-    }
-  }, []);
 
  
   const navigate = (newView) => {
@@ -49,44 +36,6 @@ function App() {
   };
 
  
-  if (view === null) {
-    return (
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        background: "#0f0f0f",
-        color: "#fff",
-        fontFamily: "sans-serif",
-        fontSize: "14px",
-        opacity: 0.5,
-      }}>
-        Loading...
-      </div>
-    );
-  }
-
-  // Signup Page
-  if (view === "signup") {
-    return (
-      <Signup
-        onSignupSuccess={() => navigate("login")}
-        onGoToLogin={() => navigate("login")}
-      />
-    );
-  }
-
-  // Login Page
-  if (view === "login") {
-    return (
-      <Login
-        onLoginSuccess={() => navigate("dashboard")}
-        onGoToSignup={() => navigate("signup")}
-      />
-    );
-  }
-
   // Training Page
   if (view === "training") {
     return (
