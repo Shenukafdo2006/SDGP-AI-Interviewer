@@ -227,6 +227,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-software-engineer-base",
       name: "Intern Software Engineer",
       icon: "💻",
+      image: "/images/SE.jpg",
       color: "#667eea",
       industry: "Technology",
       description: "ATS-optimized for dev roles",
@@ -239,6 +240,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-data-scientist-base",
       name: "Intern Data Scientist",
       icon: "📊",
+      image: "/images/DataScientist.jpg",
       color: "#f093fb",
       industry: "Data & AI",
       description: "Highlight models, metrics & research",
@@ -251,6 +253,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-ui-ux-designer-base",
       name: "Intern UX/UI Designer",
       icon: "🎨",
+      image: "/images/UI-_-UX-Design.webp",
       color: "#4facfe",
       industry: "Design",
       description: "Portfolio-first creative layout",
@@ -263,6 +266,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-quality-assurance-base",
       name: "Intern Quality Assurance",
       icon: "👔",
+      image: "/images/QA.jpeg",
       color: "#2c3e50",
       industry: "Technology",
       description: "ATS-optimized for QA roles",
@@ -275,6 +279,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-web-developer-base",
       name: "Intern Web Developer",
       icon: "✨",
+      image: "/images/WebDeveloper.jpeg",
       color: "#764ba2",
       industry: "Technology",
       description: "ATS-optimized for web development roles",
@@ -287,6 +292,7 @@ const CVMaker = ({ onBack }) => {
       id: "intern-project-manager-base",
       name: "Intern Project Manager",
       icon: "📄",
+      image: "/images/PM.jpg",
       color: "#4facfe",
       industry: "Management",
       description: "ATS-optimized for project coordination roles",
@@ -921,7 +927,13 @@ ${coverLetterDetails.signature}
   const renderTemplateCard = (template) => (
     <div key={template.id} className={`cvmaker-template-card ${selectedTemplate === template.id ? "cvmaker-selected" : ""}`} onClick={() => setSelectedTemplate(template.id)}>
       <div className="cvmaker-template-preview" style={{ background: `linear-gradient(135deg, ${template.color}22, ${template.color}44)` }}>
-        <div style={{ fontSize: "44px" }}>{template.icon}</div>
+        <div className="cvmaker-template-placeholder" aria-hidden="true">{template.icon}</div>
+        <img
+          className="cvmaker-template-image"
+          src={template.image}
+          alt={`${template.name} template preview`}
+          onError={(event) => { event.currentTarget.style.display = "none"; }}
+        />
         <div className="cvmaker-ats-badge">ATS {template.atsScore}%</div>
       </div>
       <div className="cvmaker-template-details">

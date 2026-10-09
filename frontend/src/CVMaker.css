@@ -426,6 +426,19 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+}
+
+.cvmaker-template-placeholder {
+  font-size: 44px;
+}
+
+.cvmaker-template-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cvmaker-ats-badge {
@@ -438,6 +451,7 @@
   border-radius: 20px;
   font-size: 0.7rem;
   font-weight: 700;
+  z-index: 1;
 }
 
 .cvmaker-template-details {

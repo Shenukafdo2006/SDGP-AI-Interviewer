@@ -16,6 +16,17 @@ describe("CVMaker", () => {
     expect(onBack).toHaveBeenCalledTimes(1);
   });
 
+  test("uses the matching image preview for each CV template", () => {
+    render(<CVMaker onBack={vi.fn()} />);
+
+    expect(screen.getByRole("img", { name: "Intern Software Engineer template preview" })).toHaveAttribute("src", "/images/SE.jpg");
+    expect(screen.getByRole("img", { name: "Intern Data Scientist template preview" })).toHaveAttribute("src", "/images/DataScientist.jpg");
+    expect(screen.getByRole("img", { name: "Intern UX/UI Designer template preview" })).toHaveAttribute("src", "/images/UI-_-UX-Design.webp");
+    expect(screen.getByRole("img", { name: "Intern Quality Assurance template preview" })).toHaveAttribute("src", "/images/QA.jpeg");
+    expect(screen.getByRole("img", { name: "Intern Web Developer template preview" })).toHaveAttribute("src", "/images/WebDeveloper.jpeg");
+    expect(screen.getByRole("img", { name: "Intern Project Manager template preview" })).toHaveAttribute("src", "/images/PM.jpg");
+  });
+
   // eslint-disable-next-line no-undef
   test("switches to smart scoring and alerts when analysis is attempted without CV content", () => {
     // eslint-disable-next-line no-undef
