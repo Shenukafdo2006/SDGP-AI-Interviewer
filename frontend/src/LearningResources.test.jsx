@@ -17,7 +17,7 @@ describe("LearningResources", () => {
 
     render(<LearningResources onBack={onBack} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /back to home/i }));
+    await userEvent.click(screen.getByRole("button", { name: "Back" }));
 
     expect(onBack).toHaveBeenCalledTimes(1);
   });
@@ -37,5 +37,15 @@ describe("LearningResources", () => {
     expect(startCourseLinks).toHaveLength(9);
     expect(startCourseLinks[0]).toHaveAttribute("href", "https://www.w3schools.com/");
     expect(startCourseLinks[0]).toHaveAttribute("target", "_blank");
+  });
+
+  test("filters the course list by level from the sidebar", async () => {
+    render(<LearningResources onBack={vi.fn()} />);
+
+    await userEvent.click(screen.getByRole("button", { name: /beginner/i }));
+
+    expect(screen.getByText("6")).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: /start course/i })).toHaveLength(6);
+    expect(screen.queryByText(/mozilla developer network/i)).not.toBeInTheDocument();
   });
 });

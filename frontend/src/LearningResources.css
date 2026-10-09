@@ -5,41 +5,10 @@
   color: #ffffff;
 }
 
-/* Sidebar Styling */
-.resources-sidebar {
-  width: 260px;
-  background: #1e293b;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 30px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-}
-
-.back-nav-btn {
-  background: rgba(99, 102, 241, 0.4);
-  color: #dbeafe;
-  border: 1px solid rgba(99, 102, 241, 0.7);
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 40px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.back-nav-btn:hover {
-  background: rgba(99, 102, 241, 0.6);
-  color: #f0f8ff;
-  border-color: rgba(99, 102, 241, 0.9);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-.filter-group label { display: block; margin-bottom: 10px; font-size: 14px; cursor: pointer; }
-
 /* Main Content Area */
 .resources-main {
   flex: 1;
+  min-width: 0;
   padding: 40px 60px;
 }
 
@@ -48,6 +17,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 50px;
+}
+
+.learning-resources-page .desktop-header .header-text h1 {
+  font-size: 32px;
+  line-height: 1.2;
 }
 
 .header-stats { display: flex; gap: 20px; }
@@ -96,4 +70,44 @@
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .learning-resources-page .resources-main {
+    padding: 24px 16px;
+  }
+
+  .learning-resources-page .desktop-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .learning-resources-page .desktop-header .header-text h1 {
+    font-size: 24px;
+  }
+
+  .learning-resources-page .header-stats {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .learning-resources-page .stat-box {
+    flex: 1 1 120px;
+  }
+
+  .learning-resources-page .resources-desktop-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .learning-resources-page .desktop-res-card {
+    border-radius: 12px;
+  }
+
+  .learning-resources-page .res-body {
+    padding: 18px;
+  }
 }

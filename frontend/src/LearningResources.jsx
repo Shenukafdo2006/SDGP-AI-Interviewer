@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LearningResources.css';
+import AppSidebar from './AppSidebar';
 
 const resources = [
   { id: 1, title: 'W3Schools - Learn Web Development', provider: 'W3Schools', tags: ['HTML', 'CSS', 'JavaScript'], level: 'Beginner', rating: 4.5, progress: 0, color: "#04AA6D", duration: "Self-Paced", link: "https://www.w3schools.com/" },
@@ -14,8 +15,13 @@ const resources = [
 ];
 
 const LearningResources = ({ onBack }) => {
+  const [activeLevel, setActiveLevel] = useState('all');
+  const visibleResources = activeLevel === 'all'
+    ? resources
+    : resources.filter(resource => resource.level === activeLevel);
+
   // Calculate total completed hours based on course progress
-  const totalCompletedHours = resources.reduce((total, res) => {
+  const totalCompletedHours = visibleResources.reduce((total, res) => {
     // Assume each course is worth the hours shown in duration (e.g., "45h 30m" = 45.5 hours)
     const durationMatch = res.duration.match(/(\d+)h\s*(\d+)?m?/);
     if (durationMatch) {
@@ -29,22 +35,20 @@ const LearningResources = ({ onBack }) => {
 
   const completedHoursDisplay = Math.round(totalCompletedHours);
   return (
-    <div className="learning-desktop-container">
-      <aside className="resources-sidebar">
-        <button className="back-nav-btn" onClick={onBack}>← Back to Home</button>
-        <div className="filter-group">
-          <h4>Filter by Level</h4>
-          <label><input type="checkbox" /> Beginner</label>
-          <label><input type="checkbox" /> Intermediate</label>
-          <label><input type="checkbox" /> Advanced</label>
-        </div>
-        <div className="filter-group">
-          <h4>Categories</h4>
-          <span className="sidebar-tag">Web Dev</span>
-          <span className="sidebar-tag">DevOps</span>
-          <span className="sidebar-tag">Mobile</span>
-        </div>
-      </aside>
+    <div className="learning-desktop-container learning-resources-page">
+      <AppSidebar
+        title="Learning Resources"
+        icon="📚"
+        items={[
+          { id: 'all', icon: '📖', label: 'All Courses' },
+          { id: 'Beginner', icon: '🌱', label: 'Beginner' },
+          { id: 'Intermediate', icon: '⚡', label: 'Intermediate' },
+          { id: 'Advanced', icon: '🚀', label: 'Advanced' },
+        ]}
+        activeId={activeLevel}
+        onSelect={setActiveLevel}
+        onBack={onBack}
+      />
 
       <main className="resources-main">
         <header className="desktop-header">
@@ -53,13 +57,13 @@ const LearningResources = ({ onBack }) => {
             <p>Welcome back! You have 3 courses in progress.</p>
           </div>
           <div className="header-stats">
-            <div className="stat-box"><span>{resources.length}</span> Courses</div>
+            <div className="stat-box"><span>{visibleResources.length}</span> Courses</div>
             <div className="stat-box"><span>{completedHoursDisplay}h</span> Completed</div>
           </div>
         </header>
 
         <div className="resources-desktop-grid">
-          {resources.map((res) => (
+          {visibleResources.map((res) => (
             <div key={res.id} className="desktop-res-card">
               <div className="res-banner" style={{ background: `${res.color}22` }}>
                 <span className="res-duration">{res.duration}</span>
