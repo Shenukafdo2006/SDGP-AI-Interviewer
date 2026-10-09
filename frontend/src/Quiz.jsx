@@ -1,5 +1,6 @@
 import "./Quiz.css";
 import React, { useState, useMemo, useEffect } from "react";
+import AppSidebar from "./AppSidebar";
 
 const quizzes = [
     { 
@@ -1132,38 +1133,39 @@ const Quiz = ({onBack}) => {
 
   const filteredQuizzes = quizzes.filter(q => q.difficulty === activeTab);
 
-  return (
-    <div className="quiz-page">
-      // Quiz Header
-      <header className="header">
-        {!selectedQuiz && (
-          <button className="main-back-btn" onClick={onBack}>
-            ← Back Dashboard 
-          </button>
-        )}
+  const selectDifficulty = (difficulty) => {
+    if (selectedQuiz) {
+      resetQuiz();
+    }
+    setActiveTab(difficulty);
+  };
 
+  return (
+    <div className="quiz-app">
+      <AppSidebar
+        title="Skills Quiz"
+        icon="📝"
+        items={[
+          { id: "Beginner", icon: "🌱", label: "Beginner" },
+          { id: "Intermediate", icon: "⚡", label: "Intermediate" },
+          { id: "Advanced", icon: "🚀", label: "Advanced" },
+        ]}
+        activeId={activeTab}
+        onSelect={selectDifficulty}
+        onBack={onBack}
+      />
+      <div className="quiz-page">
+      <header className="header">
         {selectedQuiz && (
           <div className="menu-icon" onClick={resetQuiz}>← Back Skill Quiz </div>
         )}
-        <div className="logo">📝 Skills Quiz</div>
+        <div className="logo">{selectedQuiz ? "Quiz Practice" : "Quiz Library"}</div>
       </header>
 
       <div className="quiz-container">
-        // Quiz Selection Tabs and Cards
+        {/* Quiz Selection Cards */}
         {!selectedQuiz && (
           <>
-            <div className="dashboard-tabs">
-              {["Beginner", "Intermediate", "Advanced"].map(tab => (
-                <button
-                  key={tab}
-                  className={`tab-btn ${activeTab === tab ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-        
             <div className="quiz-grid">
               {filteredQuizzes.map((quiz) => (
                 <div key={quiz.id} className="quiz-card">
@@ -1176,7 +1178,7 @@ const Quiz = ({onBack}) => {
             </div>
           </>
         )}
-        // Quiz Player and Result Display
+        {/* Quiz Player and Result Display */}
         {selectedQuiz && showResult && (
           <div className="result-box">
             <h2>{selectedQuiz.title}</h2>
@@ -1189,7 +1191,7 @@ const Quiz = ({onBack}) => {
           </div>
         )}
 
-        // Quiz Player Interface
+        {/* Quiz Player Interface */}
         {selectedQuiz && !showResult && (
           <div className="quiz-player">
             <div
@@ -1237,6 +1239,7 @@ const Quiz = ({onBack}) => {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

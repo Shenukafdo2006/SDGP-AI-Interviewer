@@ -11,7 +11,7 @@ describe("Quiz", () => {
 
     render(<Quiz onBack={vi.fn()} />);
 
-    expect(screen.getByRole("button", { name: /back dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back" })).toBeInTheDocument();
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole("button", { name: /start quiz/i })[0]);
@@ -38,7 +38,7 @@ describe("Quiz", () => {
     expect(screen.getByText("Core JavaScript Concepts")).toBeInTheDocument();
     expect(screen.queryByText("Advanced C++ Concepts")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Advanced" }));
+    fireEvent.click(screen.getByRole("button", { name: /advanced/i }));
 
     expect(screen.getByText("Advanced C++ Concepts")).toBeInTheDocument();
     expect(screen.queryByText("Core JavaScript Concepts")).not.toBeInTheDocument();
