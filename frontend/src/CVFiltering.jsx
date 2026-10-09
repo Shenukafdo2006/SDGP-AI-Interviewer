@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/static-components */
 import React, { useState, useCallback } from 'react';
 import './CVFiltering.css';
+import AppSidebar from './AppSidebar';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -833,15 +834,19 @@ const CVFiltering = ({ onBack }) => {
 
       <Notification notifications={notifications} />
 
+      <div className="cvf-layout">
+        <AppSidebar
+          title="CV Filtering"
+          items={TABS}
+          activeId={activeTab}
+          onSelect={setActiveTab}
+          onBack={onBack}
+        />
+        <div className="cvf-workspace">
       <div className="cvf-shell" style={{ paddingBottom: '60px' }}>
         {/* Header */}
         <header className="cvf-header">
           <div className="cvf-header__left">
-            {onBack && (
-              <button className="cvf-back-btn" onClick={onBack} title="Back to Dashboard">
-                ← Back
-              </button>
-            )}
             <div className="cvf-header__brand">
               <h1>CV Filtering <span className="cvf-badge">v2.0</span></h1>
             </div>
@@ -878,20 +883,6 @@ const CVFiltering = ({ onBack }) => {
             </div>
           </div>
         </header>
-
-        {/* Nav Tabs - Removed Advanced */}
-        <nav className="cvf-nav">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              className={`cvf-nav__tab ${activeTab === tab.id ? 'cvf-nav__tab--active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
-            </button>
-          ))}
-        </nav>
 
         {/* Content */}
         <main className="cvf-main">
@@ -936,6 +927,8 @@ const CVFiltering = ({ onBack }) => {
             />
           )}
         </main>
+      </div>
+        </div>
       </div>
 
       {selectedCV && <CVModal cv={selectedCV} onClose={() => setSelectedCV(null)} />}

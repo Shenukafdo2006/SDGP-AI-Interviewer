@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SkillImprovement.css";
 import { getUserProgress, updateGoalProgress } from "./api/skillApi";
+import AppSidebar from "./AppSidebar";
 
 const weeklyGoalsData = [
   { category: "Coding", goal: "Complete 5 LeetCode problems", current: 3, total: 5 },
@@ -54,7 +55,7 @@ const recommendations = [
   },
 ];
 
-const SkillImprovement = ({onBack}) => {
+const SkillImprovement = ({ onBack }) => {
   const [weeklyGoals, setWeeklyGoals] = useState({
     coding: { current: 0, total: 5 },
     learning: { current: 0, total: 2 },
@@ -63,6 +64,7 @@ const SkillImprovement = ({onBack}) => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeSection, setActiveSection] = useState("goals");
 
   const uid = localStorage.getItem('uid');
 
@@ -113,6 +115,11 @@ const SkillImprovement = ({onBack}) => {
     }
   };
 
+  const handleSectionSelect = (section) => {
+    setActiveSection(section);
+    document.getElementById(`skill-${section}`)?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+  };
+
   const getPriorityClass = (level) => {
     if (level === "High") return "priority-high";
     if (level === "Medium") return "priority-medium";
@@ -137,43 +144,19 @@ const SkillImprovement = ({onBack}) => {
     return descriptions[category] || `${category} tasks`;
   }
 
-  if (loading) {
-    return (
-      <div className="learning-desktop-container">
-        <main className="resources-main" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <div>Loading progress data...</div>
-        </main>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="learning-desktop-container">
-        <main className="resources-main" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-          <div style={{ color: '#ef4444' }}>{error}</div>
-        </main>
-      </div>
-    );
-  }
-
   return (
     <div className="learning-desktop-container">
-      <aside className="resources-sidebar">
-        <button className="back-nav-btn" onClick={onBack}>← Back to Home</button>
-        <div className="filter-group">
-          <h4>Filter by Priority</h4>
-          <label><input type="checkbox" /> High Priority</label>
-          <label><input type="checkbox" /> Medium Priority</label>
-          <label><input type="checkbox" /> Low Priority</label>
-        </div>
-        <div className="filter-group">
-          <h4>Categories</h4>
-          <span className="sidebar-tag">Coding</span>
-          <span className="sidebar-tag">Interview</span>
-          <span className="sidebar-tag">Projects</span>
-        </div>
-      </aside>
+      <AppSidebar
+        title="Skill Improvement"
+        icon="⚡"
+        items={[
+          { id: "goals", icon: "🎯", label: "Weekly Goals" },
+          { id: "recommendations", icon: "✨", label: "Recommendations" },
+        ]}
+        activeId={activeSection}
+        onSelect={handleSectionSelect}
+        onBack={onBack}
+      />
 
       <main className="resources-main">
         <header className="desktop-header">
@@ -187,8 +170,13 @@ const SkillImprovement = ({onBack}) => {
           </div>
         </header>
 
+        {loading ? (
+          <div className="skill-state-message">Loading progress data...</div>
+        ) : error ? (
+          <div className="skill-state-message skill-state-message--error">{error}</div>
+        ) : (
         <div className="skill-content">
-          <section className="skill-section">
+          <section className="skill-section" id="skill-goals">
             <h2>Weekly Goals</h2>
             <div className="goal-container">
               {goalsArray.map((goal, idx) => {
@@ -229,7 +217,7 @@ const SkillImprovement = ({onBack}) => {
             </div>
           </section>
 
-          <section className="skill-section">
+          <section className="skill-section" id="skill-recommendations">
             <h2>Personalized Recommendations</h2>
             <div className="recommendation-container">
               {recommendations.map((rec, idx) => (
@@ -259,6 +247,7 @@ const SkillImprovement = ({onBack}) => {
             </div>
           </section>
         </div>
+        )}
       </main>
     </div>
   );

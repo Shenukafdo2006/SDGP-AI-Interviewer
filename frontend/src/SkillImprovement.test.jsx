@@ -68,4 +68,15 @@ describe("SkillImprovement", () => {
 
     expect(await screen.findByText(/failed to load progress data/i)).toBeInTheDocument();
   });
+
+  test("shows the shared sidebar and activates its section links", async () => {
+    render(<SkillImprovement onBack={vi.fn()} />);
+
+    const goalsLink = screen.getByRole("button", { name: /weekly goals/i });
+    const recommendationsLink = screen.getByRole("button", { name: /recommendations/i });
+
+    expect(goalsLink).toHaveAttribute("aria-current", "page");
+    await userEvent.click(recommendationsLink);
+    expect(recommendationsLink).toHaveAttribute("aria-current", "page");
+  });
 });

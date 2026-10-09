@@ -8,6 +8,22 @@
   gap: 50px;
 }
 
+.skill-state-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  color: #cbd5e1;
+}
+
+.skill-state-message--error {
+  color: #ef4444;
+}
+
+.skill-section {
+  scroll-margin-top: 24px;
+}
+
 .skill-section h2 {
   color: #fff;
   font-size: 28px;
