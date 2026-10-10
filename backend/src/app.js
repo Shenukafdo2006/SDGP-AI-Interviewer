@@ -5,6 +5,7 @@ const cors = require("cors");
 const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
 const cvRoutes = require("./routes/cvRoutes");
 const skillImprovementRoutes = require("./routes/skillImprovementRoutes");
+const { checkConnection } = require("./config/mysql");
 
 const app = express();
 
@@ -14,6 +15,19 @@ app.use(express.json({ limit: "15mb" }));
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+app.get("/api/db/health", async (req, res) => {
+  try {
+    await checkConnection();
+    return res.json({ status: "ok", database: "mysql" });
+  } catch (error) {
+    console.error("MySQL health check failed:", error.code || "UNKNOWN_ERROR");
+    return res.status(503).json({
+      status: "error",
+      message: "MySQL connection unavailable.",
+    });
+  }
 });
 
 app.use("/api/interview", aiInterviewRoutes);
