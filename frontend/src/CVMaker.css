@@ -379,6 +379,66 @@
   flex-wrap: wrap;
 }
 
+.cvmaker-job-recommendation {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0 0 20px;
+  padding: 14px 18px;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  background: #1e2440;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.cvmaker-job-recommendation small {
+  color: #94a3b8;
+}
+
+.cvmaker-job-skill-suggestions {
+  margin: 0 0 20px;
+  padding: 18px;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.08);
+}
+
+.cvmaker-job-skill-suggestions h4,
+.cvmaker-job-skill-suggestions p {
+  margin: 0 0 8px;
+  color: #e2e8f0;
+}
+
+.cvmaker-job-skill-suggestions p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.cvmaker-job-skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cvmaker-job-skill-option {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #4f46e5;
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: #1a1f35;
+  color: #c7d2fe;
+  cursor: pointer;
+}
+
+.cvmaker-job-skill-option:disabled {
+  border-color: #2d3460;
+  color: #94a3b8;
+  cursor: default;
+}
+
 .cvmaker-filter-label {
   font-weight: 700;
   color: #f1f5f9;

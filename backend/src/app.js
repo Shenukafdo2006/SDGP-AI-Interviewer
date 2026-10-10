@@ -6,6 +6,7 @@ const aiInterviewRoutes = require("./routes/aiInterviewRoutes");
 const cvRoutes = require("./routes/cvRoutes");
 const skillImprovementRoutes = require("./routes/skillImprovementRoutes");
 const { checkConnection } = require("./config/mysql");
+const jobPostingRoutes = require("./routes/jobPostings");
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/interview", aiInterviewRoutes);
 app.use("/api/cv", cvRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/skills", skillImprovementRoutes);
+app.use("/api/jobs", jobPostingRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
@@ -41,6 +43,10 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err);
+
+  if (err?.code === "LIMIT_FILE_SIZE") {
+    return res.status(413).json({ error: "PDF exceeds the 10 MB upload limit." });
+  }
 
   if (err?.type === "entity.too.large") {
     return res.status(413).json({

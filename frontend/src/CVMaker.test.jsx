@@ -3,6 +3,10 @@ import CVMaker from "./CVMaker";
 
 // eslint-disable-next-line no-undef
 describe("CVMaker", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   // eslint-disable-next-line no-undef
   test("calls onBack when the back button is clicked", () => {
     // eslint-disable-next-line no-undef
@@ -25,6 +29,30 @@ describe("CVMaker", () => {
     expect(screen.getByRole("img", { name: "Intern Quality Assurance template preview" })).toHaveAttribute("src", "/images/QA.jpeg");
     expect(screen.getByRole("img", { name: "Intern Web Developer template preview" })).toHaveAttribute("src", "/images/WebDeveloper.jpeg");
     expect(screen.getByRole("img", { name: "Intern Project Manager template preview" })).toHaveAttribute("src", "/images/PM.jpg");
+  });
+
+  test("loads approved role requirements and adds a confirmed skill to the CV", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        jobCount: 1,
+        recommendations: [
+          { skill: "GraphQL", skillType: "required", postingCount: 1 },
+          { skill: "REST APIs", skillType: "preferred", postingCount: 1 },
+        ],
+      }),
+    }));
+
+    const { container } = render(<CVMaker onBack={vi.fn()} />);
+    fireEvent.focus(screen.getByPlaceholderText(/select an intern role/i));
+    fireEvent.click(container.querySelector(".cvmaker-role-option"));
+
+    expect(await screen.findByText(/based on 1 approved job posting/i)).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole("button", { name: /edit & customize cv/i })[0]);
+    fireEvent.click(screen.getByRole("button", { name: /skills/i }));
+    fireEvent.click(await screen.findByRole("button", { name: "Add GraphQL to CV" }));
+
+    expect(screen.getByDisplayValue("GraphQL")).toBeInTheDocument();
   });
 
   // eslint-disable-next-line no-undef

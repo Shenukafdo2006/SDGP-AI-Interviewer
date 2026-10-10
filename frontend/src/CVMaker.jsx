@@ -308,6 +308,62 @@ const CVMaker = ({ onBack }) => {
   
   // Filter templates based on selected role
   const [selectedRoleId, setSelectedRoleId] = useState(null);
+
+  const [jobRecommendations, setJobRecommendations] = useState({
+    status: "idle",
+    jobCount: 0,
+    recommendations: [],
+  });
+
+  useEffect(() => {
+    if (!selectedRoleId) {
+      setJobRecommendations({ status: "idle", jobCount: 0, recommendations: [] });
+      return undefined;
+    }
+
+    let cancelled = false;
+    setJobRecommendations({ status: "loading", jobCount: 0, recommendations: [] });
+    fetch(`/api/jobs/recommendations?role=${encodeURIComponent(selectedRoleId)}`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Recommendations unavailable");
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) {
+          setJobRecommendations({
+            status: "loaded",
+            jobCount: Number(data.jobCount) || 0,
+            recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setJobRecommendations({ status: "error", jobCount: 0, recommendations: [] });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedRoleId]);
+
+  const addJobSkillToCV = (skillName) => {
+    setCvFormData((previous) => {
+      if (previous.keySkills.some((skill) => skill.toLowerCase() === skillName.toLowerCase())) {
+        return previous;
+      }
+      return { ...previous, keySkills: [...previous.keySkills, skillName] };
+    });
+    setSkillsEntries((previous) => {
+      if (previous.some((entry) => entry.skill.toLowerCase() === skillName.toLowerCase())) {
+        return previous;
+      }
+      const blankIndex = previous.findIndex((entry) => !entry.skill.trim());
+      if (blankIndex === -1) return [...previous, { skill: skillName, level: "" }];
+      return previous.map((entry, index) => index === blankIndex ? { ...entry, skill: skillName } : entry);
+    });
+  };
   
   const filteredTemplates = selectedRoleId
     ? allTemplates.filter(template => template.roleCategory === selectedRoleId)
@@ -317,6 +373,10 @@ const CVMaker = ({ onBack }) => {
   const getCurrentRecommendation = () => {
     if (selectedRoleId) {
       const selectedRole = internRoles.find(role => role.id === selectedRoleId);
+      if (jobRecommendations.status === "loading") return "Checking approved job postings...";
+      if (jobRecommendations.jobCount > 0) {
+        return `Based on ${jobRecommendations.jobCount} approved job posting${jobRecommendations.jobCount === 1 ? "" : "s"} for ${selectedRole?.label || "this role"}`;
+      }
       return selectedRole ? selectedRole.recommendation : "Select a role to see personalized recommendations";
     }
     return "Software Engineer template best matches your profile";
@@ -1336,6 +1396,32 @@ ${coverLetterDetails.signature}
           {activeSection === "skills" && (
             <div className="cvmaker-editor-main-full">
               <div className="cvmaker-section-header"><h3>Skills</h3><button className="cvmaker-add-btn" onClick={addSkill}>+ Add skill</button></div>
+              {jobRecommendations.jobCount > 0 && jobRecommendations.recommendations.length > 0 && (
+                <div className="cvmaker-job-skill-suggestions">
+                  <h4>Skills mentioned in approved job postings</h4>
+                  <p>Only add skills you can honestly demonstrate in your experience.</p>
+                  <div className="cvmaker-job-skill-list">
+                    {jobRecommendations.recommendations.map((item) => {
+                      const alreadyAdded = cvFormData.keySkills.some(
+                        (skill) => skill.toLowerCase() === item.skill.toLowerCase(),
+                      );
+                      return (
+                        <button
+                          key={`${item.skill}-${item.skillType}`}
+                          type="button"
+                          className="cvmaker-job-skill-option"
+                          aria-label={`${alreadyAdded ? "Added" : "Add"} ${item.skill} to CV`}
+                          onClick={() => addJobSkillToCV(item.skill)}
+                          disabled={alreadyAdded}
+                        >
+                          <span>{item.skill}</span>
+                          <span>{alreadyAdded ? "Added" : "Add"}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               {skillsEntries.map((skill, idx) => (
                 <div key={idx} className="cvmaker-entry-card-small">
                   <div className="cvmaker-entry-header"><span>Skill #{idx + 1}</span><button className="cvmaker-remove-btn" onClick={() => removeSkill(idx)}>✕</button></div>
@@ -1469,6 +1555,18 @@ ${coverLetterDetails.signature}
               {selectedRoleId && (<div className="cvmaker-active-filter"><span className="cvmaker-filter-badge">Showing templates for: {internRoles.find(r => r.id === selectedRoleId)?.label}<button className="cvmaker-remove-filter" onClick={clearRoleFilter}>×</button></span></div>)}
             </div>
             <div className="cvmaker-template-filter"><span className="cvmaker-filter-label">🎯 Smart Recommendation:</span><span className="cvmaker-filter-tag">{getCurrentRecommendation()}</span></div>
+            {selectedRoleId && jobRecommendations.status === "loaded" && jobRecommendations.jobCount > 0 && (
+              <div className="cvmaker-job-recommendation" role="status">
+                <strong>From approved postings:</strong>
+                <span>{jobRecommendations.recommendations.slice(0, 8).map((item) => item.skill).join(" · ")}</span>
+                <small>Open a template and review these in Skills. Nothing is added to your CV unless you choose it.</small>
+              </div>
+            )}
+            {selectedRoleId && jobRecommendations.status === "loaded" && jobRecommendations.jobCount === 0 && (
+              <div className="cvmaker-job-recommendation" role="status">
+                No approved job postings are available for this role yet. Templates will use the built-in guidance.
+              </div>
+            )}
             <div className="cvmaker-ai-info"><span className="cvmaker-ai-info-icon">🤖</span><span>Click "Edit & Customize CV" on any card to create a personalized CV</span></div>
             <div className="cvmaker-templates-grid">{filteredTemplates.map(template => renderTemplateCard(template))}</div>
             <div className="cvmaker-ats-info-box"><h4>🤖 ATS-Optimized Templates Include:</h4><div className="cvmaker-ats-features"><span>✅ Single-column layout</span><span>✅ Standard headings</span><span>✅ Machine-readable dates</span><span>✅ Keyword-rich summary</span><span>✅ Bullet point consistency</span></div></div>
