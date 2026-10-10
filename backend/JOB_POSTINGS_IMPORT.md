@@ -4,7 +4,7 @@ This flow stores each original PDF as a MySQL `LONGBLOB`, extracts searchable te
 
 ## 1. Apply the schema migration
 
-In MySQL Workbench, select the `interviewer_jobs` connection and open `backend/sql/job-postings.sql`. Execute it once. It adds PDF metadata/blob fields to `source_documents` and a `role_family` column to `job_postings`; it uses the existing `job_skills` table.
+The `source_documents` PDF columns have already been added to the local database. The current `sql/job-postings.sql` contains only the remaining `job_postings.role_family` column and its index. Open it in Workbench while connected as `root` (or another account with `ALTER` privilege), then execute it once.
 
 If Workbench reports that a column or index already exists, stop and inspect the schema instead of repeatedly executing the migration.
 
