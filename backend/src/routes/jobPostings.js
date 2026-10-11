@@ -216,6 +216,52 @@ router.put("/admin/imports/:id/review", requireImportToken, async (req, res) => 
   }
 });
 
+router.get("/catalog", async (_req, res) => {
+  try {
+    const [postings] = await pool.query(
+      `SELECT id, company_name AS companyName, role_title AS roleTitle,
+              role_family AS roleFamily, location, work_mode AS workMode,
+              employment_type AS employmentType, application_status AS applicationStatus
+       FROM job_postings
+       WHERE review_status = 'approved'
+       ORDER BY created_at DESC
+       LIMIT 200`,
+    );
+
+    if (postings.length === 0) {
+      return res.json({ postings: [] });
+    }
+
+    const postingIds = postings.map((posting) => posting.id);
+    const placeholders = postingIds.map(() => "?").join(", ");
+    const [skills] = await pool.execute(
+      `SELECT job_posting_id AS jobPostingId, skill_name AS skill,
+              skill_type AS skillType
+       FROM job_skills
+       WHERE job_posting_id IN (${placeholders})
+       ORDER BY skill_name ASC`,
+      postingIds,
+    );
+
+    const skillsByPosting = new Map();
+    for (const skill of skills) {
+      const current = skillsByPosting.get(skill.jobPostingId) || [];
+      current.push({ skill: skill.skill, skillType: skill.skillType });
+      skillsByPosting.set(skill.jobPostingId, current);
+    }
+
+    return res.json({
+      postings: postings.map((posting) => ({
+        ...posting,
+        skills: skillsByPosting.get(posting.id) || [],
+      })),
+    });
+  } catch (error) {
+    console.error("Approved job catalog lookup failed:", error.code || "UNKNOWN_ERROR");
+    return res.status(503).json({ error: "Approved job postings are unavailable." });
+  }
+});
+
 router.get("/recommendations", async (req, res) => {
   const roleFamily = cleanString(req.query.role, 100);
   if (!roleFamily) {

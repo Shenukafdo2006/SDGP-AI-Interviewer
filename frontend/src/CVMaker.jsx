@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./CVMaker.css";
+import JobPostingReview from "./JobPostingReview";
 
 const CVMaker = ({ onBack }) => {
   const [activeFeature, setActiveFeature] = useState("templates");
@@ -133,6 +134,7 @@ const CVMaker = ({ onBack }) => {
   // Available intern roles for dropdown
   const internRoles = [
     { id: "intern-software-engineer", label: "Intern Software Engineer", recommendation: "Software Engineer template best matches your profile" },
+    { id: "intern-quality-assurance", label: "Intern Quality Assurance", recommendation: "Quality Assurance template matches testing and quality roles" },
     { id: "intern-web-developer", label: "Intern Web Developer", recommendation: "Web Developer template optimized for frontend/backend roles" },
     { id: "intern-ui-ux-designer", label: "Intern UI/UX Designer", recommendation: "UI/UX Designer template with portfolio-first layout" },
     { id: "intern-project-manager", label: "Intern Project Manager", recommendation: "Project Manager template focused on leadership and coordination" },
@@ -174,6 +176,17 @@ const CVMaker = ({ onBack }) => {
           "Portfolio Website: Designed and developed a responsive portfolio with 99% accessibility score",
           "E-Learning Platform: Created an interactive learning platform with video integration"
         ]
+      },
+      "intern-quality-assurance": {
+        summary: "Careful and curious QA intern focused on testing software, documenting defects, and helping teams deliver reliable products.",
+        skills: ["Software Testing", "Test Cases", "Bug Reporting", "Agile", "Communication", "Problem Solving"],
+        education: "Bachelor's degree in Software Engineering or Computer Science | 2023 - Present",
+        experience: [
+          "• Practiced writing clear test cases and reporting reproducible defects",
+          "• Collaborated with developers to verify fixes and improve product quality",
+          "• Applied systematic exploratory and regression testing techniques"
+        ],
+        projects: ["Add a QA project you personally completed"]
       },
       "intern-ui-ux-designer": {
         summary: "User-centered designer focused on creating intuitive and beautiful digital experiences. Skilled in translating user research into actionable design solutions that drive engagement.",
@@ -272,8 +285,8 @@ const CVMaker = ({ onBack }) => {
       description: "ATS-optimized for QA roles",
       atsScore: 97,
       tags: ["ATS Friendly", "Testing Tools", "Bug Tracking"],
-      roleCategory: "intern-software-engineer",
-      aiContent: generateFallbackContent("intern-software-engineer")
+      roleCategory: "intern-quality-assurance",
+      aiContent: generateFallbackContent("intern-quality-assurance")
     },
     {
       id: "intern-web-developer-base",
@@ -1659,6 +1672,9 @@ ${coverLetterDetails.signature}
           </div>
         );
 
+      case "job-review":
+        return <JobPostingReview />;
+
       default:
         return <div>Select a feature</div>;
     }
@@ -1668,6 +1684,7 @@ ${coverLetterDetails.signature}
     { id: "templates", icon: "📋", label: "Templates" },
     { id: "scoring", icon: "⭐", label: "Smart Scoring" },
     { id: "coverletter", icon: "✉️", label: "Cover Letter" },
+    { id: "job-review", icon: "🗂️", label: "Job Postings" },
   ];
 
   return (

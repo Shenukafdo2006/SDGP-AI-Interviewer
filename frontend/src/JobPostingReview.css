@@ -1,0 +1,250 @@
+.job-review {
+  color: #e2e8f0;
+}
+
+.job-review__header,
+.job-review__toolbar,
+.job-review__posting-header,
+.job-review__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.job-review__header {
+  margin-bottom: 20px;
+}
+
+.job-review__header h3,
+.job-review__header p,
+.job-review__sources h4,
+.job-review__source-text h4,
+.job-review__posting-header h4 {
+  margin: 0;
+}
+
+.job-review__header p {
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+.job-review button,
+.job-review__upload {
+  border: 1px solid #3b4677;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #e0e7ff;
+  background: #252b4a;
+  cursor: pointer;
+  font: inherit;
+}
+
+.job-review button:hover,
+.job-review__upload:hover {
+  border-color: #818cf8;
+  background: #30375f;
+}
+
+.job-review button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.job-review__notice {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #123a32;
+  color: #a7f3d0;
+}
+
+.job-review__notice--error {
+  background: #45262c;
+  color: #fecaca;
+}
+
+.job-review__toolbar {
+  justify-content: flex-end;
+  margin: 14px 0;
+}
+
+.job-review__token {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.job-review__token input {
+  width: 220px;
+}
+
+.job-review__token input,
+.job-review__fields input,
+.job-review__fields select,
+.job-review__posting textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #343d67;
+  border-radius: 7px;
+  padding: 9px 10px;
+  color: #f1f5f9;
+  background: #141a2d;
+  font: inherit;
+}
+
+.job-review__upload input {
+  display: none;
+}
+
+.job-review__layout {
+  display: grid;
+  grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.job-review__sources {
+  position: sticky;
+  top: 10px;
+  display: grid;
+  gap: 8px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  background: #171c31;
+}
+
+.job-review__sources > p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.job-review__source {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.job-review__source small {
+  color: #94a3b8;
+}
+
+.job-review__source--active {
+  border-color: #818cf8 !important;
+  background: #31375f !important;
+}
+
+.job-review__workspace {
+  min-width: 0;
+}
+
+.job-review__source-text {
+  margin-bottom: 18px;
+  padding: 14px;
+  border: 1px solid #2d3460;
+  border-radius: 10px;
+  background: #171c31;
+}
+
+.job-review__source-text pre {
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #cbd5e1;
+  font: 0.85rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.job-review__suggestion-note {
+  margin: 8px 0;
+  color: #a5b4fc;
+  font-size: 0.85rem;
+}
+
+.job-review__posting-header {
+  margin: 12px 0;
+}
+
+.job-review__posting {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 14px;
+  padding: 16px;
+  border: 1px solid #343d67;
+  border-radius: 10px;
+}
+
+.job-review__posting legend {
+  padding: 0 6px;
+  color: #a5b4fc;
+  font-weight: 700;
+}
+
+.job-review__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.job-review__fields label,
+.job-review__posting > label {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+}
+
+.job-review__remove {
+  justify-self: start;
+  color: #fecaca !important;
+}
+
+.job-review__actions {
+  justify-content: flex-end;
+  padding: 8px 0 18px;
+}
+
+.job-review__actions button {
+  border-color: #5b5ce2;
+  background: #4f46e5;
+  color: #fff;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .job-review__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .job-review__sources {
+    position: static;
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .job-review__toolbar,
+  .job-review__token {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .job-review__token input {
+    width: 100%;
+  }
+
+  .job-review__fields {
+    grid-template-columns: 1fr;
+  }
+}

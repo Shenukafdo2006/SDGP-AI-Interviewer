@@ -28,7 +28,7 @@ The response includes an import ID and extracted text. The PDF and text are stor
 
 ## 4. Review and approve the posting
 
-A PDF may contain several jobs. Review the extracted text, then submit one or more structured postings using `PUT /api/jobs/admin/imports/:id/review`, also with the Bearer token. Each posting needs `companyName`, `roleTitle`, and `roleFamily`. Use a role-family value matching the CV Maker role ID, for example `intern-software-engineer`.
+A PDF may contain several jobs. The review screen suggests `intern-software-engineer` for `part*.pdf` and `intern-data-scientist` for `ML_part*.pdf`, but verify and change the category for each posting because these PDFs include QA, WordPress, data-engineering, and other roles. Review the extracted text, then submit one or more structured postings using `PUT /api/jobs/admin/imports/:id/review`, also with the Bearer token. Each posting needs `companyName`, `roleTitle`, and `roleFamily`. Use a role-family value matching the CV Maker role ID, for example `intern-software-engineer`.
 
 Example request body:
 
@@ -57,6 +57,8 @@ The review endpoint writes to the existing `job_postings` and `job_skills` table
 ## 5. Use the postings in CV Maker
 
 When the user selects an intern role, the frontend requests `/api/jobs/recommendations?role=intern-software-engineer` (or the selected role ID). It displays skills aggregated from approved postings. The user can add relevant skills from the editor's Skills section; the app does not claim a suggested skill without user confirmation.
+
+CV Filtering can select an approved posting from `/api/jobs/catalog`. Its skill-overlap score weights each required skill twice as much as each preferred skill. This is a simple keyword overlap indicator, not an ATS score or a measure of a candidate's overall ability. CVs without parsed skills are shown as not parsed instead of being assigned a fabricated score.
 
 ## Deployment note
 

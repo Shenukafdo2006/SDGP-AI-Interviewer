@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/static-components */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import './CVFiltering.css';
 import AppSidebar from './AppSidebar';
 
@@ -125,13 +125,19 @@ const SkillTag = ({ skill, size = '' }) => (
   <span className={`cvf-skill-tag ${size ? 'cvf-skill-tag--' + size : ''}`}>{skill}</span>
 );
 
-const MatchBar = ({ pct }) => (
-  <div className="cvf-match-bar">
-    <div className="cvf-match-bar__track">
-      <div className="cvf-match-bar__fill" style={{ width: `${pct}%` }} />
+const MatchBar = ({ pct, label = "match" }) => (
+  pct === null ? (
+    <div className="cvf-match-bar cvf-match-bar--unparsed">
+      <span className="cvf-match-bar__label">CV skills not parsed</span>
     </div>
-    <span className="cvf-match-bar__label">{pct}% match</span>
-  </div>
+  ) : (
+    <div className="cvf-match-bar">
+      <div className="cvf-match-bar__track">
+        <div className="cvf-match-bar__fill" style={{ width: `${pct}%` }} />
+      </div>
+      <span className="cvf-match-bar__label">{pct}% {label}</span>
+    </div>
+  )
 );
 
 const AvatarCircle = ({ initials, status, size = 'md' }) => (
@@ -253,7 +259,7 @@ const CVCardGrid = ({ cv, selected, onSelect, onClick }) => (
     <h3 className="cvf-cv-card__name">{cv.name}</h3>
     <p className="cvf-cv-card__role">{cv.position}</p>
 
-    <MatchBar pct={cv.matchPercentage} />
+    <MatchBar pct={cv.matchPercentage} label={cv.matchLabel || "match"} />
 
     <div className="cvf-cv-card__meta">
       <span>🎓 {cv.education}</span>
@@ -305,14 +311,18 @@ const CVCardList = ({ cv, selected, onSelect, onClick }) => (
       </div>
     </div>
     <div className="cvf-cv-list__right">
-      <div
-        className="cvf-match-ring"
-        style={{
-          background: `conic-gradient(#10b981 0% ${cv.matchPercentage}%, #e5e7eb ${cv.matchPercentage}% 100%)`
-        }}
-      >
-        <span>{cv.matchPercentage}%</span>
-      </div>
+      {cv.matchPercentage === null ? (
+        <span className="cvf-unparsed-match">Not parsed</span>
+      ) : (
+        <div
+          className="cvf-match-ring"
+          style={{
+            background: `conic-gradient(#10b981 0% ${cv.matchPercentage}%, #e5e7eb ${cv.matchPercentage}% 100%)`
+          }}
+        >
+          <span>{cv.matchPercentage}%</span>
+        </div>
+      )}
       <div className="cvf-cv-list__status">
         <span className="cvf-status-dot" style={{ background: getStatusColor(cv.status) }} />
         <span className="cvf-text-muted cvf-text-sm">{cv.status}</span>
@@ -326,6 +336,7 @@ const CVCardList = ({ cv, selected, onSelect, onClick }) => (
 
 const FilterTab = ({
   cvData, filters, onFilterChange, onApply, onClearFilters,
+  approvedJobs, jobsLoading, selectedJobId, onJobChange,
   viewMode, setViewMode, sortBy, setSortBy,
   selectedCVs, onToggleSelect,
   onOpenCV,
@@ -375,6 +386,20 @@ const FilterTab = ({
             <div className="cvf-row-between cvf-mb-16">
               <h3>Filters</h3>
               <button className="cvf-btn-ghost" onClick={onClearFilters}>Clear all</button>
+            </div>
+
+            <div className="cvf-filter-group">
+              <label htmlFor="cvf-target-job">Match to approved job</label>
+              <select id="cvf-target-job" value={selectedJobId} onChange={(event) => onJobChange(event.target.value)}>
+                <option value="">No job selected</option>
+                {approvedJobs.map((job) => (
+                  <option key={job.id} value={String(job.id)}>
+                    {job.roleTitle} — {job.companyName}
+                  </option>
+                ))}
+              </select>
+              {jobsLoading && <small>Loading approved jobs...</small>}
+              {!jobsLoading && approvedJobs.length === 0 && <small>No approved job postings yet.</small>}
             </div>
 
             <FilterInput label="Position" name="position" options={[
@@ -663,6 +688,9 @@ const CVFiltering = ({ onBack }) => {
   const [cvData] = useState(SAMPLE_CVS);
   const [filterResults, setFilterResults] = useState([]);
   const [uploadedCVs, setUploadedCVs] = useState([]);
+  const [approvedJobs, setApprovedJobs] = useState([]);
+  const [selectedJobId, setSelectedJobId] = useState("");
+  const [jobsLoading, setJobsLoading] = useState(true);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploadProgress, setUploadProgress] = useState({});
@@ -679,6 +707,28 @@ const CVFiltering = ({ onBack }) => {
   const [selectedCVs, setSelectedCVs] = useState([]);
   const [selectedCV, setSelectedCV] = useState(null);
   const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/jobs/catalog")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Approved jobs unavailable");
+        return response.json();
+      })
+      .then((data) => {
+        if (!cancelled) setApprovedJobs(Array.isArray(data.postings) ? data.postings : []);
+      })
+      .catch(() => {
+        if (!cancelled) setApprovedJobs([]);
+      })
+      .finally(() => {
+        if (!cancelled) setJobsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // ── Notifications ─────────────────────────────────────────────────────────
 
@@ -772,6 +822,31 @@ const CVFiltering = ({ onBack }) => {
     if (searchQuery) {
       result = result.filter(cv => JSON.stringify(cv).toLowerCase().includes(searchQuery.toLowerCase()));
     }
+
+    const selectedJob = approvedJobs.find((job) => String(job.id) === selectedJobId);
+    if (selectedJob) {
+      const requiredSkills = selectedJob.skills
+        .filter((skill) => skill.skillType === "required")
+        .map((skill) => skill.skill);
+      const preferredSkills = selectedJob.skills
+        .filter((skill) => skill.skillType === "preferred")
+        .map((skill) => skill.skill);
+      const totalWeight = requiredSkills.length * 2 + preferredSkills.length;
+
+      result = result.map((cv) => {
+        const candidateSkills = Array.isArray(cv.skills) ? cv.skills : [];
+        if (candidateSkills.length === 0 || totalWeight === 0) {
+          return { ...cv, matchPercentage: null, matchLabel: "skill overlap" };
+        }
+
+        const normalizedSkills = new Set(candidateSkills.map((skill) => skill.trim().toLowerCase()));
+        const matchedRequired = requiredSkills.filter((skill) => normalizedSkills.has(skill.toLowerCase()));
+        const matchedPreferred = preferredSkills.filter((skill) => normalizedSkills.has(skill.toLowerCase()));
+        const score = Math.round(((matchedRequired.length * 2 + matchedPreferred.length) / totalWeight) * 100);
+        return { ...cv, matchPercentage: score, matchLabel: "skill overlap" };
+      });
+    }
+
     setFilterResults(result);
     addNotification('success', `Found ${result.length} matching CVs`);
   };
@@ -899,6 +974,10 @@ const CVFiltering = ({ onBack }) => {
           {activeTab === 'filter' && (
             <FilterTab
               cvData={allCVs}
+              approvedJobs={approvedJobs}
+              jobsLoading={jobsLoading}
+              selectedJobId={selectedJobId}
+              onJobChange={setSelectedJobId}
               filters={filters}
               onFilterChange={handleFilterChange}
               onApply={applyFilters}
